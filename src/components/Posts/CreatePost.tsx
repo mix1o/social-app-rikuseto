@@ -26,6 +26,7 @@ const CreatePost: FC = () => {
     })
       .then(res => res.json())
       .then(json => {
+        console.log(json);
         setLink(json.data.link);
       });
   };
@@ -60,7 +61,7 @@ const CreatePost: FC = () => {
   };
 
   const createNewPost = () => {
-    fetch('https://rikuseto-social.herokuapp.com/post/create', {
+    fetch('http://localhost:8000/post/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +69,7 @@ const CreatePost: FC = () => {
       body: JSON.stringify(post),
     });
   };
-
+  // https://rikuseto-social.herokuapp.com
   console.log(post);
 
   return (
