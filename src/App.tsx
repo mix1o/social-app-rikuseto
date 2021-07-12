@@ -1,23 +1,15 @@
-import { FC, useEffect, useState } from 'react';
-
-interface TestInterface {
-  id: number;
-  name: string;
-}
+import { FC } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Posts from './components/Posts/Posts';
 
 const App: FC = () => {
-  const [api, setApi] = useState<TestInterface[]>([]);
-
-  useEffect(() => {
-    fetch('https://rikuseto-social.herokuapp.com/test')
-      .then(res => res.json())
-      .then(json => setApi(json));
-  }, []);
-
   return (
     <div>
-      <h1>New social app is coming ! Change</h1>
-      <div style={{ textAlign: 'center' }}>{JSON.stringify(api)}</div>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Posts} />
+        </Switch>
+      </Router>
     </div>
   );
 };
