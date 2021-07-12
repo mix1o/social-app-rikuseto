@@ -1,27 +1,21 @@
 import { ChangeEvent, FormEvent, FC, useState } from 'react';
 import Compressor from 'compressorjs';
 
-// interface OptionsInterface {
-//   value: string;
-//   label: string;
-// }
-
-// interface Post {
-//   headline?: string;
-//   file?: string;
-//   category?: string;
-// }
-
-// interface File {
-//   name: string;
-//   lastModified: number;
-//   lastModifiedDate?: string;
-//   size: number;
-//   type: string;
-//   webkitRelativePath?: string;
-// }
+interface Post {
+  headline?: string;
+  file?: string;
+  category?: string;
+}
 
 const CreatePost: FC = () => {
+  const [link, setLink] = useState<string>('');
+
+  const [post, setPost] = useState<Post>({
+    headline: '',
+    file: link,
+    category: '',
+  });
+
   const upload = (data: any) => {
     fetch('https://api.imgur.com/3/image/', {
       method: 'post',
@@ -32,7 +26,7 @@ const CreatePost: FC = () => {
     })
       .then(res => res.json())
       .then(json => {
-        console.log(json);
+        setLink(json.data.link);
       });
   };
   const compressImg = (file: any) => {
@@ -55,8 +49,36 @@ const CreatePost: FC = () => {
       },
     });
   };
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
+  ) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setPost({ ...post, [name]: value });
+  };
+
+  const createNewPost = () => {
+    fetch('https://rikuseto-social.herokuapp.com/post/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(post),
+    });
+  };
+
+  console.log(post);
+
   return (
     <div className="App">
+      <input onChange={e => handleChange(e)} type="text" name="headline" />
+      <select onChange={e => handleChange(e)} name="category">
+        //TODO set default value
+        <option value="memes">memes</option>
+        <option value="sport">sport</option>
+      </select>
       <input
         type="file"
         accept="image/*"
@@ -64,6 +86,7 @@ const CreatePost: FC = () => {
           compressImg(e.target.files);
         }}
       />
+      <button onClick={createNewPost}>Create new post</button>
     </div>
   );
 };
