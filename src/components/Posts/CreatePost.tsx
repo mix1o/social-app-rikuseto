@@ -86,7 +86,7 @@ const CreatePost: FC = () => {
           compressImg(e.target.files);
         }}
       />
-      <button onClick={createNewPost}>Create new post</button>
+      <button onClick={createNewPost}>Create post</button>
     </div>
   );
 };
