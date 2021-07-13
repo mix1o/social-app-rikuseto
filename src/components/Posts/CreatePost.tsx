@@ -21,6 +21,8 @@ const CreatePost: FC = () => {
   const [disable, setDisable] = useState(false);
   const [areFiles, setAreFiles] = useState(false);
 
+  console.log(`Client-ID ${process.env.REACT_APP_IMGUR_KEY}`);
+
   const upload = (data: any) => {
     fetch('https://api.imgur.com/3/image/', {
       method: 'post',
