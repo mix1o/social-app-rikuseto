@@ -76,7 +76,6 @@ const CreatePost: FC = () => {
     <div className="App">
       <input onChange={e => handleChange(e)} type="text" name="headline" />
       <select onChange={e => handleChange(e)} name="category">
-        //TODO set default value
         <option value="memes">memes</option>
         <option value="sport">sport</option>
       </select>
