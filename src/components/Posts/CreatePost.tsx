@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState, useEffect } from 'react';
+import React, { ChangeEvent, FC, useState, useEffect } from 'react';
 import Compressor from 'compressorjs';
 
 interface Post {
@@ -18,16 +18,14 @@ const CreatePost: FC = () => {
   const [userPickedImage, setUserPickedImage] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
-
   const [disable, setDisable] = useState(false);
-
   const [areFiles, setAreFiles] = useState(false);
 
   const upload = (data: any) => {
     fetch('https://api.imgur.com/3/image/', {
       method: 'post',
       headers: {
-        Authorization: 'Client-ID de39c19dac90e78',
+        Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,
       },
       body: data,
     })
@@ -37,13 +35,14 @@ const CreatePost: FC = () => {
         console.log(json);
         if (json.status === 403) {
           setCorrectImage(false);
-          setMessage('Something went wrong');
+          setMessage('Something went wrong. Please try again');
           return;
         }
         setTimeout(() => {
           setPost({ ...post, file: json.data.link });
         }, 1000);
         setCorrectImage(true);
+        setMessage('Your image is correct uploaded');
       });
   };
 
@@ -78,21 +77,20 @@ const CreatePost: FC = () => {
   };
 
   const createNewPost = () => {
-    fetch('https://rikuseto-social.herokuapp.com/post/create', {
+    fetch('https://rikuseto-social.herokuapp.com/posts/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(post),
-    });
+    }).then(() => setPost({ headline: '', file: '', category: '' }));
   };
 
   const checkCorrectPost = () => {
     if (userPickedImage) {
-      console.log('user picks');
       setAreFiles(false);
       if (
-        post!.headline!.length > 1 &&
+        post!.headline!.length >= 3 &&
         post!.category!.length > 1 &&
         post!.file!.length > 3 &&
         correctImage
@@ -104,9 +102,14 @@ const CreatePost: FC = () => {
       }
     }
 
-    if (post!.headline!.length > 1 && post!.category!.length > 1) {
+    if (post!.headline!.length >= 3 && post!.category!.length > 1) {
       return true;
-    } else return false;
+    } else {
+      setMessage(
+        'Headline must be at least 3 words and category cannot be empty'
+      );
+      return false;
+    }
   };
 
   useEffect(() => {
@@ -150,13 +153,13 @@ const CreatePost: FC = () => {
         }}
       />
       <br />
-
       {!disable && !areFiles && (
         <button disabled={!correctFormatPost} onClick={createNewPost}>
           Create post
         </button>
       )}
       {disable && <p>Loading image...</p>}
+      {!correctFormatPost && post!.headline!.length > 0 && <p>{message}</p>}
     </div>
   );
 };
