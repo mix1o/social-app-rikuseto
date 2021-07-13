@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, FC, useState, useEffect } from 'react';
+import { ChangeEvent, FC, useState, useEffect } from 'react';
 import Compressor from 'compressorjs';
 
 interface Post {
@@ -19,6 +19,10 @@ const CreatePost: FC = () => {
   const [message, setMessage] = useState<string>('');
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
 
+  const [disable, setDisable] = useState(false);
+
+  const [areFiles, setAreFiles] = useState(false);
+
   const upload = (data: any) => {
     fetch('https://api.imgur.com/3/image/', {
       method: 'post',
@@ -38,10 +42,11 @@ const CreatePost: FC = () => {
         }
         setTimeout(() => {
           setPost({ ...post, file: json.data.link });
-          setCorrectImage(true);
         }, 1000);
+        setCorrectImage(true);
       });
   };
+
   const compressImg = (file: any) => {
     if (!file) return;
 
@@ -84,13 +89,19 @@ const CreatePost: FC = () => {
 
   const checkCorrectPost = () => {
     if (userPickedImage) {
+      console.log('user picks');
+      setAreFiles(false);
       if (
         post!.headline!.length > 1 &&
         post!.category!.length > 1 &&
+        post!.file!.length > 3 &&
         correctImage
       ) {
+        setDisable(false);
         return true;
-      } else return false;
+      } else {
+        return false;
+      }
     }
 
     if (post!.headline!.length > 1 && post!.category!.length > 1) {
@@ -100,7 +111,7 @@ const CreatePost: FC = () => {
 
   useEffect(() => {
     setCorrectFormatPost(checkCorrectPost());
-  }, [post, message]);
+  }, [post, message, correctImage]);
 
   return (
     <div className="App">
@@ -125,16 +136,27 @@ const CreatePost: FC = () => {
       </select>
       <br />
       <input
+        onClick={() => {
+          setDisable(true);
+        }}
+        onFocus={() => {
+          setDisable(false);
+        }}
         type="file"
         accept="image/*"
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           compressImg(e.target.files);
+          setAreFiles(true);
         }}
       />
       <br />
-      <button disabled={!correctFormatPost} onClick={createNewPost}>
-        Create post
-      </button>
+
+      {!disable && !areFiles && (
+        <button disabled={!correctFormatPost} onClick={createNewPost}>
+          Create post
+        </button>
+      )}
+      {disable && <p>Loading image...</p>}
     </div>
   );
 };
