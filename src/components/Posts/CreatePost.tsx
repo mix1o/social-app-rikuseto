@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, FC, useState } from 'react';
+import { ChangeEvent, FormEvent, FC, useState, useEffect } from 'react';
 import Compressor from 'compressorjs';
 
 interface Post {
@@ -8,13 +8,16 @@ interface Post {
 }
 
 const CreatePost: FC = () => {
-  const [link, setLink] = useState<string>('');
-
   const [post, setPost] = useState<Post>({
     headline: '',
-    file: link,
+    file: '',
     category: '',
   });
+
+  const [correctImage, setCorrectImage] = useState<boolean>(false);
+  const [userPickedImage, setUserPickedImage] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
+  const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
 
   const upload = (data: any) => {
     fetch('https://api.imgur.com/3/image/', {
@@ -26,12 +29,21 @@ const CreatePost: FC = () => {
     })
       .then(res => res.json())
       .then(json => {
+        setUserPickedImage(true);
         console.log(json);
-        setLink(json.data.link);
+        if (json.status === 403) {
+          setCorrectImage(false);
+          setMessage('Something went wrong');
+          return;
+        }
+        setTimeout(() => {
+          setPost({ ...post, file: json.data.link });
+          setCorrectImage(true);
+        }, 1000);
       });
   };
   const compressImg = (file: any) => {
-    if (!file) console.log('oops');
+    if (!file) return;
 
     const firstImg = file[0];
 
@@ -61,7 +73,7 @@ const CreatePost: FC = () => {
   };
 
   const createNewPost = () => {
-    fetch('http://localhost:8000/post/create', {
+    fetch('https://rikuseto-social.herokuapp.com/post/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -69,17 +81,49 @@ const CreatePost: FC = () => {
       body: JSON.stringify(post),
     });
   };
-  // https://rikuseto-social.herokuapp.com
-  console.log(post);
+
+  const checkCorrectPost = () => {
+    if (userPickedImage) {
+      if (
+        post!.headline!.length > 1 &&
+        post!.category!.length > 1 &&
+        correctImage
+      ) {
+        return true;
+      } else return false;
+    }
+
+    if (post!.headline!.length > 1 && post!.category!.length > 1) {
+      return true;
+    } else return false;
+  };
+
+  useEffect(() => {
+    setCorrectFormatPost(checkCorrectPost());
+  }, [post, message]);
 
   return (
     <div className="App">
-      <input onChange={e => handleChange(e)} type="text" name="headline" />
-      <select onChange={e => handleChange(e)} name="category">
-        //TODO set default value
+      <h1>Create new post</h1>
+      <input
+        value={post.headline}
+        onChange={e => handleChange(e)}
+        type="text"
+        name="headline"
+      />
+      <br />
+      <select
+        defaultValue={post.category}
+        onChange={e => handleChange(e)}
+        name="category"
+      >
+        <option value="" disabled>
+          Choose category
+        </option>
         <option value="memes">memes</option>
         <option value="sport">sport</option>
       </select>
+      <br />
       <input
         type="file"
         accept="image/*"
@@ -87,7 +131,10 @@ const CreatePost: FC = () => {
           compressImg(e.target.files);
         }}
       />
-      <button onClick={createNewPost}>Create post</button>
+      <br />
+      <button disabled={!correctFormatPost} onClick={createNewPost}>
+        Create post
+      </button>
     </div>
   );
 };
