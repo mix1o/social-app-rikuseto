@@ -1,13 +1,21 @@
-import { FC } from 'react';
+import { FC, ReactChild } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Posts from './components/Posts/Posts';
+import Auth from './components/Auth/Auth';
+import { useFetch } from './hooks/useFetch';
+import { Routes } from './Routes';
 
 const App: FC = () => {
+  // const { data } = useFetch('https://jsonplaceholder.typicode.com/posts');
+
   return (
     <div>
       <Router>
         <Switch>
-          <Route exact path="/" component={Posts} />
+          {Routes.map(
+            ({ component: Component, url, exact }): ReactChild => (
+              <Route key={url} path={url} exact={exact} component={Component} />
+            )
+          )}
         </Switch>
       </Router>
     </div>
