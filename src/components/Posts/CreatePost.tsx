@@ -8,7 +8,6 @@ interface Post {
   file?: string;
   category?: string;
   user_id?: string;
-  author?: string;
 }
 
 interface CreateProps {
@@ -25,7 +24,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     file: '',
     category: '',
     user_id: user._id,
-    author: `${user.first_name} ${user.last_name}`,
   });
 
   const [correctImage, setCorrectImage] = useState<boolean>(false);

@@ -1,19 +1,19 @@
 import { createMachine } from 'xstate';
 
-type StatesInterface =
+type MachineStateInterface =
   | { value: 'signIn'; context: undefined }
   | { value: 'signUp'; context: undefined }
   | { value: 'resetPassword'; context: undefined };
 
-type Events =
+type MachineEvents =
   | { type: 'SIGN_UP' }
   | { type: 'SIGN_IN' }
   | { type: 'RESET_PASSWORD' };
 
 export const AuthStateMachine = createMachine<
   undefined,
-  Events,
-  StatesInterface
+  MachineEvents,
+  MachineStateInterface
 >({
   id: 'authMachine',
   initial: 'signIn',

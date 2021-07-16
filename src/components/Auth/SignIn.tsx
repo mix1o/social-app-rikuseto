@@ -14,7 +14,7 @@ interface UserLoginData {
 
 const SignIn: FC = () => {
   const [cookies, setCookie, removeCookie] = useCookies();
-  const [, send] = useMachine(AuthStateMachine);
+  const [current, send] = useMachine(AuthStateMachine);
 
   console.log(cookies);
 
@@ -59,7 +59,14 @@ const SignIn: FC = () => {
         <button onClick={() => send('SIGN_UP')}>
           Don't have acc ? Sign Up
         </button>
-        <button onClick={() => send('RESET_PASSWORD')}>Reset passwword</button>
+        <button
+          onClick={() => {
+            send('RESET_PASSWORD');
+            console.log(current);
+          }}
+        >
+          Reset passwword
+        </button>
       </main>
     </>
   );

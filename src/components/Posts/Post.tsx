@@ -4,20 +4,10 @@ import { useCookies } from 'react-cookie';
 import Comments from '../Comments/Comments';
 import { LikedElements } from '../../hooks/LikedElements';
 import moment from 'moment';
+import { PostInterfaceExtended } from '../../interfaces/posts/postInterfaces';
+import { AuthorInterface } from '../../interfaces/common/common';
 
-interface Post {
-  _id: string;
-  user_id: string;
-  headline: string;
-  category: string;
-  file: string;
-  likes: string[];
-  date: string;
-  onClickLike: () => void;
-  author: string;
-}
-
-const Post: FC<Post> = ({
+const Post: FC<PostInterfaceExtended> = ({
   _id,
   user_id,
   headline,
@@ -26,12 +16,19 @@ const Post: FC<Post> = ({
   likes,
   onClickLike,
   date,
-  author,
 }) => {
   const [cookies] = useCookies();
   const { user } = cookies;
   const [liked, setLiked] = useState<boolean | undefined>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
+
+  const [author, setAuthor] = useState<AuthorInterface>();
+
+  const authorOfPost = () => {
+    axios
+      .get(`${process.env.REACT_APP_API}/author?userId=${user_id}`)
+      .then(res => setAuthor(res.data));
+  };
 
   const handleLikePost = (id: string, user_id: string) => {
     axios
@@ -46,6 +43,7 @@ const Post: FC<Post> = ({
   };
 
   useEffect(() => {
+    authorOfPost();
     const like = LikedElements(user, likes);
     setLiked(like);
     return;
@@ -53,7 +51,13 @@ const Post: FC<Post> = ({
 
   return (
     <div style={{ background: '#333', color: '#fff', textAlign: 'center' }}>
-      <p>{author}</p>
+      <p>
+        {author?.firstName} {author?.lastName}
+      </p>
+      <img
+        style={{ width: '50px', height: '50px', borderRadius: '100%' }}
+        src={author?.avatar}
+      />
       <p>{headline}</p>
       <p>{category}</p>
       <p>{moment(date).fromNow()}</p>

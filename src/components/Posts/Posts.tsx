@@ -3,17 +3,7 @@ import CreatePost from './CreatePost';
 import styled from 'styled-components';
 import Post from './Post';
 import axios from 'axios';
-
-interface PostsProps {
-  likes: string[];
-  _id: string;
-  user_id: string;
-  headline: string;
-  category: string;
-  date: string;
-  file: string;
-  author: string;
-}
+import { PostInterface } from '../../interfaces/posts/postInterfaces';
 
 const ContainerNewPost = styled.div`
   width: 100%;
@@ -28,7 +18,7 @@ const ContainerNewPost = styled.div`
 `;
 
 const Posts: FC = () => {
-  const [posts, setPosts] = useState<PostsProps[]>();
+  const [posts, setPosts] = useState<PostInterface[]>();
   const [open, setOpen] = useState<boolean>(false);
 
   const fetchPosts = (): void => {
@@ -65,24 +55,21 @@ const Posts: FC = () => {
           <CreatePost handleFetchPosts={handleFetchPosts} setOpen={setOpen} />
         </ContainerNewPost>
       )}
-      {posts?.map(
-        ({ _id, headline, category, file, user_id, likes, date, author }) => {
-          return (
-            <Post
-              key={_id}
-              _id={_id}
-              headline={headline}
-              category={category}
-              file={file}
-              user_id={user_id}
-              likes={likes}
-              onClickLike={handleFetchPosts}
-              date={date}
-              author={author}
-            />
-          );
-        }
-      )}
+      {posts?.map(({ _id, headline, category, file, user_id, likes, date }) => {
+        return (
+          <Post
+            key={_id}
+            _id={_id}
+            headline={headline}
+            category={category}
+            file={file}
+            user_id={user_id}
+            likes={likes}
+            onClickLike={handleFetchPosts}
+            date={date}
+          />
+        );
+      })}
     </div>
   );
 };
