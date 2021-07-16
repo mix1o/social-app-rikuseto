@@ -1,17 +1,31 @@
 import React, { ChangeEvent, FC, useState, useEffect } from 'react';
 import Compressor from 'compressorjs';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 interface Post {
   headline?: string;
   file?: string;
   category?: string;
+  user_id?: string;
+  author?: string;
 }
 
-const CreatePost: FC = () => {
+interface CreateProps {
+  handleFetchPosts: () => void;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
+  const [cookies] = useCookies();
+  const { user } = cookies;
+
   const [post, setPost] = useState<Post>({
     headline: '',
     file: '',
     category: '',
+    user_id: user._id,
+    author: `${user.first_name} ${user.last_name}`,
   });
 
   const [correctImage, setCorrectImage] = useState<boolean>(false);
@@ -21,32 +35,53 @@ const CreatePost: FC = () => {
   const [disable, setDisable] = useState(false);
   const [areFiles, setAreFiles] = useState(false);
 
-  console.log(`Client-ID ${process.env.REACT_APP_IMGUR_KEY}`);
-
   const upload = (data: any) => {
-    fetch('https://api.imgur.com/3/image/', {
-      method: 'post',
-      headers: {
-        Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,
-      },
-      body: data,
-    })
-      .then(res => res.json())
-      .then(json => {
+    axios
+      .post('https://api.imgur.com/3/image/', data, {
+        headers: {
+          Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,
+        },
+      })
+      .then(res => {
         setUserPickedImage(true);
-        console.log(json);
-        if (json.status === 403) {
+        console.log(res);
+        if (res.status === 403) {
           setCorrectImage(false);
           setMessage('Something went wrong. Please try again');
           return;
         }
         setTimeout(() => {
-          setPost({ ...post, file: json.data.link });
+          setPost({ ...post, file: res.data.link });
         }, 1000);
         setCorrectImage(true);
         setMessage('Your image is correct uploaded');
       });
   };
+
+  // const upload = (data: any) => {
+  //   fetch('https://api.imgur.com/3/image/', {
+  //     method: 'post',
+  //     headers: {
+  // Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,
+  //     },
+  //     body: data,
+  //   })
+  //     .then(res => res.json())
+  //     .then(json => {
+  //       setUserPickedImage(true);
+  //       console.log(json);
+  //       if (json.status === 403) {
+  //         setCorrectImage(false);
+  //         setMessage('Something went wrong. Please try again');
+  //         return;
+  //       }
+  //       setTimeout(() => {
+  //         setPost({ ...post, file: json.data.link });
+  //       }, 1000);
+  //       setCorrectImage(true);
+  //       setMessage('Your image is correct uploaded');
+  //     });
+  // };
 
   const compressImg = (file: any) => {
     if (!file) return;
@@ -79,13 +114,13 @@ const CreatePost: FC = () => {
   };
 
   const createNewPost = () => {
-    fetch('https://rikuseto-social.herokuapp.com/posts/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(post),
-    }).then(() => setPost({ headline: '', file: '', category: '' }));
+    if (user) {
+      axios.post(`${process.env.REACT_APP_API}/posts/create`, post).then(() => {
+        setPost({ headline: '', file: '', category: '' });
+        handleFetchPosts();
+        setOpen(false);
+      });
+    }
   };
 
   const checkCorrectPost = () => {

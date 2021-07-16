@@ -2,8 +2,33 @@ import { Form, Formik, validateYupSchema } from 'formik';
 import { FC } from 'react';
 import TextField from '../../Formik/TextField';
 import { AuthSchema } from '../../Formik/ValidationSchemas';
+import { useCookies } from 'react-cookie';
+import axios from 'axios';
+import { useMachine } from '@xstate/react';
+import { AuthStateMachine } from './AuthStateMachine';
+
+interface UserLoginData {
+  email: string;
+  password: string;
+}
 
 const SignIn: FC = () => {
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const [, send] = useMachine(AuthStateMachine);
+
+  console.log(cookies);
+
+  const handleLogIn = (values: UserLoginData) => {
+    axios
+      .post(`${process.env.REACT_APP_API}/auth/login`, values)
+      .then(res => {
+        if (res.data.valid) {
+          setCookie('user', res.data.user);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+
   return (
     <>
       <header>
@@ -13,8 +38,7 @@ const SignIn: FC = () => {
       <main>
         <Formik
           initialValues={{ email: '', password: '' }}
-          onSubmit={values => console.log(values)}
-          validationSchema={AuthSchema}
+          onSubmit={values => handleLogIn(values)}
         >
           <Form>
             <TextField
@@ -32,6 +56,10 @@ const SignIn: FC = () => {
             <button type="submit">Sign In</button>
           </Form>
         </Formik>
+        <button onClick={() => send('SIGN_UP')}>
+          Don't have acc ? Sign Up
+        </button>
+        <button onClick={() => send('RESET_PASSWORD')}>Reset passwword</button>
       </main>
     </>
   );

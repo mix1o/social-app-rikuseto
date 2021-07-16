@@ -9,12 +9,14 @@ const Auth: FC = () => {
   const [current, send] = useMachine(AuthStateMachine);
   // TODO Fix this fucking pice of shit, cannot call hook outside fucntion body HOW !??!?!?!???!?!?!?
 
+  console.log(current);
+
   return (
     <>
-      {/* <SignIn/> */}
+      <SignIn />
       <SignUp />
-
-      {/* <div>{current.matches('signIn') && <SignIn />}</div>
+      {/* 
+      <div>{current.matches('signIn') && <SignIn />}</div>
       <div>{current.matches('signUp') && <SignUp />}</div>
       <div>{current.matches('resetPassword') && <ResetPassword />}</div> */}
     </>
