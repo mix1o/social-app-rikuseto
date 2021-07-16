@@ -44,7 +44,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       })
       .then(res => {
         setUserPickedImage(true);
-        console.log(res);
+
         if (res.status === 403) {
           setCorrectImage(false);
           setMessage('Something went wrong. Please try again');
