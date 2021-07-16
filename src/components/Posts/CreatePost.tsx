@@ -51,37 +51,12 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           return;
         }
         setTimeout(() => {
-          setPost({ ...post, file: res.data.link });
+          setPost({ ...post, file: res.data.data.link });
         }, 1000);
         setCorrectImage(true);
         setMessage('Your image is correct uploaded');
       });
   };
-
-  // const upload = (data: any) => {
-  //   fetch('https://api.imgur.com/3/image/', {
-  //     method: 'post',
-  //     headers: {
-  // Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,
-  //     },
-  //     body: data,
-  //   })
-  //     .then(res => res.json())
-  //     .then(json => {
-  //       setUserPickedImage(true);
-  //       console.log(json);
-  //       if (json.status === 403) {
-  //         setCorrectImage(false);
-  //         setMessage('Something went wrong. Please try again');
-  //         return;
-  //       }
-  //       setTimeout(() => {
-  //         setPost({ ...post, file: json.data.link });
-  //       }, 1000);
-  //       setCorrectImage(true);
-  //       setMessage('Your image is correct uploaded');
-  //     });
-  // };
 
   const compressImg = (file: any) => {
     if (!file) return;

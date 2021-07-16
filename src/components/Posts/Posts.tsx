@@ -33,7 +33,7 @@ const Posts: FC = () => {
 
   const fetchPosts = (): void => {
     axios
-      .get('http://localhost:8000/posts/get')
+      .get(`${process.env.REACT_APP_API}/posts/get`)
       .then(res => setPosts(res.data));
   };
 
