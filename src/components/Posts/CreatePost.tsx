@@ -23,7 +23,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     headline: '',
     file: '',
     category: '',
-    user_id: user._id,
+    user_id: user ? user._id : '',
   });
 
   const [correctImage, setCorrectImage] = useState<boolean>(false);
@@ -128,8 +128,9 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
 
   return (
     <div className="App">
-      <h1>Create new post</h1>
+      <h1 data-testid="create-post-header">Create new post</h1>
       <input
+        data-testid="headline"
         value={post.headline}
         onChange={e => handleChange(e)}
         type="text"
@@ -164,12 +165,19 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       />
       <br />
       {!disable && !areFiles && (
-        <button disabled={!correctFormatPost} onClick={createNewPost}>
+        <button
+          style={{ background: 'red' }}
+          data-testid="button"
+          disabled={!correctFormatPost}
+          onClick={createNewPost}
+        >
           Create post
         </button>
       )}
       {disable && <p>Loading image...</p>}
-      {!correctFormatPost && post!.headline!.length > 0 && <p>{message}</p>}
+      {!correctFormatPost && post!.headline!.length > 0 && (
+        <p data-testid="message">{message}</p>
+      )}
     </div>
   );
 };
