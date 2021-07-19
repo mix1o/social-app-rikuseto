@@ -20,9 +20,9 @@ interface CommentsData {
 }
 
 const ContainerComments = styled.div`
-  background: #333;
+  background: #fff;
   min-height: 100vh;
-  position: absolute;
+  position: fixed;
   z-index: 10;
   top: 0;
   left: 0;
@@ -79,18 +79,26 @@ const Comments: FC<CommentProps> = ({ postId, setOpenComments }) => {
         </>
       )}
       {!user && <p>You need to be logged in to add new comment</p>}
-      {comments?.map(({ _id, text, user_id, likes }) => {
-        return (
-          <Comment
-            key={_id}
-            _id={_id}
-            text={text}
-            user_id={user_id}
-            likes={likes}
-            refreshComments={getAllComments}
-          />
-        );
-      })}
+      <div
+        style={{
+          maxHeight: '100vh',
+          overflowY: 'scroll',
+          paddingBottom: '4rem',
+        }}
+      >
+        {comments?.map(({ _id, text, user_id, likes }) => {
+          return (
+            <Comment
+              key={_id}
+              _id={_id}
+              text={text}
+              user_id={user_id}
+              likes={likes}
+              refreshComments={getAllComments}
+            />
+          );
+        })}
+      </div>
     </ContainerComments>
   );
 };

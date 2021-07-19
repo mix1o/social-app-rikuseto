@@ -3,6 +3,7 @@ import CreatePost from './CreatePost';
 import styled from 'styled-components';
 import Post from './Post';
 import axios from 'axios';
+import { useCookies } from 'react-cookie';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
 
 const ContainerNewPost = styled.div`
@@ -21,6 +22,9 @@ const Posts: FC = () => {
   const [posts, setPosts] = useState<PostInterface[]>();
   const [open, setOpen] = useState<boolean>(false);
 
+  const [cookies] = useCookies();
+  const { user } = cookies;
+
   const fetchPosts = (): void => {
     axios
       .get(`${process.env.REACT_APP_API}/posts/get`)
@@ -37,13 +41,21 @@ const Posts: FC = () => {
 
   return (
     <div>
-      <label>
-        <input
-          onClick={() => setOpen(true)}
-          type="text"
-          placeholder="What's on your mind"
-        />
-      </label>
+      {user && (
+        <label className="post__container-input">
+          <img
+            className="post__image-author"
+            src={user.avatar}
+            alt={user.first_name}
+          />
+          <input
+            className="post__input"
+            onClick={() => setOpen(true)}
+            type="text"
+            placeholder={`${user.first_name}, what's is on your mind`}
+          />
+        </label>
+      )}
       {open && (
         <ContainerNewPost>
           <div

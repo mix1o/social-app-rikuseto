@@ -47,27 +47,32 @@ const Comment: FC<SingleCommentProps> = ({
   }, [likes]);
 
   return (
-    <div style={{ marginTop: '10px', background: '#d9d9d9', color: '#000' }}>
-      <p>
-        {author?.firstName} {author?.lastName}
-      </p>
-      <p>{text}</p>
-      <img
-        style={{ width: '50px', height: '50px', borderRadius: '100%' }}
-        src={author?.avatar}
-        alt="user profile"
-      />
-      <p>Likes: {likes.length}</p>
-      <button
-        style={liked ? { background: 'green' } : { background: 'gray' }}
-        onClick={() => {
-          if (user) {
-            handleLikeComment();
-          }
-        }}
-      >
-        add like
-      </button>
+    <div className="comment">
+      <div className="comment__author">
+        <img
+          className="comment__author-image"
+          src={author?.avatar}
+          alt="user profile"
+        />
+        <p>
+          {author?.firstName} {author?.lastName}
+        </p>
+      </div>
+      <p className="comment__content">{text}</p>
+      <div className="comment__action">
+        <p>{likes.length}</p>
+        <button
+          className="comment__btn"
+          style={liked ? { color: 'purple' } : { color: '#555' }}
+          onClick={() => {
+            if (user) {
+              handleLikeComment();
+            }
+          }}
+        >
+          <i className="fas fa-star" />
+        </button>
+      </div>
     </div>
   );
 };

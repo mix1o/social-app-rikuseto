@@ -47,38 +47,49 @@ const Post: FC<PostInterfaceExtended> = ({
     const like = LikedElements(user, likes);
     setLiked(like);
     return;
-  }, [likes]);
+  }, [likes, user]);
 
   return (
-    <div style={{ background: '#333', color: '#fff', textAlign: 'center' }}>
-      <p>
-        {author?.firstName} {author?.lastName}
-      </p>
-      <img
-        style={{ width: '50px', height: '50px', borderRadius: '100%' }}
-        src={author?.avatar}
-      />
-      <p>{headline}</p>
-      <p>{category}</p>
-      <p>{moment(date).fromNow()}</p>
-      <img
-        style={{ width: '90%', height: '200px' }}
-        src={file}
-        alt={headline}
-      />
-      <div>
-        Stars {likes.length}
-        <button
-          style={liked ? { background: 'green' } : { background: 'gray' }}
-          onClick={() => {
-            if (user) {
-              handleLikePost(_id, user._id);
-            }
-          }}
-        >
-          Add Star
+    <div data-testid="post" className="post">
+      {file.length > 3 && (
+        <div className="post__image-container">
+          <img className="post__image" src={file} alt={headline} />
+        </div>
+      )}
+      <div className="post__author">
+        <img className="post__image-author" src={author?.avatar} />
+        <p>
+          {author?.firstName} {author?.lastName}
+        </p>
+      </div>
+      <div className="post__content">
+        <div className="post__type">
+          <p className="post__date">{moment(date).fromNow()}</p>
+          <p className="post__category">Category: {category}</p>
+        </div>
+        <p className="post__headline">{headline}</p>
+      </div>
+      <div className="post__actions">
+        <div className="post__container-likes">
+          <p className="post__likes">{likes.length}</p>
+          <button
+            className="post__btn post__star"
+            style={liked ? { color: 'purple' } : { color: '#555' }}
+            onClick={() => {
+              if (user) {
+                handleLikePost(_id, user._id);
+              }
+            }}
+          >
+            <i className="fas fa-star"></i>
+          </button>
+        </div>
+        <button className="post__btn" onClick={() => setOpenComments(true)}>
+          <i className="far fa-comment"></i>
         </button>
-        <button onClick={() => setOpenComments(true)}>Comments</button>
+      </div>
+      <div className="post__comments" onClick={() => setOpenComments(true)}>
+        <p>View all comments</p>
       </div>
       {openComments && (
         <Comments postId={_id} setOpenComments={setOpenComments} />
