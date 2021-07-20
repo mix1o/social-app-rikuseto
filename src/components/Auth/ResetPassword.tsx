@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import { useMachine } from '@xstate/react';
-import { AuthStateMachine } from './AuthStateMachine';
+import { useMachine, useService } from '@xstate/react';
+import { AuthStateMachine, authService } from './AuthStateMachine';
 
 const ResetPassword: FC = () => {
-  const [, send] = useMachine(AuthStateMachine);
+  const [, send] = useService(authService);
   return (
     <div>
       Teraz jest reset

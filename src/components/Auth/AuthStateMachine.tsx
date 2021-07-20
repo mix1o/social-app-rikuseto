@@ -1,4 +1,4 @@
-import { createMachine } from 'xstate';
+import { createMachine, interpret } from 'xstate';
 
 type MachineStateInterface =
   | { value: 'signIn'; context: undefined }
@@ -37,3 +37,6 @@ export const AuthStateMachine = createMachine<
     },
   },
 });
+
+export const authService = interpret(AuthStateMachine);
+authService.start();

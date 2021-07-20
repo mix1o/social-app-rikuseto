@@ -1,11 +1,11 @@
-import { Form, Formik, validateYupSchema } from 'formik';
+import { Form, Formik } from 'formik';
 import { FC } from 'react';
 import TextField from '../../Formik/TextField';
 import { AuthSchema } from '../../Formik/ValidationSchemas';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
-import { useMachine } from '@xstate/react';
-import { AuthStateMachine } from './AuthStateMachine';
+import { useMachine, useService } from '@xstate/react';
+import { AuthStateMachine, authService } from './AuthStateMachine';
 
 interface UserLoginData {
   email: string;
@@ -14,7 +14,7 @@ interface UserLoginData {
 
 const SignIn: FC = () => {
   const [cookies, setCookie, removeCookie] = useCookies();
-  const [current, send] = useMachine(AuthStateMachine);
+  const [, send] = useService(authService);
 
   console.log(cookies);
 
@@ -62,10 +62,9 @@ const SignIn: FC = () => {
         <button
           onClick={() => {
             send('RESET_PASSWORD');
-            console.log(current);
           }}
         >
-          Reset passwword
+          Reset password
         </button>
       </main>
     </>

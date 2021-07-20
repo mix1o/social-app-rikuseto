@@ -3,8 +3,8 @@ import { FC } from 'react';
 import TextField from '../../Formik/TextField';
 import { AuthSchema } from '../../Formik/ValidationSchemas';
 import axios from 'axios';
-import { useMachine } from '@xstate/react';
-import { AuthStateMachine } from './AuthStateMachine';
+import { useMachine, useService } from '@xstate/react';
+import { AuthStateMachine, authService } from './AuthStateMachine';
 
 interface UserAccountData {
   email: string;
@@ -15,7 +15,7 @@ interface UserAccountData {
 }
 
 const SignUp: FC = () => {
-  const [current, send] = useMachine(AuthStateMachine);
+  const [, send] = useService(authService);
 
   const createAccount = (values: UserAccountData) => {
     axios
