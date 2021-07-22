@@ -10,9 +10,9 @@ const Auth: FC = () => {
 
   return (
     <>
-      <div>{current.matches('signIn') && <SignIn />}</div>
-      <div>{current.matches('signUp') && <SignUp />}</div>
-      <div>{current.matches('resetPassword') && <ResetPassword />}</div>
+      {current.matches('signIn') && <SignIn />}
+      {current.matches('signUp') && <SignUp />}
+      {current.matches('resetPassword') && <ResetPassword />}
     </>
   );
 };
