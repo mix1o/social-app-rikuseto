@@ -1,3 +1,60 @@
-// -----------------------------------------------------------------------------
-// This file contains all styles related to the button component.
-// -----------------------------------------------------------------------------
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+
+@mixin btnBasicPseudo($pseudoClass, $bg-color, $border-color: transparent) {
+  &:#{$pseudoClass} {
+    background: $bg-color;
+    border: 2px solid $border-color;
+    margin: -2px;
+  }
+}
+@mixin btnEmptyPseudo(
+  $pseudoClass,
+  $bg-color,
+  $shadowIn: null 2px 2px,
+  $bg: clr.$main-bg-500
+) {
+  &:#{$pseudoClass} {
+    box-shadow: $shadowIn 0px 0px $bg-color;
+    // margin: -2px;
+    border-color: $bg;
+    color: $bg;
+  }
+}
+
+@mixin btnBasic($padding: 0.5rem 1rem, $fs: ft.$fs-200) {
+  background: clr.$main-bg-500;
+  color: clr.$font-light-300;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: $padding;
+  font-size: $fs;
+}
+
+@mixin btn() {
+  @include btnBasic(1.2rem, ft.$fs-300);
+  @include btnBasicPseudo('hover', clr.$main-bg-700, clr.$main-bg-400);
+  @include btnBasicPseudo('active', clr.$main-bg-400, clr.$main-bg-700);
+  @include btnBasicPseudo('disabled', clr.$main-bg-200);
+}
+
+@mixin btnEmpty() {
+  background: transparent;
+  color: clr.$main-bg-500;
+  border: 2px solid clr.$main-bg-500;
+  border-radius: 2px;
+  font-weight: ft.$fw-500;
+  padding: 1rem;
+  font-size: ft.$fs-300;
+  cursor: pointer;
+
+  @include btnEmptyPseudo('hover', clr.$main-bg-300, inset -2px 2px);
+  @include btnEmptyPseudo('active', clr.$main-bg-300);
+  @include btnEmptyPseudo(
+    'disabled',
+    clr.$main-bg-300,
+    null 0 0,
+    clr.$main-bg-200
+  );
+}
