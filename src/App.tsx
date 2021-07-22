@@ -1,17 +1,15 @@
 import { FC, ReactChild } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Auth from './components/Auth/Auth';
 import { Routes } from './Routes';
 import { useCookies } from 'react-cookie';
 import Header from './components/Header/Header';
 
 const App: FC = () => {
-  const [cookies, , removeCookie] = useCookies();
-  const { user } = cookies;
+  const [cookies] = useCookies();
 
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <Router>
         <Switch>
           {Routes.map(
