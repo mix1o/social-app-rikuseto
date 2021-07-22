@@ -1,0 +1,51 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/variables' as var;
+@use '../abstracts/fontSizes' as ft;
+@use '../components/button' as btn;
+
+.auth-form {
+  display: grid;
+  align-content: center;
+  width: var.$form-width;
+
+  &__wrapper {
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  &__label {
+    color: clr.$font-dark-400;
+    position: absolute;
+    pointer-events: none;
+    transition: 400ms;
+  }
+  &__input {
+    font-size: ft.$fs-300;
+    padding: 1rem;
+    width: 100%;
+    border: 2px solid clr.$main-bg-500;
+    border-radius: 3px;
+  }
+  &__error {
+    color: clr.$warning-500;
+    font-weight: ft.$fw-500;
+    padding-top: 1rem;
+  }
+  &__input--error {
+    background: clr.$warning-300;
+    border-color: clr.$warning-500;
+  }
+  &__btn-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  &__next-form {
+    @include btn.btnEmpty();
+    margin-right: 1rem;
+  }
+  &__submit {
+    @include btn.btn();
+    justify-self: right;
+    max-width: max-content;
+  }
+}

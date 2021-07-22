@@ -1,0 +1,31 @@
+@use '../abstracts/variables' as var;
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+@use '../components/button' as btn;
+
+.auth {
+  margin: 0 1rem;
+  height: 100vh;
+  display: grid;
+  justify-content: center;
+
+  &__header {
+    display: flex;
+    flex-flow: column;
+    align-self: flex-end;
+  }
+  &__sub-headline {
+    font-size: ft.$fs-300;
+    margin: 0.5rem 0;
+  }
+  &__form-link {
+    text-align: center;
+    font-size: ft.$fs-300;
+    color: clr.$font-dark-600;
+    font-weight: ft.$fw-600;
+  }
+  &__form-next {
+    cursor: pointer;
+    color: clr.$main-bg-500;
+  }
+}
