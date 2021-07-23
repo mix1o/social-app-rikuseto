@@ -1,13 +1,29 @@
-@use '../abstracts/variables' as var;
 @use '../abstracts/colors' as clr;
 @use '../abstracts/fontSizes' as ft;
-@use '../components/button' as btn;
+@use '../abstracts/media' as qr;
+
+.wrapper {
+  @include qr.media('>=tablet') {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-image: url('https://img.freepik.com/free-vector/social-tree-concept-illustration_114360-4898.jpg?size=338&ext=jpg&ga=GA1.2.1424524701.1621555200');
+    background-repeat: no-repeat;
+    background-size: cover;
+    aspect-ratio: 16/9;
+  }
+}
 
 .auth {
   margin: 0 1rem;
   height: 100vh;
   display: grid;
   justify-content: center;
+  @include qr.media('>=tablet') {
+    background: #fff;
+    padding: 0 2rem;
+  }
 
   &__header {
     display: flex;

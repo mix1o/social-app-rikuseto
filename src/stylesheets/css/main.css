@@ -318,6 +318,11 @@ h6 {
   margin: -2px;
 }
 
+.menu {
+  position: sticky;
+  bottom: 0;
+}
+
 .post {
   background: #e7e7e7;
   margin-top: 1rem;
@@ -422,11 +427,30 @@ h6 {
   color: inherit;
 }
 
+@media (min-width: 768px) {
+  .wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-image: url("https://img.freepik.com/free-vector/social-tree-concept-illustration_114360-4898.jpg?size=338&ext=jpg&ga=GA1.2.1424524701.1621555200");
+    background-repeat: no-repeat;
+    background-size: cover;
+    aspect-ratio: 16/9;
+  }
+}
+
 .auth {
   margin: 0 1rem;
   height: 100vh;
   display: grid;
   justify-content: center;
+}
+@media (min-width: 768px) {
+  .auth {
+    background: #fff;
+    padding: 0 2rem;
+  }
 }
 .auth__header {
   display: flex;
