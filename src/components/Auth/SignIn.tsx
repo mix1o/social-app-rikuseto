@@ -28,8 +28,8 @@ const SignIn: FC = () => {
   };
 
   return (
-    <div className="wrapper">
-      <main className="auth">
+    <>
+      <main className="auth__main">
         <div className="auth__header">
           <h1>Login</h1>
           <p className="auth__sub-headline">Please sign in to continue.</p>
@@ -78,7 +78,7 @@ const SignIn: FC = () => {
           </p>
         </div>
       </main>
-    </div>
+    </>
   );
 };
 

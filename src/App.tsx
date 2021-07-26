@@ -10,7 +10,7 @@ const App: FC = () => {
 
   return (
     <div>
-      {/* <Header /> */}
+      <Header />
       <Router>
         <Switch>
           {Routes.map(
@@ -19,8 +19,8 @@ const App: FC = () => {
             )
           )}
         </Switch>
+        <Menu />
       </Router>
-      <Menu />
     </div>
   );
 };

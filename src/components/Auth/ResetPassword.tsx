@@ -8,8 +8,8 @@ import TextField from '../../Formik/TextField';
 const ResetPassword: FC = () => {
   const [, send] = useService(authService);
   return (
-    <div className="wrapper">
-      <main className="auth">
+    <>
+      <main className="auth__main">
         <div className="auth__header">
           <h1>Reset password</h1>
         </div>
@@ -44,7 +44,7 @@ const ResetPassword: FC = () => {
           </span>
         </p>
       </main>
-    </div>
+    </>
   );
 };
 

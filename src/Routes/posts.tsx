@@ -4,5 +4,4 @@ export const PostsRoute = {
   component: Posts,
   url: '/',
   exact: true,
-  requirePermission: false,
 };
