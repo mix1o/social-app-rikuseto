@@ -1,11 +1,34 @@
-// -----------------------------------------------------------------------------
-// This file contains all styles related to the header of the site/application.
-// -----------------------------------------------------------------------------
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+@use '../abstracts/media' as qr;
+@use '../abstracts/variables' as var;
 
 .header {
-  background-color: #d9d9d9;
+  background-color: clr.$light-bg-500;
+  border-bottom: 1px solid clr.$light-bg-600;
   display: flex;
   justify-content: space-between;
-  padding: 0 0.5rem;
+  padding: 1rem;
   align-items: center;
+  position: sticky;
+  top: 0;
+
+  &__message {
+    margin: 0;
+  }
+  &__nav-button {
+    width: 3rem;
+    height: 3rem;
+    background: clr.$main-bg-300;
+    border: none;
+    border-radius: 100rem;
+  }
+
+  &__menu {
+    background-color: clr.$main-bg-300;
+    height: 100vh;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
 }

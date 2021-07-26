@@ -222,11 +222,31 @@ h6 {
 }
 
 .header {
-  background-color: #d9d9d9;
+  background-color: #fff;
+  border-bottom: 1px solid #f3f2f5;
   display: flex;
   justify-content: space-between;
-  padding: 0 0.5rem;
+  padding: 1rem;
   align-items: center;
+  position: sticky;
+  top: 0;
+}
+.header__message {
+  margin: 0;
+}
+.header__nav-button {
+  width: 3rem;
+  height: 3rem;
+  background: #b496ee;
+  border: none;
+  border-radius: 100rem;
+}
+.header__menu {
+  background-color: #b496ee;
+  height: 100vh;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .auth-form {
@@ -321,6 +341,18 @@ h6 {
 .menu {
   position: sticky;
   bottom: 0;
+  display: flex;
+  background-color: #fff;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-top: 1px solid #f3f2f5;
+}
+.menu__item {
+  font-size: 2.1rem;
+  color: #222831;
+}
+.menu__item--active {
+  color: #753ee0;
 }
 
 .post {
@@ -427,27 +459,26 @@ h6 {
   color: inherit;
 }
 
+.auth {
+  height: 100vh;
+}
 @media (min-width: 768px) {
-  .wrapper {
-    width: 100vw;
-    height: 100vh;
+  .auth {
     display: flex;
     justify-content: center;
     background-image: url("https://img.freepik.com/free-vector/social-tree-concept-illustration_114360-4898.jpg?size=338&ext=jpg&ga=GA1.2.1424524701.1621555200");
     background-repeat: no-repeat;
     background-size: cover;
-    aspect-ratio: 16/9;
   }
 }
-
-.auth {
+.auth__main {
   margin: 0 1rem;
-  height: 100vh;
+  height: 100%;
   display: grid;
   justify-content: center;
 }
 @media (min-width: 768px) {
-  .auth {
+  .auth__main {
     background: #fff;
     padding: 0 2rem;
   }

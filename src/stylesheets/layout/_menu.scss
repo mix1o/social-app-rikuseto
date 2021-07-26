@@ -1,4 +1,20 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+
 .menu {
   position: sticky;
   bottom: 0;
+  display: flex;
+  background-color: clr.$light-bg-500;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-top: 1px solid clr.$light-bg-600;
+
+  &__item {
+    font-size: ft.$fs-400;
+    color: clr.$font-dark-700;
+  }
+  &__item--active {
+    color: clr.$font-active-500;
+  }
 }
