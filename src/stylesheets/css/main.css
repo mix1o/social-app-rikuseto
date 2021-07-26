@@ -224,12 +224,14 @@ h6 {
 .header {
   background-color: #fff;
   border-bottom: 1px solid #f3f2f5;
-  display: flex;
-  justify-content: space-between;
   padding: 1rem;
-  align-items: center;
   position: sticky;
   top: 0;
+}
+.header__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .header__message {
   margin: 0;
@@ -243,10 +245,38 @@ h6 {
 }
 .header__menu {
   background-color: #d3c2f5;
-  height: 100vh;
+  min-height: 450px;
   position: absolute;
   right: 0;
   top: 0;
+}
+.header__options {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  display: grid;
+  grid-template-areas: "center";
+}
+.header__blurred-bg {
+  background: rgba(34, 40, 49, 0.8);
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  grid-area: center;
+}
+.header__option {
+  min-width: 350px;
+  max-width: 450px;
+  grid-area: center;
+  background: #fff;
+  align-self: center;
+  justify-self: center;
+  padding: 2rem;
+  border-radius: 3px;
+  border: 1px solid #f3f2f5;
+  z-index: 5;
 }
 
 .auth-form {
@@ -491,6 +521,7 @@ h6 {
 .auth__sub-headline {
   font-size: 1.6rem;
   margin: 0.5rem 0;
+  padding-bottom: 2.5rem;
 }
 .auth__form-link {
   text-align: center;

@@ -6,13 +6,16 @@
 .header {
   background-color: clr.$light-bg-500;
   border-bottom: 1px solid clr.$light-bg-600;
-  display: flex;
-  justify-content: space-between;
+
   padding: 1rem;
-  align-items: center;
+
   position: sticky;
   top: 0;
-
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   &__message {
     margin: 0;
   }
@@ -26,9 +29,39 @@
 
   &__menu {
     background-color: clr.$main-bg-200;
-    height: 100vh;
+    min-height: 450px;
     position: absolute;
     right: 0;
     top: 0;
+  }
+  &__options {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    display: grid;
+    grid-template-areas: 'center';
+  }
+  &__blurred-bg {
+    background: rgba(clr.$secondary-bg-600, 0.8);
+    width: 100vw;
+    height: 100vh;
+    z-index: 2;
+    grid-area: center;
+  }
+  &__option {
+    min-width: var.$form-width;
+    max-width: 450px;
+    // min-height: 500px;
+    // max-height: 600px;
+    grid-area: center;
+    background: clr.$light-bg-500;
+    align-self: center;
+    justify-self: center;
+    padding: 2rem;
+    border-radius: 3px;
+    border: 1px solid clr.$light-bg-600;
+    z-index: 5;
   }
 }
