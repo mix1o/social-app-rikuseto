@@ -9,7 +9,7 @@ const App: FC = () => {
   const [cookies] = useCookies();
 
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <Header />
       <Router>
         <Switch>

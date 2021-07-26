@@ -1,72 +1,76 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, ReactChild, ReactElement } from 'react';
 import { useCookies } from 'react-cookie';
 import SignIn from '../Auth/SignIn';
 import SignUp from '../Auth/SignUp';
 import { motion as m, AnimatePresence as Presence } from 'framer-motion';
 
 import { useRef } from 'react';
+import { type } from 'os';
 
 const variants = {
   open: {
     opacity: 1,
-    x: 0,
+    y: 0,
     transition: {
       type: 'tween',
       ease: 'easeIn',
+      duration: 0.2,
     },
   },
   closed: {
     opacity: 0,
-    x: '100%',
+    y: '-100%',
     transition: {
       type: 'tween',
       ease: 'easeOut',
+      duration: 0.2,
     },
   },
 };
 
-const HeaderItem = () => {
-  return <div>a</div>;
+const USER_OPTIONS = {
+  NULL: '',
+  SIGN_IN: 'sign-in',
+  SIGN_UP: 'sign-up',
 };
 
 const Header: FC = () => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
+  const [userOption, setUserOption] = useState(USER_OPTIONS.NULL);
   const [cookies, , removeCookie] = useCookies();
   const { user } = cookies;
-  const [userOption, setUserOption] = useState<number>(0);
-  const menuRef = useRef<HTMLButtonElement>(null);
-  const handleUserChoose = (option: number) => {
+
+  const handleUserChoose = (option: string) => {
     setUserOption(option);
   };
 
   useEffect(() => {
-    setUserOption(0);
+    setUserOption(USER_OPTIONS.NULL);
     setOpenMenu(false);
   }, [user]);
 
   return (
     <div className="header">
-      <h3 className="header__message">RS</h3>
-      <button
-        className="header__nav-button"
-        onClick={() => setOpenMenu(!openMenu)}
-        // ref={menuRef}
-      ></button>
+      <div className="header__content">
+        <h3 className="header__message">RS</h3>
+        <button
+          className="header__nav-button"
+          onClick={() => setOpenMenu(!openMenu)}
+        ></button>
+      </div>
+
       <m.div
         initial="closed"
         animate={openMenu ? 'open' : 'closed'}
         variants={variants}
         className="header__menu"
-        // drag
-        // dragConstraints={menuRef}
-        // onDrag={e => console.log(e)}
       >
         <div onClick={() => setOpenMenu(false)}>x</div>
         {!user && (
           <div>
             <button
               onClick={() => {
-                handleUserChoose(1);
+                handleUserChoose(USER_OPTIONS.SIGN_IN);
                 setOpenMenu(false);
               }}
             >
@@ -74,7 +78,7 @@ const Header: FC = () => {
             </button>
             <button
               onClick={() => {
-                handleUserChoose(2);
+                handleUserChoose(USER_OPTIONS.SIGN_UP);
                 setOpenMenu(false);
               }}
             >
@@ -89,19 +93,35 @@ const Header: FC = () => {
           </div>
         )}
       </m.div>
-      <div style={{ position: 'absolute', top: 0, left: 0 }}>
-        {userOption === 1 && (
+
+      {userOption.length >= 1 && (
+        <div className="header__options">
+          <div
+            className="header__blurred-bg"
+            onClick={() => setUserOption(USER_OPTIONS.NULL)}
+          ></div>
           <>
-            <SignIn /> <button onClick={() => setUserOption(0)}>close</button>
+            {userOption === USER_OPTIONS.SIGN_IN && (
+              <div className="header__option">
+                <SignIn />
+                <button onClick={() => setUserOption(USER_OPTIONS.NULL)}>
+                  close
+                </button>
+              </div>
+            )}
+            {userOption === USER_OPTIONS.SIGN_UP && (
+              <>
+                <div className="header__option">
+                  <SignUp />
+                  <button onClick={() => setUserOption(USER_OPTIONS.NULL)}>
+                    close
+                  </button>
+                </div>
+              </>
+            )}
           </>
-        )}
-        {userOption === 2 && (
-          <>
-            {' '}
-            <SignUp /> <button onClick={() => setUserOption(0)}>close</button>
-          </>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
