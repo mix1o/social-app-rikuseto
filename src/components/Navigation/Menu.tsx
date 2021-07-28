@@ -1,27 +1,43 @@
-import { FC, useState, useMemo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-
+import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion as m } from 'framer-motion';
 interface MenuProps {
-  className: string;
+  iconsClasses: string;
   href: string;
-  position: number;
-  currentPosition: number;
+  selected: string;
+  setSelected: Dispatch<SetStateAction<string>>;
+  value: string;
 }
 
+const MenuItemVariant = {
+  active: {
+    color: '#753ee0',
+  },
+  disabled: {
+    color: '#222831',
+  },
+};
+
 const MenuItem: FC<MenuProps> = ({
-  className,
   href,
-  position,
-  currentPosition,
+  iconsClasses,
+  selected,
+  setSelected,
+  value,
 }) => {
   return (
-    <Link to={href} className="menu__item">
-      <i
-        className={`${className} ${
-          currentPosition === position ? 'menu__item--active' : null
-        }`}
-      ></i>
-    </Link>
+    <m.button
+      variants={MenuItemVariant}
+      initial="disabled"
+      animate={selected === value ? 'active' : 'disabled'}
+      whileTap={{ scale: 1.2 }}
+      onClick={() => setSelected(value)}
+      className="menu__item"
+    >
+      <Link to={href} className="menu__item--link">
+        <i className={`${iconsClasses}`}></i>
+      </Link>
+    </m.button>
   );
 };
 
@@ -87,24 +103,54 @@ const MenuItem: FC<MenuProps> = ({
 //   );
 // };
 
+const MENU_ROUTES = {
+  MAIN: 'main',
+  NOTIFICATION: 'notification',
+  POST: 'post',
+  MESSAGES: 'messages',
+  AUTH: 'auth',
+};
+
 const Menu = () => {
+  const [selected, setSelected] = useState(MENU_ROUTES.MAIN);
+
   return (
     <nav className="menu">
-      <Link to="/">
-        <i className={`fas fa-home menu__item `}></i>
-      </Link>
-      <Link to="/notification">
-        <i className={`fas fa-bell menu__item `}></i>
-      </Link>
-      <Link to="/new-post">
-        <i className={`fas fa-plus menu__item `}></i>
-      </Link>
-      <Link to="/messages">
-        <i className={`fas fa-comment-dots menu__item `}></i>
-      </Link>
-      <Link to="/auth">
-        <i className={`fas fa-user menu__item `}></i>
-      </Link>
+      <MenuItem
+        href="/"
+        selected={selected}
+        iconsClasses="fas fa-home"
+        setSelected={setSelected}
+        value={MENU_ROUTES.MAIN}
+      />
+      <MenuItem
+        href="/notification"
+        selected={selected}
+        iconsClasses="fas fa-bell "
+        setSelected={setSelected}
+        value={MENU_ROUTES.NOTIFICATION}
+      />
+      <MenuItem
+        href="/new-post"
+        selected={selected}
+        iconsClasses="fas fa-plus"
+        setSelected={setSelected}
+        value={MENU_ROUTES.POST}
+      />
+      <MenuItem
+        href="/messages"
+        selected={selected}
+        iconsClasses="fas fa-comment-dots"
+        setSelected={setSelected}
+        value={MENU_ROUTES.MESSAGES}
+      />
+      <MenuItem
+        href="/auth"
+        selected={selected}
+        iconsClasses="fas fa-user"
+        setSelected={setSelected}
+        value={MENU_ROUTES.AUTH}
+      />
     </nav>
   );
 };

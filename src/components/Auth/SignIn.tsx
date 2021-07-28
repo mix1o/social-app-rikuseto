@@ -3,7 +3,7 @@ import { FC } from 'react';
 import TextField from '../../Formik/TextField';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
-import { useService } from '@xstate/react';
+import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
 import { AuthSchema2 as AuthSchema } from '../../Formik/ValidationSchemas';
 
@@ -14,7 +14,7 @@ interface UserLoginData {
 
 const SignIn: FC = () => {
   const [, setCookie] = useCookies();
-  const [, send] = useService(authService);
+  const [, send] = useActor(authService);
 
   const handleLogIn = (values: UserLoginData) => {
     axios

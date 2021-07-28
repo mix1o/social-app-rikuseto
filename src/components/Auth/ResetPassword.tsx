@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useService } from '@xstate/react';
 import { authService } from './AuthStateMachine';
 import { Form, Formik } from 'formik';
-import { AuthSchema3 as AuthSchmea } from '../../Formik/ValidationSchemas';
+import { AuthSchema3 as AuthSchema } from '../../Formik/ValidationSchemas';
 import TextField from '../../Formik/TextField';
 
 const ResetPassword: FC = () => {
@@ -16,7 +16,7 @@ const ResetPassword: FC = () => {
         <Formik
           initialValues={{ email: '' }}
           onSubmit={values => console.log(values)}
-          validationSchema={AuthSchmea}
+          validationSchema={AuthSchema}
         >
           <Form className="auth-form">
             <TextField
@@ -40,7 +40,7 @@ const ResetPassword: FC = () => {
           Go back to
           <span className="auth__form-next" onClick={() => send('SIGN_IN')}>
             {' '}
-            Login page
+            Login
           </span>
         </p>
       </main>

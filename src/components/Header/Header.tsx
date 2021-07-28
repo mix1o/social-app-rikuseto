@@ -1,11 +1,11 @@
-import { FC, useState, useEffect, ReactChild, ReactElement } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import SignIn from '../Auth/SignIn';
 import SignUp from '../Auth/SignUp';
 import { motion as m, AnimatePresence as Presence } from 'framer-motion';
-
-import { useRef } from 'react';
-import { type } from 'os';
+import { useActor } from '@xstate/react';
+import { authService } from '../Auth/AuthStateMachine';
+import ResetPassword from '../Auth/ResetPassword';
 
 const variants = {
   open: {
@@ -30,8 +30,9 @@ const variants = {
 
 const USER_OPTIONS = {
   NULL: '',
-  SIGN_IN: 'sign-in',
-  SIGN_UP: 'sign-up',
+  SIGN_IN: 'signIn',
+  SIGN_UP: 'signUp',
+  RESET_PASSWORD: 'resetPassword',
 };
 
 const Header: FC = () => {
@@ -39,6 +40,7 @@ const Header: FC = () => {
   const [userOption, setUserOption] = useState(USER_OPTIONS.NULL);
   const [cookies, , removeCookie] = useCookies();
   const { user } = cookies;
+  const [current, send] = useActor(authService);
 
   const handleUserChoose = (option: string) => {
     setUserOption(option);
@@ -98,10 +100,18 @@ const Header: FC = () => {
         <div className="header__options">
           <div
             className="header__blurred-bg"
-            onClick={() => setUserOption(USER_OPTIONS.NULL)}
+            onClick={() => {
+              setUserOption(USER_OPTIONS.NULL);
+              send('SIGN_IN');
+            }}
           ></div>
           <>
-            {userOption === USER_OPTIONS.SIGN_IN && (
+            <div className="header__option">
+              {current.matches('signIn') && <SignIn />}
+              {current.matches('signUp') && <SignUp />}
+              {current.matches('resetPassword') && <ResetPassword />}
+            </div>
+            {/* {userOption === USER_OPTIONS.SIGN_IN && (
               <div className="header__option">
                 <SignIn />
                 <button onClick={() => setUserOption(USER_OPTIONS.NULL)}>
@@ -118,7 +128,7 @@ const Header: FC = () => {
                   </button>
                 </div>
               </>
-            )}
+            )} */}
           </>
         </div>
       )}

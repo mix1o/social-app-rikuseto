@@ -12,9 +12,10 @@
 
   &__item {
     font-size: ft.$fs-400;
-    color: clr.$font-dark-700;
+    background: transparent;
+    border: none;
   }
-  &__item--active {
-    color: clr.$font-active-500;
+  &__item--link {
+    color: inherit;
   }
 }

@@ -263,7 +263,6 @@ h6 {
   background: rgba(34, 40, 49, 0.8);
   width: 100vw;
   height: 100vh;
-  z-index: 2;
   grid-area: center;
 }
 .header__option {
@@ -379,10 +378,11 @@ h6 {
 }
 .menu__item {
   font-size: 2.1rem;
-  color: #222831;
+  background: transparent;
+  border: none;
 }
-.menu__item--active {
-  color: #753ee0;
+.menu__item--link {
+  color: inherit;
 }
 
 .post {

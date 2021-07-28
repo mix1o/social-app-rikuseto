@@ -5,6 +5,7 @@ import Post from './Post';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
+import Menu from '../Navigation/Menu';
 
 const ContainerNewPost = styled.div`
   width: 100%;

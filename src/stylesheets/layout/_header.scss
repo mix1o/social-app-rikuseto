@@ -47,14 +47,12 @@
     background: rgba(clr.$secondary-bg-600, 0.8);
     width: 100vw;
     height: 100vh;
-    z-index: 2;
+
     grid-area: center;
   }
   &__option {
     min-width: var.$form-width;
     max-width: 450px;
-    // min-height: 500px;
-    // max-height: 600px;
     grid-area: center;
     background: clr.$light-bg-500;
     align-self: center;
