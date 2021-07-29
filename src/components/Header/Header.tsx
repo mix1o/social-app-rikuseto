@@ -74,6 +74,7 @@ const Header: FC = () => {
               onClick={() => {
                 handleUserChoose(USER_OPTIONS.SIGN_IN);
                 setOpenMenu(false);
+                send('SIGN_IN')
               }}
             >
               Log In
@@ -82,9 +83,10 @@ const Header: FC = () => {
               onClick={() => {
                 handleUserChoose(USER_OPTIONS.SIGN_UP);
                 setOpenMenu(false);
+                send('SIGN_UP')
               }}
             >
-              Sign In
+              Sign Un
             </button>
           </div>
         )}
