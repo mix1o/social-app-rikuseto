@@ -5,7 +5,7 @@ import Post from './Post';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
-import Menu from '../Navigation/Menu';
+
 
 const ContainerNewPost = styled.div`
   width: 100%;
@@ -26,8 +26,8 @@ const Posts: FC = () => {
   const [cookies] = useCookies();
   const { user } = cookies;
 
-  const fetchPosts = (): void => {
-    axios
+  const fetchPosts =  ():void => {
+  axios
       .get(`${process.env.REACT_APP_API}/posts/get`)
       .then(res => setPosts(res.data));
   };
@@ -41,7 +41,7 @@ const Posts: FC = () => {
   }, []);
 
   return (
-    <div>
+    <main>
       {user && (
         <label className="post__container-input">
           <img
@@ -83,7 +83,7 @@ const Posts: FC = () => {
           />
         );
       })}
-    </div>
+    </main>
   );
 };
 

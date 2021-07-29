@@ -6,6 +6,7 @@ import { LikedElements } from '../../hooks/LikedElements';
 import moment from 'moment';
 import { PostInterfaceExtended } from '../../interfaces/posts/postInterfaces';
 import { AuthorInterface } from '../../interfaces/common/common';
+import { motion as m } from 'framer-motion';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
@@ -23,6 +24,7 @@ const Post: FC<PostInterfaceExtended> = ({
   const [openComments, setOpenComments] = useState<boolean>(false);
 
   const [author, setAuthor] = useState<AuthorInterface>();
+  const [topPost, setTopPost] = useState({});
 
   const authorOfPost = () => {
     axios
@@ -42,48 +44,67 @@ const Post: FC<PostInterfaceExtended> = ({
       .catch(err => console.log(err));
   };
 
+  const fetchComment = (postId: string) => {
+    axios
+      .get(`${process.env.REACT_APP_API}/comments/top?postId=${postId}`)
+      .then(res => console.log(res.data));
+  };
+
   useEffect(() => {
     authorOfPost();
+    fetchComment(_id);
+
     const like = LikedElements(user, likes);
     setLiked(like);
     return;
   }, [likes, user]);
 
   return (
-    <div data-testid="post" className="post">
+    <section data-testid="post" className="post">
       {file.length > 3 && (
         <div className="post__image-container">
           <img className="post__image" src={file} alt={headline} />
         </div>
       )}
       <div className="post__author">
-        <img className="post__image-author" src={author?.avatar} />
-        <p>
-          {author?.firstName} {author?.lastName}
-        </p>
+        <img
+          className="post__image-author"
+          src={author?.avatar}
+          alt="user profile"
+        />
+        <div>
+          <p className="post__author-name">
+            {author?.firstName} {author?.lastName}
+          </p>
+          <p className="post__info">
+            Posted on: <span className="post__category-name">{category}</span>
+            <span> {moment(date).fromNow()}</span>
+          </p>
+        </div>
       </div>
       <div className="post__content">
-        <div className="post__type">
-          <p className="post__date">{moment(date).fromNow()}</p>
-          <p className="post__category">Category: {category}</p>
-        </div>
-        <p className="post__headline">{headline}</p>
+        <h3 className="post__headline">{headline}</h3>
       </div>
       <div className="post__actions">
-        <div className="post__container-likes">
-          <p className="post__likes">{likes.length}</p>
-          <button
-            className="post__btn post__star"
-            style={liked ? { color: 'purple' } : { color: '#555' }}
+        <m.div
+          className="post__container-likes"
+          animate={liked ? { color: '#753ee0' } : { color: '#222831' }}
+        >
+          <m.button
+            className="post__btn"
+            whileTap={{ scale: 1.2 }}
             onClick={() => {
               if (user) {
                 handleLikePost(_id, user._id);
               }
             }}
+            aria-label="like or dislike post"
+            type="button"
           >
             <i className="fas fa-star"></i>
-          </button>
-        </div>
+          </m.button>
+          <span className="post__likes">{likes.length}</span>
+        </m.div>
         <button className="post__btn" onClick={() => setOpenComments(true)}>
           <i className="far fa-comment"></i>
         </button>
@@ -94,7 +115,7 @@ const Post: FC<PostInterfaceExtended> = ({
       {openComments && (
         <Comments postId={_id} setOpenComments={setOpenComments} />
       )}
-    </div>
+    </section>
   );
 };
 
