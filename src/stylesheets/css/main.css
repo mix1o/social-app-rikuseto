@@ -223,7 +223,7 @@ h6 {
 
 .header {
   background-color: #fff;
-  border-bottom: 1px solid #f3f2f5;
+  border-bottom: 1px solid #e4e4e4;
   padding: 1rem;
   position: sticky;
   top: 0;
@@ -368,13 +368,14 @@ h6 {
 }
 
 .menu {
-  position: sticky;
+  position: fixed;
   bottom: 0;
+  width: 100%;
   display: flex;
   background-color: #fff;
   justify-content: space-between;
   padding: 1rem 2rem;
-  border-top: 1px solid #f3f2f5;
+  border-top: 1px solid #e4e4e4;
 }
 .menu__item {
   font-size: 2.1rem;
@@ -386,8 +387,9 @@ h6 {
 }
 
 .post {
-  background: #e7e7e7;
-  margin-top: 1rem;
+  background: #f3f2f5;
+  margin-bottom: 1rem;
+  max-width: 400px;
 }
 .post__image-container {
   width: 100%;
@@ -401,54 +403,64 @@ h6 {
 .post__author {
   display: flex;
   align-items: center;
+  padding: 0 1rem;
+  margin-top: 1rem;
+}
+.post__author-name {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #36344b;
+  margin: 0;
 }
 .post__image-author {
   border-radius: 100%;
-  width: 2.3rem;
-  height: 2.3rem;
+  width: 3rem;
+  height: 3rem;
   margin-right: 1rem;
 }
 .post__content {
-  padding: 0.5rem;
+  padding: 0 1rem;
 }
 .post__type {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.post__headline {
-  font-weight: 900;
+.post__info {
+  color: #656285;
+  margin: 0;
+  padding-top: 0.5rem;
 }
-.post__category {
-  color: #525252;
-}
-.post__date {
-  color: #525252;
+.post__category-name {
+  font-weight: 500;
+  color: #36344b;
 }
 .post__actions {
-  border-bottom: 1px solid #000;
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 0 1rem;
+}
+.post__container-likes {
   display: flex;
   align-items: center;
 }
 .post__btn {
   border: none;
   background-color: transparent;
-  font-size: 1.5rem;
-}
-.post__container-likes {
-  display: flex;
-  align-items: center;
+  font-size: 2.1rem;
+  padding: 0;
+  color: inherit;
 }
 .post__comments {
   text-align: center;
   padding: 0.2rem;
 }
-.post .fa-star {
-  color: inherit;
-}
 .post__likes {
-  margin-left: 0.5rem;
-  font-size: 1rem;
+  margin: 0 0.5rem;
+  padding-top: 0.25rem;
+  font-size: 1.6rem;
+  color: inherit;
 }
 .post__container-input {
   display: flex;
@@ -460,6 +472,13 @@ h6 {
 .post__input {
   width: 100%;
   padding: 0.5rem;
+}
+.post .fa-star {
+  color: inherit;
+}
+
+.post:first-child {
+  margin-top: 1rem;
 }
 
 .comment {

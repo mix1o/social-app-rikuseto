@@ -1,6 +1,12 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+@use '../abstracts/media' as qr;
+@use '../abstracts/variables' as var;
+
 .post {
-  background: #e7e7e7;
-  margin-top: 1rem;
+  background: clr.$light-bg-600;
+  margin-bottom: 1rem;
+  max-width: 400px;
 
   &__image-container {
     width: 100%;
@@ -14,54 +20,65 @@
   &__author {
     display: flex;
     align-items: center;
+    padding: var.$padding-around-post;
+    margin-top: 1rem;
+  }
+  &__author-name {
+    font-size: ft.$fs-200;
+    font-weight: ft.$fw-600;
+    color: clr.$font-dark-600;
+    margin: 0;
   }
   &__image-author {
     border-radius: 100%;
-    width: 2.3rem;
-    height: 2.3rem;
+    width: 3rem;
+    height: 3rem;
     margin-right: 1rem;
   }
   &__content {
-    padding: 0.5rem;
+    padding: var.$padding-around-post;
   }
   &__type {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  &__headline {
-    font-weight: 900;
+  &__info {
+    color: clr.$font-dark-400;
+    margin: 0;
+    padding-top: 0.5rem;
   }
-  &__category {
-    color: #525252;
+  &__category-name {
+    font-weight: ft.$fw-600;
+    color: clr.$font-dark-600;
   }
-  &__date {
-    color: #525252;
-  }
+
   &__actions {
-    border-bottom: 1px solid #000;
+    display: flex;
+    align-items: center;
+    margin-top: 2rem;
+    padding: var.$padding-around-post;
+  }
+  &__container-likes {
     display: flex;
     align-items: center;
   }
   &__btn {
     border: none;
     background-color: transparent;
-    font-size: 1.5rem;
-  }
-  &__container-likes {
-    display: flex;
-    align-items: center;
+    font-size: ft.$fs-400;
+    padding: 0;
+    color: inherit;
   }
   &__comments {
     text-align: center;
     padding: 0.2rem;
   }
-  .fa-star {
-    color: inherit;
-  }
   &__likes {
-    margin-left: 0.5rem;
-    font-size: 1rem;
+    margin: 0 0.5rem;
+    padding-top: 0.25rem;
+    font-size: ft.$fs-300;
+    color: inherit;
   }
   &__container-input {
     display: flex;
@@ -74,4 +91,11 @@
     width: 100%;
     padding: 0.5rem;
   }
+  .fa-star {
+    color: inherit;
+  }
+}
+
+.post:first-child {
+  margin-top: 1rem;
 }
