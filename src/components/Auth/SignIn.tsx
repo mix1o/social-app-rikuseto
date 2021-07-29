@@ -43,13 +43,13 @@ const SignIn: FC = () => {
             <TextField
               key="email-input-field"
               name="email"
-              placeholderLabel="monke@gmail.com"
+              label="monke@gmail.com"
               type="email"
             />
             <TextField
               key="password-input-field"
               name="password"
-              placeholderLabel="Password"
+              label="Password"
               type="password"
             />
             <div className="auth-form__btn-wrapper">

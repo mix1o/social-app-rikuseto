@@ -46,35 +46,35 @@ const SignUp: FC = () => {
             <TextField
               key="email-input-field"
               name="email"
-              placeholderLabel="Email address"
+              label="Email address"
               type="email"
               id="email"
             />
             <TextField
               key="first-name-input-field"
               name="firstName"
-              placeholderLabel="First Name"
+              label="First Name"
               type="text"
               id="firsName"
             />
             <TextField
               key="last-name-input-field"
               name="lastName"
-              placeholderLabel="Last Name"
+              label="Last Name"
               type="text"
               id="lastName"
             />
             <TextField
               key="password-input-field"
               name="password"
-              placeholderLabel="Password"
+              label="Password"
               type="password"
               id="password"
             />
             <TextField
               key="password_confirm-input-field"
               name="confirmPassword"
-              placeholderLabel="Confirm Password"
+              label="Confirm Password"
               type="password"
               id="password2"
             />

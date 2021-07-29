@@ -22,7 +22,7 @@ const ResetPassword: FC = () => {
             <TextField
               key="email-input-field"
               name="email"
-              placeholderLabel="monke@gmail.com"
+              label="monke@gmail.com"
               type="email"
             />
             <button
