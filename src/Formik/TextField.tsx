@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 interface FieldProps {
   key: string;
-  placeholderLabel: string;
+  label: string;
   name: string;
   type: string;
   id?: string;
@@ -29,7 +29,7 @@ const TextField: FC<FieldProps> = ({ ...rest }) => {
       onBlur={() => setFocus(!focus)}
     >
       <Placeholder className="auth-form__label" focus={focus || meta.touched}>
-        {rest.placeholderLabel}{' '}
+        {rest.label}{' '}
         <span className="auth-form__error">{error}</span>
       </Placeholder>
       <input
