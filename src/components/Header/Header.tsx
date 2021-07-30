@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import SignIn from '../Auth/SignIn';
 import SignUp from '../Auth/SignUp';
-import { motion as m, AnimatePresence as Presence } from 'framer-motion';
+import { motion as m } from 'framer-motion';
 import { useActor } from '@xstate/react';
 import { authService } from '../Auth/AuthStateMachine';
 import ResetPassword from '../Auth/ResetPassword';
@@ -74,7 +74,7 @@ const Header: FC = () => {
               onClick={() => {
                 handleUserChoose(USER_OPTIONS.SIGN_IN);
                 setOpenMenu(false);
-                send('SIGN_IN')
+                send('SIGN_IN');
               }}
             >
               Log In
@@ -83,7 +83,7 @@ const Header: FC = () => {
               onClick={() => {
                 handleUserChoose(USER_OPTIONS.SIGN_UP);
                 setOpenMenu(false);
-                send('SIGN_UP')
+                send('SIGN_UP');
               }}
             >
               Sign Un
@@ -99,21 +99,21 @@ const Header: FC = () => {
       </m.div>
 
       {userOption.length >= 1 && (
-        <div className="header__options">
+        <div className="blurred__options">
           <div
-            className="header__blurred-bg"
+            className="blurred__blurred-bg"
             onClick={() => {
               setUserOption(USER_OPTIONS.NULL);
               send('SIGN_IN');
             }}
           ></div>
-          <>
-            <div className="header__option">
-              {current.matches('signIn') && <SignIn />}
-              {current.matches('signUp') && <SignUp />}
-              {current.matches('resetPassword') && <ResetPassword />}
-            </div>
-            {/* {userOption === USER_OPTIONS.SIGN_IN && (
+
+          <div className="blurred__option">
+            {current.matches('signIn') && <SignIn />}
+            {current.matches('signUp') && <SignUp />}
+            {current.matches('resetPassword') && <ResetPassword />}
+          </div>
+          {/* {userOption === USER_OPTIONS.SIGN_IN && (
               <div className="header__option">
                 <SignIn />
                 <button onClick={() => setUserOption(USER_OPTIONS.NULL)}>
@@ -131,7 +131,6 @@ const Header: FC = () => {
                 </div>
               </>
             )} */}
-          </>
         </div>
       )}
     </div>

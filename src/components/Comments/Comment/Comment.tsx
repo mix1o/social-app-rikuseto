@@ -36,7 +36,7 @@ const Comment: FC<SingleCommentProps> = ({
   };
 
   useEffect(() => {
-    authorOfComment(user_id).then(res => setAuthor(res.data));
+    authorOfComment(user_id).then(res => setAuthor(res));
     const like = LikedElements(user, likes);
     setLiked(like);
   }, [likes]);
