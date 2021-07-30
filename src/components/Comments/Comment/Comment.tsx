@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { LikedElements } from '../../../hooks/LikedElements';
 import { AuthorInterface } from '../../../interfaces/common/common';
+import { authorOfComment } from '../../../helpers/AuthorOfComment';
 
 interface SingleCommentProps {
   _id: string;
@@ -25,12 +26,6 @@ const Comment: FC<SingleCommentProps> = ({
   const [liked, setLiked] = useState<boolean | undefined>();
   const [author, setAuthor] = useState<AuthorInterface>();
 
-  const authorOfComment = () => {
-    axios
-      .get(`${process.env.REACT_APP_API}/author?userId=${user_id}`)
-      .then(res => setAuthor(res.data));
-  };
-
   const handleLikeComment = () => {
     axios
       .post(`${process.env.REACT_APP_API}/comments/like`, {
@@ -41,7 +36,7 @@ const Comment: FC<SingleCommentProps> = ({
   };
 
   useEffect(() => {
-    authorOfComment();
+    authorOfComment(user_id).then(res => setAuthor(res.data));
     const like = LikedElements(user, likes);
     setLiked(like);
   }, [likes]);

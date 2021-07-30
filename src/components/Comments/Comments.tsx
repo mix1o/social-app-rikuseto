@@ -4,19 +4,10 @@ import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 import Comment from './Comment/Comment';
-
+import { CommentsData } from '../../interfaces/comments/commentsInterfaces';
 interface CommentProps {
   postId: string;
   setOpenComments: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-interface CommentsData {
-  date: string;
-  likes: string[];
-  post_id: string;
-  user_id: string;
-  _id: string;
-  text: string;
 }
 
 const ContainerComments = styled.div`
