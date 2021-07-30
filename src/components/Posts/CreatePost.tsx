@@ -127,57 +127,63 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   }, [post, message, correctImage]);
 
   return (
-    <div className="App">
-      <h1 data-testid="create-post-header">Create new post</h1>
-      <input
-        data-testid="headline"
-        value={post.headline}
-        onChange={e => handleChange(e)}
-        type="text"
-        name="headline"
-      />
-      <br />
-      <select
-        defaultValue={post.category}
-        onChange={e => handleChange(e)}
-        name="category"
-      >
-        <option value="" disabled>
-          Choose category
-        </option>
-        <option value="memes">memes</option>
-        <option value="sport">sport</option>
-      </select>
-      <br />
-      <input
-        onClick={() => {
-          setDisable(true);
-        }}
-        onFocus={() => {
-          setDisable(false);
-        }}
-        type="file"
-        accept="image/*"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          compressImg(e.target.files);
-          setAreFiles(true);
-        }}
-      />
-      <br />
-      {!disable && !areFiles && (
-        <button
-          style={{ background: 'red' }}
-          data-testid="button"
-          disabled={!correctFormatPost}
-          onClick={createNewPost}
+    <div className="blurred__options">
+      <div
+        className="blurred__blurred-bg"
+        onClick={() => setOpen(prevVal => !prevVal)}
+      ></div>
+      <div className="blurred__option">
+        <h1 data-testid="create-post-header">Create new post</h1>
+        <input
+          data-testid="headline"
+          value={post.headline}
+          onChange={e => handleChange(e)}
+          type="text"
+          name="headline"
+        />
+        <br />
+        <select
+          defaultValue={post.category}
+          onChange={e => handleChange(e)}
+          name="category"
         >
-          Create post
-        </button>
-      )}
-      {disable && <p>Loading image...</p>}
-      {!correctFormatPost && post!.headline!.length > 0 && (
-        <p data-testid="message">{message}</p>
-      )}
+          <option value="" disabled>
+            Choose category
+          </option>
+          <option value="memes">memes</option>
+          <option value="sport">sport</option>
+        </select>
+        <br />
+        <input
+          onClick={() => {
+            setDisable(true);
+          }}
+          onFocus={() => {
+            setDisable(false);
+          }}
+          type="file"
+          accept="image/*"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            compressImg(e.target.files);
+            setAreFiles(true);
+          }}
+        />
+        <br />
+        {!disable && !areFiles && (
+          <button
+            style={{ background: 'red' }}
+            data-testid="button"
+            disabled={!correctFormatPost}
+            onClick={createNewPost}
+          >
+            Create post
+          </button>
+        )}
+        {disable && <p>Loading image...</p>}
+        {!correctFormatPost && post!.headline!.length > 0 && (
+          <p data-testid="message">{message}</p>
+        )}
+      </div>
     </div>
   );
 };

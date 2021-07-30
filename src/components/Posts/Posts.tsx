@@ -6,19 +6,6 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
 
-
-const ContainerNewPost = styled.div`
-  width: 100%;
-  height: 100vh;
-  padding: 2rem;
-  text-align: center;
-  z-index: 10;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: #333;
-`;
-
 const Posts: FC = () => {
   const [posts, setPosts] = useState<PostInterface[]>();
   const [open, setOpen] = useState<boolean>(false);
@@ -26,8 +13,8 @@ const Posts: FC = () => {
   const [cookies] = useCookies();
   const { user } = cookies;
 
-  const fetchPosts =  ():void => {
-  axios
+  const fetchPosts = (): void => {
+    axios
       .get(`${process.env.REACT_APP_API}/posts/get`)
       .then(res => setPosts(res.data));
   };
@@ -58,15 +45,7 @@ const Posts: FC = () => {
         </label>
       )}
       {open && (
-        <ContainerNewPost>
-          <div
-            onClick={() => setOpen(false)}
-            style={{ textAlign: 'right', color: '#000' }}
-          >
-            x
-          </div>
-          <CreatePost handleFetchPosts={handleFetchPosts} setOpen={setOpen} />
-        </ContainerNewPost>
+        <CreatePost handleFetchPosts={handleFetchPosts} setOpen={setOpen} />
       )}
       {posts?.map(({ _id, headline, category, file, user_id, likes, date }) => {
         return (

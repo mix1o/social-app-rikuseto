@@ -52,7 +52,6 @@ const Post: FC<PostInterfaceExtended> = ({
       authorOfComment(comment?.topComment.user_id).then(res => {
         setCommentAuthor(res);
       });
-      console.log('kurwio');
     }
   }, [comment]);
 
