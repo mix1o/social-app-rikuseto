@@ -70,9 +70,17 @@
     padding: 0;
     color: inherit;
   }
-  &__comments {
+  &__comments--count {
     text-align: center;
-    padding: 0.2rem;
+    padding: 1rem 0;
+  }
+  &__comments-text {
+    margin: 0 0 0.5rem;
+    font-weight: ft.$fw-600;
+    font-size: ft.$fs-200;
+  }
+  &__comments-total {
+    color: clr.$font-active-500;
   }
   &__likes {
     margin: 0 0.5rem;
@@ -90,6 +98,21 @@
   &__input {
     width: 100%;
     padding: 0.5rem;
+  }
+  &__top-comment {
+    padding: var.$padding-around-post;
+    font-size: ft.$fs-200;
+    color: clr.$font-dark-400;
+    margin-top: 2rem;
+    text-overflow: ellipsis;
+    white-space: pre-wrap;
+    overflow: hidden;
+  }
+  &__top-author {
+    font-weight: ft.$fw-600;
+  }
+  &__top-text {
+    color: clr.$font-dark-600;
   }
   .fa-star {
     color: inherit;

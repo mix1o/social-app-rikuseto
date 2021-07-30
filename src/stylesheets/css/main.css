@@ -288,7 +288,7 @@ h6 {
   position: relative;
 }
 .auth-form__label {
-  color: #656285;
+  color: #737186;
   position: absolute;
   pointer-events: none;
   transition: 400ms;
@@ -427,7 +427,7 @@ h6 {
   justify-content: space-between;
 }
 .post__info {
-  color: #656285;
+  color: #737186;
   margin: 0;
   padding-top: 0.5rem;
 }
@@ -452,9 +452,17 @@ h6 {
   padding: 0;
   color: inherit;
 }
-.post__comments {
+.post__comments--count {
   text-align: center;
-  padding: 0.2rem;
+  padding: 1rem 0;
+}
+.post__comments-text {
+  margin: 0 0 0.5rem;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+.post__comments-total {
+  color: #753ee0;
 }
 .post__likes {
   margin: 0 0.5rem;
@@ -472,6 +480,21 @@ h6 {
 .post__input {
   width: 100%;
   padding: 0.5rem;
+}
+.post__top-comment {
+  padding: 0 1rem;
+  font-size: 1.2rem;
+  color: #737186;
+  margin-top: 2rem;
+  text-overflow: ellipsis;
+  white-space: pre-wrap;
+  overflow: hidden;
+}
+.post__top-author {
+  font-weight: 500;
+}
+.post__top-text {
+  color: #36344b;
 }
 .post .fa-star {
   color: inherit;
