@@ -28,9 +28,11 @@ const TextField: FC<FieldProps> = ({ ...rest }) => {
       onFocus={() => setFocus(!focus)}
       onBlur={() => setFocus(!focus)}
     >
-      <Placeholder className="auth-form__label" focus={focus || meta.touched}>
-        {rest.label}{' '}
-        <span className="auth-form__error">{error}</span>
+      <Placeholder
+        className="auth-form__label"
+        focus={focus || meta.touched || meta.value}
+      >
+        {rest.label} <span className="auth-form__error">{error}</span>
       </Placeholder>
       <input
         {...rest}
