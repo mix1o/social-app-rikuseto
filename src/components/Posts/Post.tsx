@@ -7,6 +7,8 @@ import moment from 'moment';
 import { PostInterfaceExtended } from '../../interfaces/posts/postInterfaces';
 import { AuthorInterface } from '../../interfaces/common/common';
 import { motion as m } from 'framer-motion';
+import { TopComment } from '../../interfaces/comments/commentsInterfaces';
+import { authorOfComment } from '../../helpers/AuthorOfComment';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
@@ -24,13 +26,8 @@ const Post: FC<PostInterfaceExtended> = ({
   const [openComments, setOpenComments] = useState<boolean>(false);
 
   const [author, setAuthor] = useState<AuthorInterface>();
-  const [topPost, setTopPost] = useState({});
-
-  const authorOfPost = () => {
-    axios
-      .get(`${process.env.REACT_APP_API}/author?userId=${user_id}`)
-      .then(res => setAuthor(res.data));
-  };
+  const [commentAuthor, setCommentAuthor] = useState<AuthorInterface>();
+  const [comment, setComment] = useState<TopComment>();
 
   const handleLikePost = (id: string, user_id: string) => {
     axios
@@ -44,15 +41,24 @@ const Post: FC<PostInterfaceExtended> = ({
       .catch(err => console.log(err));
   };
 
-  const fetchComment = (postId: string) => {
+  const fetchTopComment = (postId: string) => {
     axios
       .get(`${process.env.REACT_APP_API}/comments/top?postId=${postId}`)
-      .then(res => console.log(res.data));
+      .then(res => setComment(res.data));
   };
 
   useEffect(() => {
-    authorOfPost();
-    fetchComment(_id);
+    if (comment?.topComment) {
+      authorOfComment(comment?.topComment.user_id).then(res => {
+        setCommentAuthor(res);
+      });
+      console.log('kurwio');
+    }
+  }, [comment]);
+
+  useEffect(() => {
+    authorOfComment(user_id).then(res => setAuthor(res));
+    fetchTopComment(_id);
 
     const like = LikedElements(user, likes);
     setLiked(like);
@@ -109,9 +115,37 @@ const Post: FC<PostInterfaceExtended> = ({
           <i className="far fa-comment"></i>
         </button>
       </div>
-      <div className="post__comments" onClick={() => setOpenComments(true)}>
-        <p>View all comments</p>
-      </div>
+      {comment?.topComment && (
+        <>
+          <p className="post__top-comment">
+            <span className="post__top-author">{commentAuthor?.firstName}</span>
+            {' · '}
+            <span className="post__top-date">
+              {moment(comment.topComment.date).fromNow()}
+            </span>{' '}
+            {' · '}
+            <span className="post__top-text">{comment.topComment.text}</span>
+          </p>
+        </>
+      )}
+
+      {comment && (
+        <div
+          className="post__comments--count"
+          onClick={() => setOpenComments(true)}
+        >
+          {comment.allComments >= 1 ? (
+            <p className="post__comments-text">
+              View all comments{' '}
+              <span className="post__comments-total">
+                &#40;{comment?.allComments}&#41;
+              </span>
+            </p>
+          ) : (
+            <p className="post__comments-text">Be this first one to comment</p>
+          )}
+        </div>
+      )}
       {openComments && (
         <Comments postId={_id} setOpenComments={setOpenComments} />
       )}
