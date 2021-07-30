@@ -21,7 +21,7 @@
     display: flex;
     align-items: center;
     padding: var.$padding-around-post;
-    margin-top: 1rem;
+    padding-top: 1rem;
   }
   &__author-name {
     font-size: ft.$fs-200;
@@ -87,6 +87,7 @@
     padding-top: 0.25rem;
     font-size: ft.$fs-300;
     color: inherit;
+    font-weight: ft.$fw-600;
   }
   &__container-input {
     display: flex;

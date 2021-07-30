@@ -250,33 +250,6 @@ h6 {
   right: 0;
   top: 0;
 }
-.header__options {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  display: grid;
-  grid-template-areas: "center";
-}
-.header__blurred-bg {
-  background: rgba(34, 40, 49, 0.8);
-  width: 100vw;
-  height: 100vh;
-  grid-area: center;
-}
-.header__option {
-  min-width: 350px;
-  max-width: 450px;
-  grid-area: center;
-  background: #fff;
-  align-self: center;
-  justify-self: center;
-  padding: 2rem;
-  border-radius: 3px;
-  border: 1px solid #f3f2f5;
-  z-index: 5;
-}
 
 .auth-form {
   display: grid;
@@ -386,6 +359,34 @@ h6 {
   color: inherit;
 }
 
+.blurred__options {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  display: grid;
+  grid-template-areas: "center";
+}
+.blurred__blurred-bg {
+  background: rgba(34, 40, 49, 0.8);
+  width: 100vw;
+  height: 100vh;
+  grid-area: center;
+}
+.blurred__option {
+  min-width: 350px;
+  max-width: 450px;
+  grid-area: center;
+  background: #fff;
+  align-self: center;
+  justify-self: center;
+  padding: 2rem;
+  border-radius: 3px;
+  border: 1px solid #f3f2f5;
+  z-index: 5;
+}
+
 .post {
   background: #f3f2f5;
   margin-bottom: 1rem;
@@ -404,7 +405,7 @@ h6 {
   display: flex;
   align-items: center;
   padding: 0 1rem;
-  margin-top: 1rem;
+  padding-top: 1rem;
 }
 .post__author-name {
   font-size: 1.2rem;
@@ -469,6 +470,7 @@ h6 {
   padding-top: 0.25rem;
   font-size: 1.6rem;
   color: inherit;
+  font-weight: 500;
 }
 .post__container-input {
   display: flex;
