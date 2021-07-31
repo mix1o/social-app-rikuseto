@@ -11,3 +11,16 @@ export interface TopComment {
   topComment?: CommentsData;
   allComments: number;
 }
+
+export interface CommentProps {
+  postId: string;
+  setOpenComments: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface SingleCommentProps {
+  _id: string;
+  user_id: string;
+  text: string;
+  likes: string[];
+  refreshComments: () => void;
+}
