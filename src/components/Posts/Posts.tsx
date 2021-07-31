@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import CreatePost from './CreatePost';
-import styled from 'styled-components';
 import Post from './Post';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';

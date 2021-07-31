@@ -46,6 +46,24 @@ const Post: FC<PostInterfaceExtended> = ({
       .get(`${process.env.REACT_APP_API}/comments/top?postId=${postId}`)
       .then(res => setComment(res.data));
   };
+  //#TODO Use .then to resolve promise or async awiat ?
+  // useEffect(() => {
+  //   let didCancel = false;
+  //   const resolvePromise = async () => {
+  //     if (comment?.topComment) {
+  //       const test = await authorOfComment(comment.topComment.user_id);
+  //       if (!didCancel) {
+  //         setCommentAuthor(test);
+  //       }
+  //     }
+  //   };
+
+  //   resolvePromise();
+
+  //   return () => {
+  //     didCancel = true;
+  //   };
+  // });
 
   useEffect(() => {
     if (comment?.topComment) {

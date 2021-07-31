@@ -5,14 +5,7 @@ import { useCookies } from 'react-cookie';
 import { LikedElements } from '../../../hooks/LikedElements';
 import { AuthorInterface } from '../../../interfaces/common/common';
 import { authorOfComment } from '../../../helpers/AuthorOfComment';
-
-interface SingleCommentProps {
-  _id: string;
-  user_id: string;
-  text: string;
-  likes: string[];
-  refreshComments: () => void;
-}
+import { SingleCommentProps } from '../../../interfaces/comments/commentsInterfaces';
 
 const Comment: FC<SingleCommentProps> = ({
   _id,
@@ -37,6 +30,7 @@ const Comment: FC<SingleCommentProps> = ({
 
   useEffect(() => {
     authorOfComment(user_id).then(res => setAuthor(res));
+
     const like = LikedElements(user, likes);
     setLiked(like);
   }, [likes]);

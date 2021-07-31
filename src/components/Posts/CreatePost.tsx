@@ -133,7 +133,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
         onClick={() => setOpen(prevVal => !prevVal)}
       ></div>
       <div className="blurred__option">
-        <h1 data-testid="create-post-header">Create new post</h1>
+        <h2 data-testid="create-post-header">Create new post</h2>
         <input
           data-testid="headline"
           value={post.headline}
@@ -141,7 +141,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           type="text"
           name="headline"
         />
-        <br />
         <select
           defaultValue={post.category}
           onChange={e => handleChange(e)}

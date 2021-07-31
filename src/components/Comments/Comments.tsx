@@ -4,11 +4,10 @@ import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 import Comment from './Comment/Comment';
-import { CommentsData } from '../../interfaces/comments/commentsInterfaces';
-interface CommentProps {
-  postId: string;
-  setOpenComments: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import {
+  CommentsData,
+  CommentProps,
+} from '../../interfaces/comments/commentsInterfaces';
 
 const ContainerComments = styled.div`
   background: #fff;
