@@ -1,11 +1,10 @@
 import { FC, useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
-import SignIn from '../Auth/SignIn';
-import SignUp from '../Auth/SignUp';
 import { motion as m } from 'framer-motion';
 import { useActor } from '@xstate/react';
 import { authService } from '../Auth/AuthStateMachine';
-import ResetPassword from '../Auth/ResetPassword';
+import logo from '../../assets/logo/logo.png';
+import BlurredMenu from '../Navigation/BlurredMenu';
 
 const variants = {
   open: {
@@ -28,39 +27,37 @@ const variants = {
   },
 };
 
-const USER_OPTIONS = {
-  NULL: '',
-  SIGN_IN: 'signIn',
-  SIGN_UP: 'signUp',
-  RESET_PASSWORD: 'resetPassword',
-};
-
 const Header: FC = () => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
-  const [userOption, setUserOption] = useState(USER_OPTIONS.NULL);
+  const [userOption, setUserOption] = useState<boolean>(false);
   const [cookies, , removeCookie] = useCookies();
   const { user } = cookies;
   const [current, send] = useActor(authService);
 
-  const handleUserChoose = (option: string) => {
-    setUserOption(option);
-  };
-
   useEffect(() => {
-    setUserOption(USER_OPTIONS.NULL);
+    setUserOption(false);
     setOpenMenu(false);
   }, [user]);
+
+  const changeTheme = (theme: string) => {
+    localStorage.setItem('theme', theme);
+  };
 
   return (
     <div className="header">
       <div className="header__content">
-        <h3 className="header__message">RS</h3>
+        <h3 className="header__message">
+          <img src={logo} alt="Logo" />
+        </h3>
         <button
           className="header__nav-button"
           onClick={() => setOpenMenu(!openMenu)}
-        ></button>
+        >
+          <i className="fas fa-bell" />
+        </button>
       </div>
-
+      <button onClick={() => changeTheme('light')}>Light</button>
+      <button onClick={() => changeTheme('dark')}>Dark</button>
       <m.div
         initial="closed"
         animate={openMenu ? 'open' : 'closed'}
@@ -68,28 +65,28 @@ const Header: FC = () => {
         className="header__menu"
       >
         <div onClick={() => setOpenMenu(false)}>x</div>
-        {!user && (
+        {/* {!user && (
           <div>
             <button
               onClick={() => {
-                handleUserChoose(USER_OPTIONS.SIGN_IN);
                 setOpenMenu(false);
                 send('SIGN_IN');
+                setUserOption(true);
               }}
             >
               Log In
             </button>
             <button
               onClick={() => {
-                handleUserChoose(USER_OPTIONS.SIGN_UP);
                 setOpenMenu(false);
                 send('SIGN_UP');
+                setUserOption(true);
               }}
             >
               Sign Un
             </button>
           </div>
-        )}
+        )} */}
         {user && (
           <div>
             <button onClick={() => removeCookie('user')}>Log out</button>
@@ -98,24 +95,7 @@ const Header: FC = () => {
         )}
       </m.div>
 
-      {userOption.length >= 1 && (
-        <div className="blurred__options">
-          <div
-            className="blurred__blurred-bg"
-            onClick={() => {
-              setUserOption(USER_OPTIONS.NULL);
-              send('SIGN_IN');
-            }}
-          ></div>
-
-          <div className="blurred__option">
-            {current.matches('signIn') && <SignIn />}
-            {current.matches('signUp') && <SignUp />}
-            {current.matches('resetPassword') && <ResetPassword />}
-          </div>
-
-        </div>
-      )}
+      {userOption && <BlurredMenu setUserOption={setUserOption} />}
     </div>
   );
 };

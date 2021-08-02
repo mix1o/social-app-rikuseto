@@ -238,11 +238,14 @@ h6 {
   margin: 0;
 }
 .header__nav-button {
-  width: 3rem;
-  height: 3rem;
-  background: #b496ee;
   border: none;
   border-radius: 100rem;
+  background: transparent;
+  color: #222831;
+  font-size: 2.1rem;
+}
+.header__nav-button .fa-bell {
+  color: inherit;
 }
 .header__menu {
   background-color: #d3c2f5;
@@ -392,7 +395,13 @@ h6 {
   background: #f3f2f5;
   max-width: 400px;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  background: var(--background);
+}
+.post__headline {
+  margin-top: 2rem;
+  margin-left: 2px;
+  font-size: 1.6rem;
 }
 .post__image-container {
   width: 100%;
@@ -414,11 +423,12 @@ h6 {
   font-weight: 500;
   color: #36344b;
   margin: 0;
+  font-size: 1.4rem;
 }
 .post__image-author {
   border-radius: 100%;
-  width: 3rem;
-  height: 3rem;
+  width: 3.5rem;
+  height: 3.5rem;
   margin-right: 1rem;
 }
 .post__content {
@@ -433,6 +443,7 @@ h6 {
   color: #737186;
   margin: 0;
   padding-top: 0.5rem;
+  font-size: 1.2rem;
 }
 .post__category-name {
   font-weight: 500;
@@ -441,6 +452,7 @@ h6 {
 .post__actions {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-top: 2rem;
   padding: 0 1rem;
 }
@@ -458,6 +470,8 @@ h6 {
 .post__comments--count {
   text-align: center;
   padding: 1rem 0;
+  margin: 2rem 1rem;
+  border-top: 2px solid #e4e4e4;
 }
 .post__comments-text {
   margin: 0 0 0.5rem;
@@ -474,16 +488,27 @@ h6 {
   color: inherit;
   font-weight: 500;
 }
+.post__wrapper {
+  background: #f3f2f5;
+  margin: 2rem 0;
+  padding: 1rem;
+}
 .post__container-input {
   display: flex;
   margin: 1rem 0;
   align-items: center;
   justify-content: center;
-  padding: 0 1rem;
 }
 .post__input {
   width: 100%;
-  padding: 0.5rem;
+  border: 2px solid #b9b8ba;
+  border-radius: 100rem;
+  background: transparent;
+  padding: 1rem;
+  font-size: 1.2rem;
+}
+.post__input::placeholder {
+  color: #36344b;
 }
 .post__top-comment {
   padding: 0 1rem;
@@ -497,15 +522,24 @@ h6 {
 .post__top-author {
   font-weight: 500;
 }
-.post__top-text {
-  color: #36344b;
-}
 .post .fa-star {
   color: inherit;
+  font-size: 2.1rem;
+}
+.post__single-action {
+  font-size: 1.4rem;
+  margin: 0 0.5rem;
+}
+.post__single-action .fa-share {
+  font-size: 1.4rem;
+  margin-left: 0.3rem;
+}
+.post__count-comments {
+  margin-right: 0.3rem;
 }
 
-.post:first-child {
-  margin-top: 1rem;
+.post:last-child {
+  margin-bottom: 10rem;
 }
 
 .comment {
@@ -578,6 +612,16 @@ h6 {
 .auth__form-next {
   cursor: pointer;
   color: #753ee0;
+}
+
+.dark {
+  background: #000;
+  color: #fff;
+}
+
+.light {
+  background: #fff;
+  color: #000;
 }
 
 /*# sourceMappingURL=main.css.map */

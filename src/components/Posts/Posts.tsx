@@ -29,19 +29,22 @@ const Posts: FC = () => {
   return (
     <main>
       {user && (
-        <label className="post__container-input">
-          <img
-            className="post__image-author"
-            src={user.avatar}
-            alt={user.first_name}
-          />
-          <input
-            className="post__input"
-            onClick={() => setOpen(true)}
-            type="text"
-            placeholder={`${user.first_name}, what's is on your mind`}
-          />
-        </label>
+        <div className="post__wrapper">
+          <label className="post__container-input">
+            <img
+              className="post__image-author"
+              src={user.avatar}
+              alt={user.first_name}
+            />
+            <input
+              disabled={open ? true : false}
+              className="post__input"
+              onClick={() => setOpen(true)}
+              type="text"
+              placeholder={`${user.first_name}, what's is on your mind`}
+            />
+          </label>
+        </div>
       )}
       {open && (
         <CreatePost handleFetchPosts={handleFetchPosts} setOpen={setOpen} />

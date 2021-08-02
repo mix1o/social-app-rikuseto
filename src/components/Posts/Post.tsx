@@ -9,6 +9,10 @@ import { AuthorInterface } from '../../interfaces/common/common';
 import { motion as m } from 'framer-motion';
 import { TopComment } from '../../interfaces/comments/commentsInterfaces';
 import { authorOfComment } from '../../helpers/AuthorOfComment';
+import BlurredMenu from '../Navigation/BlurredMenu';
+import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
+import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
@@ -24,21 +28,29 @@ const Post: FC<PostInterfaceExtended> = ({
   const { user } = cookies;
   const [liked, setLiked] = useState<boolean | undefined>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
+  const [popup, setPopup] = useState<boolean>(false);
 
   const [author, setAuthor] = useState<AuthorInterface>();
   const [commentAuthor, setCommentAuthor] = useState<AuthorInterface>();
   const [comment, setComment] = useState<TopComment>();
 
-  const handleLikePost = (id: string, user_id: string) => {
-    axios
-      .post(`${process.env.REACT_APP_API}/posts/like`, {
-        postId: id,
-        userId: user_id,
-      })
-      .then(() => {
-        onClickLike();
-      })
-      .catch(err => console.log(err));
+  // const [theme, setTheme] = useState<string>('light');
+
+  const handleLikePost = () => {
+    if (user) {
+      axios
+        .post(`${process.env.REACT_APP_API}/posts/like`, {
+          postId: _id,
+          userId: user_id,
+        })
+        .then(() => {
+          onClickLike();
+        })
+        .catch(err => console.log(err));
+
+      return;
+    }
+    setPopup(true);
   };
 
   const fetchTopComment = (postId: string) => {
@@ -53,24 +65,21 @@ const Post: FC<PostInterfaceExtended> = ({
         setCommentAuthor(res);
       });
     }
+    fetchTopComment(_id);
   }, [comment]);
 
   useEffect(() => {
     authorOfComment(user_id).then(res => setAuthor(res));
-    fetchTopComment(_id);
 
     const like = LikedElements(user, likes);
     setLiked(like);
     return;
   }, [likes, user]);
 
+  const theme = localStorage.getItem('theme');
+
   return (
-    <section data-testid="post" className="post">
-      {file.length > 3 && (
-        <div className="post__image-container">
-          <img className="post__image" src={file} alt={headline} />
-        </div>
-      )}
+    <section data-testid="post" className={`post ${theme}`}>
       <div className="post__author">
         <img
           className="post__image-author"
@@ -90,33 +99,48 @@ const Post: FC<PostInterfaceExtended> = ({
       <div className="post__content">
         <h3 className="post__headline">{headline}</h3>
       </div>
+      {file.length > 3 && (
+        <div className="post__image-container">
+          <img className="post__image" src={file} alt={headline} />
+        </div>
+      )}
       <div className="post__actions">
         <m.div
           className="post__container-likes"
-          animate={liked ? { color: '#753ee0' } : { color: '#222831' }}
+          animate={liked ? { color: '#753ee0' } : { color: '#000' }}
         >
           <m.button
             className="post__btn"
             whileTap={{ scale: 1.2 }}
-            onClick={() => {
-              if (user) {
-                handleLikePost(_id, user._id);
-              }
-            }}
+            onClick={() => handleLikePost()}
             aria-label="like or dislike post"
             type="button"
           >
-            <i className="fas fa-star"></i>
+            {liked ? (
+              <FontAwesomeIcon icon={faStarChonky} />
+            ) : (
+              <FontAwesomeIcon icon={farBellThin} />
+            )}
           </m.button>
           <span className="post__likes">{likes.length}</span>
         </m.div>
-        <button className="post__btn" onClick={() => setOpenComments(true)}>
-          <i className="far fa-comment"></i>
-        </button>
+        <div>
+          <button
+            className="post__btn post__single-action"
+            onClick={() => setOpenComments(true)}
+          >
+            <span className="post__count-comments">{comment?.allComments}</span>
+            comments
+          </button>
+          <button className="post__btn post__single-action">
+            Share <i className="fas fa-share"></i>
+          </button>
+        </div>
       </div>
       {comment?.topComment && (
         <>
           <p className="post__top-comment">
+            <p>Popular: </p>
             <span className="post__top-author">{commentAuthor?.firstName}</span>
             {' · '}
             <span className="post__top-date">
@@ -148,6 +172,7 @@ const Post: FC<PostInterfaceExtended> = ({
       {openComments && (
         <Comments postId={_id} setOpenComments={setOpenComments} />
       )}
+      {popup && <BlurredMenu setUserOption={setPopup} />}
     </section>
   );
 };

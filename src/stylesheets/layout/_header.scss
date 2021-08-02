@@ -21,11 +21,14 @@
     margin: 0;
   }
   &__nav-button {
-    width: 3rem;
-    height: 3rem;
-    background: clr.$main-bg-300;
     border: none;
     border-radius: 100rem;
+    background: transparent;
+    color: clr.$font-dark-700;
+    font-size: ft.$fs-400;
+    .fa-bell {
+      color: inherit;
+    }
   }
 
   &__menu {
