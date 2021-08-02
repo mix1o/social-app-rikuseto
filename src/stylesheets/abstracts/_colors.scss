@@ -31,12 +31,6 @@ $light-bg-600: #f3f2f5;
 $light-bg-700: #e4e4e4;
 $light-bg-800: #b9b8ba;
 
-$font-dark-300: #908ea7;
-$font-dark-400: #737186;
-$font-dark-500: #58556d;
-$font-dark-600: #36344b;
-$font-dark-700: #222831;
-
 $font-light-400: #cfcfc9;
 $font-light-300: #eaeae7;
 $font-light-200: #f8f8f8;
@@ -46,3 +40,33 @@ $font-active-500: #753ee0;
 $warning-300: rgba(229, 62, 62, 0.3);
 $warning-500: #e53e3e;
 $pass-500: #53c245;
+
+$dark-theme: 'dark-theme';
+$light-theme: 'light-theme';
+
+$primary-color-dark: 'primary-color-dark';
+$primary-color: 'primary-color';
+$primary-color-light: 'primary-color-light';
+$primary-color-text: 'primary-color-text';
+$accent-color: 'accent-color';
+$primary-text-color: 'primary-text-color';
+$secondary-text-color: 'secondary-text-color';
+$divider-color: 'divider-color';
+$general-background: 'general-background';
+$general-background-light: 'general-background-light';
+/* ...other color keys... */
+
+[data-value='dark'] {
+  --font-dark-300: #908ea7;
+  --font-dark-400: #737186;
+  --font-dark-500: #58556d;
+  --font-dark-600: #36344b;
+  --font-dark-700: #222831;
+}
+[data-value='light'] {
+  --font-dark-300: #908ea7;
+  --font-dark-400: #737186;
+  --font-dark-500: #58556d;
+  --font-dark-600: #40ff36;
+  --font-dark-700: #222831;
+}

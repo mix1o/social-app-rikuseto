@@ -33,7 +33,7 @@
   &__author-name {
     font-size: ft.$fs-200;
     font-weight: ft.$fw-600;
-    color: clr.$font-dark-600;
+    color: var(--font-dark-600);
     margin: 0;
     font-size: ft.$fs-250;
   }
@@ -52,14 +52,14 @@
     justify-content: space-between;
   }
   &__info {
-    color: clr.$font-dark-400;
+    color: var(--font-dark-400);
     margin: 0;
     padding-top: 0.5rem;
     font-size: ft.$fs-200;
   }
   &__category-name {
     font-weight: ft.$fw-600;
-    color: clr.$font-dark-600;
+    color: var(--font-dark-600);
   }
 
   &__actions {
@@ -121,12 +121,12 @@
     font-size: ft.$fs-200;
   }
   &__input::placeholder {
-    color: clr.$font-dark-600;
+    color: var(--font-dark-600);
   }
   &__top-comment {
     padding: var.$padding-around-post;
     font-size: ft.$fs-200;
-    color: clr.$font-dark-400;
+    color: var(--font-dark-400);
     margin-top: 2rem;
     text-overflow: ellipsis;
     white-space: pre-wrap;

@@ -34,8 +34,6 @@ const Post: FC<PostInterfaceExtended> = ({
   const [commentAuthor, setCommentAuthor] = useState<AuthorInterface>();
   const [comment, setComment] = useState<TopComment>();
 
-  // const [theme, setTheme] = useState<string>('light');
-
   const handleLikePost = () => {
     if (user) {
       axios
@@ -79,7 +77,7 @@ const Post: FC<PostInterfaceExtended> = ({
   const theme = localStorage.getItem('theme');
 
   return (
-    <section data-testid="post" className={`post ${theme}`}>
+    <section data-testid="post" className="post">
       <div className="post__author">
         <img
           className="post__image-author"

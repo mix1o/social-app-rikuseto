@@ -36,7 +36,7 @@
   &__form-link {
     text-align: center;
     font-size: ft.$fs-300;
-    color: clr.$font-dark-600;
+    color: var(--font-dark-600);
     font-weight: ft.$fw-600;
   }
   &__form-next {

@@ -13,7 +13,7 @@
     position: relative;
   }
   &__label {
-    color: clr.$font-dark-400;
+    color: var(--font-dark-400);
     position: absolute;
     pointer-events: none;
     transition: 400ms;
