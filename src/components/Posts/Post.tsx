@@ -39,7 +39,7 @@ const Post: FC<PostInterfaceExtended> = ({
       axios
         .post(`${process.env.REACT_APP_API}/posts/like`, {
           postId: _id,
-          userId: user_id,
+          userId: user._id,
         })
         .then(() => {
           onClickLike();
@@ -57,14 +57,19 @@ const Post: FC<PostInterfaceExtended> = ({
       .then(res => setComment(res.data));
   };
 
-  useEffect(() => {
+  const fetchPostDetails = () => {
     if (comment?.topComment) {
       authorOfComment(comment?.topComment.user_id).then(res => {
         setCommentAuthor(res);
       });
     }
     fetchTopComment(_id);
-  }, [comment]);
+  };
+
+  useEffect(() => {
+    fetchPostDetails();
+    // ERROR_FIX top comment
+  }, []);
 
   useEffect(() => {
     authorOfComment(user_id).then(res => setAuthor(res));
@@ -73,8 +78,6 @@ const Post: FC<PostInterfaceExtended> = ({
     setLiked(like);
     return;
   }, [likes, user]);
-
-  const theme = localStorage.getItem('theme');
 
   return (
     <section data-testid="post" className="post">
@@ -105,7 +108,8 @@ const Post: FC<PostInterfaceExtended> = ({
       <div className="post__actions">
         <m.div
           className="post__container-likes"
-          animate={liked ? { color: '#753ee0' } : { color: '#000' }}
+          animate={liked ? { color: '#753ee0' } : { color: '#222831' }}
+          // TODO Change color of liked post on dark mode
         >
           <m.button
             className="post__btn"
@@ -168,7 +172,11 @@ const Post: FC<PostInterfaceExtended> = ({
         </div>
       )}
       {openComments && (
-        <Comments postId={_id} setOpenComments={setOpenComments} />
+        <Comments
+          postId={_id}
+          setOpenComments={setOpenComments}
+          fetchPostDetails={fetchPostDetails}
+        />
       )}
       {popup && <BlurredMenu setUserOption={setPopup} />}
     </section>

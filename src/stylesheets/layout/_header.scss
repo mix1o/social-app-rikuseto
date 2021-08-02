@@ -4,8 +4,8 @@
 @use '../abstracts/variables' as var;
 
 .header {
-  background-color: clr.$light-bg-500;
-  border-bottom: 1px solid clr.$light-bg-700;
+  background-color: var(--light-bg-500);
+  border-bottom: 1px solid var(--light-bg-700);
 
   padding: 1rem;
 

@@ -15,6 +15,7 @@ export interface TopComment {
 export interface CommentProps {
   postId: string;
   setOpenComments: React.Dispatch<React.SetStateAction<boolean>>;
+  fetchPostDetails: () => void;
 }
 
 export interface SingleCommentProps {

@@ -22,7 +22,7 @@
     font-size: ft.$fs-300;
     padding: 1rem;
     width: 100%;
-    border: 2px solid clr.$main-bg-500;
+    border: 2px solid var(--main-bg-500);
     border-radius: 3px;
   }
   &__error {

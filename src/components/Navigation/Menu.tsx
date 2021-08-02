@@ -115,6 +115,7 @@ const Menu = () => {
   const [selected, setSelected] = useState(MENU_ROUTES.MAIN);
 
   return (
+    // TODO set white color icons on dark mode
     <nav className="menu">
       <MenuItem
         href="/"

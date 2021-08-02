@@ -4,11 +4,10 @@
 @use '../abstracts/variables' as var;
 
 .post {
-  background: clr.$light-bg-600;
+  background: var(--light-bg-600);
   max-width: 400px;
   width: 100%;
   margin-bottom: 2rem;
-  background: var(--background);
 
   &__headline {
     margin-top: 2rem;
@@ -72,6 +71,7 @@
   &__container-likes {
     display: flex;
     align-items: center;
+    color: red;
   }
   &__btn {
     border: none;
@@ -84,12 +84,13 @@
     text-align: center;
     padding: 1rem 0;
     margin: 2rem 1rem;
-    border-top: 2px solid clr.$light-bg-700;
+    border-top: 2px solid var(--light-bg-700);
   }
   &__comments-text {
     margin: 0 0 0.5rem;
     font-weight: ft.$fw-600;
     font-size: ft.$fs-200;
+    color: var(--font-dark-600);
   }
   &__comments-total {
     color: clr.$font-active-500;
@@ -102,7 +103,7 @@
     font-weight: ft.$fw-600;
   }
   &__wrapper {
-    background: clr.$light-bg-600;
+    background: var(--light-bg-600);
     margin: 2rem 0;
     padding: 1rem;
   }
@@ -114,7 +115,7 @@
   }
   &__input {
     width: 100%;
-    border: 2px solid clr.$light-bg-800;
+    border: 2px solid var(--light-bg-800);
     border-radius: 100rem;
     background: transparent;
     padding: 1rem;
@@ -143,7 +144,7 @@
   &__single-action {
     font-size: ft.$fs-250;
     margin: 0 0.5rem;
-
+    color: var(--font-dark-600);
     .fa-share {
       font-size: ft.$fs-250;
       margin-left: 0.3rem;

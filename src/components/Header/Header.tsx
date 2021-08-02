@@ -33,29 +33,35 @@ const Header: FC = () => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [userOption, setUserOption] = useState<boolean>(false);
   const [cookies, , removeCookie] = useCookies();
-  const [userTheme, setUserTheme] = useState('');
-  const [toggleTheme, setToggleTheme] = useState<boolean>();
+
   const { user } = cookies;
 
   const [current, send] = useActor(authService);
 
-  // const reducer = useCallback((theme, action) => {##FIX
-  //   console.log(action);
-  //   switch (action.type) {
-  //     case 'CHANGE':
-  //       localStorage.setItem('theme', action.payload.theme);
-  //       return;
-  //   }
-  // }, []);
+  const reducer = (theme: any, action: any) => {
+    switch (action.type) {
+      case 'CHANGE':
+        localStorage.setItem(
+          'theme',
+          JSON.stringify({ theme: action.payload })
+        );
 
-  // const [theme, dispatch] = useReducer(reducer, 'light', () => {
-  //   const themeLocal = localStorage.getItem('theme');
-  //   console.log(themeLocal);
-  // });
+        return theme;
+    }
+  };
 
-  // useEffect(() => {
-  //   localStorage.setItem('theme', JSON.stringify(theme));
-  // }, [theme]);
+  const [theme, dispatch] = useReducer(reducer, { theme: 'light' }, () => {
+    const themeLocal = localStorage.getItem('theme');
+
+    return themeLocal ? JSON.parse(themeLocal) : { theme: 'light' };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('theme', JSON.stringify(theme));
+    const userTheme = JSON.parse(localStorage.getItem('theme') || '');
+
+    html!.dataset!.value = userTheme.theme;
+  }, [theme]);
 
   return (
     <div className="header">
@@ -79,14 +85,16 @@ const Header: FC = () => {
       </button> */}
       <button
         onClick={() => {
-          // dispatch({ type: 'CHANGE', payload: { theme: 'light' } });
+          dispatch({ type: 'CHANGE', payload: 'light' });
+          html!.dataset!.value = 'light';
         }}
       >
         Light
       </button>
       <button
         onClick={() => {
-          // dispatch({ type: 'CHANGE', payload: { theme: 'dark' } });
+          dispatch({ type: 'CHANGE', payload: 'dark' });
+          html!.dataset!.value = 'dark';
         }}
       >
         Dark
