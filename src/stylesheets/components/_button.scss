@@ -16,7 +16,6 @@
 ) {
   &:#{$pseudoClass} {
     box-shadow: $shadowIn 0px 0px $bg-color;
-    // margin: -2px;
     border-color: $bg;
     color: $bg;
   }
@@ -24,7 +23,7 @@
 
 @mixin btnBasic($padding: 0.5rem 1rem, $fs: ft.$fs-200) {
   background: clr.$main-bg-500;
-  color: clr.$font-light-300;
+  color: var(--font-light-300);
   border: none;
   border-radius: 2px;
   cursor: pointer;

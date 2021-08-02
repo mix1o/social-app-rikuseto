@@ -19,7 +19,11 @@ const ContainerComments = styled.div`
   width: 100%;
 `;
 
-const Comments: FC<CommentProps> = ({ postId, setOpenComments }) => {
+const Comments: FC<CommentProps> = ({
+  postId,
+  setOpenComments,
+  fetchPostDetails,
+}) => {
   const [commentText, setCommentText] = useState<string>('');
   const [comments, setComments] = useState<CommentsData[]>();
   const [cookies] = useCookies();
@@ -36,6 +40,7 @@ const Comments: FC<CommentProps> = ({ postId, setOpenComments }) => {
         .then(() => {
           setCommentText('');
           getAllComments();
+          fetchPostDetails();
         });
       return;
     }

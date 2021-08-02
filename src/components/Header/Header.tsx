@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useReducer, useCallback } from 'react';
 import { useCookies } from 'react-cookie';
 import { motion as m } from 'framer-motion';
 import { useActor } from '@xstate/react';
@@ -28,20 +28,40 @@ const variants = {
 };
 
 const Header: FC = () => {
+  const html = document.querySelector('html');
+
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [userOption, setUserOption] = useState<boolean>(false);
   const [cookies, , removeCookie] = useCookies();
+
   const { user } = cookies;
+
   const [current, send] = useActor(authService);
 
-  useEffect(() => {
-    setUserOption(false);
-    setOpenMenu(false);
-  }, [user]);
+  const reducer = (theme: any, action: any) => {
+    switch (action.type) {
+      case 'CHANGE':
+        localStorage.setItem(
+          'theme',
+          JSON.stringify({ theme: action.payload })
+        );
 
-  const changeTheme = (theme: string) => {
-    localStorage.setItem('theme', theme);
+        return theme;
+    }
   };
+
+  const [theme, dispatch] = useReducer(reducer, { theme: 'light' }, () => {
+    const themeLocal = localStorage.getItem('theme');
+
+    return themeLocal ? JSON.parse(themeLocal) : { theme: 'light' };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('theme', JSON.stringify(theme));
+    const userTheme = JSON.parse(localStorage.getItem('theme') || '');
+
+    html!.dataset!.value = userTheme.theme;
+  }, [theme]);
 
   return (
     <div className="header">
@@ -56,8 +76,29 @@ const Header: FC = () => {
           <i className="fas fa-bell" />
         </button>
       </div>
-      <button onClick={() => changeTheme('light')}>Light</button>
-      <button onClick={() => changeTheme('dark')}>Dark</button>
+      {/* <button
+        onClick={() => {
+          userTheme === 'light' ? setUserTheme('dark') : setUserTheme('light');
+        }}
+      >
+        Light
+      </button> */}
+      <button
+        onClick={() => {
+          dispatch({ type: 'CHANGE', payload: 'light' });
+          html!.dataset!.value = 'light';
+        }}
+      >
+        Light
+      </button>
+      <button
+        onClick={() => {
+          dispatch({ type: 'CHANGE', payload: 'dark' });
+          html!.dataset!.value = 'dark';
+        }}
+      >
+        Dark
+      </button>
       <m.div
         initial="closed"
         animate={openMenu ? 'open' : 'closed'}
@@ -65,28 +106,6 @@ const Header: FC = () => {
         className="header__menu"
       >
         <div onClick={() => setOpenMenu(false)}>x</div>
-        {/* {!user && (
-          <div>
-            <button
-              onClick={() => {
-                setOpenMenu(false);
-                send('SIGN_IN');
-                setUserOption(true);
-              }}
-            >
-              Log In
-            </button>
-            <button
-              onClick={() => {
-                setOpenMenu(false);
-                send('SIGN_UP');
-                setUserOption(true);
-              }}
-            >
-              Sign Un
-            </button>
-          </div>
-        )} */}
         {user && (
           <div>
             <button onClick={() => removeCookie('user')}>Log out</button>

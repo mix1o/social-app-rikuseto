@@ -18,7 +18,7 @@
     display: grid;
     justify-content: center;
     @include qr.media('>=tablet') {
-      background: clr.$light-bg-500;
+      background: var(--light-bg-500);
       padding: 0 2rem;
     }
   }
@@ -36,7 +36,7 @@
   &__form-link {
     text-align: center;
     font-size: ft.$fs-300;
-    color: clr.$font-dark-600;
+    color: var(--font-dark-600);
     font-weight: ft.$fw-600;
   }
   &__form-next {

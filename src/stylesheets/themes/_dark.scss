@@ -1,4 +1,25 @@
-.dark {
-  background: #000;
-  color: #fff;
+[data-value='dark'] {
+  --secondary-bg-100: #919191;
+  --secondary-bg-200: #787878;
+  --secondary-bg-300: #6b6b6b;
+  --secondary-bg-400: #525252;
+  --secondary-bg-500: #fff;
+  --secondary-bg-600: #f3f2f5;
+  --secondary-bg-700: #e4e4e4;
+  --secondary-bg-800: #b9b8ba;
+
+  --light-bg-500: #414141;
+  --light-bg-600: #222831;
+  --light-bg-700: #0d0f12;
+  --light-bg-800: #020203;
+
+  --font-dark-300: #b6b6b4;
+  --font-dark-400: #cfcfc9;
+  --font-dark-500: #eaeae7;
+  --font-dark-600: #f8f8f8;
+  --font-dark-700: #fdfcfc;
+
+  --font-light-400: #737186;
+  --font-light-300: #58556d;
+  --font-light-200: #36344b;
 }

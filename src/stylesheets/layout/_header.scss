@@ -4,8 +4,8 @@
 @use '../abstracts/variables' as var;
 
 .header {
-  background-color: clr.$light-bg-500;
-  border-bottom: 1px solid clr.$light-bg-700;
+  background-color: var(--light-bg-500);
+  border-bottom: 1px solid var(--light-bg-700);
 
   padding: 1rem;
 
@@ -24,7 +24,7 @@
     border: none;
     border-radius: 100rem;
     background: transparent;
-    color: clr.$font-dark-700;
+    color: var(--font-dark-600);
     font-size: ft.$fs-400;
     .fa-bell {
       color: inherit;

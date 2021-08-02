@@ -6,10 +6,10 @@
   bottom: 0;
   width: 100%;
   display: flex;
-  background-color: clr.$light-bg-500;
+  background-color: var(--light-bg-500);
   justify-content: space-between;
   padding: 1rem 2rem;
-  border-top: 1px solid clr.$light-bg-700;
+  border-top: 1px solid var(--light-bg-700);
 
   &__item {
     font-size: ft.$fs-400;
