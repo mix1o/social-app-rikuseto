@@ -113,24 +113,7 @@ const Header: FC = () => {
             {current.matches('signUp') && <SignUp />}
             {current.matches('resetPassword') && <ResetPassword />}
           </div>
-          {/* {userOption === USER_OPTIONS.SIGN_IN && (
-              <div className="header__option">
-                <SignIn />
-                <button onClick={() => setUserOption(USER_OPTIONS.NULL)}>
-                  close
-                </button>
-              </div>
-            )}
-            {userOption === USER_OPTIONS.SIGN_UP && (
-              <>
-                <div className="header__option">
-                  <SignUp />
-                  <button onClick={() => setUserOption(USER_OPTIONS.NULL)}>
-                    close
-                  </button>
-                </div>
-              </>
-            )} */}
+
         </div>
       )}
     </div>

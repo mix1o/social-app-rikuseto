@@ -6,7 +6,7 @@ import Menu from './components/Navigation/Menu';
 
 const App: FC = () => {
   return (
-    <div style={{ position: 'relative' }}>
+    <div>
       <Header />
       <Router>
         <Switch>

@@ -127,7 +127,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   }, [post, message, correctImage]);
 
   return (
-    <div className="blurred__options">
+    <div className="blurred__options create">
       <div
         className="blurred__blurred-bg"
         onClick={() => setOpen(prevVal => !prevVal)}

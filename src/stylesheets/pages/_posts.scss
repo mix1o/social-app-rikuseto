@@ -5,8 +5,9 @@
 
 .post {
   background: clr.$light-bg-600;
-  margin-bottom: 1rem;
   max-width: 400px;
+  width: 100%;
+  margin-bottom: 1rem;
 
   &__image-container {
     width: 100%;
