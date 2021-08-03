@@ -29,15 +29,17 @@ const Posts: FC = () => {
 
   const [state, actions] = useCounter();
 
-  // TODO COMMENTS Popup
+  const [disabled, setDisabled] = useState<boolean>(false);
+  useEffect(() => {
+    if (state.isOpenCommentComponent) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [state.isOpenCommentComponent]);
+
   return (
-    <main
-      style={
-        state.isOpenCommentComponent
-          ? { overflowY: 'hidden', height: '10vh' }
-          : {}
-      }
-    >
+    <main style={disabled ? { overflow: 'hidden', height: '20vh' } : {}}>
       {user && (
         <div className="post__wrapper">
           <label className="post__container-input">

@@ -126,7 +126,6 @@ const Post: FC<PostInterfaceExtended> = ({
           <button
             className="post__btn post__single-action"
             onClick={() => setOpenComments(true)}
-            // TODO OPEN COMMENTS
           >
             <span className="post__count-comments">{comment?.allComments}</span>
             comments
@@ -156,7 +155,7 @@ const Post: FC<PostInterfaceExtended> = ({
         >
           {comment.allComments >= 1 ? (
             <p className="post__comments-text">
-              View all comments {/* TODO OPEN COMMENTS */}
+              View all comments
               <span className="post__comments-total">
                 &#40;{comment?.allComments}&#41;
               </span>

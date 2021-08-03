@@ -68,7 +68,9 @@ const Comments: FC<CommentProps> = ({
 
   const [state, actions] = useCounter();
 
-  actions.isOpenComment(true);
+  useEffect(() => {
+    actions.isOpenComment(true);
+  }, []);
 
   return (
     <m.section
