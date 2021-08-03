@@ -22,7 +22,7 @@ const ContainerComments = styled.div`
 const Comments: FC<CommentProps> = ({
   postId,
   setOpenComments,
-  fetchPostDetails,
+  fetchTopComment,
 }) => {
   const [commentText, setCommentText] = useState<string>('');
   const [comments, setComments] = useState<CommentsData[]>();
@@ -40,7 +40,7 @@ const Comments: FC<CommentProps> = ({
         .then(() => {
           setCommentText('');
           getAllComments();
-          fetchPostDetails();
+          fetchTopComment();
         });
       return;
     }

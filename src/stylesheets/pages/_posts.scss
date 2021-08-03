@@ -67,11 +67,11 @@
     justify-content: space-between;
     margin-top: 2rem;
     padding: var.$padding-around-post;
+    color: var(--font-dark-600);
   }
   &__container-likes {
     display: flex;
     align-items: center;
-    color: red;
   }
   &__btn {
     border: none;

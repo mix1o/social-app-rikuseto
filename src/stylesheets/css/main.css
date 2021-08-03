@@ -365,6 +365,33 @@ h6 {
   color: inherit;
 }
 
+.container-theme {
+  width: 50px;
+  background: #d9d9d9;
+  height: 20px;
+  padding: 0 2px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  margin: 2rem;
+}
+
+.circle-theme {
+  background: #333;
+  width: 17px;
+  height: 17px;
+  border-radius: 100px;
+}
+
+.container-theme-disabled {
+  justify-content: flex-start;
+}
+
+.container-theme--active {
+  background: blue;
+  justify-content: flex-end;
+}
+
 .blurred__options {
   position: absolute;
   top: 0;
@@ -456,11 +483,11 @@ h6 {
   justify-content: space-between;
   margin-top: 2rem;
   padding: 0 1rem;
+  color: var(--font-dark-600);
 }
 .post__container-likes {
   display: flex;
   align-items: center;
-  color: red;
 }
 .post__btn {
   border: none;

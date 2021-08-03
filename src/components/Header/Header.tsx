@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useReducer, useCallback } from 'react';
+import { FC, useState, useEffect, useReducer, useRef } from 'react';
 import { useCookies } from 'react-cookie';
 import { motion as m } from 'framer-motion';
 import { useActor } from '@xstate/react';
@@ -63,6 +63,16 @@ const Header: FC = () => {
     html!.dataset!.value = userTheme.theme;
   }, [theme]);
 
+  const themeIndex = localStorage.getItem('theme');
+  const [idx, setIdx] = useState(
+    JSON.parse(themeIndex || '').theme === 'dark' ? 0 : 1
+  );
+
+  const handleChangeTheme = (property: string) => {
+    dispatch({ type: 'CHANGE', payload: property });
+    html!.dataset!.value = property;
+  };
+
   return (
     <div className="header">
       <div className="header__content">
@@ -76,29 +86,27 @@ const Header: FC = () => {
           <i className="fas fa-bell" />
         </button>
       </div>
-      {/* <button
+
+      <m.div
+        className={`${
+          idx === 1 ? 'container-theme-disabled' : 'container-theme--active'
+        } container-theme`}
         onClick={() => {
-          userTheme === 'light' ? setUserTheme('dark') : setUserTheme('light');
+          if (idx === 0) {
+            handleChangeTheme('light');
+            setIdx(1);
+            return;
+          }
+          if (idx === 1) {
+            handleChangeTheme('dark');
+            setIdx(0);
+            return;
+          }
         }}
       >
-        Light
-      </button> */}
-      <button
-        onClick={() => {
-          dispatch({ type: 'CHANGE', payload: 'light' });
-          html!.dataset!.value = 'light';
-        }}
-      >
-        Light
-      </button>
-      <button
-        onClick={() => {
-          dispatch({ type: 'CHANGE', payload: 'dark' });
-          html!.dataset!.value = 'dark';
-        }}
-      >
-        Dark
-      </button>
+        <m.div layout className="circle-theme"></m.div>
+      </m.div>
+
       <m.div
         initial="closed"
         animate={openMenu ? 'open' : 'closed'}

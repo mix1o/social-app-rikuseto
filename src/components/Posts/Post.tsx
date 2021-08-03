@@ -51,24 +51,22 @@ const Post: FC<PostInterfaceExtended> = ({
     setPopup(true);
   };
 
-  const fetchTopComment = (postId: string) => {
+  const fetchTopComment = () => {
     axios
-      .get(`${process.env.REACT_APP_API}/comments/top?postId=${postId}`)
-      .then(res => setComment(res.data));
-  };
-
-  const fetchPostDetails = () => {
-    if (comment?.topComment) {
-      authorOfComment(comment?.topComment.user_id).then(res => {
-        setCommentAuthor(res);
+      .get(`${process.env.REACT_APP_API}/comments/top?postId=${_id}`)
+      .then(res => {
+        setComment(res.data);
+        if (res.data.topComment) {
+          authorOfComment(res.data.topComment.user_id).then(res => {
+            setCommentAuthor(res);
+          });
+        }
       });
-    }
-    fetchTopComment(_id);
   };
 
+  const fetchPostDetails = () => console.log('d');
   useEffect(() => {
-    fetchPostDetails();
-    // ERROR_FIX top comment
+    fetchTopComment();
   }, []);
 
   useEffect(() => {
@@ -108,12 +106,7 @@ const Post: FC<PostInterfaceExtended> = ({
       <div className="post__actions">
         <m.div
           className="post__container-likes"
-          // animate={
-          // liked
-          // ? { color: '#753ee0' }
-          // : { color: `${JSON.parse(theme || '').theme === 'dark' ? '#fff' : '#'}` }
-          // }
-          // TODO Change color of liked post on dark mode
+          animate={liked ? { color: '#753ee0' } : { color: 'inherit' }}
         >
           <m.button
             className="post__btn"
@@ -179,7 +172,7 @@ const Post: FC<PostInterfaceExtended> = ({
         <Comments
           postId={_id}
           setOpenComments={setOpenComments}
-          fetchPostDetails={fetchPostDetails}
+          fetchTopComment={fetchTopComment}
         />
       )}
       {popup && <BlurredMenu setUserOption={setPopup} />}
