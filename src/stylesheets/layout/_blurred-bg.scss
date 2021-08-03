@@ -1,5 +1,6 @@
 @use '../abstracts/colors' as clr;
 @use '../abstracts/variables' as var;
+@use '../abstracts/mixins' as mix;
 
 .blurred {
   &__options {
@@ -19,6 +20,7 @@
     grid-area: center;
   }
   &__option {
+    @include mix.border();
     min-width: var.$form-width;
     max-width: 450px;
     grid-area: center;
@@ -27,7 +29,7 @@
     justify-self: center;
     padding: 2rem;
     border-radius: 3px;
-    border: 1px solid var(--light-bg-600);
+
     z-index: 5;
   }
 }

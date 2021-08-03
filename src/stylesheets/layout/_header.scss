@@ -2,11 +2,11 @@
 @use '../abstracts/fontSizes' as ft;
 @use '../abstracts/media' as qr;
 @use '../abstracts/variables' as var;
+@use '../abstracts/mixins' as mix;
 
 .header {
   background-color: var(--light-bg-500);
-  border-bottom: 1px solid var(--light-bg-700);
-
+  @include mix.border('-bottom');
   padding: 1rem;
 
   position: sticky;

@@ -1,5 +1,6 @@
 @use '../abstracts/colors' as clr;
 @use '../abstracts/fontSizes' as ft;
+@use '../abstracts/mixins' as mix;
 
 .menu {
   position: fixed;
@@ -9,7 +10,7 @@
   background-color: var(--light-bg-500);
   justify-content: space-between;
   padding: 1rem 2rem;
-  border-top: 1px solid var(--light-bg-700);
+  @include mix.border('-top');
   color: var(--font-dark-600);
 
   &__item {

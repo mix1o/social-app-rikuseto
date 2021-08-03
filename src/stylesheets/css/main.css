@@ -3,7 +3,7 @@ html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  background: var(--light-bg-600);
+  background: var(--light-bg-500);
 }
 
 *,
@@ -266,7 +266,7 @@ h6 {
   position: relative;
 }
 .auth-form__label {
-  color: var(--font-dark-400);
+  color: var(--font-dark-600);
   position: absolute;
   pointer-events: none;
   transition: 400ms;
@@ -275,8 +275,10 @@ h6 {
   font-size: 1.6rem;
   padding: 1rem;
   width: 100%;
-  border: 2px solid var(--main-bg-500);
+  border: 2px solid #753ee0;
   border-radius: 3px;
+  background: var(--light-bg-550);
+  color: var(--font-dark-600);
 }
 .auth-form__error {
   color: #e53e3e;
@@ -381,6 +383,7 @@ h6 {
   grid-area: center;
 }
 .blurred__option {
+  border: 1px solid var(--light-bg-700);
   min-width: 350px;
   max-width: 450px;
   grid-area: center;
@@ -389,7 +392,6 @@ h6 {
   justify-self: center;
   padding: 2rem;
   border-radius: 3px;
-  border: 1px solid var(--light-bg-600);
   z-index: 5;
 }
 
@@ -398,6 +400,7 @@ h6 {
   max-width: 400px;
   width: 100%;
   margin-bottom: 2rem;
+  border: 1px solid var(--light-bg-700);
 }
 .post__headline {
   margin-top: 2rem;
@@ -606,6 +609,8 @@ h6 {
   font-size: 1.6rem;
   margin: 0.5rem 0;
   padding-bottom: 2.5rem;
+  color: var(--font-dark-600);
+  font-weight: 300;
 }
 .auth__form-link {
   text-align: center;
@@ -628,9 +633,10 @@ h6 {
   --secondary-bg-700: #e4e4e4;
   --secondary-bg-800: #b9b8ba;
   --light-bg-400: #414141;
-  --light-bg-500: #222831;
-  --light-bg-600: #18191a;
-  --light-bg-700: #0d0f12;
+  --light-bg-500: #1a1a1c;
+  --light-bg-600: #212122;
+  --light-bg-550: #212122;
+  --light-bg-700: #3d3d3f;
   --light-bg-800: #020203;
   --font-dark-300: #b6b6b4;
   --font-dark-400: #cfcfc9;
@@ -638,7 +644,7 @@ h6 {
   --font-dark-600: #f8f8f8;
   --font-dark-700: #fdfcfc;
   --font-light-400: #737186;
-  --font-light-300: #58556d;
+  --font-light-300: #f8f8f8;
   --font-light-200: #36344b;
 }
 
@@ -652,6 +658,7 @@ h6 {
   --secondary-bg-700: #0d0f12;
   --secondary-bg-800: #020203;
   --light-bg-500: #fff;
+  --light-bg-550: #fff;
   --light-bg-600: #f3f2f5;
   --light-bg-700: #e4e4e4;
   --light-bg-800: #b9b8ba;
