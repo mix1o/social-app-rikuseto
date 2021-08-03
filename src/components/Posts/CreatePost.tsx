@@ -136,14 +136,12 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
 
   const handleNewOpt = (value: any, action: any) => {
     setNewOption(value);
-    console.log(value);
   };
 
   const fetchOptions = (value: string, actions: any) => {
-    console.log(actions);
     axios
       .get(`${process.env.REACT_APP_API}/posts/category?value=${value}`)
-      .then(res => console.log(res));
+      .then(res => setFetchedOptions(res.data));
   };
 
   return (
@@ -154,6 +152,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       ></div>
       <div className="blurred__option">
         <h2 data-testid="create-post-header">Create new post</h2>
+        <p>test</p>
         <input
           data-testid="headline"
           value={post.headline}
