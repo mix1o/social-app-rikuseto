@@ -108,7 +108,11 @@ const Post: FC<PostInterfaceExtended> = ({
       <div className="post__actions">
         <m.div
           className="post__container-likes"
-          animate={liked ? { color: '#753ee0' } : { color: '#222831' }}
+          // animate={
+          // liked
+          // ? { color: '#753ee0' }
+          // : { color: `${JSON.parse(theme || '').theme === 'dark' ? '#fff' : '#'}` }
+          // }
           // TODO Change color of liked post on dark mode
         >
           <m.button
