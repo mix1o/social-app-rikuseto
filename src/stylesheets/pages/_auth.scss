@@ -1,10 +1,10 @@
 @use '../abstracts/colors' as clr;
 @use '../abstracts/fontSizes' as ft;
 @use '../abstracts/media' as qr;
-@use '../abstracts/variables' as var;
 
 .auth {
   height: 100vh;
+
   @include qr.media('>=tablet') {
     display: flex;
     justify-content: center;
@@ -22,7 +22,6 @@
       padding: 0 2rem;
     }
   }
-
   &__header {
     display: flex;
     flex-flow: column;
@@ -32,6 +31,8 @@
     font-size: ft.$fs-300;
     margin: 0.5rem 0;
     padding-bottom: 2.5rem;
+    color: var(--font-dark-600);
+    font-weight: ft.$fw-400;
   }
   &__form-link {
     text-align: center;

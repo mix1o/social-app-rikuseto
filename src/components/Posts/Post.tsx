@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { FC, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import Comments from '../Comments/Comments';
 import { LikedElements } from '../../hooks/LikedElements';
 import moment from 'moment';
 import { PostInterfaceExtended } from '../../interfaces/posts/postInterfaces';
 import { AuthorInterface } from '../../interfaces/common/common';
-import { motion as m } from 'framer-motion';
+import { motion as m, AnimatePresence as Presence } from 'framer-motion';
 import { TopComment } from '../../interfaces/comments/commentsInterfaces';
 import { authorOfComment } from '../../helpers/AuthorOfComment';
 import BlurredMenu from '../Navigation/BlurredMenu';
@@ -64,7 +64,6 @@ const Post: FC<PostInterfaceExtended> = ({
       });
   };
 
-  const fetchPostDetails = () => console.log('d');
   useEffect(() => {
     fetchTopComment();
   }, []);
@@ -127,6 +126,7 @@ const Post: FC<PostInterfaceExtended> = ({
           <button
             className="post__btn post__single-action"
             onClick={() => setOpenComments(true)}
+            // TODO OPEN COMMENTS
           >
             <span className="post__count-comments">{comment?.allComments}</span>
             comments
@@ -139,7 +139,6 @@ const Post: FC<PostInterfaceExtended> = ({
       {comment?.topComment && (
         <>
           <p className="post__top-comment">
-            <p>Popular: </p>
             <span className="post__top-author">{commentAuthor?.firstName}</span>
             {' · '}
             <span className="post__top-date">
@@ -150,7 +149,6 @@ const Post: FC<PostInterfaceExtended> = ({
           </p>
         </>
       )}
-
       {comment && (
         <div
           className="post__comments--count"
@@ -158,7 +156,7 @@ const Post: FC<PostInterfaceExtended> = ({
         >
           {comment.allComments >= 1 ? (
             <p className="post__comments-text">
-              View all comments{' '}
+              View all comments {/* TODO OPEN COMMENTS */}
               <span className="post__comments-total">
                 &#40;{comment?.allComments}&#41;
               </span>
@@ -168,13 +166,16 @@ const Post: FC<PostInterfaceExtended> = ({
           )}
         </div>
       )}
-      {openComments && (
-        <Comments
-          postId={_id}
-          setOpenComments={setOpenComments}
-          fetchTopComment={fetchTopComment}
-        />
-      )}
+      <Presence exitBeforeEnter>
+        {openComments && (
+          <Comments
+            key={_id}
+            postId={_id}
+            setOpenComments={setOpenComments}
+            fetchTopComment={fetchTopComment}
+          />
+        )}
+      </Presence>
       {popup && <BlurredMenu setUserOption={setPopup} />}
     </section>
   );

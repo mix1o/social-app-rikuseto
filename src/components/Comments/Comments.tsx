@@ -4,20 +4,29 @@ import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 import Comment from './Comment/Comment';
+import { motion as m } from 'framer-motion';
 import {
   CommentsData,
   CommentProps,
 } from '../../interfaces/comments/commentsInterfaces';
+import { useCounter } from '../../store/sub';
 
-const ContainerComments = styled.div`
-  background: #fff;
-  min-height: 100vh;
-  position: fixed;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  width: 100%;
-`;
+const commentVariant = {
+  hidden: {
+    y: 1000,
+    opacity: 0,
+    transition: {
+      type: 'tween',
+    },
+  },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: 'tween',
+    },
+  },
+};
 
 const Comments: FC<CommentProps> = ({
   postId,
@@ -57,30 +66,29 @@ const Comments: FC<CommentProps> = ({
     getAllComments();
   }, []);
 
+  const [state, actions] = useCounter();
+
+  actions.isOpenComment(true);
+
   return (
-    <ContainerComments>
-      <div onClick={() => setOpenComments(false)}>x</div>
-      {user && (
-        <>
-          {' '}
-          <input
-            value={commentText}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setCommentText(e.target.value)
-            }
-            type="text"
-          />
-          <button onClick={handleNewComment}>Add comments</button>
-        </>
-      )}
+    <m.section
+      variants={commentVariant}
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+      className="comments"
+    >
       {!user && <p>You need to be logged in to add new comment</p>}
-      <div
-        style={{
-          maxHeight: '100vh',
-          overflowY: 'scroll',
-          paddingBottom: '4rem',
-        }}
-      >
+      <div>
+        <button
+          style={{ fontSize: '50px', color: 'white' }}
+          onClick={() => {
+            setOpenComments(false);
+            actions.isOpenComment(false);
+          }}
+        >
+          X
+        </button>
         {comments?.map(({ _id, text, user_id, likes }) => {
           return (
             <Comment
@@ -94,7 +102,20 @@ const Comments: FC<CommentProps> = ({
           );
         })}
       </div>
-    </ContainerComments>
+      {user && (
+        <div className="comments__">
+          <input
+            className="comments__input"
+            value={commentText}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setCommentText(e.target.value)
+            }
+            type="text"
+          />
+          <button onClick={handleNewComment}>Add comments</button>
+        </div>
+      )}
+    </m.section>
   );
 };
 

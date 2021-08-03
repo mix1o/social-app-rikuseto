@@ -1,27 +1,25 @@
-.comment {
-  background-color: #e7e7e7;
-  margin-top: 1rem;
-  padding: 0.5rem;
+@use '../abstracts/colors' as clr;
+@use '../abstracts/variables' as var;
+@use '../abstracts/fontSizes' as ft;
+@use '../components/button' as btn;
 
-  &__author {
-    display: flex;
-    align-items: center;
-  }
-  &__author-image {
-    height: 2.3rem;
-    width: 2.3rem;
-    border-radius: 100%;
-    margin-right: 0.5rem;
-  }
-  &__action {
-    display: flex;
-    align-items: center;
-  }
-  &__btn {
-    background: transparent;
-    border: none;
-  }
-  .fa-star {
-    color: inherit;
+.comments {
+  background: var(--light-bg-600);
+  z-index: 5;
+  height: 75vh;
+  overflow-y: scroll;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  border-radius: 10px 10px 0 0;
+  // margin-bottom: 20rem;
+
+  &__input {
+    position: fixed;
+    bottom: 0;
+    background-color: red;
   }
 }
+// .comment:last-child {
+//   margin-bottom: 20rem;
+// }

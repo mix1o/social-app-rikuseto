@@ -4,6 +4,7 @@ import Post from './Post';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
+import { useCounter } from '../../store/sub';
 
 const Posts: FC = () => {
   const [posts, setPosts] = useState<PostInterface[]>();
@@ -26,8 +27,17 @@ const Posts: FC = () => {
     fetchPosts();
   }, []);
 
+  const [state, actions] = useCounter();
+
+  // TODO COMMENTS Popup
   return (
-    <main>
+    <main
+      style={
+        state.isOpenCommentComponent
+          ? { overflowY: 'hidden', height: '10vh' }
+          : {}
+      }
+    >
       {user && (
         <div className="post__wrapper">
           <label className="post__container-input">
