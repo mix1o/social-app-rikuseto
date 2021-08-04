@@ -5,11 +5,11 @@
 @use '../abstracts/mixins' as mix;
 
 .header {
-  background-color: var(--light-bg-500);
+  background-color: var(--light-bg-400);
   @include mix.border('-bottom');
   padding: 1rem;
 
-  position: sticky;
+  position: fixed;
   width: 100%;
   top: 0;
   &__content {

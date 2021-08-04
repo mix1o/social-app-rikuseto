@@ -1,4 +1,15 @@
+import { FC } from 'react';
 import { AuthRoute } from './auth';
-import { PostsRoute } from './posts';
+import { PostsRoute, CreatePostRoute } from './posts';
 
-export const Routes = [AuthRoute, PostsRoute];
+interface RouteProps<T> {
+  component: FC<T>;
+  url: string;
+  exact: boolean;
+}
+
+export const Routes: RouteProps<any>[] = [
+  AuthRoute,
+  PostsRoute,
+  //   CreatePostRoute,
+];

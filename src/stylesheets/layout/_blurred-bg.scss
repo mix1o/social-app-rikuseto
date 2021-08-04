@@ -4,19 +4,20 @@
 
 .blurred {
   &__options {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     overflow: hidden;
     display: grid;
     grid-template-areas: 'center';
+    z-index: 3;
   }
   &__blurred-bg {
-    background: rgba(var(--secondary-bg-600), 0.8);
+    background-color: rgba(var(--secondary-bg-600), 0.8);
+    z-index: 2;
     width: 100vw;
     height: 100vh;
-
     grid-area: center;
   }
   &__option {
@@ -29,7 +30,6 @@
     justify-self: center;
     padding: 2rem;
     border-radius: 3px;
-
-    z-index: 5;
+    z-index: 3;
   }
 }
