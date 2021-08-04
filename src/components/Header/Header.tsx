@@ -88,32 +88,32 @@ const Header: FC = () => {
       </div>
 
       <m.div
-        className={`${
-          idx === 1 ? 'container-theme-disabled' : 'container-theme--active'
-        } container-theme`}
-        onClick={() => {
-          if (idx === 0) {
-            handleChangeTheme('light');
-            setIdx(1);
-            return;
-          }
-          if (idx === 1) {
-            handleChangeTheme('dark');
-            setIdx(0);
-            return;
-          }
-        }}
-      >
-        <m.div layout className="circle-theme"></m.div>
-      </m.div>
-
-      <m.div
         initial="closed"
         animate={openMenu ? 'open' : 'closed'}
         variants={variants}
         className="header__menu"
       >
         <div onClick={() => setOpenMenu(false)}>x</div>
+        <p>Theme </p>
+        <m.div
+          className={`${
+            idx === 1 ? 'container-theme-disabled' : 'container-theme--active'
+          } container-theme`}
+          onClick={() => {
+            if (idx === 0) {
+              handleChangeTheme('light');
+              setIdx(1);
+              return;
+            }
+            if (idx === 1) {
+              handleChangeTheme('dark');
+              setIdx(0);
+              return;
+            }
+          }}
+        >
+          <m.div layout className="circle-theme"></m.div>
+        </m.div>
         {user && (
           <div>
             <button onClick={() => removeCookie('user')}>Log out</button>

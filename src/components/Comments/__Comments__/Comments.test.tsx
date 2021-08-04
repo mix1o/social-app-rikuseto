@@ -43,6 +43,7 @@ test('Input correctly change value and at render is empty', () => {
 
 test('Button add new comment functionality', async () => {
   const btn = getByTestId('publish');
+  const input = getByTestId('input-comments');
 
   expect(btn.textContent).toBe('Publish');
 
@@ -53,5 +54,11 @@ test('Button add new comment functionality', async () => {
   await waitFor(() => {
     const popup = getByTestId('blurred');
     expect(popup).toBeInTheDocument();
+  });
+
+  fireEvent.change(input, { target: { value: '         ' } });
+  await waitFor(() => {
+    const message = getByTestId('message');
+    expect(message).toBeInTheDocument();
   });
 });

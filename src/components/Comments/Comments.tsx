@@ -42,12 +42,19 @@ const Comments: FC<CommentProps> = ({
   const { user } = cookies;
   const [popup, setPopup] = useState<boolean>(false);
 
+  const [message, setMessage] = useState<string>('');
+
   const handleNewComment = (): void => {
     if (!user) {
       setPopup(true);
       return;
     }
-    if (commentText.length >= 1) {
+    if (
+      commentText.length >= 1 &&
+      (/\d/.test(commentText) ||
+        /[a-zA-Z]/g.test(commentText) ||
+        /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(commentText))
+    ) {
       axios
         .post(`${process.env.REACT_APP_API}/comments/create`, {
           commentText,
@@ -61,7 +68,7 @@ const Comments: FC<CommentProps> = ({
         });
       return;
     }
-    // TODO space
+    setMessage('Text must be at least 1 character');
   };
 
   const getAllComments = (): void => {
@@ -130,22 +137,27 @@ const Comments: FC<CommentProps> = ({
       </div>
 
       <div className="comments__container-input">
-        <input
-          data-testid="input-comments"
-          className="comments__input"
-          value={commentText}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setCommentText(e.target.value)
-          }
-          type="text"
-        />
-        <button
-          data-testid="publish"
-          className="comments__publish"
-          onClick={handleNewComment}
-        >
-          Publish
-        </button>
+        <div style={{ display: 'flex' }}>
+          <input
+            data-testid="input-comments"
+            className="comments__input"
+            value={commentText}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setCommentText(e.target.value)
+            }
+            type="text"
+          />
+          <button
+            data-testid="publish"
+            className="comments__publish"
+            onClick={handleNewComment}
+          >
+            Publish
+          </button>
+        </div>
+        <p data-testid="message" className="comments__message">
+          {message}
+        </p>
       </div>
 
       {popup && <BlurredMenu setUserOption={setPopup} />}

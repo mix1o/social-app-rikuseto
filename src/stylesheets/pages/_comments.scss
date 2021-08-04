@@ -23,7 +23,6 @@
     bottom: 0rem;
     left: 50%;
     transform: translate(-50%);
-    display: flex;
     background-color: var(--light-bg-500);
     padding: 1rem;
   }
@@ -32,6 +31,7 @@
     padding: 0.7rem;
     border: 2px solid clr.$main-bg-500;
     color: var(--font-dark-600);
+    font-size: ft.$fs-250;
     background: var(--light-bg-600);
   }
   &__publish {
@@ -79,5 +79,11 @@
     color: var(--font-dark-300);
     font-size: ft.$fs-300;
     text-align: center;
+  }
+  &__message {
+    color: clr.$warning-500;
+    text-align: center;
+    flex: 1;
+    font-size: ft.$fs-200;
   }
 }

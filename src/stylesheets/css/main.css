@@ -478,7 +478,7 @@ h6 {
 }
 
 .comment:last-child {
-  margin-bottom: 7rem;
+  margin-bottom: 9rem;
 }
 
 .post {
@@ -657,7 +657,6 @@ h6 {
   bottom: 0rem;
   left: 50%;
   transform: translate(-50%);
-  display: flex;
   background-color: var(--light-bg-500);
   padding: 1rem;
 }
@@ -666,6 +665,7 @@ h6 {
   padding: 0.7rem;
   border: 2px solid #753ee0;
   color: var(--font-dark-600);
+  font-size: 1.4rem;
   background: var(--light-bg-600);
 }
 .comments__publish {
@@ -734,6 +734,12 @@ h6 {
   color: var(--font-dark-300);
   font-size: 1.6rem;
   text-align: center;
+}
+.comments__message {
+  color: #e53e3e;
+  text-align: center;
+  flex: 1;
+  font-size: 1.2rem;
 }
 
 .auth {
