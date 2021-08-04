@@ -1,7 +1,8 @@
-import React, { ChangeEvent, FC, useState, useEffect } from 'react';
+import { ChangeEvent, FC, useState, useEffect } from 'react';
 import Compressor from 'compressorjs';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
+import CreatableSelect from 'react-select/creatable';
 
 interface Post {
   headline?: string;
@@ -32,7 +33,8 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState(false);
   const [areFiles, setAreFiles] = useState(false);
-
+  const [newOption, setNewOption] = useState([]);
+  const [fetchedOptions, setFetchedOptions] = useState([]);
   const upload = (data: any) => {
     axios
       .post('https://api.imgur.com/3/image/', data, {
@@ -126,6 +128,22 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     setCorrectFormatPost(checkCorrectPost());
   }, [post, message, correctImage]);
 
+  const opt = [
+    { value: 'Memes', label: 'memes' },
+    { value: 'DankMemes', label: 'Dank' },
+    { value: 'Sport', label: 'sport' },
+  ];
+
+  const handleNewOpt = (value: any, action: any) => {
+    setNewOption(value);
+  };
+
+  const fetchOptions = (value: string, actions: any) => {
+    axios
+      .get(`${process.env.REACT_APP_API}/posts/category?value=${value}`)
+      .then(res => setFetchedOptions(res.data));
+  };
+
   return (
     <div className="blurred__options create">
       <div
@@ -134,6 +152,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       ></div>
       <div className="blurred__option">
         <h2 data-testid="create-post-header">Create new post</h2>
+        <p>test</p>
         <input
           data-testid="headline"
           value={post.headline}
@@ -141,7 +160,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           type="text"
           name="headline"
         />
-        <select
+        {/* <select
           defaultValue={post.category}
           onChange={e => handleChange(e)}
           name="category"
@@ -151,7 +170,16 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           </option>
           <option value="memes">memes</option>
           <option value="sport">sport</option>
-        </select>
+        </select> */}
+        <CreatableSelect
+          isMulti
+          options={opt}
+          onChange={handleNewOpt}
+          onInputChange={fetchOptions}
+          menuIsOpen={true}
+          // loadOptions={test}
+        />
+
         <br />
         <input
           onClick={() => {
