@@ -223,10 +223,10 @@ h6 {
 }
 
 .header {
-  background-color: var(--light-bg-500);
+  background-color: var(--light-bg-400);
   border-bottom: 1px solid var(--light-bg-700);
   padding: 1rem;
-  position: sticky;
+  position: fixed;
   width: 100%;
   top: 0;
 }
@@ -352,7 +352,7 @@ h6 {
   bottom: 0;
   width: 100%;
   display: flex;
-  background-color: var(--light-bg-500);
+  background-color: var(--light-bg-400);
   justify-content: space-between;
   padding: 1rem 2rem;
   z-index: 1;
@@ -396,16 +396,18 @@ h6 {
 }
 
 .blurred__options {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   overflow: hidden;
   display: grid;
   grid-template-areas: "center";
+  z-index: 3;
 }
 .blurred__blurred-bg {
-  background: rgba(var(--secondary-bg-600), 0.8);
+  background-color: rgba(var(--secondary-bg-600), 0.8);
+  z-index: 2;
   width: 100vw;
   height: 100vh;
   grid-area: center;
@@ -420,7 +422,7 @@ h6 {
   justify-self: center;
   padding: 2rem;
   border-radius: 3px;
-  z-index: 5;
+  z-index: 3;
 }
 
 .comment {
@@ -675,10 +677,10 @@ h6 {
   --secondary-bg-300: #6b6b6b;
   --secondary-bg-400: #525252;
   --secondary-bg-500: #fff;
-  --secondary-bg-600: #f3f2f5;
+  --secondary-bg-600: 34, 40, 49;
   --secondary-bg-700: #e4e4e4;
   --secondary-bg-800: #b9b8ba;
-  --light-bg-400: #414141;
+  --light-bg-400: #29292b;
   --light-bg-500: #1a1a1c;
   --light-bg-600: #212122;
   --light-bg-550: #212122;
@@ -700,12 +702,13 @@ h6 {
   --secondary-bg-300: #6b6b6b;
   --secondary-bg-400: #525252;
   --secondary-bg-500: #414141;
-  --secondary-bg-600: #222831;
+  --secondary-bg-600: 34, 40, 49;
   --secondary-bg-700: #0d0f12;
   --secondary-bg-800: #020203;
+  --light-bg-400: #fff;
   --light-bg-500: #fff;
   --light-bg-550: #fff;
-  --light-bg-600: #f3f2f5;
+  --light-bg-600: #f9f9f9;
   --light-bg-700: #e4e4e4;
   --light-bg-800: #b9b8ba;
   --font-dark-300: #908ea7;

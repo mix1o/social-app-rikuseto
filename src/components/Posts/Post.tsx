@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import Comments from '../Comments/Comments';
 import { LikedElements } from '../../hooks/LikedElements';
