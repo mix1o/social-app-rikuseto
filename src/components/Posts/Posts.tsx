@@ -23,7 +23,7 @@ const Posts: FC = () => {
   const handleFetchPosts = (): void => {
     fetchPosts();
   };
-
+  console.log(`${process.env.REACT_APP_API}/posts/get`);
   useEffect(() => {
     fetchPosts();
   }, []);
