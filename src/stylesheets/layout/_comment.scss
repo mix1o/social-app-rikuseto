@@ -4,13 +4,18 @@
 @use '../components/button' as btn;
 
 .comment {
-  background-color: #e7e7e7;
-  margin-top: 1rem;
-  padding: 0.5rem;
+  background: var(--light-bg-500);
+  margin-top: 2rem;
+  color: var(--font-dark-600);
+  border-bottom: 1px solid var(--light-bg-700);
 
   &__author {
     display: flex;
     align-items: center;
+  }
+  &__author-name {
+    font-size: ft.$fs-250;
+    font-weight: 600;
   }
   &__author-image {
     height: 2.3rem;
@@ -19,14 +24,35 @@
     margin-right: 0.5rem;
   }
   &__action {
+    margin: 1rem 0;
     display: flex;
     align-items: center;
+  }
+  &__date {
+    margin-left: 1rem;
+    font-size: ft.$fs-250;
+  }
+  &__content {
+    font-size: ft.$fs-250;
+    margin: 0.7rem 2px;
   }
   &__btn {
     background: transparent;
     border: none;
+    padding: 0;
+    color: inherit;
   }
   .fa-star {
     color: inherit;
   }
+  &__likes {
+    font-size: ft.$fs-250;
+    margin: 0 0 0 0.5rem;
+  }
+  &__container-likes {
+    color: var(--font-dark-600);
+  }
+}
+.comment:last-child {
+  margin-bottom: 7rem;
 }

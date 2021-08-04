@@ -4,7 +4,8 @@
 @use '../components/button' as btn;
 
 .comments {
-  background: var(--light-bg-600);
+  background: var(--light-bg-500);
+  border-top: 2px solid clr.$main-bg-500;
   z-index: 5;
   height: 75vh;
   overflow-y: scroll;
@@ -12,14 +13,66 @@
   position: fixed;
   bottom: 0;
   border-radius: 10px 10px 0 0;
-  // margin-bottom: 20rem;
 
-  &__input {
+  &__container {
+    padding: 1rem;
+  }
+  &__container-input {
+    width: 100%;
     position: fixed;
-    bottom: 0;
-    background-color: red;
+    bottom: 0rem;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    background-color: var(--light-bg-500);
+    padding: 1rem;
+  }
+  &__input {
+    width: 100%;
+    padding: 0.7rem;
+    border: 2px solid clr.$main-bg-500;
+    color: var(--font-dark-600);
+    background: var(--light-bg-600);
+  }
+  &__publish {
+    @include btn.btn();
+    font-size: ft.$fs-200;
+  }
+  &__close-btn {
+    font-size: ft.$fs-400;
+    background-color: transparent;
+    color: var(--font-dark-600);
+    border: none;
+  }
+  &__icon {
+    color: inherit;
+  }
+  &__header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: var(--light-bg-600);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+  }
+  &__filter-text {
+    color: var(--font-dark-600);
+    font-size: ft.$fs-250;
+  }
+  &__filter-container {
+    display: flex;
+    align-items: center;
+  }
+  &__filter {
+    margin-left: 1rem;
+    background-color: transparent;
+    color: var(--font-dark-600);
+    border: 1px solid clr.$main-bg-500;
+    padding: 0.5rem;
+  }
+  &__filter-option {
+    background-color: var(--light-bg-600);
   }
 }
-// .comment:last-child {
-//   margin-bottom: 20rem;
-// }

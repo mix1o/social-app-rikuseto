@@ -23,5 +23,6 @@ export interface SingleCommentProps {
   user_id: string;
   text: string;
   likes: string[];
+  date: string;
   refreshComments: () => void;
 }
