@@ -35,6 +35,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [areFiles, setAreFiles] = useState(false);
   const [newOption, setNewOption] = useState([]);
   const [fetchedOptions, setFetchedOptions] = useState([]);
+
   const upload = (data: any) => {
     axios
       .post('https://api.imgur.com/3/image/', data, {
@@ -124,8 +125,15 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     }
   };
 
+  const fetchGroupeList = () => {
+    axios
+      .get(`${process.env.REACT_APP_API}/user/category-list`)
+      .then(res => console.log(res));
+  };
+
   useEffect(() => {
     setCorrectFormatPost(checkCorrectPost());
+    fetchGroupeList();
   }, [post, message, correctImage]);
 
   const opt = [
