@@ -1,5 +1,5 @@
 import { Form, Formik } from 'formik';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import TextField from '../../Formik/TextField';
 import { AuthSchema } from '../../Formik/ValidationSchemas';
 import axios from 'axios';
@@ -16,11 +16,12 @@ interface UserAccountData {
 
 const SignUp: FC = () => {
   const [, send] = useService(authService);
+  const [message, setMessage] = useState('');
 
   const createAccount = (values: UserAccountData) => {
     axios
       .post(`${process.env.REACT_APP_API}/auth/create-account`, values)
-      .then(res => console.log(res))
+      .then(res => setMessage(res.data.message))
       .catch(e => console.log(e));
   };
 
@@ -84,6 +85,7 @@ const SignUp: FC = () => {
             </button>
           </Form>
         </Formik>
+        {message && <p className="auth__message">{message}</p>}
         <p className="auth__form-link">
           Already a member ?
           <span className="auth__form-next" onClick={() => send('SIGN_IN')}>

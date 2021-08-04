@@ -8,6 +8,7 @@
   @include qr.media('>=tablet') {
     display: flex;
     justify-content: center;
+
     background-image: url('https://img.freepik.com/free-vector/social-tree-concept-illustration_114360-4898.jpg?size=338&ext=jpg&ga=GA1.2.1424524701.1621555200');
     background-repeat: no-repeat;
     background-size: cover;
@@ -16,7 +17,7 @@
     margin: 0 1rem;
     height: 100%;
     display: grid;
-    justify-content: center;
+    place-content: center;
     @include qr.media('>=tablet') {
       background: var(--light-bg-500);
       padding: 0 2rem;
@@ -43,5 +44,10 @@
   &__form-next {
     cursor: pointer;
     color: clr.$main-bg-500;
+  }
+  &__message {
+    text-align: center;
+    font-size: ft.$fs-200;
+    margin: 2rem 0;
   }
 }

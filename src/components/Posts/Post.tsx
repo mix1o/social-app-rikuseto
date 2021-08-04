@@ -155,7 +155,7 @@ const Post: FC<PostInterfaceExtended> = ({
         >
           {comment.allComments >= 1 ? (
             <p className="post__comments-text">
-              View all comments
+              View all comments{' '}
               <span className="post__comments-total">
                 &#40;{comment?.allComments}&#41;
               </span>
