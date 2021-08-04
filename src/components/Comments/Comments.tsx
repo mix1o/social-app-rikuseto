@@ -43,7 +43,11 @@ const Comments: FC<CommentProps> = ({
   const [popup, setPopup] = useState<boolean>(false);
 
   const handleNewComment = (): void => {
-    if (commentText.length >= 1 && user) {
+    if (!user) {
+      setPopup(true);
+      return;
+    }
+    if (commentText.length >= 1) {
       axios
         .post(`${process.env.REACT_APP_API}/comments/create`, {
           commentText,
@@ -57,7 +61,7 @@ const Comments: FC<CommentProps> = ({
         });
       return;
     }
-    setPopup(true);
+    // TODO space
   };
 
   const getAllComments = (): void => {
@@ -87,7 +91,9 @@ const Comments: FC<CommentProps> = ({
       <div>
         <div className="comments__header">
           <div className="comments__filter-container">
-            <p className="comments__filter-text">Filter by</p>
+            <p data-testid="filter-text" className="comments__filter-text">
+              Filter by
+            </p>
             <select className="comments__filter">
               <option className="comments__filter-option">Most popular</option>
               <option className="comments__filter-option">Latest</option>
@@ -117,11 +123,15 @@ const Comments: FC<CommentProps> = ({
               />
             );
           })}
+          {comments?.length === 0 && (
+            <p className="comments__info">No comments yet</p>
+          )}
         </div>
       </div>
-      {/* {user && ( */}
+
       <div className="comments__container-input">
         <input
+          data-testid="input-comments"
           className="comments__input"
           value={commentText}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -129,11 +139,15 @@ const Comments: FC<CommentProps> = ({
           }
           type="text"
         />
-        <button className="comments__publish" onClick={handleNewComment}>
+        <button
+          data-testid="publish"
+          className="comments__publish"
+          onClick={handleNewComment}
+        >
           Publish
         </button>
       </div>
-      {/* )} */}
+
       {popup && <BlurredMenu setUserOption={setPopup} />}
     </m.section>
   );

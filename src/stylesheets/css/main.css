@@ -226,9 +226,11 @@ h6 {
   background-color: var(--light-bg-400);
   border-bottom: 1px solid var(--light-bg-700);
   padding: 1rem;
-  position: fixed;
+  position: sticky;
   width: 100%;
   top: 0;
+  left: 0;
+  margin-bottom: 2rem;
 }
 .header__content {
   display: flex;
@@ -391,7 +393,7 @@ h6 {
 }
 
 .container-theme--active {
-  background: blue;
+  background: #753ee0;
   justify-content: flex-end;
 }
 
@@ -562,7 +564,7 @@ h6 {
   text-align: center;
   padding: 1rem 0;
   margin: 1rem 1rem 0 1rem;
-  border-top: 2px solid var(--light-bg-700);
+  border-top: 1px solid var(--light-bg-700);
 }
 .post__comments-text {
   margin: 0.5rem;
@@ -593,7 +595,7 @@ h6 {
 }
 .post__input {
   width: 100%;
-  border: 2px solid var(--light-bg-800);
+  border: 1px solid var(--light-bg-700);
   border-radius: 100rem;
   background: transparent;
   padding: 1rem;
@@ -727,6 +729,11 @@ h6 {
 }
 .comments__filter-option {
   background-color: var(--light-bg-600);
+}
+.comments__info {
+  color: var(--font-dark-300);
+  font-size: 1.6rem;
+  text-align: center;
 }
 
 .auth {

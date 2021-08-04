@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import { useCounter } from '../../store/sub';
+import Header from '../Header/Header';
 
 const Posts: FC = () => {
   const [posts, setPosts] = useState<PostInterface[]>();
@@ -39,44 +40,49 @@ const Posts: FC = () => {
   }, [state.isOpenCommentComponent]);
 
   return (
-    <main style={disabled ? { overflow: 'hidden', height: '50vh' } : {}}>
-      {user && (
-        <div className="post__wrapper">
-          <label className="post__container-input">
-            <img
-              className="post__image-author"
-              src={user.avatar}
-              alt={user.first_name}
-            />
-            <input
-              disabled={open ? true : false}
-              className="post__input"
-              onClick={() => setOpen(true)}
-              type="text"
-              placeholder={`${user.first_name}, what's is on your mind`}
-            />
-          </label>
-        </div>
-      )}
-      {open && (
-        <CreatePost handleFetchPosts={handleFetchPosts} setOpen={setOpen} />
-      )}
-      {posts?.map(({ _id, headline, category, file, user_id, likes, date }) => {
-        return (
-          <Post
-            key={_id}
-            _id={_id}
-            headline={headline}
-            category={category}
-            file={file}
-            user_id={user_id}
-            likes={likes}
-            onClickLike={handleFetchPosts}
-            date={date}
-          />
-        );
-      })}
-    </main>
+    <>
+      <Header />
+      <main style={disabled ? { overflow: 'hidden', height: '50vh' } : {}}>
+        {user && (
+          <div className="post__wrapper">
+            <label className="post__container-input">
+              <img
+                className="post__image-author"
+                src={user.avatar}
+                alt={user.first_name}
+              />
+              <input
+                disabled={open ? true : false}
+                className="post__input"
+                onClick={() => setOpen(true)}
+                type="text"
+                placeholder={`${user.first_name}, what's is on your mind`}
+              />
+            </label>
+          </div>
+        )}
+        {open && (
+          <CreatePost handleFetchPosts={handleFetchPosts} setOpen={setOpen} />
+        )}
+        {posts?.map(
+          ({ _id, headline, category, file, user_id, likes, date }) => {
+            return (
+              <Post
+                key={_id}
+                _id={_id}
+                headline={headline}
+                category={category}
+                file={file}
+                user_id={user_id}
+                likes={likes}
+                onClickLike={handleFetchPosts}
+                date={date}
+              />
+            );
+          }
+        )}
+      </main>
+    </>
   );
 };
 

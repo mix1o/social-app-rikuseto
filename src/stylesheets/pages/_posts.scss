@@ -87,7 +87,7 @@
     text-align: center;
     padding: 1rem 0;
     margin: 1rem 1rem 0 1rem;
-    border-top: 2px solid var(--light-bg-700);
+    border-top: 1px solid var(--light-bg-700);
   }
   &__comments-text {
     margin: 0.5rem;
@@ -118,7 +118,7 @@
   }
   &__input {
     width: 100%;
-    border: 2px solid var(--light-bg-800);
+    border: 1px solid var(--light-bg-700);
     border-radius: 100rem;
     background: transparent;
     padding: 1rem;

@@ -13,7 +13,7 @@ const BlurredMenu: React.FC<Blur> = ({ setUserOption }) => {
   const [current, send] = useActor(authService);
 
   return (
-    <div className="blurred__options">
+    <div data-testid="blurred" className="blurred__options">
       <div
         className="blurred__blurred-bg"
         onClick={() => {

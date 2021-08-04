@@ -7,7 +7,6 @@ import Menu from './components/Navigation/Menu';
 const App: FC = () => {
   return (
     <div>
-      <Header />
       <Router>
         <Switch>
           {Routes.map(

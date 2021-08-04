@@ -75,4 +75,9 @@
   &__filter-option {
     background-color: var(--light-bg-600);
   }
+  &__info {
+    color: var(--font-dark-300);
+    font-size: ft.$fs-300;
+    text-align: center;
+  }
 }
