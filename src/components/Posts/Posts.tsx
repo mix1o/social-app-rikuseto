@@ -28,7 +28,7 @@ const Posts: FC = () => {
     fetchPosts();
   }, []);
 
-  const [state, actions] = useCounter();
+  const [state] = useCounter();
 
   const [disabled, setDisabled] = useState<boolean>(false);
   useEffect(() => {
@@ -43,7 +43,7 @@ const Posts: FC = () => {
     <>
       <Header />
       <main style={disabled ? { overflow: 'hidden', height: '50vh' } : {}}>
-        {user && (
+        {user && !state.isOpenCommentComponent && (
           <div className="post__wrapper">
             <label className="post__container-input">
               <img

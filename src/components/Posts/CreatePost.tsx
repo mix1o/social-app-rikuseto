@@ -35,6 +35,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [areFiles, setAreFiles] = useState(false);
   const [newOption, setNewOption] = useState([]);
   const [fetchedOptions, setFetchedOptions] = useState([]);
+
   const upload = (data: any) => {
     axios
       .post('https://api.imgur.com/3/image/', data, {
@@ -160,7 +161,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           type="text"
           name="headline"
         />
-        {/* <select
+        <select
           defaultValue={post.category}
           onChange={e => handleChange(e)}
           name="category"
@@ -170,15 +171,15 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           </option>
           <option value="memes">memes</option>
           <option value="sport">sport</option>
-        </select> */}
-        <CreatableSelect
+        </select>
+        {/* <CreatableSelect
           isMulti
           options={opt}
           onChange={handleNewOpt}
           onInputChange={fetchOptions}
           menuIsOpen={true}
           // loadOptions={test}
-        />
+        /> */}
 
         <br />
         <input
