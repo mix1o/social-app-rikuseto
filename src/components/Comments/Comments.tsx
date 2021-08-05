@@ -1,6 +1,5 @@
 import axios from 'axios';
-import React, { ChangeEvent, FC, useState } from 'react';
-import styled from 'styled-components';
+import { ChangeEvent, FC, RefAttributes, useRef, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 import Comment from './Comment/Comment';
@@ -41,8 +40,9 @@ const Comments: FC<CommentProps> = ({
   const [cookies] = useCookies();
   const { user } = cookies;
   const [popup, setPopup] = useState<boolean>(false);
-
+  const commentRef = useRef<any>();
   const [message, setMessage] = useState<string>('');
+  const [state, actions] = useCounter();
 
   const handleNewComment = (): void => {
     if (!user) {
@@ -65,6 +65,13 @@ const Comments: FC<CommentProps> = ({
           setCommentText('');
           getAllComments();
           fetchTopComment();
+          console.log(commentRef.current);
+          setTimeout(() => {
+            commentRef.current.scrollTo({
+              top: commentRef.current.scrollHeight,
+              behavior: 'smooth',
+            });
+          }, 300);
         });
       return;
     }
@@ -81,8 +88,6 @@ const Comments: FC<CommentProps> = ({
     getAllComments();
   }, []);
 
-  const [state, actions] = useCounter();
-
   useEffect(() => {
     actions.isOpenComment(true);
   }, []);
@@ -94,6 +99,7 @@ const Comments: FC<CommentProps> = ({
       animate="show"
       exit="hidden"
       className="comments"
+      ref={commentRef}
     >
       <div>
         <div className="comments__header">
