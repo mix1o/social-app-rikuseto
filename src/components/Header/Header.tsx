@@ -77,6 +77,7 @@ const Header: FC = () => {
     <div className="header">
       <div className="header__content">
         <h3 className="header__message">
+          test
           <img src={logo} alt="Logo" />
         </h3>
         <button
