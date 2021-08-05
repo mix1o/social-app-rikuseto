@@ -125,8 +125,15 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     }
   };
 
+  const fetchGroupeList = () => {
+    axios
+      .get(`${process.env.REACT_APP_API}/user/category-list`)
+      .then(res => console.log(res));
+  };
+
   useEffect(() => {
     setCorrectFormatPost(checkCorrectPost());
+    fetchGroupeList();
   }, [post, message, correctImage]);
 
   const opt = [
