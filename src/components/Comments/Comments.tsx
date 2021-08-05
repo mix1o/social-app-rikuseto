@@ -4,29 +4,57 @@ import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 import Comment from './Comment/Comment';
+import { motion as m } from 'framer-motion';
 import {
   CommentsData,
   CommentProps,
 } from '../../interfaces/comments/commentsInterfaces';
+import { useCounter } from '../../store/sub';
+import BlurredMenu from '../Navigation/BlurredMenu';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 
-const ContainerComments = styled.div`
-  background: #fff;
-  min-height: 100vh;
-  position: fixed;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  width: 100%;
-`;
+const commentVariant = {
+  hidden: {
+    y: 1000,
+    opacity: 0,
+    transition: {
+      type: 'tween',
+    },
+  },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: 'tween',
+    },
+  },
+};
 
-const Comments: FC<CommentProps> = ({ postId, setOpenComments }) => {
+const Comments: FC<CommentProps> = ({
+  postId,
+  setOpenComments,
+  fetchTopComment,
+}) => {
   const [commentText, setCommentText] = useState<string>('');
   const [comments, setComments] = useState<CommentsData[]>();
   const [cookies] = useCookies();
   const { user } = cookies;
+  const [popup, setPopup] = useState<boolean>(false);
+
+  const [message, setMessage] = useState<string>('');
 
   const handleNewComment = (): void => {
-    if (commentText.length >= 1) {
+    if (!user) {
+      setPopup(true);
+      return;
+    }
+    if (
+      commentText.length >= 1 &&
+      (/\d/.test(commentText) ||
+        /[a-zA-Z]/g.test(commentText) ||
+        /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(commentText))
+    ) {
       axios
         .post(`${process.env.REACT_APP_API}/comments/create`, {
           commentText,
@@ -36,10 +64,11 @@ const Comments: FC<CommentProps> = ({ postId, setOpenComments }) => {
         .then(() => {
           setCommentText('');
           getAllComments();
+          fetchTopComment();
         });
       return;
     }
-    console.log('Too short text');
+    setMessage('Text must be at least 1 character');
   };
 
   const getAllComments = (): void => {
@@ -52,44 +81,87 @@ const Comments: FC<CommentProps> = ({ postId, setOpenComments }) => {
     getAllComments();
   }, []);
 
+  const [state, actions] = useCounter();
+
+  useEffect(() => {
+    actions.isOpenComment(true);
+  }, []);
+
   return (
-    <ContainerComments>
-      <div onClick={() => setOpenComments(false)}>x</div>
-      {user && (
-        <>
-          {' '}
+    <m.section
+      variants={commentVariant}
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+      className="comments"
+    >
+      <div>
+        <div className="comments__header">
+          <div className="comments__filter-container">
+            <p data-testid="filter-text" className="comments__filter-text">
+              Filter by
+            </p>
+            <select className="comments__filter">
+              <option className="comments__filter-option">Most popular</option>
+              <option className="comments__filter-option">Latest</option>
+            </select>
+          </div>
+          <button
+            className="comments__close-btn"
+            onClick={() => {
+              setOpenComments(false);
+              actions.isOpenComment(false);
+            }}
+          >
+            <FontAwesomeIcon className="comments__icon" icon={faTimesCircle} />
+          </button>
+        </div>
+        <div className="comments__container">
+          {comments?.map(({ _id, text, user_id, likes, date }) => {
+            return (
+              <Comment
+                key={_id}
+                _id={_id}
+                text={text}
+                user_id={user_id}
+                likes={likes}
+                date={date}
+                refreshComments={getAllComments}
+              />
+            );
+          })}
+          {comments?.length === 0 && (
+            <p className="comments__info">No comments yet</p>
+          )}
+        </div>
+      </div>
+
+      <div className="comments__container-input">
+        <div style={{ display: 'flex' }}>
           <input
+            data-testid="input-comments"
+            className="comments__input"
             value={commentText}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setCommentText(e.target.value)
             }
             type="text"
           />
-          <button onClick={handleNewComment}>Add comments</button>
-        </>
-      )}
-      {!user && <p>You need to be logged in to add new comment</p>}
-      <div
-        style={{
-          maxHeight: '100vh',
-          overflowY: 'scroll',
-          paddingBottom: '4rem',
-        }}
-      >
-        {comments?.map(({ _id, text, user_id, likes }) => {
-          return (
-            <Comment
-              key={_id}
-              _id={_id}
-              text={text}
-              user_id={user_id}
-              likes={likes}
-              refreshComments={getAllComments}
-            />
-          );
-        })}
+          <button
+            data-testid="publish"
+            className="comments__publish"
+            onClick={handleNewComment}
+          >
+            Publish
+          </button>
+        </div>
+        <p data-testid="message" className="comments__message">
+          {message}
+        </p>
       </div>
-    </ContainerComments>
+
+      {popup && <BlurredMenu setUserOption={setPopup} />}
+    </m.section>
   );
 };
 

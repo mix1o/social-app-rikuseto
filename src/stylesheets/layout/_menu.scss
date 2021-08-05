@@ -1,15 +1,18 @@
 @use '../abstracts/colors' as clr;
 @use '../abstracts/fontSizes' as ft;
+@use '../abstracts/mixins' as mix;
 
 .menu {
   position: fixed;
   bottom: 0;
   width: 100%;
   display: flex;
-  background-color: clr.$light-bg-500;
+  background-color: var(--light-bg-400);
   justify-content: space-between;
   padding: 1rem 2rem;
-  border-top: 1px solid clr.$light-bg-700;
+  z-index: 1;
+  @include mix.border('-top');
+  color: var(--font-dark-600);
 
   &__item {
     font-size: ft.$fs-400;
@@ -19,4 +22,28 @@
   &__item--link {
     color: inherit;
   }
+}
+
+.container-theme {
+  width: 50px;
+  background: #d9d9d9;
+  height: 20px;
+  padding: 0 2px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  margin: 2rem;
+}
+.circle-theme {
+  background: #333;
+  width: 17px;
+  height: 17px;
+  border-radius: 100px;
+}
+.container-theme-disabled {
+  justify-content: flex-start;
+}
+.container-theme--active {
+  background: clr.$main-bg-500;
+  justify-content: flex-end;
 }

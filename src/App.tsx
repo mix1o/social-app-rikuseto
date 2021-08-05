@@ -1,4 +1,4 @@
-import React, { FC, ReactChild } from 'react';
+import { FC, ReactChild, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Routes } from './Routes';
 import Header from './components/Header/Header';
@@ -6,8 +6,7 @@ import Menu from './components/Navigation/Menu';
 
 const App: FC = () => {
   return (
-    <div style={{ position: 'relative' }}>
-      <Header />
+    <div>
       <Router>
         <Switch>
           {Routes.map(

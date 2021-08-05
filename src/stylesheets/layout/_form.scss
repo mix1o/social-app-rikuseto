@@ -7,13 +7,14 @@
   display: grid;
   align-content: center;
   width: var.$form-width;
+  margin-bottom: 2rem;
 
   &__wrapper {
     margin-bottom: 3rem;
     position: relative;
   }
   &__label {
-    color: clr.$font-dark-400;
+    color: var(--font-dark-600);
     position: absolute;
     pointer-events: none;
     transition: 400ms;
@@ -24,6 +25,8 @@
     width: 100%;
     border: 2px solid clr.$main-bg-500;
     border-radius: 3px;
+    background: var(--light-bg-550);
+    color: var(--font-dark-600);
   }
   &__error {
     color: clr.$warning-500;

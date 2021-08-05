@@ -1,11 +1,10 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useReducer, useRef } from 'react';
 import { useCookies } from 'react-cookie';
-import SignIn from '../Auth/SignIn';
-import SignUp from '../Auth/SignUp';
 import { motion as m } from 'framer-motion';
 import { useActor } from '@xstate/react';
 import { authService } from '../Auth/AuthStateMachine';
-import ResetPassword from '../Auth/ResetPassword';
+import logo from '../../assets/logo/logo.png';
+import BlurredMenu from '../Navigation/BlurredMenu';
 
 const variants = {
   open: {
@@ -28,37 +27,64 @@ const variants = {
   },
 };
 
-const USER_OPTIONS = {
-  NULL: '',
-  SIGN_IN: 'signIn',
-  SIGN_UP: 'signUp',
-  RESET_PASSWORD: 'resetPassword',
-};
-
 const Header: FC = () => {
+  const html = document.querySelector('html');
+
   const [openMenu, setOpenMenu] = useState<boolean>(false);
-  const [userOption, setUserOption] = useState(USER_OPTIONS.NULL);
+  const [userOption, setUserOption] = useState<boolean>(false);
   const [cookies, , removeCookie] = useCookies();
+
   const { user } = cookies;
+
   const [current, send] = useActor(authService);
 
-  const handleUserChoose = (option: string) => {
-    setUserOption(option);
+  const reducer = (theme: any, action: any) => {
+    switch (action.type) {
+      case 'CHANGE':
+        localStorage.setItem(
+          'theme',
+          JSON.stringify({ theme: action.payload })
+        );
+
+        return theme;
+    }
   };
 
+  const [theme, dispatch] = useReducer(reducer, { theme: 'light' }, () => {
+    const themeLocal = localStorage.getItem('theme');
+
+    return themeLocal ? JSON.parse(themeLocal) : { theme: 'light' };
+  });
+
   useEffect(() => {
-    setUserOption(USER_OPTIONS.NULL);
-    setOpenMenu(false);
-  }, [user]);
+    localStorage.setItem('theme', JSON.stringify(theme));
+    const userTheme = JSON.parse(localStorage.getItem('theme') || '');
+
+    html!.dataset!.value = userTheme.theme;
+  }, [theme]);
+
+  const themeIndex = localStorage.getItem('theme');
+  const [idx, setIdx] = useState(
+    JSON.parse(themeIndex || '').theme === 'dark' ? 0 : 1
+  );
+
+  const handleChangeTheme = (property: string) => {
+    dispatch({ type: 'CHANGE', payload: property });
+    html!.dataset!.value = property;
+  };
 
   return (
     <div className="header">
       <div className="header__content">
-        <h3 className="header__message">RS</h3>
+        <h3 className="header__message">
+          <img src={logo} alt="Logo" />
+        </h3>
         <button
           className="header__nav-button"
           onClick={() => setOpenMenu(!openMenu)}
-        ></button>
+        >
+          <i className="fas fa-bell" />
+        </button>
       </div>
 
       <m.div
@@ -68,28 +94,26 @@ const Header: FC = () => {
         className="header__menu"
       >
         <div onClick={() => setOpenMenu(false)}>x</div>
-        {!user && (
-          <div>
-            <button
-              onClick={() => {
-                handleUserChoose(USER_OPTIONS.SIGN_IN);
-                setOpenMenu(false);
-                send('SIGN_IN');
-              }}
-            >
-              Log In
-            </button>
-            <button
-              onClick={() => {
-                handleUserChoose(USER_OPTIONS.SIGN_UP);
-                setOpenMenu(false);
-                send('SIGN_UP');
-              }}
-            >
-              Sign Un
-            </button>
-          </div>
-        )}
+        <p>Theme </p>
+        <m.div
+          className={`${
+            idx === 1 ? 'container-theme-disabled' : 'container-theme--active'
+          } container-theme`}
+          onClick={() => {
+            if (idx === 0) {
+              handleChangeTheme('light');
+              setIdx(1);
+              return;
+            }
+            if (idx === 1) {
+              handleChangeTheme('dark');
+              setIdx(0);
+              return;
+            }
+          }}
+        >
+          <m.div layout className="circle-theme"></m.div>
+        </m.div>
         {user && (
           <div>
             <button onClick={() => removeCookie('user')}>Log out</button>
@@ -98,41 +122,7 @@ const Header: FC = () => {
         )}
       </m.div>
 
-      {userOption.length >= 1 && (
-        <div className="blurred__options">
-          <div
-            className="blurred__blurred-bg"
-            onClick={() => {
-              setUserOption(USER_OPTIONS.NULL);
-              send('SIGN_IN');
-            }}
-          ></div>
-
-          <div className="blurred__option">
-            {current.matches('signIn') && <SignIn />}
-            {current.matches('signUp') && <SignUp />}
-            {current.matches('resetPassword') && <ResetPassword />}
-          </div>
-          {/* {userOption === USER_OPTIONS.SIGN_IN && (
-              <div className="header__option">
-                <SignIn />
-                <button onClick={() => setUserOption(USER_OPTIONS.NULL)}>
-                  close
-                </button>
-              </div>
-            )}
-            {userOption === USER_OPTIONS.SIGN_UP && (
-              <>
-                <div className="header__option">
-                  <SignUp />
-                  <button onClick={() => setUserOption(USER_OPTIONS.NULL)}>
-                    close
-                  </button>
-                </div>
-              </>
-            )} */}
-        </div>
-      )}
+      {userOption && <BlurredMenu setUserOption={setUserOption} />}
     </div>
   );
 };

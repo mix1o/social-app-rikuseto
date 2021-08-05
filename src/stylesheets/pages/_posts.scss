@@ -2,12 +2,21 @@
 @use '../abstracts/fontSizes' as ft;
 @use '../abstracts/media' as qr;
 @use '../abstracts/variables' as var;
+@use '../abstracts/mixins' as mix;
 
 .post {
-  background: clr.$light-bg-600;
-  margin-bottom: 1rem;
+  background: var(--light-bg-600);
   max-width: 400px;
-
+  width: 100%;
+  margin-bottom: 2rem;
+  @include mix.border('-top');
+  @include mix.border('-bottom');
+  &__headline {
+    margin: 3rem 0;
+    margin-left: 2px;
+    font-size: ft.$fs-300;
+    overflow-wrap: break-word;
+  }
   &__image-container {
     width: 100%;
     height: auto;
@@ -21,18 +30,19 @@
     display: flex;
     align-items: center;
     padding: var.$padding-around-post;
-    padding-top: 1rem;
+    padding-top: 2rem;
   }
   &__author-name {
     font-size: ft.$fs-200;
     font-weight: ft.$fw-600;
-    color: clr.$font-dark-600;
+    color: var(--font-dark-600);
     margin: 0;
+    font-size: ft.$fs-250;
   }
   &__image-author {
     border-radius: 100%;
-    width: 3rem;
-    height: 3rem;
+    width: 3.5rem;
+    height: 3.5rem;
     margin-right: 1rem;
   }
   &__content {
@@ -44,20 +54,23 @@
     justify-content: space-between;
   }
   &__info {
-    color: clr.$font-dark-400;
+    color: var(--font-dark-400);
     margin: 0;
     padding-top: 0.5rem;
+    font-size: ft.$fs-200;
   }
   &__category-name {
     font-weight: ft.$fw-600;
-    color: clr.$font-dark-600;
+    color: var(--font-dark-600);
   }
 
   &__actions {
     display: flex;
     align-items: center;
-    margin-top: 2rem;
+    justify-content: space-between;
+    margin-top: 4rem;
     padding: var.$padding-around-post;
+    color: var(--font-dark-600);
   }
   &__container-likes {
     display: flex;
@@ -73,14 +86,18 @@
   &__comments--count {
     text-align: center;
     padding: 1rem 0;
+    margin: 1rem 1rem 0 1rem;
+    border-top: 1px solid var(--light-bg-700);
   }
   &__comments-text {
-    margin: 0 0 0.5rem;
+    margin: 0.5rem;
     font-weight: ft.$fw-600;
     font-size: ft.$fs-200;
+    color: var(--font-dark-600);
   }
   &__comments-total {
     color: clr.$font-active-500;
+    font-weight: ft.$fw-700;
   }
   &__likes {
     margin: 0 0.5rem;
@@ -89,21 +106,32 @@
     color: inherit;
     font-weight: ft.$fw-600;
   }
+  &__wrapper {
+    background: var(--light-bg-600);
+    margin: 2rem 0;
+    padding: 1rem;
+  }
   &__container-input {
     display: flex;
     margin: 1rem 0;
     align-items: center;
     justify-content: center;
-    padding: 0 1rem;
   }
   &__input {
     width: 100%;
-    padding: 0.5rem;
+    border: 1px solid var(--light-bg-700);
+    border-radius: 100rem;
+    background: transparent;
+    padding: 1rem;
+    font-size: ft.$fs-200;
+  }
+  &__input::placeholder {
+    color: var(--font-dark-600);
   }
   &__top-comment {
     padding: var.$padding-around-post;
     font-size: ft.$fs-200;
-    color: clr.$font-dark-400;
+    color: var(--font-dark-400);
     margin-top: 2rem;
     text-overflow: ellipsis;
     white-space: pre-wrap;
@@ -112,14 +140,25 @@
   &__top-author {
     font-weight: ft.$fw-600;
   }
-  &__top-text {
-    color: clr.$font-dark-600;
-  }
+
   .fa-star {
     color: inherit;
+    font-size: ft.$fs-400;
+  }
+  &__single-action {
+    font-size: ft.$fs-250;
+    margin: 0 0.5rem;
+    color: var(--font-dark-600);
+    .fa-share {
+      font-size: ft.$fs-250;
+      margin-left: 0.3rem;
+    }
+  }
+  &__count-comments {
+    margin-right: 0.3rem;
   }
 }
 
-.post:first-child {
-  margin-top: 1rem;
+.post:last-child {
+  margin-bottom: 10rem;
 }

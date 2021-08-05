@@ -1,33 +1,35 @@
 @use '../abstracts/colors' as clr;
 @use '../abstracts/variables' as var;
+@use '../abstracts/mixins' as mix;
 
 .blurred {
   &__options {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     overflow: hidden;
     display: grid;
     grid-template-areas: 'center';
+    z-index: 3;
   }
   &__blurred-bg {
-    background: rgba(clr.$secondary-bg-600, 0.8);
+    background-color: rgba(var(--secondary-bg-600), 0.8);
+    z-index: 2;
     width: 100vw;
     height: 100vh;
-
     grid-area: center;
   }
   &__option {
+    @include mix.border();
     min-width: var.$form-width;
     max-width: 450px;
     grid-area: center;
-    background: clr.$light-bg-500;
+    background: var(--light-bg-500);
     align-self: center;
     justify-self: center;
     padding: 2rem;
     border-radius: 3px;
-    border: 1px solid clr.$light-bg-600;
-    z-index: 5;
+    z-index: 3;
   }
 }

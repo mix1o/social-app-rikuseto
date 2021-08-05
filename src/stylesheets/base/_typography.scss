@@ -1,4 +1,4 @@
-@use '../abstracts/colors' as c;
+@use '../abstracts/colors' as clr;
 @use '../abstracts/fontSizes' as ft;
 
 h1,
@@ -7,7 +7,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: c.$font-dark-600;
+  color: var(--font-dark-600);
   font-weight: ft.$fw-600;
   margin: 1rem 0;
 }

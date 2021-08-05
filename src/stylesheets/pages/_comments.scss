@@ -1,27 +1,89 @@
-.comment {
-  background-color: #e7e7e7;
-  margin-top: 1rem;
-  padding: 0.5rem;
+@use '../abstracts/colors' as clr;
+@use '../abstracts/variables' as var;
+@use '../abstracts/fontSizes' as ft;
+@use '../components/button' as btn;
 
-  &__author {
-    display: flex;
-    align-items: center;
+.comments {
+  background: var(--light-bg-500);
+  border-top: 2px solid clr.$main-bg-500;
+  z-index: 5;
+  height: 75vh;
+  overflow-y: scroll;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  border-radius: 10px 10px 0 0;
+
+  &__container {
+    padding: 1rem;
   }
-  &__author-image {
-    height: 2.3rem;
-    width: 2.3rem;
-    border-radius: 100%;
-    margin-right: 0.5rem;
+  &__container-input {
+    width: 100%;
+    position: fixed;
+    bottom: 0rem;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: var(--light-bg-500);
+    padding: 1rem;
   }
-  &__action {
-    display: flex;
-    align-items: center;
+  &__input {
+    width: 100%;
+    padding: 0.7rem;
+    border: 2px solid clr.$main-bg-500;
+    color: var(--font-dark-600);
+    font-size: ft.$fs-250;
+    background: var(--light-bg-600);
   }
-  &__btn {
-    background: transparent;
+  &__publish {
+    @include btn.btn();
+    font-size: ft.$fs-200;
+  }
+  &__close-btn {
+    font-size: ft.$fs-400;
+    background-color: transparent;
+    color: var(--font-dark-600);
     border: none;
   }
-  .fa-star {
+  &__icon {
     color: inherit;
+  }
+  &__header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: var(--light-bg-600);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+  }
+  &__filter-text {
+    color: var(--font-dark-600);
+    font-size: ft.$fs-250;
+  }
+  &__filter-container {
+    display: flex;
+    align-items: center;
+  }
+  &__filter {
+    margin-left: 1rem;
+    background-color: transparent;
+    color: var(--font-dark-600);
+    border: 1px solid clr.$main-bg-500;
+    padding: 0.5rem;
+  }
+  &__filter-option {
+    background-color: var(--light-bg-600);
+  }
+  &__info {
+    color: var(--font-dark-300);
+    font-size: ft.$fs-300;
+    text-align: center;
+  }
+  &__message {
+    color: clr.$warning-500;
+    text-align: center;
+    flex: 1;
+    font-size: ft.$fs-200;
   }
 }

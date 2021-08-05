@@ -6,9 +6,13 @@ import { LikedElements } from '../../hooks/LikedElements';
 import moment from 'moment';
 import { PostInterfaceExtended } from '../../interfaces/posts/postInterfaces';
 import { AuthorInterface } from '../../interfaces/common/common';
-import { motion as m } from 'framer-motion';
+import { motion as m, AnimatePresence as Presence } from 'framer-motion';
 import { TopComment } from '../../interfaces/comments/commentsInterfaces';
 import { authorOfComment } from '../../helpers/AuthorOfComment';
+import BlurredMenu from '../Navigation/BlurredMenu';
+import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
+import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
@@ -24,58 +28,48 @@ const Post: FC<PostInterfaceExtended> = ({
   const { user } = cookies;
   const [liked, setLiked] = useState<boolean | undefined>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
+  const [popup, setPopup] = useState<boolean>(false);
 
   const [author, setAuthor] = useState<AuthorInterface>();
   const [commentAuthor, setCommentAuthor] = useState<AuthorInterface>();
   const [comment, setComment] = useState<TopComment>();
 
-  const handleLikePost = (id: string, user_id: string) => {
-    axios
-      .post(`${process.env.REACT_APP_API}/posts/like`, {
-        postId: id,
-        userId: user_id,
-      })
-      .then(() => {
-        onClickLike();
-      })
-      .catch(err => console.log(err));
+  const handleLikePost = () => {
+    if (user) {
+      axios
+        .post(`${process.env.REACT_APP_API}/posts/like`, {
+          postId: _id,
+          userId: user._id,
+        })
+        .then(() => {
+          onClickLike();
+        })
+        .catch(err => console.log(err));
+
+      return;
+    }
+    setPopup(true);
   };
 
-  const fetchTopComment = (postId: string) => {
+  const fetchTopComment = () => {
     axios
-      .get(`${process.env.REACT_APP_API}/comments/top?postId=${postId}`)
-      .then(res => setComment(res.data));
+      .get(`${process.env.REACT_APP_API}/comments/top?postId=${_id}`)
+      .then(res => {
+        setComment(res.data);
+        if (res.data.topComment) {
+          authorOfComment(res.data.topComment.user_id).then(res => {
+            setCommentAuthor(res);
+          });
+        }
+      });
   };
-  //#TODO Use .then to resolve promise or async awiat ?
-  // useEffect(() => {
-  //   let didCancel = false;
-  //   const resolvePromise = async () => {
-  //     if (comment?.topComment) {
-  //       const test = await authorOfComment(comment.topComment.user_id);
-  //       if (!didCancel) {
-  //         setCommentAuthor(test);
-  //       }
-  //     }
-  //   };
-
-  //   resolvePromise();
-
-  //   return () => {
-  //     didCancel = true;
-  //   };
-  // });
 
   useEffect(() => {
-    if (comment?.topComment) {
-      authorOfComment(comment?.topComment.user_id).then(res => {
-        setCommentAuthor(res);
-      });
-    }
-  }, [comment]);
+    fetchTopComment();
+  }, []);
 
   useEffect(() => {
     authorOfComment(user_id).then(res => setAuthor(res));
-    fetchTopComment(_id);
 
     const like = LikedElements(user, likes);
     setLiked(like);
@@ -84,11 +78,6 @@ const Post: FC<PostInterfaceExtended> = ({
 
   return (
     <section data-testid="post" className="post">
-      {file.length > 3 && (
-        <div className="post__image-container">
-          <img className="post__image" src={file} alt={headline} />
-        </div>
-      )}
       <div className="post__author">
         <img
           className="post__image-author"
@@ -108,29 +97,43 @@ const Post: FC<PostInterfaceExtended> = ({
       <div className="post__content">
         <h3 className="post__headline">{headline}</h3>
       </div>
+      {file.length > 3 && (
+        <div className="post__image-container">
+          <img className="post__image" src={file} alt={headline} />
+        </div>
+      )}
       <div className="post__actions">
         <m.div
           className="post__container-likes"
-          animate={liked ? { color: '#753ee0' } : { color: '#222831' }}
+          animate={liked ? { color: '#753ee0' } : { color: 'inherit' }}
         >
           <m.button
             className="post__btn"
             whileTap={{ scale: 1.2 }}
-            onClick={() => {
-              if (user) {
-                handleLikePost(_id, user._id);
-              }
-            }}
+            onClick={() => handleLikePost()}
             aria-label="like or dislike post"
             type="button"
           >
-            <i className="fas fa-star"></i>
+            {liked ? (
+              <FontAwesomeIcon icon={faStarChonky} />
+            ) : (
+              <FontAwesomeIcon icon={farBellThin} />
+            )}
           </m.button>
           <span className="post__likes">{likes.length}</span>
         </m.div>
-        <button className="post__btn" onClick={() => setOpenComments(true)}>
-          <i className="far fa-comment"></i>
-        </button>
+        <div>
+          <button
+            className="post__btn post__single-action"
+            onClick={() => setOpenComments(true)}
+          >
+            <span className="post__count-comments">{comment?.allComments}</span>
+            comments
+          </button>
+          <button className="post__btn post__single-action">
+            Share <i className="fas fa-share"></i>
+          </button>
+        </div>
       </div>
       {comment?.topComment && (
         <>
@@ -145,7 +148,6 @@ const Post: FC<PostInterfaceExtended> = ({
           </p>
         </>
       )}
-
       {comment && (
         <div
           className="post__comments--count"
@@ -163,9 +165,17 @@ const Post: FC<PostInterfaceExtended> = ({
           )}
         </div>
       )}
-      {openComments && (
-        <Comments postId={_id} setOpenComments={setOpenComments} />
-      )}
+      <Presence exitBeforeEnter>
+        {openComments && (
+          <Comments
+            key={_id}
+            postId={_id}
+            setOpenComments={setOpenComments}
+            fetchTopComment={fetchTopComment}
+          />
+        )}
+      </Presence>
+      {popup && <BlurredMenu setUserOption={setPopup} />}
     </section>
   );
 };

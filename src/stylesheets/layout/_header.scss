@@ -2,15 +2,19 @@
 @use '../abstracts/fontSizes' as ft;
 @use '../abstracts/media' as qr;
 @use '../abstracts/variables' as var;
+@use '../abstracts/mixins' as mix;
 
 .header {
-  background-color: clr.$light-bg-500;
-  border-bottom: 1px solid clr.$light-bg-700;
-
+  background-color: var(--light-bg-400);
+  @include mix.border('-bottom');
   padding: 1rem;
 
   position: sticky;
+  width: 100%;
   top: 0;
+  left: 0;
+  margin-bottom: 2rem;
+
   &__content {
     display: flex;
     justify-content: space-between;
@@ -20,11 +24,14 @@
     margin: 0;
   }
   &__nav-button {
-    width: 3rem;
-    height: 3rem;
-    background: clr.$main-bg-300;
     border: none;
     border-radius: 100rem;
+    background: transparent;
+    color: var(--font-dark-600);
+    font-size: ft.$fs-400;
+    .fa-bell {
+      color: inherit;
+    }
   }
 
   &__menu {
