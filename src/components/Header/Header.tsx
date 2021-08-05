@@ -38,38 +38,13 @@ const Header: FC = () => {
 
   const [current, send] = useActor(authService);
 
-  const reducer = (theme: any, action: any) => {
-    switch (action.type) {
-      case 'CHANGE':
-        localStorage.setItem(
-          'theme',
-          JSON.stringify({ theme: action.payload })
-        );
-
-        return theme;
-    }
-  };
-
-  const [theme, dispatch] = useReducer(reducer, { theme: 'light' }, () => {
-    const themeLocal = localStorage.getItem('theme');
-
-    return themeLocal ? JSON.parse(themeLocal) : { theme: 'light' };
-  });
-
-  useEffect(() => {
-    localStorage.setItem('theme', JSON.stringify(theme));
-    const userTheme = JSON.parse(localStorage.getItem('theme') || '');
-
-    html!.dataset!.value = userTheme.theme;
-  }, [theme]);
-
-  const themeIndex = localStorage.getItem('theme');
+  const theme = localStorage.getItem('theme');
   const [idx, setIdx] = useState(
-    JSON.parse(themeIndex || '').theme === 'dark' ? 0 : 1
+    JSON.parse(theme || '').theme === 'dark' ? 0 : 1
   );
 
   const handleChangeTheme = (property: string) => {
-    dispatch({ type: 'CHANGE', payload: property });
+    localStorage.setItem('theme', JSON.stringify({ theme: property }));
     html!.dataset!.value = property;
   };
 
@@ -77,7 +52,6 @@ const Header: FC = () => {
     <div className="header">
       <div className="header__content">
         <h3 className="header__message">
-          test
           <img src={logo} alt="Logo" />
         </h3>
         <button
