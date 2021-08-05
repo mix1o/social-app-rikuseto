@@ -6,6 +6,8 @@ import axios from 'axios';
 import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
 import { AuthSchema2 as AuthSchema } from '../../Formik/ValidationSchemas';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 interface UserLoginData {
   email: string;
@@ -15,13 +17,21 @@ interface UserLoginData {
 const SignIn: FC = () => {
   const [, setCookie] = useCookies();
   const [, send] = useActor(authService);
+  const history = useHistory();
+  const [message, setMessage] = useState('');
 
   const handleLogIn = (values: UserLoginData) => {
     axios
       .post(`${process.env.REACT_APP_API}/auth/login`, values)
       .then(res => {
+        if (res.status === 203) {
+          setMessage(res.data.message);
+        }
         if (res.data.valid) {
+          setMessage(res.data.message);
           setCookie('user', res.data.user);
+          history.push('/');
+          window.location.reload();
         }
       })
       .catch(err => console.log(err));
@@ -68,6 +78,7 @@ const SignIn: FC = () => {
             </div>
           </Form>
         </Formik>
+        {message && <p className="auth__message">{message}</p>}
         <div>
           <p className="auth__form-link">
             Don't have account yet ?
