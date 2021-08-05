@@ -38,15 +38,15 @@ const Header: FC = () => {
 
   const [current, send] = useActor(authService);
 
-  const theme = localStorage.getItem('theme');
-  const [idx, setIdx] = useState(
-    JSON.parse(theme || '').theme === 'dark' ? 0 : 1
-  );
+  // const theme = localStorage.getItem('theme');
+  // const [idx, setIdx] = useState(
+  //   JSON.parse(theme || '').theme === 'dark' ? 0 : 1
+  // );
 
-  const handleChangeTheme = (property: string) => {
-    localStorage.setItem('theme', JSON.stringify({ theme: property }));
-    html!.dataset!.value = property;
-  };
+  // const handleChangeTheme = (property: string) => {
+  //   localStorage.setItem('theme', JSON.stringify({ theme: property }));
+  //   html!.dataset!.value = property;
+  // };
 
   return (
     <div className="header">
@@ -70,7 +70,7 @@ const Header: FC = () => {
       >
         <div onClick={() => setOpenMenu(false)}>x</div>
         <p>Theme </p>
-        <m.div
+        {/* <m.div
           className={`${
             idx === 1 ? 'container-theme-disabled' : 'container-theme--active'
           } container-theme`}
@@ -88,7 +88,7 @@ const Header: FC = () => {
           }}
         >
           <m.div layout className="circle-theme"></m.div>
-        </m.div>
+        </m.div> */}
         {user && (
           <div>
             <button onClick={() => removeCookie('user')}>Log out</button>

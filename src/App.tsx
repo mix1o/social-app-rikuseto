@@ -18,6 +18,7 @@ const App: FC = () => {
     }
   }, []);
 
+  console.log('dd');
   return (
     <div>
       <Router>
