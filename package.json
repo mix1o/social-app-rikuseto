@@ -21,8 +21,6 @@
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "js-base64": "^3.6.1",
-    "libphonenumber-js": "^1.9.22",
-    "moment": "^2.29.1",
     "netlify-cli": "^4.0.3",
     "react": "^17.0.2",
     "react-cookie": "^4.0.3",
