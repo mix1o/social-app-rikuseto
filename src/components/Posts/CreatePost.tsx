@@ -153,12 +153,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="blurred__options">
-      <p>Push from branch</p>
-=======
     <div className="blurred__options create">
->>>>>>> origin/master
       <div
         className="blurred__blurred-bg"
         onClick={() => setOpen(prevVal => !prevVal)}
