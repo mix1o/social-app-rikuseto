@@ -2,8 +2,6 @@ import { ChangeEvent, FC, useState, useEffect } from 'react';
 import Compressor from 'compressorjs';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import CreatableSelect from 'react-select/creatable';
-
 interface Post {
   headline?: string;
   file?: string;
@@ -33,8 +31,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState(false);
   const [areFiles, setAreFiles] = useState(false);
-  const [newOption, setNewOption] = useState([]);
-  const [fetchedOptions, setFetchedOptions] = useState([]);
 
   const upload = (data: any) => {
     axios
@@ -125,15 +121,8 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     }
   };
 
-  const fetchGroupeList = () => {
-    axios
-      .get(`${process.env.REACT_APP_API}/user/category-list`)
-      .then(res => console.log(res));
-  };
-
   useEffect(() => {
     setCorrectFormatPost(checkCorrectPost());
-    fetchGroupeList();
   }, [post, message, correctImage]);
 
   const opt = [
@@ -141,15 +130,11 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     { value: 'DankMemes', label: 'Dank' },
     { value: 'Sport', label: 'sport' },
   ];
-
-  const handleNewOpt = (value: any, action: any) => {
-    setNewOption(value);
-  };
-
-  const fetchOptions = (value: string, actions: any) => {
-    axios
-      .get(`${process.env.REACT_APP_API}/posts/category?value=${value}`)
-      .then(res => setFetchedOptions(res.data));
+  const updateCat = () => {
+    axios.post(`${process.env.REACT_APP_API}/category/category-list`, {
+      userId: user._id,
+      categoryId: '610a7457056f032b53a5e37e',
+    });
   };
 
   return (
@@ -159,6 +144,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
         onClick={() => setOpen(prevVal => !prevVal)}
       ></div>
       <div className="blurred__option">
+        <button onClick={updateCat}>UPDATE CAT</button>
         <h2 data-testid="create-post-header">Create new post</h2>
         <p>test</p>
         <input
@@ -179,14 +165,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           <option value="memes">memes</option>
           <option value="sport">sport</option>
         </select>
-        {/* <CreatableSelect
-          isMulti
-          options={opt}
-          onChange={handleNewOpt}
-          onInputChange={fetchOptions}
-          menuIsOpen={true}
-          // loadOptions={test}
-        /> */}
 
         <br />
         <input
