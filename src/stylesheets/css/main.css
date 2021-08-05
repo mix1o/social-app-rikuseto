@@ -641,13 +641,12 @@ h6 {
 
 .comments {
   background: var(--light-bg-500);
-  border-top: 2px solid #753ee0;
   z-index: 5;
   height: 75vh;
-  overflow-y: scroll;
   width: 100%;
   position: fixed;
   bottom: 0;
+  overflow-y: scroll;
   border-radius: 10px 10px 0 0;
 }
 .comments__container {
@@ -709,6 +708,7 @@ h6 {
   top: 0;
   left: 0;
   background-color: var(--light-bg-600);
+  border-top: 2px solid #753ee0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -793,6 +793,7 @@ h6 {
 .auth__message {
   text-align: center;
   font-size: 1.2rem;
+  color: #e53e3e;
   margin: 2rem 0;
 }
 

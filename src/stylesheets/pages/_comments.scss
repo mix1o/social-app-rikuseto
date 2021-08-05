@@ -5,13 +5,12 @@
 
 .comments {
   background: var(--light-bg-500);
-  border-top: 2px solid clr.$main-bg-500;
   z-index: 5;
   height: 75vh;
-  overflow-y: scroll;
   width: 100%;
   position: fixed;
   bottom: 0;
+  overflow-y: scroll;
   border-radius: 10px 10px 0 0;
 
   &__container {
@@ -52,6 +51,7 @@
     top: 0;
     left: 0;
     background-color: var(--light-bg-600);
+    border-top: 2px solid clr.$main-bg-500;
     display: flex;
     justify-content: space-between;
     align-items: center;

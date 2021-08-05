@@ -55,10 +55,12 @@ const Comment: FC<SingleCommentProps> = ({
         <p className="comment__date">{moment(date).fromNow()}</p>
       </div>
       <p className="comment__content">{text}</p>
-      <div></div>
+
       <div className="comment__container-likes">
         <m.div
-          animate={liked ? { color: '#753ee0' } : { color: 'inherit' }}
+          animate={
+            liked ? { color: '#753ee0' } : { color: 'var(--font-dark-600)' }
+          }
           className="comment__action"
         >
           <m.button

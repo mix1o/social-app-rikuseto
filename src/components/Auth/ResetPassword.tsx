@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import { useService } from '@xstate/react';
+import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
 import { Form, Formik } from 'formik';
 import { AuthSchema3 as AuthSchema } from '../../Formik/ValidationSchemas';
 import TextField from '../../Formik/TextField';
 
 const ResetPassword: FC = () => {
-  const [, send] = useService(authService);
+  const [, send] = useActor(authService);
   return (
     <>
       <main className="auth__main">
@@ -36,6 +36,7 @@ const ResetPassword: FC = () => {
             </button>
           </Form>
         </Formik>
+        {/* {message && <p className="auth__message">{message}</p>} */}
         <p className="auth__form-link">
           Go back to
           <span className="auth__form-next" onClick={() => send('SIGN_IN')}>

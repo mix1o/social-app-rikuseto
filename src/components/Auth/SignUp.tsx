@@ -3,8 +3,9 @@ import { FC, useState } from 'react';
 import TextField from '../../Formik/TextField';
 import { AuthSchema } from '../../Formik/ValidationSchemas';
 import axios from 'axios';
-import { useService } from '@xstate/react';
+import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
+import { useHistory } from 'react-router-dom';
 
 interface UserAccountData {
   email: string;
@@ -15,13 +16,18 @@ interface UserAccountData {
 }
 
 const SignUp: FC = () => {
-  const [, send] = useService(authService);
+  const [, send] = useActor(authService);
   const [message, setMessage] = useState('');
+  const history = useHistory();
 
   const createAccount = (values: UserAccountData) => {
     axios
       .post(`${process.env.REACT_APP_API}/auth/create-account`, values)
-      .then(res => setMessage(res.data.message))
+      .then(res => {
+        setMessage(res.data.message);
+        window.location.reload();
+        history.push('/');
+      })
       .catch(e => console.log(e));
   };
 

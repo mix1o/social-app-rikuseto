@@ -168,7 +168,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           type="text"
           name="headline"
         />
-        {/* <select
+        <select
           defaultValue={post.category}
           onChange={e => handleChange(e)}
           name="category"
@@ -178,15 +178,15 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           </option>
           <option value="memes">memes</option>
           <option value="sport">sport</option>
-        </select> */}
-        <CreatableSelect
+        </select>
+        {/* <CreatableSelect
           isMulti
           options={opt}
           onChange={handleNewOpt}
           onInputChange={fetchOptions}
           menuIsOpen={true}
           // loadOptions={test}
-        />
+        /> */}
 
         <br />
         <input
