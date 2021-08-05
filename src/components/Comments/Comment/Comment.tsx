@@ -24,6 +24,7 @@ const Comment: FC<SingleCommentProps> = ({
   const { user } = cookies;
   const [liked, setLiked] = useState<boolean | undefined>();
   const [author, setAuthor] = useState<AuthorInterface>();
+  console.log(123);
 
   const handleLikeComment = () => {
     axios
