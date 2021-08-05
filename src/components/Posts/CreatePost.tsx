@@ -3,6 +3,7 @@ import Compressor from 'compressorjs';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import CreatableSelect from 'react-select/creatable';
+import Picker from 'emoji-picker-react';
 
 interface Post {
   headline?: string;
@@ -36,6 +37,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [newOption, setNewOption] = useState([]);
   const [fetchedOptions, setFetchedOptions] = useState([]);
 
+  const [openEmojiList, setOpenEmojiList] = useState<boolean>(false);
   const upload = (data: any) => {
     axios
       .post('https://api.imgur.com/3/image/', data, {
@@ -152,6 +154,10 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       .then(res => setFetchedOptions(res.data));
   };
 
+  const onEmojiClick = (event: any, emojiObject: any) => {
+    setPost({ ...post, headline: post.headline + emojiObject.emoji });
+  };
+
   return (
     <div className="blurred__options create">
       <div
@@ -168,6 +174,10 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           type="text"
           name="headline"
         />
+        <button onClick={() => setOpenEmojiList(prevState => !prevState)}>
+          <i className="fas fa-smile"></i>
+        </button>
+        {openEmojiList && <Picker onEmojiClick={onEmojiClick} />}
         <select
           defaultValue={post.category}
           onChange={e => handleChange(e)}

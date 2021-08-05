@@ -105,9 +105,7 @@ const Post: FC<PostInterfaceExtended> = ({
       <div className="post__actions">
         <m.div
           className="post__container-likes"
-          animate={
-            liked ? { color: '#753ee0' } : { color: 'var(--font-dark-600)' }
-          }
+          animate={liked ? { color: '#753ee0' } : { color: 'inherit' }}
         >
           <m.button
             className="post__btn"
