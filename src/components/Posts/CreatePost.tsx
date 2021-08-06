@@ -2,6 +2,9 @@ import { ChangeEvent, FC, useState, useEffect } from 'react';
 import Compressor from 'compressorjs';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
+import { env } from 'process';
+import { useSelector } from '@xstate/react';
+import { isConstructorDeclaration } from 'typescript';
 interface Post {
   headline?: string;
   file?: string;
@@ -12,6 +15,12 @@ interface Post {
 interface CreateProps {
   handleFetchPosts: () => void;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface Category {
+  _id: string;
+  name: string;
+  totalPosts: number;
 }
 
 const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
@@ -31,6 +40,8 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState(false);
   const [areFiles, setAreFiles] = useState(false);
+  const [newCategory, setNewCategory] = useState('');
+  const [categories, setCategories] = useState<Category[]>();
 
   const upload = (data: any) => {
     axios
@@ -125,16 +136,19 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     setCorrectFormatPost(checkCorrectPost());
   }, [post, message, correctImage]);
 
-  const opt = [
-    { value: 'Memes', label: 'memes' },
-    { value: 'DankMemes', label: 'Dank' },
-    { value: 'Sport', label: 'sport' },
-  ];
   const updateCat = () => {
-    axios.post(`${process.env.REACT_APP_API}/category/category-list`, {
+    axios.post(`${process.env.REACT_APP_API}/category/add-category`, {
       userId: user._id,
-      categoryId: '610a7457056f032b53a5e37e',
+      categoryId: '610d38b87b2a7940c278a9b9',
     });
+  };
+
+  const getCategory = () => {
+    axios
+      .get(
+        `${process.env.REACT_APP_API}/category/get-categories?id=${user._id}`
+      )
+      .then(res => setCategories(res.data));
   };
 
   return (
@@ -145,6 +159,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       ></div>
       <div className="blurred__option">
         <button onClick={updateCat}>UPDATE CAT</button>
+        <button onClick={getCategory}>GET LIST CATGEGOY</button>
         <h2 data-testid="create-post-header">Create new post</h2>
         <p>test</p>
         <input
@@ -162,8 +177,11 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           <option value="" disabled>
             Choose category
           </option>
-          <option value="memes">memes</option>
-          <option value="sport">sport</option>
+          {categories?.map(({ _id: id, name, totalPosts }) => (
+            <option key={id} value={id}>
+              {name} {totalPosts}
+            </option>
+          ))}
         </select>
 
         <br />
@@ -182,6 +200,29 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           }}
         />
         <br />
+        <div className="create-category">
+          <h3>Create new Category</h3>
+          <input
+            type="text"
+            placeholder="newCategory"
+            onChange={e => {
+              setNewCategory(e.target.value);
+            }}
+          />
+          <button
+            onClick={() => {
+              axios
+                .post(`${process.env.REACT_APP_API}/category/new`, {
+                  name: newCategory,
+                })
+                .then(res => console.log(res));
+            }}
+          >
+            Create New Category
+          </button>
+          <br />
+          <br />
+        </div>
         {!disable && !areFiles && (
           <button
             style={{ background: 'red' }}
