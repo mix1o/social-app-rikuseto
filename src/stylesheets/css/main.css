@@ -482,6 +482,14 @@ h6 {
   margin-bottom: 9rem;
 }
 
+.comment--last:last-child {
+  margin-bottom: 2rem;
+}
+
+.comment--last:first-child {
+  margin-top: 0;
+}
+
 .post {
   background: var(--light-bg-600);
   max-width: 401px;
@@ -671,6 +679,33 @@ h6 {
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
+}
+.post__container-shared {
+  margin-top: 2rem;
+}
+.post__shared-error {
+  color: var(--font-dark-300);
+  text-align: center;
+  font-size: 1.6rem;
+}
+.post__shared-container-links {
+  text-align: center;
+}
+.post__shared-link {
+  margin: 1rem;
+  font-size: 1.4rem;
+  text-decoration: none;
+  color: #753ee0;
+  text-align: center;
+}
+.post__shared-text {
+  color: var(--font-dark-400);
+  font-size: 1.6rem;
+  margin: 1rem;
+}
+.post__shared-comments {
+  padding: 1rem;
+  font-size: 2.1rem;
 }
 
 .post:last-child {

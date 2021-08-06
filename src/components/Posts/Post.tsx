@@ -28,6 +28,7 @@ import {
   TwitterIcon,
   WhatsappIcon,
 } from 'react-share';
+import { useLocation } from 'react-router-dom';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
@@ -91,7 +92,15 @@ const Post: FC<PostInterfaceExtended> = ({
     return;
   }, [likes, user]);
 
-  const linkShare = `https://social-rikueto.netlify.app/postId=${_id}`;
+  const linkShare = `https://social-rikueto.netlify.app/post/${_id}`;
+
+  const [disableComments, setDisableComments] = useState<boolean>(false);
+  const location = useLocation();
+  useEffect(() => {
+    if (location.pathname.includes('/post')) {
+      setDisableComments(true);
+    }
+  }, [location.pathname]);
 
   const ShareIitems = () => {
     return (
@@ -162,7 +171,10 @@ const Post: FC<PostInterfaceExtended> = ({
           <img className="post__image" src={file} alt={headline} />
         </div>
       )}
-      <div className="post__actions">
+      <div
+        style={disableComments ? { paddingBottom: '1rem' } : {}}
+        className="post__actions"
+      >
         <m.div
           className="post__container-likes"
           animate={liked ? { color: '#753ee0' } : { color: 'inherit' }}
@@ -183,13 +195,17 @@ const Post: FC<PostInterfaceExtended> = ({
           <span className="post__likes">{likes.length}</span>
         </m.div>
         <div>
-          <button
-            className="post__btn post__single-action"
-            onClick={() => setOpenComments(true)}
-          >
-            <span className="post__count-comments">{comment?.allComments}</span>
-            comments
-          </button>
+          {!disableComments && (
+            <button
+              className="post__btn post__single-action"
+              onClick={() => setOpenComments(true)}
+            >
+              <span className="post__count-comments">
+                {comment?.allComments}
+              </span>
+              comments
+            </button>
+          )}
           <button className="post__btn post__single-action">
             <Floater
               styles={{
@@ -218,7 +234,7 @@ const Post: FC<PostInterfaceExtended> = ({
           </button>
         </div>
       </div>
-      {comment?.topComment && (
+      {!disableComments && comment?.topComment && (
         <>
           <p className="post__top-comment">
             <span className="post__top-author">{commentAuthor?.firstName}</span>
@@ -231,7 +247,7 @@ const Post: FC<PostInterfaceExtended> = ({
           </p>
         </>
       )}
-      {comment && (
+      {!disableComments && comment && (
         <div
           className="post__comments--count"
           onClick={() => setOpenComments(true)}

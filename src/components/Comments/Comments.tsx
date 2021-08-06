@@ -68,7 +68,7 @@ const Comments: FC<CommentProps> = ({
           setCommentText('');
           getAllComments();
           fetchTopComment();
-          console.log(commentRef.current);
+
           setTimeout(() => {
             commentRef.current.scrollTo({
               top: commentRef.current.scrollHeight,
@@ -100,7 +100,7 @@ const Comments: FC<CommentProps> = ({
     setCommentText(prevState => prevState + emojiObject.emoji);
     console.log(emojiObject);
   };
-  console.log(commentText.length);
+
   return (
     <m.section
       variants={commentVariant}

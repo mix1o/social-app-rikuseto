@@ -195,6 +195,34 @@
     justify-content: space-between;
     margin-top: 1rem;
   }
+  &__container-shared {
+    margin-top: 2rem;
+  }
+  &__shared-error {
+    color: var(--font-dark-300);
+    text-align: center;
+    font-size: ft.$fs-300;
+  }
+  &__shared-container-links {
+    text-align: center;
+  }
+  &__shared-link {
+    margin: 1rem;
+    font-size: ft.$fs-250;
+    text-decoration: none;
+    color: clr.$main-bg-500;
+    text-align: center;
+  }
+
+  &__shared-text {
+    color: var(--font-dark-400);
+    font-size: ft.$fs-300;
+    margin: 1rem;
+  }
+  &__shared-comments {
+    padding: 1rem;
+    font-size: ft.$fs-400;
+  }
 }
 
 .post:last-child {

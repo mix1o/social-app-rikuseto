@@ -11,6 +11,7 @@ import { motion as m } from 'framer-motion';
 import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useLocation } from 'react-router-dom';
 
 const Comment: FC<SingleCommentProps> = ({
   _id,
@@ -41,8 +42,19 @@ const Comment: FC<SingleCommentProps> = ({
     setLiked(like);
   }, [likes]);
 
+  const location = useLocation();
+
+  const lastChildManipulation = () => {
+    if (location.pathname.includes('post')) {
+      return true;
+    }
+    return false;
+  };
+
   return (
-    <div className="comment">
+    <div
+      className={`comment ${lastChildManipulation() ? 'comment--last' : ''}`}
+    >
       <div className="comment__author">
         <img
           className="comment__author-image"
@@ -58,9 +70,7 @@ const Comment: FC<SingleCommentProps> = ({
 
       <div className="comment__container-likes">
         <m.div
-          animate={
-            liked ? { color: '#753ee0' } : { color: 'var(--font-dark-600)' }
-          }
+          animate={liked ? { color: '#753ee0' } : { color: 'inherit' }}
           className="comment__action"
         >
           <m.button
