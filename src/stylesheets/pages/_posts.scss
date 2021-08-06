@@ -157,6 +157,44 @@
   &__count-comments {
     margin-right: 0.3rem;
   }
+  &__share-info {
+    font-size: ft.$fs-250;
+    color: var(--font-dark-600);
+    margin-left: 2px;
+  }
+  &__link {
+    font-size: ft.$fs-200;
+    color: var(--font-dark-400);
+    word-wrap: break-word;
+    border-radius: 100px;
+    margin: 0;
+    padding: 0;
+  }
+  &__btn-copy {
+    display: block;
+    margin-top: 2rem;
+    background-color: clr.$main-bg-500;
+    border: none;
+    color: var(--font-light-300);
+    font-size: ft.$fs-200;
+    padding: 1rem;
+    transition: transform 0.3s ease-in-out;
+    .fa-copy {
+      margin-left: 0.5rem;
+    }
+  }
+  &__btn-copy:active {
+    transform: scale(1.1);
+  }
+  &__container-link {
+    background-color: var(--light-bg-600);
+    padding: 1rem;
+  }
+  &__container-socials {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
 }
 
 .post:last-child {

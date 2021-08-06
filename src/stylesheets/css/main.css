@@ -634,6 +634,44 @@ h6 {
 .post__count-comments {
   margin-right: 0.3rem;
 }
+.post__share-info {
+  font-size: 1.4rem;
+  color: var(--font-dark-600);
+  margin-left: 2px;
+}
+.post__link {
+  font-size: 1.2rem;
+  color: var(--font-dark-400);
+  word-wrap: break-word;
+  border-radius: 100px;
+  margin: 0;
+  padding: 0;
+}
+.post__btn-copy {
+  display: block;
+  margin-top: 2rem;
+  background-color: #753ee0;
+  border: none;
+  color: var(--font-light-300);
+  font-size: 1.2rem;
+  padding: 1rem;
+  transition: transform 0.3s ease-in-out;
+}
+.post__btn-copy .fa-copy {
+  margin-left: 0.5rem;
+}
+.post__btn-copy:active {
+  transform: scale(1.1);
+}
+.post__container-link {
+  background-color: var(--light-bg-600);
+  padding: 1rem;
+}
+.post__container-socials {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
 
 .post:last-child {
   margin-bottom: 10rem;

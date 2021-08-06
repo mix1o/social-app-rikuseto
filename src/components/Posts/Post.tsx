@@ -13,6 +13,21 @@ import BlurredMenu from '../Navigation/BlurredMenu';
 import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Floater from 'react-floater';
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  RedditShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  EmailIcon,
+  FacebookIcon,
+  RedditIcon,
+  TelegramIcon,
+  TwitterIcon,
+  WhatsappIcon,
+} from 'react-share';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
@@ -76,6 +91,51 @@ const Post: FC<PostInterfaceExtended> = ({
     return;
   }, [likes, user]);
 
+  const linkShare = `https://social-rikueto.netlify.app/postId=${_id}`;
+
+  const ShareIitems = () => {
+    return (
+      <>
+        <div className="post__container-socials">
+          <FacebookShareButton url={linkShare}>
+            <FacebookIcon size={40} round={true} />
+          </FacebookShareButton>
+          <RedditShareButton url={linkShare}>
+            <RedditIcon size={40} round={true} />
+          </RedditShareButton>
+          <WhatsappShareButton url={linkShare}>
+            <WhatsappIcon size={40} round={true} />
+          </WhatsappShareButton>
+          <TelegramShareButton url={linkShare}>
+            <TelegramIcon size={40} round={true} />
+          </TelegramShareButton>
+          <TwitterShareButton url={linkShare}>
+            <TwitterIcon size={40} round={true} />
+          </TwitterShareButton>
+          <EmailShareButton url={linkShare}>
+            <EmailIcon size={40} round={true} />
+          </EmailShareButton>
+        </div>
+        <p className="post__share-info">Or just copy link</p>
+        <div className="post__container-link">
+          <a href={linkShare} className="post__link">
+            {linkShare}
+          </a>
+        </div>
+
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(linkShare);
+          }}
+          className="post__btn-copy"
+        >
+          Copy link
+          <i className="far fa-copy"></i>
+        </button>
+      </>
+    );
+  };
+
   return (
     <section data-testid="post" className="post">
       <div className="post__author">
@@ -131,7 +191,30 @@ const Post: FC<PostInterfaceExtended> = ({
             comments
           </button>
           <button className="post__btn post__single-action">
-            Share <i className="fas fa-share"></i>
+            <Floater
+              styles={{
+                floater: {
+                  filter: 'none',
+                },
+                container: {
+                  backgroundColor: 'var(--light-bg-700)',
+                  color: 'var(--font-dark-600)',
+                  filter: 'none',
+                  minHeight: 'none',
+                  padding: 10,
+                },
+                arrow: {
+                  color: 'var(--light-bg-700)',
+                  length: 8,
+                  spread: 10,
+                },
+              }}
+              content={ShareIitems()}
+            >
+              <div style={{ display: 'flex' }}>
+                Share <i className="fas fa-share"></i>
+              </div>
+            </Floater>
           </button>
         </div>
       </div>
