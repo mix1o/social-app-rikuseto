@@ -92,7 +92,7 @@ const Post: FC<PostInterfaceExtended> = ({
     return;
   }, [likes, user]);
 
-  const linkShare = `https://social-rikueto.netlify.app/post/${_id}`;
+  const linkShare = `https://social-rikuseto.netlify.app/post/${_id}`;
 
   const [disableComments, setDisableComments] = useState<boolean>(false);
   const location = useLocation();
