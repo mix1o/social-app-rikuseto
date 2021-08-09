@@ -12,6 +12,7 @@ import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar
 import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLocation } from 'react-router-dom';
+import BlurredMenu from '../../Navigation/BlurredMenu';
 
 const Comment: FC<SingleCommentProps> = ({
   _id,
@@ -25,8 +26,13 @@ const Comment: FC<SingleCommentProps> = ({
   const { user } = cookies;
   const [liked, setLiked] = useState<boolean | undefined>();
   const [author, setAuthor] = useState<AuthorInterface>();
+  const [popup, setPopup] = useState<boolean>(false);
 
   const handleLikeComment = () => {
+    if (!user) {
+      setPopup(true);
+      return;
+    }
     axios
       .post(`${process.env.REACT_APP_API}/comments/like`, {
         _id,
@@ -52,46 +58,47 @@ const Comment: FC<SingleCommentProps> = ({
   };
 
   return (
-    <div
-      className={`comment ${lastChildManipulation() ? 'comment--last' : ''}`}
-    >
-      <div className="comment__author">
-        <img
-          className="comment__author-image"
-          src={author?.avatar}
-          alt="user profile"
-        />
-        <p className="comment__author-name">
-          {author?.firstName} {author?.lastName}
-        </p>
-        <p className="comment__date">{moment(date).fromNow()}</p>
-      </div>
-      <p className="comment__content">{text}</p>
+    <>
+      <div
+        className={`comment ${lastChildManipulation() ? 'comment--last' : ''}`}
+      >
+        <div className="comment__author">
+          <img
+            className="comment__author-image"
+            src={author?.avatar}
+            alt="user profile"
+          />
+          <p className="comment__author-name">
+            {author?.firstName} {author?.lastName}
+          </p>
+          <p className="comment__date">{moment(date).fromNow()}</p>
+        </div>
+        <p className="comment__content">{text}</p>
 
-      <div className="comment__container-likes">
-        <m.div
-          animate={liked ? { color: '#753ee0' } : { color: 'inherit' }}
-          className="comment__action"
-        >
-          <m.button
-            whileTap={{ scale: 1.2 }}
-            className="comment__btn"
-            onClick={() => {
-              if (user) {
-                handleLikeComment();
-              }
-            }}
+        <div className="comment__container-likes">
+          <m.div
+            animate={liked ? { color: '#753ee0' } : { color: 'inherit' }}
+            className="comment__action"
           >
-            {liked ? (
-              <FontAwesomeIcon icon={faStarChonky} />
-            ) : (
-              <FontAwesomeIcon icon={farBellThin} />
-            )}
-          </m.button>
-          <p className="comment__likes">{likes.length}</p>
-        </m.div>
+            <m.button
+              whileTap={{ scale: 1.2 }}
+              className="comment__btn"
+              onClick={() => {
+                handleLikeComment();
+              }}
+            >
+              {liked ? (
+                <FontAwesomeIcon icon={faStarChonky} />
+              ) : (
+                <FontAwesomeIcon icon={farBellThin} />
+              )}
+            </m.button>
+            <p className="comment__likes">{likes.length}</p>
+          </m.div>
+        </div>
       </div>
-    </div>
+      {popup && <BlurredMenu setUserOption={setPopup} />}
+    </>
   );
 };
 

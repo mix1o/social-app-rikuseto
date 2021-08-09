@@ -1,6 +1,7 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion as m } from 'framer-motion';
+import { useCounter } from '../../store/sub';
 
 interface MenuProps {
   iconsClasses: string;
@@ -26,13 +27,17 @@ const MenuItem: FC<MenuProps> = ({
   setSelected,
   value,
 }) => {
+  const [state, actions] = useCounter();
   return (
     <m.button
       variants={MenuItemVariant}
       initial="disabled"
       animate={selected === value ? 'active' : 'disabled'}
       whileTap={{ scale: 1.2 }}
-      onClick={() => setSelected(value)}
+      onClick={() => {
+        setSelected(value);
+        actions.isOpenComment(false);
+      }}
       className="menu__item"
     >
       <Link to={href} className="menu__item--link">

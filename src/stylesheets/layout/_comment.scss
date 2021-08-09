@@ -46,10 +46,10 @@
     color: inherit;
   }
   &__likes {
-    font-size: ft.$fs-250;
     margin: 0 0 0 0.5rem;
   }
   &__container-likes {
+    font-size: ft.$fs-300;
     color: var(--font-dark-600);
   }
 }

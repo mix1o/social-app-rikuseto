@@ -195,6 +195,7 @@
     justify-content: space-between;
     margin-top: 1rem;
   }
+
   &__container-shared {
     margin-top: 2rem;
   }
@@ -227,4 +228,7 @@
 
 .post:last-child {
   margin-bottom: 10rem;
+}
+.post__mBottom:last-child {
+  margin-bottom: 3rem;
 }

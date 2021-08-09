@@ -146,7 +146,10 @@ const Post: FC<PostInterfaceExtended> = ({
   };
 
   return (
-    <section data-testid="post" className="post">
+    <section
+      data-testid="post"
+      className={`post ${disableComments ? 'post__mBottom' : ''}`}
+    >
       <div className="post__author">
         <img
           className="post__image-author"

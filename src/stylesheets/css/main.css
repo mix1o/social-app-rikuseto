@@ -471,10 +471,10 @@ h6 {
   color: inherit;
 }
 .comment__likes {
-  font-size: 1.4rem;
   margin: 0 0 0 0.5rem;
 }
 .comment__container-likes {
+  font-size: 1.6rem;
   color: var(--font-dark-600);
 }
 
@@ -712,6 +712,10 @@ h6 {
   margin-bottom: 10rem;
 }
 
+.post__mBottom:last-child {
+  margin-bottom: 3rem;
+}
+
 .comments {
   background: var(--light-bg-500);
   z-index: 5;
@@ -743,29 +747,10 @@ h6 {
   background: var(--light-bg-600);
 }
 .comments__publish {
-  background: #753ee0;
-  color: var(--font-light-300);
+  background-color: #753ee0;
   border: none;
-  border-radius: 2px;
-  cursor: pointer;
-  padding: 1.2rem;
-  font-size: 1.6rem;
+  color: var(--font-dark-600);
   font-size: 1.2rem;
-}
-.comments__publish:hover {
-  background: #471a9e;
-  border: 2px solid #946ae7;
-  margin: -2px;
-}
-.comments__publish:active {
-  background: #946ae7;
-  border: 2px solid #471a9e;
-  margin: -2px;
-}
-.comments__publish:disabled {
-  background: #d3c2f5;
-  border: 2px solid transparent;
-  margin: -2px;
 }
 .comments__close-btn {
   font-size: 2.1rem;
@@ -815,6 +800,36 @@ h6 {
   text-align: center;
   flex: 1;
   font-size: 1.2rem;
+}
+.comments__emoji {
+  background: transparent;
+  border: none;
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--font-dark-600);
+  font-size: 1.4rem;
+}
+
+.comments-shared .comments__close-btn {
+  display: none;
+}
+.comments-shared .comments__header {
+  border: none;
+  z-index: 1;
+  background: transparent;
+  position: static;
+}
+.comments-shared .comments__container-input {
+  position: static;
+  transform: none;
+  margin-bottom: 5rem;
+}
+
+.emoji-picker-react .emoji-group:before {
+  background: var(--light-bg-700);
+  padding-left: 1rem;
 }
 
 .auth {

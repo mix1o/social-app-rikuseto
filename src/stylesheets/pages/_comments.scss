@@ -34,7 +34,9 @@
     background: var(--light-bg-600);
   }
   &__publish {
-    @include btn.btn();
+    background-color: clr.$main-bg-500;
+    border: none;
+    color: var(--font-dark-600);
     font-size: ft.$fs-200;
   }
   &__close-btn {
@@ -86,4 +88,34 @@
     flex: 1;
     font-size: ft.$fs-200;
   }
+  &__emoji {
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: -5px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--font-dark-600);
+    font-size: ft.$fs-250;
+  }
+}
+.comments-shared {
+  .comments__close-btn {
+    display: none;
+  }
+  .comments__header {
+    border: none;
+    z-index: 1;
+    background: transparent;
+    position: static;
+  }
+  .comments__container-input {
+    position: static;
+    transform: none;
+    margin-bottom: 5rem;
+  }
+}
+.emoji-picker-react .emoji-group:before {
+  background: var(--light-bg-700);
+  padding-left: 1rem;
 }
