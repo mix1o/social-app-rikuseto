@@ -1,7 +1,6 @@
-import { FC, ReactChild, useState } from 'react';
+import { FC, ReactChild } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Routes } from './Routes';
-import Header from './components/Header/Header';
 import Menu from './components/Navigation/Menu';
 
 const App: FC = () => {

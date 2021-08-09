@@ -2,9 +2,7 @@ import { ChangeEvent, FC, useState, useEffect } from 'react';
 import Compressor from 'compressorjs';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import { env } from 'process';
-import { useSelector } from '@xstate/react';
-import { isConstructorDeclaration } from 'typescript';
+import Category from './Category';
 interface Post {
   headline?: string;
   file?: string;
@@ -15,12 +13,6 @@ interface Post {
 interface CreateProps {
   handleFetchPosts: () => void;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-interface Category {
-  _id: string;
-  name: string;
-  totalPosts: number;
 }
 
 const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
@@ -40,8 +32,8 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState(false);
   const [areFiles, setAreFiles] = useState(false);
+
   const [newCategory, setNewCategory] = useState('');
-  const [categories, setCategories] = useState<Category[]>();
 
   const upload = (data: any) => {
     axios
@@ -95,7 +87,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
 
     setPost({ ...post, [name]: value });
   };
-
+  console.log(post);
   const createNewPost = () => {
     if (user) {
       axios.post(`${process.env.REACT_APP_API}/posts/create`, post).then(() => {
@@ -134,21 +126,15 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
 
   useEffect(() => {
     setCorrectFormatPost(checkCorrectPost());
+
+    return () => setCorrectFormatPost(false);
   }, [post, message, correctImage]);
 
   const updateCat = () => {
     axios.post(`${process.env.REACT_APP_API}/category/add-category`, {
       userId: user._id,
-      categoryId: '610d38b87b2a7940c278a9b9',
+      categoryId: '610d31764dd43a3c15e0b010',
     });
-  };
-
-  const getCategory = () => {
-    axios
-      .get(
-        `${process.env.REACT_APP_API}/category/get-categories?id=${user._id}`
-      )
-      .then(res => setCategories(res.data));
   };
 
   return (
@@ -158,49 +144,52 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
         onClick={() => setOpen(prevVal => !prevVal)}
       ></div>
       <div className="blurred__option">
-        <button onClick={updateCat}>UPDATE CAT</button>
-        <button onClick={getCategory}>GET LIST CATGEGOY</button>
-        <h2 data-testid="create-post-header">Create new post</h2>
-        <p>test</p>
-        <input
-          data-testid="headline"
-          value={post.headline}
-          onChange={e => handleChange(e)}
-          type="text"
-          name="headline"
-        />
-        <select
-          defaultValue={post.category}
-          onChange={e => handleChange(e)}
-          name="category"
-        >
-          <option value="" disabled>
-            Choose category
-          </option>
-          {categories?.map(({ _id: id, name, totalPosts }) => (
-            <option key={id} value={id}>
-              {name} {totalPosts}
-            </option>
-          ))}
-        </select>
+        <section className="create-post">
+          <h2 data-testid="create-post__header">Create new post</h2>
+          <input
+            data-testid="headline"
+            value={post.headline}
+            onChange={e => handleChange(e)}
+            type="text"
+            name="headline"
+            placeholder="Write something interesting"
+            className="create-post__title"
+          />
+          <Category
+            handleChange={handleChange}
+            chooseCategory={post.category}
+          />
+          <label
+            onDrop={e => console.log(e)}
+            onDragOver={e => console.log(e)}
+            onDragEnter={e => console.log(e)}
+            onDragLeave={e => console.log(e)}
+            htmlFor="add-file"
+            className="create-post__drag-drop"
+          >
+            <p className="create-post__text">
+              Drag and Drop or{' '}
+              <span className="create-post__pseudo-btn">Click</span>
+            </p>
+          </label>
+          <input
+            id="add-file"
+            className="create-post__file-input"
+            onClick={() => {
+              setDisable(true);
+            }}
+            onFocus={() => {
+              setDisable(false);
+            }}
+            type="file"
+            accept="image/*"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              compressImg(e.target.files);
+              setAreFiles(true);
+            }}
+          />
 
-        <br />
-        <input
-          onClick={() => {
-            setDisable(true);
-          }}
-          onFocus={() => {
-            setDisable(false);
-          }}
-          type="file"
-          accept="image/*"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            compressImg(e.target.files);
-            setAreFiles(true);
-          }}
-        />
-        <br />
-        <div className="create-category">
+          {/* <div className="create-category">
           <h3>Create new Category</h3>
           <input
             type="text"
@@ -222,21 +211,24 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           </button>
           <br />
           <br />
-        </div>
-        {!disable && !areFiles && (
-          <button
-            style={{ background: 'red' }}
-            data-testid="button"
-            disabled={!correctFormatPost}
-            onClick={createNewPost}
-          >
-            Create post
-          </button>
-        )}
-        {disable && <p>Loading image...</p>}
-        {!correctFormatPost && post!.headline!.length > 0 && (
-          <p data-testid="message">{message}</p>
-        )}
+        </div> */}
+          {disable && <p>Loading image...</p>}
+          {!correctFormatPost && post!.headline!.length > 0 && (
+            <p data-testid="message" className="create-post__message">
+              {message}
+            </p>
+          )}
+          {!disable && !areFiles && (
+            <button
+              className="create-post__btn-add"
+              data-testid="button"
+              disabled={!correctFormatPost}
+              onClick={createNewPost}
+            >
+              Create post
+            </button>
+          )}
+        </section>
       </div>
     </div>
   );
