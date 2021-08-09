@@ -8,8 +8,10 @@ import Comment from '../../Comments/Comment/Comment';
 import Picker from 'emoji-picker-react';
 import { useCookies } from 'react-cookie';
 import Header from '../../Header/Header';
+import BlurredMenu from '../../Navigation/BlurredMenu';
+import Comments from '../../Comments/Comments';
 
-const SharedPost = () => {
+const SharedPost: FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const [post, setPost] = useState<PostInterface[]>();
@@ -43,6 +45,8 @@ const SharedPost = () => {
   const [commentText, setCommentText] = useState<string>('');
   const [openEmojiList, setOpenEmojiList] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
+  const [popup, setPopup] = useState<boolean>(false);
+  const [filter, setFilter] = useState<string>('');
 
   const onEmojiClick = (event: any, emojiObject: any) => {
     setCommentText(prevState => prevState + emojiObject.emoji);
@@ -53,6 +57,10 @@ const SharedPost = () => {
   const { user } = cookies;
 
   const handleNewComment = (): void => {
+    if (!user) {
+      setPopup(true);
+      return;
+    }
     if (
       commentText.length >= 2 ||
       (commentText.length >= 1 &&
@@ -97,76 +105,33 @@ const SharedPost = () => {
               />
             )
           )}
-        {correct && (
-          <>
-            <p className="post__shared-text">Comments: </p>
-            <div className="post__shared-comments">
-              {comments?.map(({ _id, text, user_id, likes, date }) => (
-                <Comment
-                  key={_id}
-                  _id={_id}
-                  text={text}
-                  user_id={user_id}
-                  likes={likes}
-                  date={date}
-                  refreshComments={fetchComments}
-                />
-              ))}
-            </div>
-          </>
-        )}
-        {correct && (
-          <div
-            style={{ position: 'relative', marginBottom: '5rem' }}
-            className="comments__container-input"
-          >
-            <div style={{ display: 'flex' }}>
-              <input
-                data-testid="input-comments"
-                className="comments__input"
-                value={commentText}
-                onChange={(e: any) => {
-                  setCommentText(e.target.value);
-                }}
-                onKeyDown={(e: any) => {
-                  if (e.code === 'Space' && commentText.length === 1) {
-                    setCommentText('');
-                  }
-                }}
-                type="text"
-              />
-
-              <button
-                data-testid="publish"
-                className="comments__publish"
-                onClick={handleNewComment}
-              >
-                Publish
-              </button>
-            </div>
-            <button onClick={() => setOpenEmojiList(prevState => !prevState)}>
-              <i className="fas fa-smile"></i>
-            </button>
-            {openEmojiList && <Picker onEmojiClick={onEmojiClick} />}
-            <p data-testid="message" className="comments__message">
-              {message}
-            </p>
-          </div>
-        )}
-        {!correct && !loading && (
-          <>
-            <p className="post__shared-error">Content not found</p>
-            <div className="post__shared-container-links">
-              <Link className="post__shared-link" to="/">
-                Back to explore
-              </Link>
-              <Link className="post__shared-link" to="/">
-                Report a bug
-              </Link>
-            </div>
-          </>
-        )}
       </div>
+      {correct && (
+        <>
+          <p className="post__shared-text">Comments:</p>
+
+          <Comments
+            postId={id}
+            fetchTopComment={() => {}}
+            setOpenComments={() => {}}
+            view={true}
+          />
+        </>
+      )}
+      {!correct && !loading && (
+        <>
+          <p className="post__shared-error">Content not found</p>
+          <div className="post__shared-container-links">
+            <Link className="post__shared-link" to="/">
+              Back to explore
+            </Link>
+            <Link className="post__shared-link" to="/">
+              Report a bug
+            </Link>
+          </div>
+        </>
+      )}
+      {popup && <BlurredMenu setUserOption={setPopup} />}
     </>
   );
 };
