@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ChangeEvent, FC, RefAttributes, useRef, useState } from 'react';
+import { ChangeEvent, FC, useRef, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 import Comment from './Comment/Comment';
@@ -31,10 +31,20 @@ const commentVariant = {
   },
 };
 
+interface SortedElement {
+  date: string;
+  likes: string[];
+  post_id: string;
+  text: string;
+  user_id: string;
+  _id: string;
+}
+
 const Comments: FC<CommentProps> = ({
   postId,
   setOpenComments,
   fetchTopComment,
+  view = false,
 }) => {
   const [commentText, setCommentText] = useState<string>('');
   const [comments, setComments] = useState<CommentsData[]>();
@@ -101,13 +111,34 @@ const Comments: FC<CommentProps> = ({
     console.log(emojiObject);
   };
 
+  const MODE_POPULAR = 'popular';
+  const MODE_LATEST = 'latest';
+  const MODE_DEFAULT = 'default';
+
+  const [filter, setFilter] = useState<string>('Default');
+
+  const sortComments = (a: SortedElement, b: SortedElement): number => {
+    if (filter === MODE_POPULAR) {
+      return b.likes.length - a.likes.length;
+    }
+    if (filter === MODE_LATEST) {
+      return new Date(a.date) > new Date(b.date) ? -1 : 1;
+    }
+
+    if (filter === '' || filter === MODE_DEFAULT) {
+      return 1;
+    }
+
+    return 1;
+  };
+
   return (
     <m.section
       variants={commentVariant}
       initial="hidden"
       animate="show"
       exit="hidden"
-      className="comments"
+      className={view ? 'comments-shared' : 'comments'}
       ref={commentRef}
     >
       <div>
@@ -116,9 +147,22 @@ const Comments: FC<CommentProps> = ({
             <p data-testid="filter-text" className="comments__filter-text">
               Filter by
             </p>
-            <select className="comments__filter">
-              <option className="comments__filter-option">Most popular</option>
-              <option className="comments__filter-option">Latest</option>
+            <select
+              value={filter}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                setFilter(e.target.value)
+              }
+              className="comments__filter"
+            >
+              <option value="Default" disabled>
+                Default
+              </option>
+              <option value="popular" className="comments__filter-option">
+                Most popular
+              </option>
+              <option value="latest" className="comments__filter-option">
+                Latest
+              </option>
             </select>
           </div>
           <button
@@ -132,19 +176,21 @@ const Comments: FC<CommentProps> = ({
           </button>
         </div>
         <div className="comments__container">
-          {comments?.map(({ _id, text, user_id, likes, date }) => {
-            return (
-              <Comment
-                key={_id}
-                _id={_id}
-                text={text}
-                user_id={user_id}
-                likes={likes}
-                date={date}
-                refreshComments={getAllComments}
-              />
-            );
-          })}
+          {comments
+            ?.sort(sortComments)
+            .map(({ _id, text, user_id, likes, date }) => {
+              return (
+                <Comment
+                  key={_id}
+                  _id={_id}
+                  text={text}
+                  user_id={user_id}
+                  likes={likes}
+                  date={date}
+                  refreshComments={getAllComments}
+                />
+              );
+            })}
           {comments?.length === 0 && (
             <p className="comments__info">No comments yet</p>
           )}
@@ -153,21 +199,29 @@ const Comments: FC<CommentProps> = ({
 
       <div className="comments__container-input">
         <div style={{ display: 'flex' }}>
-          <input
-            data-testid="input-comments"
-            className="comments__input"
-            value={commentText}
-            onChange={(e: any) => {
-              setCommentText(e.target.value);
-            }}
-            onKeyDown={(e: any) => {
-              if (e.code === 'Space' && commentText.length === 1) {
-                setCommentText('');
-              }
-            }}
-            type="text"
-          />
+          <div style={{ width: '100%', position: 'relative' }}>
+            <input
+              data-testid="input-comments"
+              className="comments__input"
+              value={commentText}
+              onChange={(e: any) => {
+                setCommentText(e.target.value);
+              }}
+              onKeyDown={(e: any) => {
+                if (e.code === 'Space' && commentText.length === 1) {
+                  setCommentText('');
+                }
+              }}
+              type="text"
+            />
 
+            <button
+              className="comments__emoji"
+              onClick={() => setOpenEmojiList(prevState => !prevState)}
+            >
+              <i className="fas fa-smile"></i>
+            </button>
+          </div>
           <button
             data-testid="publish"
             className="comments__publish"
@@ -176,10 +230,20 @@ const Comments: FC<CommentProps> = ({
             Publish
           </button>
         </div>
-        <button onClick={() => setOpenEmojiList(prevState => !prevState)}>
-          <i className="fas fa-smile"></i>
-        </button>
-        {openEmojiList && <Picker onEmojiClick={onEmojiClick} />}
+
+        {openEmojiList && (
+          <Picker
+            pickerStyle={{
+              width: '100%',
+              background: 'var(--light-bg-400)',
+              boxShadow: 'none',
+              border: '1px solid var(--font-dark-600)',
+              marginTop: '1rem',
+            }}
+            disableSearchBar={true}
+            onEmojiClick={onEmojiClick}
+          />
+        )}
         <p data-testid="message" className="comments__message">
           {message}
         </p>
