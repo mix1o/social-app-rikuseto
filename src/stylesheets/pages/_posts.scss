@@ -8,9 +8,22 @@
   background: var(--light-bg-600);
   max-width: 401px;
   width: 100%;
+  position: relative;
   margin-bottom: 2rem;
   @include mix.border('-top');
   @include mix.border('-bottom');
+
+  &__container-dots {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: var(--font-dark-600);
+    font-size: ft.$fs-300;
+  }
+  .fa-ellipsis-v {
+    color: inherit;
+  }
+
   &__headline {
     margin: 3rem 0;
     margin-left: 2px;
@@ -63,7 +76,27 @@
     font-weight: ft.$fw-600;
     color: var(--font-dark-600);
   }
+  &__container-dots-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 1rem 2px;
+    background-color: var(--light-bg-700);
+    margin-right: 5px;
+  }
 
+  &__action {
+    background-color: transparent;
+    display: block;
+    border: none;
+    font-size: ft.$fs-250;
+    color: var(--font-dark-600);
+    margin-top: 1rem;
+  }
+  &__action--delete {
+    color: clr.$warning-500;
+  }
   &__actions {
     display: flex;
     align-items: center;

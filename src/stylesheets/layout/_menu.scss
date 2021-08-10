@@ -23,27 +23,3 @@
     color: inherit;
   }
 }
-
-.container-theme {
-  width: 50px;
-  background: #d9d9d9;
-  height: 20px;
-  padding: 0 2px;
-  border-radius: 100px;
-  display: flex;
-  align-items: center;
-  margin: 2rem;
-}
-.circle-theme {
-  background: #333;
-  width: 17px;
-  height: 17px;
-  border-radius: 100px;
-}
-.container-theme-disabled {
-  justify-content: flex-start;
-}
-.container-theme--active {
-  background: clr.$main-bg-500;
-  justify-content: flex-end;
-}

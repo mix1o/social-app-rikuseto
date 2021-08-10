@@ -144,26 +144,30 @@ const Comments: FC<CommentProps> = ({
       <div>
         <div className="comments__header">
           <div className="comments__filter-container">
-            <p data-testid="filter-text" className="comments__filter-text">
-              Filter by
-            </p>
-            <select
-              value={filter}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                setFilter(e.target.value)
-              }
-              className="comments__filter"
-            >
-              <option value="Default" disabled>
-                Default
-              </option>
-              <option value="popular" className="comments__filter-option">
-                Most popular
-              </option>
-              <option value="latest" className="comments__filter-option">
-                Latest
-              </option>
-            </select>
+            {comments?.length! > 0 && (
+              <>
+                <p data-testid="filter-text" className="comments__filter-text">
+                  Filter by
+                </p>
+                <select
+                  value={filter}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                    setFilter(e.target.value)
+                  }
+                  className="comments__filter"
+                >
+                  <option value="Default" disabled>
+                    Default
+                  </option>
+                  <option value="popular" className="comments__filter-option">
+                    Most popular
+                  </option>
+                  <option value="latest" className="comments__filter-option">
+                    Latest
+                  </option>
+                </select>
+              </>
+            )}
           </div>
           <button
             className="comments__close-btn"
@@ -188,6 +192,7 @@ const Comments: FC<CommentProps> = ({
                   likes={likes}
                   date={date}
                   refreshComments={getAllComments}
+                  fetchTopComment={fetchTopComment}
                 />
               );
             })}

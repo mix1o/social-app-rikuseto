@@ -26,4 +26,5 @@ export interface SingleCommentProps {
   likes: string[];
   date: string;
   refreshComments: () => void;
+  fetchTopComment: () => void;
 }
