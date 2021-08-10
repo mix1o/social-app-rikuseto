@@ -13,6 +13,7 @@ import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLocation } from 'react-router-dom';
 import BlurredMenu from '../../Navigation/BlurredMenu';
+import Floater from 'react-floater';
 
 const Comment: FC<SingleCommentProps> = ({
   _id,
@@ -21,12 +22,15 @@ const Comment: FC<SingleCommentProps> = ({
   likes,
   date,
   refreshComments,
+  fetchTopComment,
 }) => {
   const [cookies] = useCookies();
   const { user } = cookies;
   const [liked, setLiked] = useState<boolean | undefined>();
   const [author, setAuthor] = useState<AuthorInterface>();
   const [popup, setPopup] = useState<boolean>(false);
+
+  const [displayMessage, setDisplayMessage] = useState<boolean>(false);
 
   const handleLikeComment = () => {
     if (!user) {
@@ -38,7 +42,10 @@ const Comment: FC<SingleCommentProps> = ({
         _id,
         userId: user._id,
       })
-      .then(() => refreshComments());
+      .then(() => {
+        refreshComments();
+        fetchTopComment();
+      });
   };
 
   useEffect(() => {
@@ -57,11 +64,93 @@ const Comment: FC<SingleCommentProps> = ({
     return false;
   };
 
+  const deleteComment = () => {
+    setDisplayMessage(true);
+    axios.delete(`${process.env.REACT_APP_API}/comments/delete`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        _id,
+      },
+    });
+
+    setTimeout(() => {
+      setDisplayMessage(false);
+      refreshComments();
+      fetchTopComment();
+    }, 500);
+  };
+
+  const ActionsComment = () => {
+    return (
+      <div className="comment__container-dots-actions">
+        <button className="comment__action-dot">
+          Report<i style={{ marginLeft: '.5rem' }} className="fas fa-ban"></i>
+        </button>
+        {user._id === user_id ? (
+          <>
+            <button className="comment__action-dot">
+              Edit
+              <i style={{ marginLeft: '.5rem' }} className="fas fa-edit"></i>
+            </button>
+            <button
+              onClick={deleteComment}
+              className="comment__action-dot comment__action--delete"
+            >
+              Delete
+              <i
+                style={{ marginLeft: '.5rem' }}
+                className="fas fa-trash-alt"
+              ></i>
+            </button>
+          </>
+        ) : null}
+      </div>
+    );
+  };
+
   return (
     <>
       <div
         className={`comment ${lastChildManipulation() ? 'comment--last' : ''}`}
       >
+        <div className="comment__container-dots">
+          <Floater
+            offset={0}
+            placement="right-start"
+            styles={{
+              floater: {
+                filter: 'none',
+              },
+              container: {
+                background: 'transparent',
+                color: 'var(--font-dark-600)',
+                filter: 'none',
+                minHeight: 'none',
+                minWidth: 100,
+                textAlign: 'right',
+                padding: 0,
+              },
+              arrow: {
+                color: 'var(--light-bg-700)',
+                length: 8,
+                spread: 10,
+              },
+            }}
+            content={ActionsComment()}
+          >
+            <button
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--font-dark-600)',
+              }}
+            >
+              <i className="fas fa-ellipsis-v"></i>
+            </button>
+          </Floater>
+        </div>
         <div className="comment__author">
           <img
             className="comment__author-image"
@@ -74,7 +163,6 @@ const Comment: FC<SingleCommentProps> = ({
           <p className="comment__date">{moment(date).fromNow()}</p>
         </div>
         <p className="comment__content">{text}</p>
-
         <div className="comment__container-likes">
           <m.div
             animate={liked ? { color: '#753ee0' } : { color: 'inherit' }}
@@ -96,6 +184,7 @@ const Comment: FC<SingleCommentProps> = ({
             <p className="comment__likes">{likes.length}</p>
           </m.div>
         </div>
+        {displayMessage && <p className="comment__information">Deleting...</p>}
       </div>
       {popup && <BlurredMenu setUserOption={setPopup} />}
     </>

@@ -145,11 +145,94 @@ const Post: FC<PostInterfaceExtended> = ({
     );
   };
 
+  const deletePost = () => {
+    axios.delete(`${process.env.REACT_APP_API}/posts/delete`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        postId: _id,
+      },
+    });
+    window.location.reload();
+  };
+
+  const ActionsPost = () => {
+    return (
+      <div className="post__container-dots-actions">
+        <button className="post__action">
+          Save post{' '}
+          <i style={{ marginLeft: '.5rem' }} className="fas fa-flag"></i>
+        </button>
+        <button className="post__action">
+          Report<i style={{ marginLeft: '.5rem' }} className="fas fa-ban"></i>
+        </button>
+        {user._id === user_id ? (
+          <>
+            <button className="post__action">
+              Edit
+              <i style={{ marginLeft: '.5rem' }} className="fas fa-edit"></i>
+            </button>
+            <button
+              onClick={deletePost}
+              className="post__action post__action--delete"
+            >
+              Delete
+              <i
+                style={{ marginLeft: '.5rem' }}
+                className="fas fa-trash-alt"
+              ></i>
+            </button>
+          </>
+        ) : null}
+      </div>
+    );
+  };
+
   return (
     <section
       data-testid="post"
       className={`post ${disableComments ? 'post__mBottom' : ''}`}
     >
+      {user && (
+        <div className="post__container-dots">
+          <Floater
+            offset={0}
+            placement="auto"
+            styles={{
+              floater: {
+                filter: 'none',
+              },
+              container: {
+                background: 'transparent',
+                color: 'var(--font-dark-600)',
+                filter: 'none',
+                minHeight: 'none',
+                minWidth: 100,
+                textAlign: 'right',
+                padding: 0,
+                margin: 0,
+              },
+              arrow: {
+                color: 'var(--light-bg-700)',
+                length: 8,
+                spread: 10,
+              },
+            }}
+            content={ActionsPost()}
+          >
+            <button
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--font-dark-600)',
+              }}
+            >
+              <i className="fas fa-ellipsis-v"></i>
+            </button>
+          </Floater>
+        </div>
+      )}
       <div className="post__author">
         <img
           className="post__image-author"
