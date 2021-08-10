@@ -3,10 +3,6 @@ import React, { FC, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { PostInterface } from '../../../interfaces/posts/postInterfaces';
 import Post from '../Post';
-import { CommentsData } from '../../../interfaces/comments/commentsInterfaces';
-import Comment from '../../Comments/Comment/Comment';
-import Picker from 'emoji-picker-react';
-import { useCookies } from 'react-cookie';
 import Header from '../../Header/Header';
 import BlurredMenu from '../../Navigation/BlurredMenu';
 import Comments from '../../Comments/Comments';
@@ -17,7 +13,6 @@ const SharedPost: FC = () => {
   const [post, setPost] = useState<PostInterface[]>();
   const [correct, setCorrect] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [comments, setComments] = useState<CommentsData[]>();
 
   const fetchPost = (): void => {
     axios.get(`${process.env.REACT_APP_API}/posts/post?id=${id}`).then(res => {
@@ -29,60 +24,14 @@ const SharedPost: FC = () => {
       setPost(res.data);
       setCorrect(true);
       setLoading(false);
-      fetchComments();
     });
-  };
-  const fetchComments = () => {
-    axios
-      .get(`${process.env.REACT_APP_API}/comments?postId=${id}`)
-      .then(res => setComments(res.data));
   };
 
   useEffect(() => {
     fetchPost();
   }, []);
 
-  const [commentText, setCommentText] = useState<string>('');
-  const [openEmojiList, setOpenEmojiList] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>('');
   const [popup, setPopup] = useState<boolean>(false);
-  const [filter, setFilter] = useState<string>('');
-
-  const onEmojiClick = (event: any, emojiObject: any) => {
-    setCommentText(prevState => prevState + emojiObject.emoji);
-    console.log(emojiObject);
-  };
-
-  const [cookies] = useCookies();
-  const { user } = cookies;
-
-  const handleNewComment = (): void => {
-    if (!user) {
-      setPopup(true);
-      return;
-    }
-    if (
-      commentText.length >= 2 ||
-      (commentText.length >= 1 &&
-        (/\d/.test(commentText) ||
-          /[a-zA-Z]/g.test(commentText) ||
-          /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(commentText)))
-    ) {
-      axios
-        .post(`${process.env.REACT_APP_API}/comments/create`, {
-          commentText,
-          postId: id,
-          userId: user._id,
-        })
-        .then(() => {
-          setCommentText('');
-          fetchComments();
-          setOpenEmojiList(false);
-        });
-      return;
-    }
-    setMessage('Text must be at least 1 character');
-  };
 
   return (
     <>
