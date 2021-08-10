@@ -3,6 +3,10 @@ import Compressor from 'compressorjs';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import Category from './Category';
+import { useDropzone as useDropZone } from 'react-dropzone';
+import { useCallback } from 'react';
+import CropImage from './CropImage';
+
 interface Post {
   headline?: string;
   file?: string;
@@ -18,6 +22,8 @@ interface CreateProps {
 const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [cookies] = useCookies();
   const { user } = cookies;
+  const maxFileSize = 5000000;
+  const fileTypes = 'image/jpeg, image/jpg, image/png, image/gif';
 
   const [post, setPost] = useState<Post>({
     headline: '',
@@ -32,10 +38,66 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState(false);
   const [areFiles, setAreFiles] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null | ArrayBuffer>(
+    ''
+  );
 
-  const [newCategory, setNewCategory] = useState('');
+  const validateFile = (fileToValidate: any) => {
+    const fileSize = fileToValidate.size;
+    const fileType = fileToValidate.type;
+    console.log(fileType);
+    if (fileSize >= maxFileSize) {
+      setMessage(
+        `File is to larger, ${(fileSize / 1000000).toFixed(
+          2
+        )}MB is to big. Max file size is ${(maxFileSize / 1000000).toFixed(
+          2
+        )}MB`
+      );
+      return false;
+    }
+    if (fileType.includes(fileTypes) || fileType.length <= 0) {
+      setMessage('Invalid file type');
+      return false;
+    }
+
+    return true;
+  };
+
+  const onDrop = useCallback((files, rejectedFiles) => {
+    // compressImg(files);
+    if (rejectedFiles && rejectedFiles.length >= 1) {
+      validateFile(rejectedFiles[0].file);
+    }
+
+    if (files && files.length >= 1) {
+      const file = files[0];
+      const validate = validateFile(file);
+      if (validate) {
+        const fileReader = new FileReader();
+        fileReader.addEventListener(
+          'load',
+          () => {
+            setImagePreview(fileReader.result);
+          },
+          false
+        );
+
+        fileReader.readAsDataURL(file);
+      }
+    }
+  }, []);
+
+  const { acceptedFiles, getRootProps, getInputProps } = useDropZone({
+    onDrop,
+    maxFiles: 1,
+    maxSize: maxFileSize,
+    multiple: false,
+    accept: fileTypes,
+  });
 
   const upload = (data: any) => {
+    console.log(data);
     axios
       .post('https://api.imgur.com/3/image/', data, {
         headers: {
@@ -70,7 +132,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
         const formData = new FormData();
 
         formData.append('file', result);
-
+        console.log(result);
         upload(result);
       },
       error(err) {
@@ -87,7 +149,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
 
     setPost({ ...post, [name]: value });
   };
-  console.log(post);
+
   const createNewPost = () => {
     if (user) {
       axios.post(`${process.env.REACT_APP_API}/posts/create`, post).then(() => {
@@ -159,22 +221,33 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
             handleChange={handleChange}
             chooseCategory={post.category}
           />
-          <label
-            onDrop={e => console.log(e)}
-            onDragOver={e => console.log(e)}
-            onDragEnter={e => console.log(e)}
-            onDragLeave={e => console.log(e)}
-            htmlFor="add-file"
-            className="create-post__drag-drop"
-          >
+
+          {/* <label htmlFor="add-file" className="create-post__drag-drop">
             <p className="create-post__text">
               Drag and Drop or{' '}
               <span className="create-post__pseudo-btn">Click</span>
             </p>
-          </label>
-          <input
+          </label> */}
+
+          {imagePreview!?.toString().length >= 1 ? (
+            <CropImage src={imagePreview?.toString()} />
+          ) : (
+            <section
+              {...getRootProps({
+                className: 'dropzone create-post__drag-drop',
+              })}
+            >
+              <input {...getInputProps()} />
+              <p className="create-post__text">
+                Drag and Drop or{' '}
+                <span className="create-post__pseudo-btn">Click</span>
+              </p>
+            </section>
+          )}
+
+          {/* <input
             id="add-file"
-            className="create-post__file-input"
+            // className="create-post__file-input"
             onClick={() => {
               setDisable(true);
             }}
@@ -187,7 +260,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
               compressImg(e.target.files);
               setAreFiles(true);
             }}
-          />
+          /> */}
 
           {/* <div className="create-category">
           <h3>Create new Category</h3>
@@ -212,6 +285,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           <br />
           <br />
         </div> */}
+
           {disable && <p>Loading image...</p>}
           {!correctFormatPost && post!.headline!.length > 0 && (
             <p data-testid="message" className="create-post__message">
