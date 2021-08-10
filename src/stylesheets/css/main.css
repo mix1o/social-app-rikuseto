@@ -610,6 +610,10 @@ h6 {
   margin: -2px;
 }
 
+.ReactCrop__drag-handle {
+  border: 5px solid red;
+}
+
 .post {
   background: var(--light-bg-600);
   max-width: 401px;

@@ -14,7 +14,6 @@ const App: FC = () => {
             )
           )}
         </Switch>
-
         <Menu />
       </Router>
     </div>
