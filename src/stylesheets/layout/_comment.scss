@@ -56,3 +56,9 @@
 .comment:last-child {
   margin-bottom: 9rem;
 }
+.comment--last:last-child {
+  margin-bottom: 2rem;
+}
+.comment--last:first-child {
+  margin-top: 0;
+}

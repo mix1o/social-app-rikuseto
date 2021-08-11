@@ -1,9 +1,22 @@
-import { FC, ReactChild } from 'react';
+import { FC, ReactChild, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Routes } from './Routes';
 import Menu from './components/Navigation/Menu';
 
 const App: FC = () => {
+  const html = document.querySelector('html');
+
+  useEffect(() => {
+    const theme = localStorage.getItem('theme');
+
+    if (theme === null) {
+      localStorage.setItem('theme', JSON.stringify({ theme: 'light' }));
+      html!.dataset.value = 'light';
+    } else {
+      html!.dataset.value = JSON.parse(theme).theme;
+    }
+  }, [localStorage.getItem('theme')]);
+
   return (
     <div>
       <Router>

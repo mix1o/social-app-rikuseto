@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { LikedElements } from '../../../hooks/LikedElements';
@@ -12,6 +12,7 @@ import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useLocation } from 'react-router-dom';
 
 const Comment: FC<SingleCommentProps> = ({
   _id,
@@ -20,22 +21,30 @@ const Comment: FC<SingleCommentProps> = ({
   likes,
   date,
   refreshComments,
+
 }) => {
   const [cookies] = useCookies();
   const { user } = cookies;
   const [liked, setLiked] = useState<boolean | undefined>();
   const [author, setAuthor] = useState<AuthorInterface>();
+  const [popup, setPopup] = useState<boolean>(false);
   dayjs.extend(relativeTime);
 
   const handleLikeComment = () => {
+    if (!user) {
+      setPopup(true);
+      return;
+    }
     axios
       .post(`${process.env.REACT_APP_API}/comments/like`, {
         _id,
         userId: user._id,
       })
-      .then(() => refreshComments());
+      .then(() => {
+        refreshComments();
+       
+      });
   };
-
   useEffect(() => {
     authorOfComment(user_id).then(res => setAuthor(res));
 
@@ -43,8 +52,19 @@ const Comment: FC<SingleCommentProps> = ({
     setLiked(like);
   }, [likes]);
 
+  const location = useLocation();
+
+  const lastChildManipulation = () => {
+    if (location.pathname.includes('post')) {
+      return true;
+    }
+    return false;
+  };
+
   return (
-    <div className="comment">
+    <div
+      className={`comment ${lastChildManipulation() ? 'comment--last' : ''}`}
+    >
       <div className="comment__author">
         <img
           className="comment__author-image"
@@ -59,9 +79,7 @@ const Comment: FC<SingleCommentProps> = ({
       <p className="comment__content">{text}</p>
       <div className="comment__container-likes">
         <m.div
-          animate={
-            liked ? { color: '#753ee0' } : { color: 'var(--font-dark-600)' }
-          }
+          animate={liked ? { color: '#753ee0' } : { color: 'inherit' }}
           className="comment__action"
         >
           <m.button

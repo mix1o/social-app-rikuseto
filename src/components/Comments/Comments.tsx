@@ -12,6 +12,7 @@ import { useCounter } from '../../store/sub';
 import BlurredMenu from '../Navigation/BlurredMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
+import Picker from 'emoji-picker-react';
 
 const commentVariant = {
   hidden: {
@@ -43,6 +44,7 @@ const Comments: FC<CommentProps> = ({
   const commentRef = useRef<any>();
   const [message, setMessage] = useState<string>('');
   const [state, actions] = useCounter();
+  const [openEmojiList, setOpenEmojiList] = useState<boolean>(false);
 
   const handleNewComment = (): void => {
     if (!user) {
@@ -50,10 +52,11 @@ const Comments: FC<CommentProps> = ({
       return;
     }
     if (
-      commentText.length >= 1 &&
-      (/\d/.test(commentText) ||
-        /[a-zA-Z]/g.test(commentText) ||
-        /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(commentText))
+      commentText.length >= 2 ||
+      (commentText.length >= 1 &&
+        (/\d/.test(commentText) ||
+          /[a-zA-Z]/g.test(commentText) ||
+          /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(commentText)))
     ) {
       axios
         .post(`${process.env.REACT_APP_API}/comments/create`, {
@@ -65,13 +68,14 @@ const Comments: FC<CommentProps> = ({
           setCommentText('');
           getAllComments();
           fetchTopComment();
-          console.log(commentRef.current);
+
           setTimeout(() => {
             commentRef.current.scrollTo({
               top: commentRef.current.scrollHeight,
               behavior: 'smooth',
             });
           }, 300);
+          setOpenEmojiList(false);
         });
       return;
     }
@@ -91,6 +95,11 @@ const Comments: FC<CommentProps> = ({
   useEffect(() => {
     actions.isOpenComment(true);
   }, []);
+
+  const onEmojiClick = (event: any, emojiObject: any) => {
+    setCommentText(prevState => prevState + emojiObject.emoji);
+    console.log(emojiObject);
+  };
 
   return (
     <m.section
@@ -148,11 +157,17 @@ const Comments: FC<CommentProps> = ({
             data-testid="input-comments"
             className="comments__input"
             value={commentText}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setCommentText(e.target.value)
-            }
+            onChange={(e: any) => {
+              setCommentText(e.target.value);
+            }}
+            onKeyDown={(e: any) => {
+              if (e.code === 'Space' && commentText.length === 1) {
+                setCommentText('');
+              }
+            }}
             type="text"
           />
+
           <button
             data-testid="publish"
             className="comments__publish"
@@ -161,6 +176,10 @@ const Comments: FC<CommentProps> = ({
             Publish
           </button>
         </div>
+        <button onClick={() => setOpenEmojiList(prevState => !prevState)}>
+          <i className="fas fa-smile"></i>
+        </button>
+        {openEmojiList && <Picker onEmojiClick={onEmojiClick} />}
         <p data-testid="message" className="comments__message">
           {message}
         </p>

@@ -86,6 +86,10 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     });
   };
 
+  const onEmojiClick = (event: any, emojiObject: any) => {
+    setPost({ ...post, headline: post.headline + emojiObject.emoji });
+  };
+
   return (
     <div className="blurred__options create">
       <div
@@ -115,31 +119,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
             setUserPickedImage={setUserPickedImage}
             setCorrectImage={setCorrectImage}
           />
-
-          {/* <div className="create-category">
-          <h3>Create new Category</h3>
-          <input
-            type="text"
-            placeholder="newCategory"
-            onChange={e => {
-              setNewCategory(e.target.value);
-            }}
-          />
-          <button
-            onClick={() => {
-              axios
-                .post(`${process.env.REACT_APP_API}/category/new`, {
-                  name: newCategory,
-                })
-                .then(res => console.log(res));
-            }}
-          >
-            Create New Category
-          </button>
-          <br />
-          <br />
-        </div> */}
-
           {disable && <p>Loading image...</p>}
           {!correctFormatPost && post!.headline!.length > 0 && (
             <p data-testid="message" className="create-post__message">
