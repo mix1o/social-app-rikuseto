@@ -6,11 +6,12 @@ import { LikedElements } from '../../../hooks/LikedElements';
 import { AuthorInterface } from '../../../interfaces/common/common';
 import { authorOfComment } from '../../../helpers/AuthorOfComment';
 import { SingleCommentProps } from '../../../interfaces/comments/commentsInterfaces';
-import moment from 'moment';
 import { motion as m } from 'framer-motion';
 import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { useLocation } from 'react-router-dom';
 import BlurredMenu from '../../Navigation/BlurredMenu';
 import Floater from 'react-floater';
@@ -29,6 +30,7 @@ const Comment: FC<SingleCommentProps> = ({
   const [liked, setLiked] = useState<boolean | undefined>();
   const [author, setAuthor] = useState<AuthorInterface>();
   const [popup, setPopup] = useState<boolean>(false);
+  dayjs.extend(relativeTime);
 
   const [displayMessage, setDisplayMessage] = useState<boolean>(false);
 
@@ -47,7 +49,6 @@ const Comment: FC<SingleCommentProps> = ({
         fetchTopComment();
       });
   };
-
   useEffect(() => {
     authorOfComment(user_id).then(res => setAuthor(res));
 
@@ -192,7 +193,7 @@ const Comment: FC<SingleCommentProps> = ({
           <p className="comment__author-name">
             {author?.firstName} {author?.lastName}
           </p>
-          <p className="comment__date">{moment(date).fromNow()}</p>
+          <p className="comment__date">{dayjs(date).fromNow()}</p>
         </div>
         {!isEdit && <p className="comment__content">{text}</p>}
         {isEdit && (

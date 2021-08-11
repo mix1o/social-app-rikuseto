@@ -2,16 +2,9 @@ import { ChangeEvent, FC, useState, useEffect } from 'react';
 import Compressor from 'compressorjs';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import CreatableSelect from 'react-select/creatable';
-import Picker from 'emoji-picker-react';
-
-interface Post {
-  headline?: string;
-  file?: string;
-  category?: string;
-  user_id?: string;
-}
-
+import Category from './Category';
+import CropImage from './CropImage';
+import { CreatePostI } from '../../interfaces/posts/postInterfaces';
 interface CreateProps {
   handleFetchPosts: () => void;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,7 +14,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [cookies] = useCookies();
   const { user } = cookies;
 
-  const [post, setPost] = useState<Post>({
+  const [post, setPost] = useState<CreatePostI>({
     headline: '',
     file: '',
     category: '',
@@ -34,53 +27,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState(false);
   const [areFiles, setAreFiles] = useState(false);
-  const [newOption, setNewOption] = useState([]);
-  const [fetchedOptions, setFetchedOptions] = useState([]);
-
-  const [openEmojiList, setOpenEmojiList] = useState<boolean>(false);
-  const upload = (data: any) => {
-    axios
-      .post('https://api.imgur.com/3/image/', data, {
-        headers: {
-          Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,
-        },
-      })
-      .then(res => {
-        setUserPickedImage(true);
-
-        if (res.status === 403) {
-          setCorrectImage(false);
-          setMessage('Something went wrong. Please try again');
-          return;
-        }
-        setTimeout(() => {
-          setPost({ ...post, file: res.data.data.link });
-        }, 1000);
-        setCorrectImage(true);
-        setMessage('Your image is correct uploaded');
-      });
-  };
-
-  const compressImg = (file: any) => {
-    if (!file) return;
-
-    const firstImg = file[0];
-
-    new Compressor(firstImg, {
-      quality: 0.6,
-      convertSize: 268000,
-      success(result) {
-        const formData = new FormData();
-
-        formData.append('file', result);
-
-        upload(result);
-      },
-      error(err) {
-        console.log(err.message);
-      },
-    });
-  };
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
@@ -127,31 +73,17 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     }
   };
 
-  const fetchGroupeList = () => {
-    axios
-      .get(`${process.env.REACT_APP_API}/user/category-list`)
-      .then(res => console.log(res));
-  };
-
   useEffect(() => {
     setCorrectFormatPost(checkCorrectPost());
-    fetchGroupeList();
+
+    return () => setCorrectFormatPost(false);
   }, [post, message, correctImage]);
 
-  const opt = [
-    { value: 'Memes', label: 'memes' },
-    { value: 'DankMemes', label: 'Dank' },
-    { value: 'Sport', label: 'sport' },
-  ];
-
-  const handleNewOpt = (value: any, action: any) => {
-    setNewOption(value);
-  };
-
-  const fetchOptions = (value: string, actions: any) => {
-    axios
-      .get(`${process.env.REACT_APP_API}/posts/category?value=${value}`)
-      .then(res => setFetchedOptions(res.data));
+  const updateCat = () => {
+    axios.post(`${process.env.REACT_APP_API}/category/add-category`, {
+      userId: user._id,
+      categoryId: '610d31764dd43a3c15e0b010',
+    });
   };
 
   const onEmojiClick = (event: any, emojiObject: any) => {
@@ -165,69 +97,45 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
         onClick={() => setOpen(prevVal => !prevVal)}
       ></div>
       <div className="blurred__option">
-        <h2 data-testid="create-post-header">Create new post</h2>
-        <p>test</p>
-        <input
-          data-testid="headline"
-          value={post.headline}
-          onChange={e => handleChange(e)}
-          type="text"
-          name="headline"
-        />
-        <button onClick={() => setOpenEmojiList(prevState => !prevState)}>
-          <i className="fas fa-smile"></i>
-        </button>
-        {openEmojiList && <Picker onEmojiClick={onEmojiClick} />}
-        <select
-          defaultValue={post.category}
-          onChange={e => handleChange(e)}
-          name="category"
-        >
-          <option value="" disabled>
-            Choose category
-          </option>
-          <option value="memes">memes</option>
-          <option value="sport">sport</option>
-        </select>
-        {/* <CreatableSelect
-          isMulti
-          options={opt}
-          onChange={handleNewOpt}
-          onInputChange={fetchOptions}
-          menuIsOpen={true}
-          // loadOptions={test}
-        /> */}
-
-        <br />
-        <input
-          onClick={() => {
-            setDisable(true);
-          }}
-          onFocus={() => {
-            setDisable(false);
-          }}
-          type="file"
-          accept="image/*"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            compressImg(e.target.files);
-            setAreFiles(true);
-          }}
-        />
-        <br />
-        {!disable && !areFiles && (
-          <button
-            style={{ background: 'red' }}
-            data-testid="button"
-            disabled={!correctFormatPost}
-            onClick={createNewPost}
-          >
-            Create post
-          </button>
-        )}
-        {disable && <p>Loading image...</p>}
-        {!correctFormatPost && post!.headline!.length > 0 && (
-          <p data-testid="message">{message}</p>
-        )}
+        <section className="create-post">
+          <h2 data-testid="create-post__header">Create new post</h2>
+          <input
+            data-testid="headline"
+            value={post.headline}
+            onChange={e => handleChange(e)}
+            type="text"
+            name="headline"
+            placeholder="Write something interesting"
+            className="create-post__title"
+          />
+          <Category
+            handleChange={handleChange}
+            chooseCategory={post.category}
+          />
+          <CropImage
+            setMessage={setMessage}
+            post={post}
+            setPost={setPost}
+            setUserPickedImage={setUserPickedImage}
+            setCorrectImage={setCorrectImage}
+          />
+          {disable && <p>Loading image...</p>}
+          {!correctFormatPost && post!.headline!.length > 0 && (
+            <p data-testid="message" className="create-post__message">
+              {message}
+            </p>
+          )}
+          {!disable && !areFiles && (
+            <button
+              className="create-post__btn-add"
+              data-testid="button"
+              disabled={!correctFormatPost}
+              onClick={createNewPost}
+            >
+              Create post
+            </button>
+          )}
+        </section>
       </div>
     </div>
   );
