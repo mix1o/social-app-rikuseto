@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import Comments from '../Comments/Comments';
 import { LikedElements } from '../../hooks/LikedElements';
@@ -38,7 +38,7 @@ const Post: FC<PostInterfaceExtended> = ({
   category,
   file,
   likes,
-  onClickLike,
+  refreshPosts,
   date,
 }) => {
   const [cookies] = useCookies();
@@ -61,7 +61,7 @@ const Post: FC<PostInterfaceExtended> = ({
           userId: user._id,
         })
         .then(() => {
-          onClickLike();
+          refreshPosts();
         })
         .catch(err => console.log(err));
 
@@ -105,7 +105,7 @@ const Post: FC<PostInterfaceExtended> = ({
     }
   }, [location.pathname]);
 
-  const ShareIitems = () => {
+  const ShareSocials = () => {
     return (
       <>
         <div className="post__container-socials">
@@ -148,8 +148,133 @@ const Post: FC<PostInterfaceExtended> = ({
     );
   };
 
+  const deletePost = () => {
+    axios.delete(`${process.env.REACT_APP_API}/posts/delete`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        postId: _id,
+      },
+    });
+    window.location.reload();
+  };
+
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+
+  const [newHeadline, setNewHeadline] = useState<string>(headline);
+  const [message, setMessage] = useState<string>('');
+
+  const editPost = () => {
+    if (newHeadline === headline) {
+      setMessage('First you need to edit your post');
+      return;
+    }
+    axios
+      .patch(`${process.env.REACT_APP_API}/posts/edit`, {
+        _id,
+        newHeadline,
+      })
+      .then(() => {
+        setIsEdit(false);
+        refreshPosts();
+      });
+  };
+
+  const savePost = () => {
+    axios.put(`${process.env.REACT_APP_API}/posts/save`, {
+      _id,
+      userId: user._id,
+    });
+  };
+
+  const ActionsPost = () => {
+    return (
+      <div className="post__container-dots-actions">
+        {user && user._id !== user_id && (
+          <>
+            <button onClick={savePost} className="post__action">
+              Save post{' '}
+              <i style={{ marginLeft: '.5rem' }} className="fas fa-flag"></i>
+            </button>
+            <button className="post__action">
+              Report
+              <i style={{ marginLeft: '.5rem' }} className="fas fa-ban"></i>
+            </button>
+          </>
+        )}
+        {user && user._id === user_id ? (
+          <>
+            <button onClick={() => setIsEdit(true)} className="post__action">
+              Edit
+              <i style={{ marginLeft: '.5rem' }} className="fas fa-edit"></i>
+            </button>
+            <button
+              onClick={deletePost}
+              className="post__action post__action--delete"
+            >
+              Delete
+              <i
+                style={{ marginLeft: '.5rem' }}
+                className="fas fa-trash-alt"
+              ></i>
+            </button>
+          </>
+        ) : null}
+      </div>
+    );
+  };
+
+  const [openToolTip, setOpenToolTip] = useState<boolean>(false);
+
   return (
-    <section data-testid="post" className="post">
+    <section
+      data-testid="post"
+      className={`post ${disableComments ? 'post__mBottom' : ''}`}
+    >
+      {user && (
+        <div
+          onClick={() => setOpenToolTip(prevState => !prevState)}
+          className="post__container-dots"
+        >
+          <Floater
+            open={openToolTip}
+            offset={0}
+            placement="auto"
+            styles={{
+              floater: {
+                filter: 'none',
+              },
+              container: {
+                background: 'transparent',
+                color: 'var(--font-dark-600)',
+                filter: 'none',
+                minHeight: 'none',
+                minWidth: 100,
+                textAlign: 'right',
+                padding: 0,
+                margin: 0,
+              },
+              arrow: {
+                color: 'var(--light-bg-700)',
+                length: 8,
+                spread: 10,
+              },
+            }}
+            content={ActionsPost()}
+          >
+            <button
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--font-dark-600)',
+              }}
+            >
+              <i className="fas fa-ellipsis-v"></i>
+            </button>
+          </Floater>
+        </div>
+      )}
       <div className="post__author">
         <img
           className="post__image-author"
@@ -167,7 +292,36 @@ const Post: FC<PostInterfaceExtended> = ({
         </div>
       </div>
       <div className="post__content">
-        <h3 className="post__headline">{headline}</h3>
+        {!isEdit && <h3 className="post__headline">{headline}</h3>}
+        {isEdit && (
+          <div className="post__edit-input-container">
+            <input
+              className="post__edit-input"
+              value={newHeadline}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setNewHeadline(e.target.value)
+              }
+              type="text"
+            />
+            <span className="post__edit-message">{message}</span>
+            {/* TODO Here can be emoji picker */}
+            <button
+              onClick={editPost}
+              className="post__edit-button post__edit-button--edit"
+            >
+              Edit
+            </button>
+            <button
+              className="post__edit-button"
+              onClick={() => {
+                setIsEdit(false);
+                setMessage('');
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
       {file.length > 3 && (
         <div className="post__image-container">
@@ -228,7 +382,7 @@ const Post: FC<PostInterfaceExtended> = ({
                   spread: 10,
                 },
               }}
-              content={ShareIitems()}
+              content={ShareSocials()}
             >
               <div style={{ display: 'flex' }}>
                 Share <i className="fas fa-share"></i>

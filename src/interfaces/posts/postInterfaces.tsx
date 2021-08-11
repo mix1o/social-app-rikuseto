@@ -9,7 +9,7 @@ export interface PostInterface {
 }
 
 export interface PostInterfaceExtended extends PostInterface {
-  onClickLike: () => void;
+  refreshPosts: () => void;
 }
 
 export interface CreatePostI {

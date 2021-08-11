@@ -5,6 +5,7 @@ import { useActor } from '@xstate/react';
 import { authService } from '../Auth/AuthStateMachine';
 import logo from '../../assets/logo/logo.png';
 import BlurredMenu from '../Navigation/BlurredMenu';
+import { Link } from 'react-router-dom';
 
 const variants = {
   open: {
@@ -57,9 +58,9 @@ const Header: FC = () => {
         </h3>
         <button
           className="header__nav-button"
-          onClick={() => setOpenMenu(!openMenu)}
+          onClick={() => setOpenMenu(true)}
         >
-          <i className="fas fa-bell" />
+          <i className="fas fa-sliders-h" />
         </button>
       </div>
 
@@ -69,31 +70,86 @@ const Header: FC = () => {
         variants={variants}
         className="header__menu"
       >
-        <div onClick={() => setOpenMenu(false)}>x</div>
-        <p>Theme </p>
-        <m.div
-          className={`${
-            idx === 1 ? 'container-theme-disabled' : 'container-theme--active'
-          } container-theme`}
-          onClick={() => {
-            if (idx === 0) {
-              handleChangeTheme('light');
-              setIdx(1);
-              return;
-            }
-            if (idx === 1) {
-              handleChangeTheme('dark');
-              setIdx(0);
-              return;
-            }
-          }}
-        >
-          <m.div layout className="circle-theme"></m.div>
-        </m.div>
+        <div className="header__container">
+          <h4 className="header__heading-main">Menu</h4>
+          <button onClick={() => setOpenMenu(false)} className="header__close">
+            <i className="fas fa-times" />
+          </button>
+        </div>
+        <div className="header__section">
+          <p className="header__heading-section">Useful links</p>
+          <p>About us</p>
+          <p>Contact</p>
+          <p>Support</p>
+        </div>
+        <div className="header__section">
+          <p className="header__heading-section">Theme</p>
+          <p className="header__information">
+            Dark mode is:{' '}
+            {idx === 0 ? (
+              <span className="header__marked">on</span>
+            ) : (
+              <span className="header__marked">off</span>
+            )}
+          </p>
+          <m.div
+            className={`${
+              idx === 1 ? 'container-theme-disabled' : 'container-theme--active'
+            } container-theme`}
+            onClick={() => {
+              if (idx === 0) {
+                handleChangeTheme('light');
+                setIdx(1);
+                return;
+              }
+              if (idx === 1) {
+                handleChangeTheme('dark');
+                setIdx(0);
+                return;
+              }
+            }}
+          >
+            <m.div layout className="circle-theme"></m.div>
+          </m.div>
+        </div>
+        {!user && (
+          <div className="header__section">
+            <p className="header__heading-section">
+              Log in to use all functionality
+            </p>
+            <div className="header__container-links">
+              <Link className="header__link" to="/auth">
+                Log in
+              </Link>
+              <Link
+                className="header__link header__link--empty"
+                onClick={() => send('SIGN_UP')}
+                to="/auth"
+              >
+                Sign in
+              </Link>
+            </div>
+          </div>
+        )}
         {user && (
-          <div>
-            <button onClick={() => removeCookie('user')}>Log out</button>
-            <button>Account</button>
+          <div className="header__section">
+            <p className="header__heading-section">
+              Check your settings account
+            </p>
+            <div className="header__container-links">
+              <Link className="header__link" to="/account">
+                Account
+              </Link>
+              <button
+                className="header__link header__link--empty"
+                onClick={() => {
+                  removeCookie('user');
+                  setOpenMenu(false);
+                }}
+              >
+                Log out
+              </button>
+            </div>
           </div>
         )}
       </m.div>

@@ -75,7 +75,7 @@ const Posts: FC = () => {
                 file={file}
                 user_id={user_id}
                 likes={likes}
-                onClickLike={handleFetchPosts}
+                refreshPosts={handleFetchPosts}
                 date={date}
               />
             );

@@ -8,7 +8,15 @@
   margin-top: 2rem;
   color: var(--font-dark-600);
   border-bottom: 1px solid var(--light-bg-700);
+  position: relative;
 
+  &__container-dots {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: var(--font-dark-600);
+    font-size: ft.$fs-300;
+  }
   &__author {
     display: flex;
     align-items: center;
@@ -46,11 +54,37 @@
     color: inherit;
   }
   &__likes {
-    font-size: ft.$fs-250;
     margin: 0 0 0 0.5rem;
   }
   &__container-likes {
+    font-size: ft.$fs-300;
     color: var(--font-dark-600);
+  }
+  &__container-dots-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-direction: column;
+    padding: 1rem 2px;
+    background-color: var(--light-bg-700);
+    margin-right: 5px;
+  }
+  &__action-dot {
+    background-color: transparent;
+    display: block;
+    border: none;
+    font-size: ft.$fs-250;
+    color: var(--font-dark-600);
+    margin-top: 1rem;
+  }
+  &__action--delete {
+    color: clr.$warning-500;
+  }
+  &__information {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--font-dark-300);
+    font-size: ft.$fs-250;
   }
 }
 .comment:last-child {

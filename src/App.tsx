@@ -2,9 +2,13 @@ import { FC, ReactChild, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Routes } from './Routes';
 import Menu from './components/Navigation/Menu';
+import { useCookies } from 'react-cookie';
 
 const App: FC = () => {
   const html = document.querySelector('html');
+
+  const [cookies] = useCookies();
+  const { user } = cookies;
 
   useEffect(() => {
     const theme = localStorage.getItem('theme');
@@ -27,7 +31,7 @@ const App: FC = () => {
             )
           )}
         </Switch>
-        <Menu />
+        {user && <Menu />}
       </Router>
     </div>
   );
