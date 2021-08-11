@@ -23,7 +23,6 @@ const CropImage: FC<CropProps> = ({ setMessage }) => {
   const [aspect, setAspect] = useState({ aspect: 0 });
   const [imagePreview, setImagePreview] = useState('');
   const [croppedImagePV, setCroppedImagePV] = useState('');
-  const [useCroppedImage, setUseCroppedImage] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -96,22 +95,44 @@ const CropImage: FC<CropProps> = ({ setMessage }) => {
     image64toCanvasRef(canvasRef.current, imagePreview, percentCrop);
   };
 
-  const handleReverseFile = () => {
-    // #TODO Choose between cropped and default image /some state to pass to function
+  const handleReverseFile = (useCropped: boolean = false) => {
     if (imagePreview) {
-      const coppedData64 = canvasRef.current
-        ?.toDataURL(`image/${croppedImagePV}`)
-        .toString();
+      if (useCropped) {
+        const coppedData64 = canvasRef.current
+          ?.toDataURL(`image/${croppedImagePV}`)
+          .toString();
+        if (coppedData64) setCroppedImagePV(coppedData64);
 
-      if (coppedData64) setCroppedImagePV(coppedData64);
+        const croppedData = base64StringTtoFile(
+          imagePreview,
+          `rikusetoImage.${coppedData64}`
+        );
+
+        compressImg(croppedData);
+        return;
+      }
 
       const croppedData = base64StringTtoFile(
         imagePreview,
-        `rikusetoImage.${coppedData64}`
+        `rikusetoImage.${imagePreview}`
       );
 
       compressImg(croppedData);
     }
+  };
+
+  const clearCrop = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    ctx!.clearRect(0, 0, canvas!?.width, canvas!?.height);
+
+    setCroppedImagePV('');
+    setImagePreview('');
+    setAspect({ aspect: 1 / 1 });
+  };
+
+  const handleRatio = (ratio: number = 0) => {
+    setAspect({ aspect: ratio });
   };
 
   const compressImg = (file: any) => {
@@ -130,19 +151,6 @@ const CropImage: FC<CropProps> = ({ setMessage }) => {
         console.log(err.message);
       },
     });
-  };
-
-  const clearCrop = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
-    ctx!.clearRect(0, 0, canvas!?.width, canvas!?.height);
-
-    setImagePreview('');
-    setAspect({ aspect: 1 / 1 });
-  };
-
-  const handleRatio = (ratio: number = 0) => {
-    setAspect({ aspect: ratio });
   };
 
   return (
@@ -193,8 +201,12 @@ const CropImage: FC<CropProps> = ({ setMessage }) => {
           ></canvas>
           <div>
             <button onClick={clearCrop}>Add new photo</button>
-            <button onClick={handleReverseFile}>Use Original Image</button>
-            <button onClick={handleReverseFile}>Use Cropped Image</button>
+            <button onClick={() => handleReverseFile(false)}>
+              Use Original Image
+            </button>
+            <button onClick={() => handleReverseFile(true)}>
+              Use Cropped Image
+            </button>
           </div>
         </div>
       ) : (
