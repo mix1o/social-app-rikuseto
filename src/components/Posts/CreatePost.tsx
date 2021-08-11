@@ -4,14 +4,7 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import Category from './Category';
 import CropImage from './CropImage';
-
-interface Post {
-  headline?: string;
-  file?: string;
-  category?: string;
-  user_id?: string;
-}
-
+import { CreatePostI } from '../../interfaces/posts/postInterfaces';
 interface CreateProps {
   handleFetchPosts: () => void;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,7 +14,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [cookies] = useCookies();
   const { user } = cookies;
 
-  const [post, setPost] = useState<Post>({
+  const [post, setPost] = useState<CreatePostI>({
     headline: '',
     file: '',
     category: '',
@@ -34,7 +27,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState(false);
   const [areFiles, setAreFiles] = useState(false);
- 
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
@@ -43,29 +35,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     const value = e.target.value;
 
     setPost({ ...post, [name]: value });
-  };
-
-  const upload = (data: Blob) => {
-    axios
-      .post('https://api.imgur.com/3/image/', data, {
-        headers: {
-          Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,
-        },
-      })
-      .then(res => {
-        setUserPickedImage(true);
-
-        if (res.status === 403) {
-          setCorrectImage(false);
-          setMessage('Something went wrong. Please try again');
-          return;
-        }
-        setTimeout(() => {
-          setPost({ ...post, file: res.data.data.link });
-        }, 1000);
-        setCorrectImage(true);
-        setMessage('Your image is correct uploaded');
-      });
   };
 
   const createNewPost = () => {
@@ -139,7 +108,13 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
             handleChange={handleChange}
             chooseCategory={post.category}
           />
-          <CropImage setMessage={setMessage} />
+          <CropImage
+            setMessage={setMessage}
+            post={post}
+            setPost={setPost}
+            setUserPickedImage={setUserPickedImage}
+            setCorrectImage={setCorrectImage}
+          />
 
           {/* <div className="create-category">
           <h3>Create new Category</h3>

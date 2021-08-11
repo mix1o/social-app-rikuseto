@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import 'react-image-crop/dist/ReactCrop.css';
+import '../../helpers/ReactCrop.css';
 import {
   image64toCanvasRef,
   extractImageFileExtensionFromBase64,
@@ -15,11 +15,23 @@ import {
 } from '../../helpers/ImageFunctions';
 import { useDropzone as useDropZone } from 'react-dropzone';
 import Compressor from 'compressorjs';
+import axios from 'axios';
+import { CreatePostI } from '../../interfaces/posts/postInterfaces';
 interface CropProps {
   setMessage: Dispatch<SetStateAction<string>>;
+  post: CreatePostI;
+  setPost: Dispatch<SetStateAction<CreatePostI>>;
+  setUserPickedImage: Dispatch<SetStateAction<boolean>>;
+  setCorrectImage: Dispatch<SetStateAction<boolean>>;
 }
 
-const CropImage: FC<CropProps> = ({ setMessage }) => {
+const CropImage: FC<CropProps> = ({
+  setMessage,
+  post,
+  setPost,
+  setUserPickedImage,
+  setCorrectImage,
+}) => {
   const [aspect, setAspect] = useState({ aspect: 0 });
   const [imagePreview, setImagePreview] = useState('');
   const [croppedImagePV, setCroppedImagePV] = useState('');
@@ -145,12 +157,36 @@ const CropImage: FC<CropProps> = ({ setMessage }) => {
         const formData = new FormData();
 
         formData.append('file', result);
-        // upload(result);
+        upload(result);
       },
       error(err) {
         console.log(err.message);
       },
     });
+  };
+
+  const upload = (data: Blob) => {
+    axios
+      .post('https://api.imgur.com/3/image/', data, {
+        headers: {
+          Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,
+        },
+      })
+
+      .then(res => {
+        setUserPickedImage(true);
+
+        if (res.status === 403) {
+          setCorrectImage(false);
+          setMessage('Something went wrong. Please try again');
+          return;
+        }
+        setTimeout(() => {
+          setPost({ ...post, file: res.data.data.link });
+        }, 1000);
+        setCorrectImage(true);
+        setMessage('Your image is correctly uploaded');
+      });
   };
 
   return (
@@ -187,18 +223,20 @@ const CropImage: FC<CropProps> = ({ setMessage }) => {
             </button>
           </div>
 
-          <ReactCrop
-            src={imagePreview}
-            crop={aspect}
-            onComplete={handleOnCropComplete}
-            onChange={handleCropChange}
-            ruleOfThirds={true}
-          />
+          <div style={{ height: '500px', overflowY: 'scroll' }}>
+            <ReactCrop
+              src={imagePreview}
+              crop={aspect}
+              onComplete={handleOnCropComplete}
+              onChange={handleCropChange}
+              ruleOfThirds={true}
+            />
 
-          <canvas
-            className="crop-image__preview-canvas"
-            ref={canvasRef}
-          ></canvas>
+            <canvas
+              className="crop-image__preview-canvas"
+              ref={canvasRef}
+            ></canvas>
+          </div>
           <div>
             <button onClick={clearCrop}>Add new photo</button>
             <button onClick={() => handleReverseFile(false)}>

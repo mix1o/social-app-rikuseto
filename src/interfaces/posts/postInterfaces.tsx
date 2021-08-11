@@ -11,3 +11,10 @@ export interface PostInterface {
 export interface PostInterfaceExtended extends PostInterface {
   onClickLike: () => void;
 }
+
+export interface CreatePostI {
+  headline?: string;
+  file?: string;
+  category?: string;
+  user_id?: string;
+}
