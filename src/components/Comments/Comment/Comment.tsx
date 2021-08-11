@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { FC, useState } from 'react';
+import React, { FC, useState, ChangeEvent } from 'react';
 import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { LikedElements } from '../../../hooks/LikedElements';
@@ -85,12 +85,17 @@ const Comment: FC<SingleCommentProps> = ({
   const ActionsComment = () => {
     return (
       <div className="comment__container-dots-actions">
-        <button className="comment__action-dot">
-          Report<i style={{ marginLeft: '.5rem' }} className="fas fa-ban"></i>
-        </button>
-        {user._id === user_id ? (
+        {user && user._id !== user_id && (
+          <button className="comment__action-dot">
+            Report<i style={{ marginLeft: '.5rem' }} className="fas fa-ban"></i>
+          </button>
+        )}
+        {user && user._id === user_id ? (
           <>
-            <button className="comment__action-dot">
+            <button
+              onClick={() => setIsEdit(true)}
+              className="comment__action-dot"
+            >
               Edit
               <i style={{ marginLeft: '.5rem' }} className="fas fa-edit"></i>
             </button>
@@ -110,47 +115,74 @@ const Comment: FC<SingleCommentProps> = ({
     );
   };
 
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [newText, setNewText] = useState<string>(text);
+  const [message, setMessage] = useState<string>('');
+  const [openToolTip, setOpenToolTip] = useState<boolean>(false);
+
+  const editComment = () => {
+    if (newText === text) {
+      setMessage('First you need to edit your post');
+      return;
+    }
+    axios
+      .patch(`${process.env.REACT_APP_API}/comments/edit`, {
+        _id,
+        newText,
+      })
+      .then(() => {
+        setIsEdit(false);
+        refreshComments();
+      });
+  };
+
   return (
     <>
       <div
         className={`comment ${lastChildManipulation() ? 'comment--last' : ''}`}
       >
-        <div className="comment__container-dots">
-          <Floater
-            offset={0}
-            placement="right-start"
-            styles={{
-              floater: {
-                filter: 'none',
-              },
-              container: {
-                background: 'transparent',
-                color: 'var(--font-dark-600)',
-                filter: 'none',
-                minHeight: 'none',
-                minWidth: 100,
-                textAlign: 'right',
-                padding: 0,
-              },
-              arrow: {
-                color: 'var(--light-bg-700)',
-                length: 8,
-                spread: 10,
-              },
-            }}
-            content={ActionsComment()}
+        {user && (
+          <div
+            onClick={() => setOpenToolTip(prevState => !prevState)}
+            className="comment__container-dots"
           >
-            <button
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--font-dark-600)',
+            <Floater
+              offset={0}
+              open={openToolTip}
+              placement="right-start"
+              styles={{
+                floater: {
+                  filter: 'none',
+                },
+                container: {
+                  background: 'transparent',
+                  color: 'var(--font-dark-600)',
+                  filter: 'none',
+                  minHeight: 'none',
+                  minWidth: 100,
+                  textAlign: 'right',
+                  padding: 0,
+                },
+                arrow: {
+                  color: 'var(--light-bg-700)',
+                  length: 8,
+                  spread: 10,
+                },
               }}
+              content={ActionsComment()}
             >
-              <i className="fas fa-ellipsis-v"></i>
-            </button>
-          </Floater>
-        </div>
+              <button
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--font-dark-600)',
+                }}
+              >
+                <i className="fas fa-ellipsis-v"></i>
+              </button>
+            </Floater>
+          </div>
+        )}
         <div className="comment__author">
           <img
             className="comment__author-image"
@@ -162,7 +194,36 @@ const Comment: FC<SingleCommentProps> = ({
           </p>
           <p className="comment__date">{moment(date).fromNow()}</p>
         </div>
-        <p className="comment__content">{text}</p>
+        {!isEdit && <p className="comment__content">{text}</p>}
+        {isEdit && (
+          <div className="post__edit-input-container">
+            <input
+              className="post__edit-input"
+              value={newText}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setNewText(e.target.value)
+              }
+              type="text"
+            />
+            <span className="post__edit-message">{message}</span>
+            {/* TODO Here can be emoji picker */}
+            <button
+              onClick={editComment}
+              className="post__edit-button post__edit-button--edit"
+            >
+              Edit
+            </button>
+            <button
+              className="post__edit-button"
+              onClick={() => {
+                setIsEdit(false);
+                setMessage('');
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
         <div className="comment__container-likes">
           <m.div
             animate={liked ? { color: '#753ee0' } : { color: 'inherit' }}
