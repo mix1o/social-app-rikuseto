@@ -8,7 +8,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    overflow: hidden;
+    max-height: 100vh;
     display: grid;
     grid-template-areas: 'center';
     z-index: 3;
@@ -23,6 +23,7 @@
   &__option {
     @include mix.border();
     min-width: var.$form-width;
+
     max-width: 450px;
     grid-area: center;
     background: var(--light-bg-500);
