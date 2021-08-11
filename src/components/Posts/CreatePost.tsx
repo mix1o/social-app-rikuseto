@@ -34,9 +34,18 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState(false);
   const [areFiles, setAreFiles] = useState(false);
+ 
 
-  const upload = (data: any) => {
-    console.log(data);
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
+  ) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setPost({ ...post, [name]: value });
+  };
+
+  const upload = (data: Blob) => {
     axios
       .post('https://api.imgur.com/3/image/', data, {
         headers: {
@@ -57,36 +66,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
         setCorrectImage(true);
         setMessage('Your image is correct uploaded');
       });
-  };
-
-  const compressImg = (file: any) => {
-    if (!file) return;
-
-    const firstImg = file[0];
-    console.log(file[0]);
-    new Compressor(firstImg, {
-      quality: 0.6,
-      convertSize: 268000,
-      success(result) {
-        const formData = new FormData();
-
-        formData.append('file', result);
-
-        upload(result);
-      },
-      error(err) {
-        console.log(err.message);
-      },
-    });
-  };
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
-  ) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    setPost({ ...post, [name]: value });
   };
 
   const createNewPost = () => {
