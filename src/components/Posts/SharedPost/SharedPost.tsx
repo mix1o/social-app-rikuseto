@@ -50,7 +50,7 @@ const SharedPost: FC = () => {
                 file={file}
                 likes={likes}
                 date={date}
-                onClickLike={fetchPost}
+                refreshPosts={fetchPost}
               />
             )
           )}

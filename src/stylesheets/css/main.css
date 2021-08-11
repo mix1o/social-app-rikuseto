@@ -827,6 +827,37 @@ h6 {
   padding: 1rem;
   font-size: 2.1rem;
 }
+.post__edit-input-container {
+  margin-top: 2rem;
+  text-align: right;
+}
+.post__edit-input {
+  width: 100%;
+  padding: 1rem 0.5rem;
+  color: var(--font-dark-600);
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  background-color: transparent;
+  outline: none;
+  border: 1px solid var(--light-bg-700);
+}
+.post__edit-input:focus {
+  border: 2px solid #753ee0;
+}
+.post__edit-button {
+  border: none;
+  background: transparent;
+  color: var(--font-dark-300);
+  font-size: 1.2rem;
+}
+.post__edit-button--edit::first-letter {
+  color: #753ee0;
+}
+.post__edit-message {
+  margin-right: 2rem;
+  color: #e53e3e;
+  opacity: 0.9;
+}
 
 .post:last-child {
   margin-bottom: 10rem;

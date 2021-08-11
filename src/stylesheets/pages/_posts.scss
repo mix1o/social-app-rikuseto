@@ -257,6 +257,37 @@
     padding: 1rem;
     font-size: ft.$fs-400;
   }
+  &__edit-input-container {
+    margin-top: 2rem;
+    text-align: right;
+  }
+  &__edit-input {
+    width: 100%;
+    padding: 1rem 0.5rem;
+    color: var(--font-dark-600);
+    margin-bottom: 1rem;
+    font-size: ft.$fs-250;
+    background-color: transparent;
+    outline: none;
+    border: 1px solid var(--light-bg-700);
+  }
+  &__edit-input:focus {
+    border: 2px solid clr.$main-bg-500;
+  }
+  &__edit-button {
+    border: none;
+    background: transparent;
+    color: var(--font-dark-300);
+    font-size: ft.$fs-200;
+  }
+  &__edit-button--edit::first-letter {
+    color: clr.$main-bg-500;
+  }
+  &__edit-message {
+    margin-right: 2rem;
+    color: clr.$warning-500;
+    opacity: 0.9;
+  }
 }
 
 .post:last-child {
