@@ -707,6 +707,19 @@ h6 {
   border: 2px solid transparent;
   margin: -2px;
 }
+.create-post__label {
+  position: relative;
+}
+.create-post__btn-emoji {
+  top: 50%;
+  right: -0.5rem;
+  background-color: transparent;
+  border: none;
+  color: var(--font-dark-600);
+  transform: translate(-50%, -50%);
+  position: absolute;
+  font-size: 1.4rem;
+}
 
 .ReactCrop__drag-handle {
   border: 5px solid red;
@@ -1215,6 +1228,74 @@ h6 {
   font-size: 1.2rem;
   color: #e53e3e;
   margin: 2rem 0;
+}
+
+.account {
+  padding: 1rem;
+}
+.account__container-avatar {
+  text-align: center;
+}
+.account__image {
+  border-radius: 1rem;
+  width: 30%;
+}
+.account__user-information {
+  text-align: center;
+}
+.account__name {
+  font-weight: bold;
+}
+.account__actions {
+  margin-top: 4rem;
+}
+.account__section {
+  background-color: var(--light-bg-600);
+  margin-top: 1rem;
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid var(--light-bg-700);
+  border-radius: 0.5rem;
+  display: grid;
+  grid-template-columns: 2rem 1fr 7rem;
+  justify-items: start;
+  align-items: center;
+  text-decoration: none;
+}
+.account__heading {
+  color: var(--font-dark-600);
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+.account__description {
+  font-size: 1.2rem;
+  color: var(--font-dark-300);
+  opacity: 0.9;
+}
+.account__description, .account__heading {
+  margin: 0;
+  padding: 0;
+  margin-left: 1rem;
+}
+.account__logout {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color: var(--font-dark-600);
+  font-weight: bold;
+  padding: 0;
+}
+.account .fa-chevron-right {
+  justify-self: end;
+  font-size: 1.2rem;
+  color: var(--font-dark-600);
+}
+.account .fa-headphones,
+.account .fa-pen,
+.account .fa-user,
+.account .fa-flag,
+.account .fa-sign-out-alt {
+  font-size: 1.4rem;
+  color: var(--font-dark-600);
 }
 
 [data-value=dark] {

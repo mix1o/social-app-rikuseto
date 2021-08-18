@@ -40,6 +40,7 @@ const Post: FC<PostInterfaceExtended> = ({
   likes,
   refreshPosts,
   date,
+  saved,
 }) => {
   const [cookies] = useCookies();
   const { user } = cookies;
@@ -187,9 +188,8 @@ const Post: FC<PostInterfaceExtended> = ({
       userId: user._id,
     });
   };
-  // TODO change between save and unsaved
   // TODO Dodwanie kategorii
-  // TODO Dodac pickera do create-posta
+
   // TODO Update ile jest postow z kategoria
   // ERROR_FIX Fix scroll
   const ActionsPost = () => {
@@ -197,8 +197,18 @@ const Post: FC<PostInterfaceExtended> = ({
       <div className="post__container-dots-actions">
         {user && user._id !== user_id && (
           <>
-            <button onClick={savePost} className="post__action">
-              Save post{' '}
+            <button
+              onClick={async () => {
+                savePost();
+                if (saved) {
+                  setTimeout(() => {
+                    refreshPosts();
+                  }, 200);
+                }
+              }}
+              className="post__action"
+            >
+              {!saved ? 'Save post' : 'Unsave'}
               <i style={{ marginLeft: '.5rem' }} className="fas fa-flag"></i>
             </button>
             <button className="post__action">

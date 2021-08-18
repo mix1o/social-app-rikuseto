@@ -93,7 +93,8 @@ const Menu = () => {
       />
 
       <MenuItem
-        href={`${user ? '/account' : '/auth'}`}
+        // href={`${user ? '/account' : '/auth'}`}
+        href="/account"
         selected={selected}
         iconsClasses="fas fa-user"
         setSelected={setSelected}

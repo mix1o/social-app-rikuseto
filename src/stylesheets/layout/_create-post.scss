@@ -49,6 +49,19 @@
     @include btn.btn();
     align-self: flex-end;
   }
+  &__label {
+    position: relative;
+  }
+  &__btn-emoji {
+    top: 50%;
+    right: -0.5rem;
+    background-color: transparent;
+    border: none;
+    color: var(--font-dark-600);
+    transform: translate(-50%, -50%);
+    position: absolute;
+    font-size: ft.$fs-250;
+  }
 }
 .ReactCrop__drag-handle {
   border: 5px solid red;
