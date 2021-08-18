@@ -184,7 +184,11 @@ const Post: FC<PostInterfaceExtended> = ({
       userId: user._id,
     });
   };
-
+  // TODO change between save and unsaved
+  // TODO Dodwanie kategorii
+  // TODO Dodac pickera do create-posta
+  // TODO Update ile jest postow z kategoria
+  // ERROR_FIX Fix scroll
   const ActionsPost = () => {
     return (
       <div className="post__container-dots-actions">
