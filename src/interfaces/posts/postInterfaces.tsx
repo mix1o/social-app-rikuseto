@@ -11,3 +11,10 @@ export interface PostInterface {
 export interface PostInterfaceExtended extends PostInterface {
   refreshPosts: () => void;
 }
+
+export interface CreatePostI {
+  headline?: string;
+  file?: string;
+  category?: string;
+  user_id?: string;
+}

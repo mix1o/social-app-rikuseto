@@ -3,7 +3,6 @@ import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import Comments from '../Comments/Comments';
 import { LikedElements } from '../../hooks/LikedElements';
-import moment from 'moment';
 import { PostInterfaceExtended } from '../../interfaces/posts/postInterfaces';
 import { AuthorInterface } from '../../interfaces/common/common';
 import { motion as m, AnimatePresence as Presence } from 'framer-motion';
@@ -13,6 +12,8 @@ import BlurredMenu from '../Navigation/BlurredMenu';
 import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import Floater from 'react-floater';
 import {
   EmailShareButton,
@@ -49,6 +50,8 @@ const Post: FC<PostInterfaceExtended> = ({
   const [author, setAuthor] = useState<AuthorInterface>();
   const [commentAuthor, setCommentAuthor] = useState<AuthorInterface>();
   const [comment, setComment] = useState<TopComment>();
+
+  dayjs.extend(relativeTime);
 
   const handleLikePost = () => {
     if (user) {
@@ -288,7 +291,7 @@ const Post: FC<PostInterfaceExtended> = ({
           </p>
           <p className="post__info">
             Posted on: <span className="post__category-name">{category}</span>
-            <span> {moment(date).fromNow()}</span>
+            <span> {dayjs(date).fromNow()}</span>
           </p>
         </div>
       </div>
@@ -398,7 +401,7 @@ const Post: FC<PostInterfaceExtended> = ({
             <span className="post__top-author">{commentAuthor?.firstName}</span>
             {' · '}
             <span className="post__top-date">
-              {moment(comment.topComment.date).fromNow()}
+              {dayjs(comment.topComment.date).fromNow()}
             </span>{' '}
             {' · '}
             <span className="post__top-text">{comment.topComment.text}</span>
