@@ -1,6 +1,12 @@
 import { FC } from 'react';
-import { AuthRoute } from './auth';
-import { PostsRoute, CreatePostRoute, SharedPostRoute } from './posts';
+import { AuthRoute, AccountRoute } from './auth';
+import {
+  PostsRoute,
+  CreatePostRoute,
+  SharedPostRoute,
+  SavedPostsRoute,
+  YourPostsRoute,
+} from './posts';
 
 interface RouteProps<T> {
   component: FC<T>;
@@ -12,5 +18,8 @@ export const Routes: RouteProps<any>[] = [
   AuthRoute,
   PostsRoute,
   SharedPostRoute,
+  AccountRoute,
+  SavedPostsRoute,
+  YourPostsRoute,
   //   CreatePostRoute,
 ];
