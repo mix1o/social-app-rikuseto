@@ -5,6 +5,8 @@ import { useCookies } from 'react-cookie';
 import Category from './Category';
 import CropImage from './CropImage';
 import { CreatePostI } from '../../interfaces/posts/postInterfaces';
+import Picker from 'emoji-picker-react';
+
 interface CreateProps {
   handleFetchPosts: () => void;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,8 +27,9 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [userPickedImage, setUserPickedImage] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
-  const [disable, setDisable] = useState(false);
-  const [areFiles, setAreFiles] = useState(false);
+  const [disable, setDisable] = useState<boolean>(false);
+  const [areFiles, setAreFiles] = useState<boolean>(false);
+  const [isOpenEmoji, setIsOpenEmoji] = useState<boolean>(false);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
@@ -99,15 +102,36 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       <div className="blurred__option">
         <section className="create-post">
           <h2 data-testid="create-post__header">Create new post</h2>
-          <input
-            data-testid="headline"
-            value={post.headline}
-            onChange={e => handleChange(e)}
-            type="text"
-            name="headline"
-            placeholder="Write something interesting"
-            className="create-post__title"
-          />
+          <label className="create-post__label">
+            <input
+              data-testid="headline"
+              value={post.headline}
+              onChange={e => handleChange(e)}
+              type="text"
+              name="headline"
+              placeholder="Write something interesting"
+              className="create-post__title"
+            />
+            <button
+              className="create-post__btn-emoji"
+              onClick={() => setIsOpenEmoji(prevState => !prevState)}
+            >
+              <i className="fas fa-smile" />
+            </button>
+          </label>
+          {isOpenEmoji && (
+            <Picker
+              pickerStyle={{
+                width: '100%',
+                background: 'var(--light-bg-400)',
+                boxShadow: 'none',
+                border: '1px solid var(--font-dark-600)',
+                marginTop: '1rem',
+              }}
+              disableSearchBar={true}
+              onEmojiClick={onEmojiClick}
+            />
+          )}
           <Category
             handleChange={handleChange}
             chooseCategory={post.category}
