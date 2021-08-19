@@ -207,7 +207,7 @@ const Comment: FC<SingleCommentProps> = ({
               type="text"
             />
             <span className="post__edit-message">{message}</span>
-            {/* TODO Here can be emoji picker */}
+
             <button
               onClick={editComment}
               className="post__edit-button post__edit-button--edit"

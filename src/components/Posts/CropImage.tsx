@@ -223,7 +223,7 @@ const CropImage: FC<CropProps> = ({
             </button>
           </div>
 
-          <div style={{ height: '500px', overflowY: 'scroll' }}>
+          <div style={{ height: '500px', overflowY: 'hidden' }}>
             <ReactCrop
               src={imagePreview}
               crop={aspect}

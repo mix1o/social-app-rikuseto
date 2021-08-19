@@ -188,10 +188,7 @@ const Post: FC<PostInterfaceExtended> = ({
       userId: user._id,
     });
   };
-  // TODO Dodwanie kategorii
 
-  // TODO Update ile jest postow z kategoria
-  // ERROR_FIX Fix scroll
   const ActionsPost = () => {
     return (
       <div className="post__container-dots-actions">
@@ -318,7 +315,7 @@ const Post: FC<PostInterfaceExtended> = ({
               type="text"
             />
             <span className="post__edit-message">{message}</span>
-            {/* TODO Here can be emoji picker */}
+
             <button
               onClick={editPost}
               className="post__edit-button post__edit-button--edit"
