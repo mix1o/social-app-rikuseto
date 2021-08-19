@@ -40,14 +40,15 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     setPost({ ...post, [name]: value });
   };
 
-  const createNewPost = () => {
+  const createNewPost = async () => {
     if (user) {
-      axios.post(`${process.env.REACT_APP_API}/posts/create`, post).then(() => {
-        setPost({ headline: '', file: '', category: '' });
-        handleFetchPosts();
-        setOpen(false);
-      });
+      axios.post(`${process.env.REACT_APP_API}/posts/create`, post);
     }
+    setPost({ headline: '', file: '', category: '' });
+    setOpen(false);
+    setTimeout(() => {
+      handleFetchPosts();
+    }, 500);
   };
 
   const checkCorrectPost = () => {
@@ -82,13 +83,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     return () => setCorrectFormatPost(false);
   }, [post, message, correctImage]);
 
-  const updateCat = () => {
-    axios.post(`${process.env.REACT_APP_API}/category/add-category`, {
-      userId: user._id,
-      categoryId: '610d31764dd43a3c15e0b010',
-    });
-  };
-
   const onEmojiClick = (event: any, emojiObject: any) => {
     setPost({ ...post, headline: post.headline + emojiObject.emoji });
   };
@@ -99,8 +93,20 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
         className="blurred__blurred-bg"
         onClick={() => setOpen(prevVal => !prevVal)}
       ></div>
-      <div className="blurred__option">
-        <section className="create-post">
+      <div
+        style={{
+          position: 'relative',
+          height: '70vh',
+          overflow: 'scroll',
+        }}
+        className="blurred__option"
+      >
+        <section
+          style={{
+            marginTop: '2rem',
+          }}
+          className="create-post"
+        >
           <h2 data-testid="create-post__header">Create new post</h2>
           <label className="create-post__label">
             <input
@@ -133,8 +139,10 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
             />
           )}
           <Category
-            handleChange={handleChange}
+            // handleChange={handleChange}
             chooseCategory={post.category}
+            setPost={setPost}
+            post={post}
           />
           <CropImage
             setMessage={setMessage}
@@ -154,7 +162,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
               className="create-post__btn-add"
               data-testid="button"
               disabled={!correctFormatPost}
-              onClick={createNewPost}
+              onClick={() => createNewPost()}
             >
               Create post
             </button>
