@@ -35,7 +35,7 @@ const CropImage: FC<CropProps> = ({
   const [aspect, setAspect] = useState({ aspect: 0 });
   const [imagePreview, setImagePreview] = useState('');
   const [croppedImagePV, setCroppedImagePV] = useState('');
-
+  const [test, setTest] = useState<any>();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const maxFileSize = 5000000;
@@ -113,23 +113,23 @@ const CropImage: FC<CropProps> = ({
         const coppedData64 = canvasRef.current
           ?.toDataURL(`image/${croppedImagePV}`)
           .toString();
-        if (coppedData64) setCroppedImagePV(coppedData64);
+        if (coppedData64) {
+          setCroppedImagePV(coppedData64);
 
+          const croppedData = base64StringTtoFile(
+            coppedData64,
+            `rikusetoImage.${coppedData64}`
+          );
+          compressImg(croppedData);
+          return;
+        }
+      } else {
         const croppedData = base64StringTtoFile(
           imagePreview,
-          `rikusetoImage.${coppedData64}`
+          `rikusetoImage.${imagePreview}`
         );
-
         compressImg(croppedData);
-        return;
       }
-
-      const croppedData = base64StringTtoFile(
-        imagePreview,
-        `rikusetoImage.${imagePreview}`
-      );
-
-      compressImg(croppedData);
     }
   };
 
@@ -155,7 +155,6 @@ const CropImage: FC<CropProps> = ({
       convertSize: 268000,
       success(result) {
         const formData = new FormData();
-
         formData.append('file', result);
         upload(result);
       },

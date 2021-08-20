@@ -10,16 +10,16 @@ const App: FC = () => {
   const [cookies] = useCookies();
   const { user } = cookies;
 
-  // useEffect(() => {
-  //   const theme = localStorage.getItem('theme');
+  useEffect(() => {
+    const theme = localStorage.getItem('theme');
 
-  //   if (theme === null) {
-  //     localStorage.setItem('theme', JSON.stringify({ theme: 'light' }));
-  //     html!.dataset.value = 'light';
-  //   } else {
-  //     html!.dataset.value = JSON.parse(theme).theme;
-  //   }
-  // }, [localStorage.getItem('theme')]);
+    if (theme === null) {
+      localStorage.setItem('theme', JSON.stringify({ theme: 'light' }));
+      html!.dataset.value = 'light';
+    } else {
+      html!.dataset.value = JSON.parse(theme).theme;
+    }
+  }, [localStorage.getItem('theme')]);
 
   return (
     <div>
