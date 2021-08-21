@@ -1,5 +1,12 @@
 import axios from 'axios';
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
 import { CreatePostI } from '../../interfaces/posts/postInterfaces';
@@ -12,7 +19,6 @@ interface CategoryArray {
 }
 
 interface CategoryProps {
-  // handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   chooseCategory?: string;
   setPost: React.Dispatch<React.SetStateAction<CreatePostI>>;
   post: CreatePostI;
@@ -22,11 +28,44 @@ interface MyProp {
   open: boolean;
 }
 
+interface CategoryItemI {
+  name: string;
+  totalPosts: number;
+  handleSetCategory: (value: string) => void;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
 const StyledInput = styled.input`
   border-bottom-width: ${(props: MyProp) => (props.open ? ' 1px' : '0')};
 `;
 
-const Category: FC<CategoryProps> = ({ chooseCategory, post, setPost }) => {
+const CategoryItem: FC<CategoryItemI> = ({
+  name,
+  totalPosts,
+  handleSetCategory,
+  setOpen,
+}) => {
+  return (
+    <div className="category__item">
+      <label
+        onClick={() => {
+          handleSetCategory(name);
+          setOpen(false);
+        }}
+        className="category__description"
+      >
+        <span className="category__description-item category__name">
+          {name}
+        </span>
+        <span className="category__description-item category__count">
+          {totalPosts} Unique posts
+        </span>
+      </label>
+    </div>
+  );
+};
+
+const Category: FC<CategoryProps> = ({ post, setPost }) => {
   const [cookies] = useCookies();
   const { user } = cookies;
 
@@ -88,7 +127,7 @@ const Category: FC<CategoryProps> = ({ chooseCategory, post, setPost }) => {
       <div className="category__search">
         <StyledInput
           type="text"
-          placeholder={`Find category or create own`}
+          placeholder={`Find category`}
           className="category__search-input"
           open={open}
           onClick={() => setOpen(true)}
@@ -116,98 +155,49 @@ const Category: FC<CategoryProps> = ({ chooseCategory, post, setPost }) => {
         )}
       </div>
       {open && (
-        <>
-          <div className="category__description-wrapper">
-            {categories!.length > 0 && (
-              <p style={{ color: 'var(--font-dark-300)', textAlign: 'center' }}>
-                Your categories
-              </p>
-            )}
-            {filterHelper
-              ?.sort((firstElem, secondELem) =>
-                firstElem.name.localeCompare(secondELem.name)
-              )
-              .map(({ _id: id, name, totalPosts }) => (
-                <div key={id} className="category__searched">
-                  <label
-                    style={{
-                      color: 'white',
-                      marginTop: '1rem',
-                    }}
-                    onClick={() => {
-                      handleSetCategory(name);
-                      setOpen(false);
-                    }}
-                    className="category__description"
-                  >
-                    <span
-                      style={{ marginBottom: '0' }}
-                      className="category__description-item category__name"
-                    >
-                      {name}
-                    </span>
-                    <span
-                      style={{
-                        color: 'var(--font-dark-300)',
-                        fontSize: '11px',
-                      }}
-                      className="category__description-item category__count"
-                    >
-                      {totalPosts} Unique posts
-                    </span>
-                  </label>
-                </div>
-              ))}
-            <p style={{ color: 'var(--font-dark-300)', textAlign: 'center' }}>
-              Other also used
-            </p>
-            {selectedCategory.length === 0 && (
-              <p style={{ color: 'var(--font-dark-300)', textAlign: 'center' }}>
-                Result will appear here
-              </p>
-            )}
-            <div>
-              {usersCategories?.map(({ name, totalPosts }, idx) => {
-                return (
-                  <div key={idx} className="category__searched">
-                    <label
-                      style={{
-                        color: 'white',
-                        marginTop: '1rem',
-                      }}
-                      onClick={() => {
-                        handleSetCategory(name);
-                        setOpen(false);
-                      }}
-                      className="category__description"
-                    >
-                      <span
-                        style={{ marginBottom: '0' }}
-                        className="category__description-item category__name"
-                      >
-                        {name}
-                      </span>
-                      <span
-                        style={{
-                          color: 'var(--font-dark-300)',
-                          fontSize: '11px',
-                        }}
-                        className="category__description-item category__count"
-                      >
-                        {totalPosts} Unique posts
-                      </span>
-                    </label>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          {categories?.length === 0 && (
-            <p style={{ color: 'var(--font-dark-300)', textAlign: 'center' }}>
-              You don't have own categories
+        <div>
+          {categories?.length === 0 && usersCategories!.length <= 1 && (
+            <p className="category__user--desc category__custom-margin">
+              You do not have any favorite
             </p>
           )}
-        </>
+          {filterHelper!.length >= 1 && (
+            <div className="category__user">
+              <>
+                <p className="category__user--desc">Favorites</p>
+                {filterHelper
+                  ?.sort((firstElem, secondElem) =>
+                    firstElem.name.localeCompare(secondElem.name)
+                  )
+                  .map(({ _id: id, name, totalPosts }) => (
+                    <CategoryItem
+                      key={id}
+                      name={name}
+                      totalPosts={totalPosts}
+                      setOpen={setOpen}
+                      handleSetCategory={handleSetCategory}
+                    />
+                  ))}
+              </>
+            </div>
+          )}
+          {usersCategories!.length >= 1 && (
+            <div className="category__other">
+              <p className="category__user--desc">Other</p>
+              <div>
+                {usersCategories?.map(({ name, totalPosts }, idx) => (
+                  <CategoryItem
+                    key={idx}
+                    name={name}
+                    totalPosts={totalPosts}
+                    setOpen={setOpen}
+                    handleSetCategory={handleSetCategory}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

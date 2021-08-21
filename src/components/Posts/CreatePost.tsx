@@ -1,5 +1,4 @@
 import { ChangeEvent, FC, useState, useEffect } from 'react';
-import Compressor from 'compressorjs';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import Category from './Category';
@@ -139,7 +138,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
             />
           )}
           <Category
-            // handleChange={handleChange}
             chooseCategory={post.category}
             setPost={setPost}
             post={post}
