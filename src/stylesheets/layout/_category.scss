@@ -14,15 +14,15 @@
   }
   &__search-input {
     width: 100%;
-    font-size: ft.$fs-250;
-    padding: 0.5rem 1rem;
+    background: var(--light-bg-550);
+    padding: 1rem;
     border-radius: 1rem 1rem 0 0;
     border: none;
     border-bottom-color: var(--secondary-bg-300);
     border-bottom-style: solid;
+    font-size: ft.$fs-300;
     color: var(--font-dark-600);
     font-weight: ft.$fw-500;
-    background: var(--light-bg-550);
   }
   &__search--open {
     position: absolute;
@@ -56,13 +56,38 @@
     justify-content: center;
     cursor: pointer;
   }
-  &__name {
-    font-weight: ft.$fw-600;
-    margin-bottom: 0.5rem;
-  }
-
   &__description-item {
     color: var(--font-dark-600);
     font-size: ft.$fs-200;
+  }
+  &__name {
+    font-size: ft.$fs-250;
+    margin-bottom: 0.5rem;
+    font-weight: ft.$fw-600;
+  }
+  &__user--desc {
+    margin: 1rem 0;
+    color: var(--font-dark-300);
+    font-size: ft.$fs-200;
+    font-weight: ft.$fw-600;
+  }
+  &__item {
+    margin-bottom: 2rem;
+  }
+  &__item:last-child {
+    margin-bottom: 1rem;
+  }
+  &__user {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--secondary-bg-300);
+  }
+  &__other {
+    padding: 0.5rem 1rem;
+  }
+  &__count {
+    color: var(--font-dark-300);
+  }
+  &__custom-margin {
+    margin: 1rem;
   }
 }

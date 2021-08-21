@@ -6,6 +6,7 @@
 .create-post {
   display: flex;
   flex-flow: column;
+
   &__title {
     font-size: ft.$fs-300;
     padding: 1rem;
@@ -15,15 +16,7 @@
     background: var(--light-bg-550);
     color: var(--font-dark-600);
   }
-  &__drag-drop {
-    min-height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    border: 1px dashed var(--secondary-bg-300);
-    border-radius: 3px;
-    margin-bottom: 2rem;
-  }
+
   &__file-input {
     visibility: hidden;
     position: absolute;
@@ -31,14 +24,7 @@
     left: 0;
     width: 0;
   }
-  &__pseudo-btn {
-    color: clr.$main-bg-500;
-    font-weight: ft.$fw-600;
-  }
-  &__text {
-    font-size: ft.$fs-250;
-    color: var(--font-dark-600);
-  }
+
   &__message {
     color: clr.$warning-500;
     text-align: center;
