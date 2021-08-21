@@ -64,6 +64,7 @@ const Posts: FC = () => {
         {open && (
           <CreatePost handleFetchPosts={handleFetchPosts} setOpen={setOpen} />
         )}
+
         {posts?.map(
           ({ _id, headline, category, file, user_id, likes, date }) => {
             return (
