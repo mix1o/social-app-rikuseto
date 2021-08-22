@@ -29,6 +29,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [disable, setDisable] = useState<boolean>(false);
   const [areFiles, setAreFiles] = useState<boolean>(false);
   const [isOpenEmoji, setIsOpenEmoji] = useState<boolean>(false);
+  const [userImage, setUserImage] = useState(false);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
@@ -57,7 +58,8 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
         post!.headline!.length >= 3 &&
         post!.category!.length > 1 &&
         post!.file!.length > 3 &&
-        correctImage
+        correctImage &&
+        !userImage
       ) {
         setDisable(false);
         return true;
@@ -148,6 +150,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
             setPost={setPost}
             setUserPickedImage={setUserPickedImage}
             setCorrectImage={setCorrectImage}
+            setUserImage={setUserImage}
           />
           {disable && <p>Loading image...</p>}
           {!correctFormatPost && post!.headline!.length > 0 && (
@@ -155,7 +158,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
               {message}
             </p>
           )}
-          {!disable && !areFiles && (
+          {!disable && !areFiles && userImage && (
             <button
               className="create-post__btn-add"
               data-testid="button"

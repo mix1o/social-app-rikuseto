@@ -17,12 +17,14 @@ import { useDropzone as useDropZone } from 'react-dropzone';
 import Compressor from 'compressorjs';
 import axios from 'axios';
 import { CreatePostI } from '../../interfaces/posts/postInterfaces';
+
 interface CropProps {
   setMessage: Dispatch<SetStateAction<string>>;
   post: CreatePostI;
   setPost: Dispatch<SetStateAction<CreatePostI>>;
   setUserPickedImage: Dispatch<SetStateAction<boolean>>;
   setCorrectImage: Dispatch<SetStateAction<boolean>>;
+  setUserImage: Dispatch<SetStateAction<boolean>>;
 }
 
 const CropImage: FC<CropProps> = ({
@@ -31,6 +33,7 @@ const CropImage: FC<CropProps> = ({
   setPost,
   setUserPickedImage,
   setCorrectImage,
+  setUserImage,
 }) => {
   const [aspect, setAspect] = useState({ aspect: 1 / 1 });
   const [imagePreview, setImagePreview] = useState('');
@@ -64,6 +67,7 @@ const CropImage: FC<CropProps> = ({
   };
 
   const onDrop = useCallback((files, rejectedFiles) => {
+    setUserImage(false);
     if (rejectedFiles && rejectedFiles.length >= 1) {
       validateFile(rejectedFiles[0].file);
     }
@@ -121,6 +125,7 @@ const CropImage: FC<CropProps> = ({
             `rikusetoImage.${coppedData64}`
           );
           compressImg(croppedData);
+          setUserImage(true);
           return;
         }
       } else {
@@ -129,6 +134,7 @@ const CropImage: FC<CropProps> = ({
           `rikusetoImage.${imagePreview}`
         );
         compressImg(croppedData);
+        setUserImage(true);
       }
     }
   };
