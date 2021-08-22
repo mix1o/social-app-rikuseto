@@ -87,6 +87,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     setPost({ ...post, headline: post.headline + emojiObject.emoji });
   };
 
+  console.log(post);
   return (
     <div className="blurred__options create">
       <div
@@ -174,3 +175,13 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
 };
 
 export default CreatePost;
+
+//TODO Zmienic model category - usunac user id
+
+//TODO Jeżeli nie znajdzie tagow to wyświetlic możliwość dodania
+
+//TODO Zrobić podstrone categories w account
+
+//TODO Wyświetlanie postów z ulubionymi kategoriami
+
+//TODO Możliwość przegladania innych profilów userów
