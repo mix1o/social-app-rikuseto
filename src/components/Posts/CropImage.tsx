@@ -17,12 +17,14 @@ import { useDropzone as useDropZone } from 'react-dropzone';
 import Compressor from 'compressorjs';
 import axios from 'axios';
 import { CreatePostI } from '../../interfaces/posts/postInterfaces';
+
 interface CropProps {
   setMessage: Dispatch<SetStateAction<string>>;
   post: CreatePostI;
   setPost: Dispatch<SetStateAction<CreatePostI>>;
   setUserPickedImage: Dispatch<SetStateAction<boolean>>;
   setCorrectImage: Dispatch<SetStateAction<boolean>>;
+  setUserImage: Dispatch<SetStateAction<boolean>>;
 }
 
 const CropImage: FC<CropProps> = ({
@@ -31,12 +33,13 @@ const CropImage: FC<CropProps> = ({
   setPost,
   setUserPickedImage,
   setCorrectImage,
+  setUserImage,
 }) => {
-  const [aspect, setAspect] = useState({ aspect: 0 });
+  const [aspect, setAspect] = useState({ aspect: 1 / 1 });
   const [imagePreview, setImagePreview] = useState('');
   const [croppedImagePV, setCroppedImagePV] = useState('');
-
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [openCrop, setOpenCrop] = useState(false);
 
   const maxFileSize = 5000000;
   const fileTypes = 'image/jpeg, image/jpg, image/png, image/gif';
@@ -64,6 +67,7 @@ const CropImage: FC<CropProps> = ({
   };
 
   const onDrop = useCallback((files, rejectedFiles) => {
+    setUserImage(false);
     if (rejectedFiles && rejectedFiles.length >= 1) {
       validateFile(rejectedFiles[0].file);
     }
@@ -113,23 +117,25 @@ const CropImage: FC<CropProps> = ({
         const coppedData64 = canvasRef.current
           ?.toDataURL(`image/${croppedImagePV}`)
           .toString();
-        if (coppedData64) setCroppedImagePV(coppedData64);
+        if (coppedData64) {
+          setCroppedImagePV(coppedData64);
 
+          const croppedData = base64StringTtoFile(
+            coppedData64,
+            `rikusetoImage.${coppedData64}`
+          );
+          compressImg(croppedData);
+          setUserImage(true);
+          return;
+        }
+      } else {
         const croppedData = base64StringTtoFile(
           imagePreview,
-          `rikusetoImage.${coppedData64}`
+          `rikusetoImage.${imagePreview}`
         );
-
         compressImg(croppedData);
-        return;
+        setUserImage(true);
       }
-
-      const croppedData = base64StringTtoFile(
-        imagePreview,
-        `rikusetoImage.${imagePreview}`
-      );
-
-      compressImg(croppedData);
     }
   };
 
@@ -138,6 +144,7 @@ const CropImage: FC<CropProps> = ({
     const ctx = canvas?.getContext('2d');
     ctx!.clearRect(0, 0, canvas!?.width, canvas!?.height);
 
+    setOpenCrop(false);
     setCroppedImagePV('');
     setImagePreview('');
     setAspect({ aspect: 1 / 1 });
@@ -155,7 +162,6 @@ const CropImage: FC<CropProps> = ({
       convertSize: 268000,
       success(result) {
         const formData = new FormData();
-
         formData.append('file', result);
         upload(result);
       },
@@ -193,43 +199,56 @@ const CropImage: FC<CropProps> = ({
     <div className="crop-image">
       {imagePreview!?.toString().length >= 1 ? (
         <div>
-          <p className="crop-image__info">
-            Crop it or leave it. &#40;Use your cursor to crop image&#41;
-          </p>
-          <div className="crop-image__controls-wrapper">
+          {!openCrop && (
             <button
-              className="crop-image__aspect--action"
-              onClick={() => handleRatio(1 / 1)}
+              onClick={() => {
+                setOpenCrop(prevValue => !prevValue);
+              }}
             >
-              1 : 1
+              Crop
             </button>
-            <button
-              className="crop-image__aspect--action"
-              onClick={() => handleRatio(3 / 4)}
-            >
-              3 : 4
-            </button>
-            <button
-              className="crop-image__aspect--action"
-              onClick={() => handleRatio(16 / 9)}
-            >
-              16 : 9
-            </button>
-            <button
-              className="crop-image__aspect--action"
-              onClick={() => handleRatio()}
-            >
-              Default
-            </button>
-          </div>
-
-          <div style={{ height: '500px', overflowY: 'hidden' }}>
+          )}
+          {openCrop && (
+            <>
+              <p className="crop-image__info">
+                Crop it or leave it. &#40;Use your cursor to crop image&#41;
+              </p>
+              <div className="crop-image__controls-wrapper">
+                <button
+                  className="crop-image__aspect--action"
+                  onClick={() => handleRatio(1 / 1)}
+                >
+                  1 : 1
+                </button>
+                <button
+                  className="crop-image__aspect--action"
+                  onClick={() => handleRatio(3 / 4)}
+                >
+                  3 : 4
+                </button>
+                <button
+                  className="crop-image__aspect--action"
+                  onClick={() => handleRatio(16 / 9)}
+                >
+                  16 : 9
+                </button>
+                <button
+                  className="crop-image__aspect--action"
+                  onClick={() => handleRatio()}
+                >
+                  Default
+                </button>
+              </div>
+            </>
+          )}
+          <div style={{ overflowY: 'hidden' }}>
             <ReactCrop
               src={imagePreview}
               crop={aspect}
               onComplete={handleOnCropComplete}
               onChange={handleCropChange}
               ruleOfThirds={true}
+              disabled={!openCrop}
             />
 
             <canvas
@@ -237,26 +256,36 @@ const CropImage: FC<CropProps> = ({
               ref={canvasRef}
             ></canvas>
           </div>
-          <div>
-            <button onClick={clearCrop}>Add new photo</button>
-            <button onClick={() => handleReverseFile(false)}>
-              Use Original Image
+          <div className="crop-image__buttons">
+            <button className="crop-image__btn" onClick={clearCrop}>
+              Add new photo
             </button>
-            <button onClick={() => handleReverseFile(true)}>
-              Use Cropped Image
+            {openCrop && (
+              <button
+                className="crop-image__btn"
+                onClick={() => handleReverseFile(true)}
+              >
+                Use Cropped Image
+              </button>
+            )}
+            <button
+              className=" crop-image__btn--full"
+              onClick={() => handleReverseFile(false)}
+            >
+              Use Original Image
             </button>
           </div>
         </div>
       ) : (
         <section
           {...getRootProps({
-            className: 'dropzone create-post__drag-drop',
+            className: 'dropzone crop-image__drag-drop',
           })}
         >
           <input {...getInputProps()} />
-          <p className="create-post__text">
+          <p className="crop-image__text">
             Drag and Drop or{' '}
-            <span className="create-post__pseudo-btn">Click</span>
+            <span className="crop-image__pseudo-btn">Click</span>
           </p>
         </section>
       )}

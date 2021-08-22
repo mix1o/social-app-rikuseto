@@ -25,4 +25,36 @@
     color: var(--font-dark-600);
     font-size: ft.$fs-250;
   }
+  &__text {
+    font-size: ft.$fs-250;
+    color: var(--font-dark-600);
+  }
+  &__pseudo-btn {
+    color: clr.$main-bg-500;
+    font-weight: ft.$fw-600;
+  }
+  &__drag-drop {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 1px dashed var(--secondary-bg-300);
+    border-radius: 3px;
+    margin-bottom: 2rem;
+  }
+  &__buttons {
+    margin: 2rem 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  &__btn {
+    @include btn.btnEmpty(var(--font-dark-600));
+    font-size: ft.$fs-250;
+    margin: 0;
+    padding: 0.5rem;
+  }
+  &__btn--full {
+    @include btn.btn();
+  }
 }
