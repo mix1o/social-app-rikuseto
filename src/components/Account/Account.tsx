@@ -46,11 +46,21 @@ const Account: FC = () => {
               </div>
               <i className="fas fa-chevron-right"></i>
             </Link>
-            <Link to="your-posts" className="account__section">
+            <Link to="/your-posts" className="account__section">
               <i className="fas fa-pen"></i>
               <div>
                 <p className="account__heading">Your posts</p>
                 <p className="account__description">Browse all your posts</p>
+              </div>
+              <i className="fas fa-chevron-right"></i>
+            </Link>
+            <Link to="/categories" className="account__section">
+              <i className="fas fa-book"></i>
+              <div>
+                <p className="account__heading">Categories</p>
+                <p className="account__description">
+                  Personalize your favorite categories
+                </p>
               </div>
               <i className="fas fa-chevron-right"></i>
             </Link>
