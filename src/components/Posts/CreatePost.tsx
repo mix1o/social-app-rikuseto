@@ -159,16 +159,17 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
               {message}
             </p>
           )}
-          {!disable && !areFiles && userImage && (
-            <button
-              className="create-post__btn-add"
-              data-testid="button"
-              disabled={!correctFormatPost}
-              onClick={() => createNewPost()}
-            >
-              Create post
-            </button>
-          )}
+          {!disable &&
+            !areFiles && ( //userImage && (
+              <button
+                className="create-post__btn-add"
+                data-testid="button"
+                disabled={!correctFormatPost}
+                onClick={() => createNewPost()}
+              >
+                Create post
+              </button>
+            )}
         </section>
       </div>
     </div>
@@ -176,10 +177,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
 };
 
 export default CreatePost;
-
-//TODO Zmienic model category - usunac user id
-
-//TODO Jeżeli nie znajdzie tagow to wyświetlic możliwość dodania
 
 //TODO Zrobić podstrone categories w account
 
