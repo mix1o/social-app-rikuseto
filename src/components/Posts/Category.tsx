@@ -30,7 +30,7 @@ interface MyProp {
 
 interface CategoryItemI {
   name: string;
-  totalPosts: number;
+  totalPosts?: number;
   handleSetCategory: (value: string) => void;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
@@ -69,11 +69,11 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
   const [cookies] = useCookies();
   const { user } = cookies;
 
-  const [categories, setCategories] = useState<CategoryArray[]>();
-  const [filterHelper, setFilterHelper] = useState<CategoryArray[]>();
+  const [categories, setCategories] = useState<CategoryArray[]>([]);
+
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [usersCategories, setUsersCategories] = useState<CategoryArray[]>();
+  const [userCategories, setUserCategories] = useState<CategoryArray[]>([]);
 
   const getCategory = () => {
     axios
@@ -82,20 +82,8 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
       )
       .then(res => {
         console.log(res.data);
-        setCategories(res.data);
-        setFilterHelper(res.data);
+        setUserCategories(res.data);
       });
-  };
-
-  const filterCategories = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const value = e.target.value;
-
-    const valueCompared = categories?.filter(category =>
-      category.name.toLocaleLowerCase().includes(value.toLocaleLowerCase())
-    );
-
-    setFilterHelper(valueCompared);
   };
 
   useEffect(() => {
@@ -109,17 +97,16 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
 
   const handleSearchFetch = () => {
     const params = new URLSearchParams({
-      userId: user._id,
       value: selectedCategory,
     });
     axios
-      .get(`${process.env.REACT_APP_API}/category/get-all?${params.toString()}`)
-      .then(res => setUsersCategories(res.data));
+      .get(`${process.env.REACT_APP_API}/category/filter?${params.toString()}`)
+      .then(res => setCategories(res.data));
   };
 
   useEffect(() => {
     if (selectedCategory.length > 0) handleSearchFetch();
-    if (selectedCategory === '') setUsersCategories([]);
+    if (selectedCategory === '') setCategories([]);
   }, [selectedCategory]);
 
   return (
@@ -134,7 +121,6 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
           value={selectedCategory}
           onChange={e => {
             handleSetCategory(e.target.value);
-            filterCategories(e);
           }}
         />
         {!open && (
@@ -156,16 +142,37 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
       </div>
       {open && (
         <div>
-          {categories?.length === 0 && usersCategories!.length <= 1 && (
+          {userCategories!.length === 0 && (
             <p className="category__user--desc category__custom-margin">
               You do not have any favorite
             </p>
           )}
-          {filterHelper!.length >= 1 && (
+          {userCategories!.length > 0 && (
+            <div className="category__user">
+              <p
+                style={{ marginLeft: '0' }}
+                className="category__user--desc category__custom-margin"
+              >
+                Favorites
+              </p>
+              {userCategories?.map(({ name, totalPosts }, idx) => {
+                return (
+                  <CategoryItem
+                    key={idx}
+                    name={name}
+                    setOpen={setOpen}
+                    totalPosts={totalPosts}
+                    handleSetCategory={handleSetCategory}
+                  />
+                );
+              })}
+            </div>
+          )}
+          {categories!.length >= 1 && (
             <div className="category__user">
               <>
-                <p className="category__user--desc">Favorites</p>
-                {filterHelper
+                <p className="category__user--desc">Others also used</p>
+                {categories
                   ?.sort((firstElem, secondElem) =>
                     firstElem.name.localeCompare(secondElem.name)
                   )
@@ -179,22 +186,6 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
                     />
                   ))}
               </>
-            </div>
-          )}
-          {usersCategories!.length >= 1 && (
-            <div className="category__other">
-              <p className="category__user--desc">Other</p>
-              <div>
-                {usersCategories?.map(({ name, totalPosts }, idx) => (
-                  <CategoryItem
-                    key={idx}
-                    name={name}
-                    totalPosts={totalPosts}
-                    setOpen={setOpen}
-                    handleSetCategory={handleSetCategory}
-                  />
-                ))}
-              </div>
             </div>
           )}
         </div>
