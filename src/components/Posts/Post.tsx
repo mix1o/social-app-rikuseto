@@ -315,22 +315,23 @@ const Post: FC<PostInterfaceExtended> = ({
               type="text"
             />
             <span className="post__edit-message">{message}</span>
-
-            <button
-              onClick={editPost}
-              className="post__edit-button post__edit-button--edit"
-            >
-              Edit
-            </button>
-            <button
-              className="post__edit-button"
-              onClick={() => {
-                setIsEdit(false);
-                setMessage('');
-              }}
-            >
-              Cancel
-            </button>
+            <div style={{ marginBottom: '1rem' }}>
+              <button
+                onClick={editPost}
+                className="post__edit-button post__edit-button--edit"
+              >
+                Edit
+              </button>
+              <button
+                className="post__edit-button"
+                onClick={() => {
+                  setIsEdit(false);
+                  setMessage('');
+                }}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         )}
       </div>

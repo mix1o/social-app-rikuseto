@@ -1395,9 +1395,61 @@ h6 {
 .account .fa-pen,
 .account .fa-user,
 .account .fa-flag,
-.account .fa-sign-out-alt {
+.account .fa-sign-out-alt,
+.account .fa-book {
   font-size: 1.4rem;
   color: var(--font-dark-600);
+}
+
+.categories__headline {
+  text-align: center;
+  color: var(--font-dark-300);
+  margin-top: 4rem;
+  font-size: 2.1rem;
+}
+.categories__container-input {
+  padding: 1rem;
+}
+.categories__input {
+  width: 100%;
+  color: var(--font-dark-600);
+  padding: 1.2rem 1rem;
+  background: var(--light-bg-600);
+  border: 1px solid #753ee0;
+  font-size: 1.4rem;
+}
+.categories__input::placeholder {
+  font-size: 1.4rem;
+}
+.categories__container {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  overflow-x: scroll;
+  border-bottom: 2px solid var(--light-bg-700);
+}
+.categories__single-category {
+  background: var(--light-bg-600);
+  color: var(--font-dark-600);
+  margin: 1rem;
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 1.4rem;
+  min-width: 15rem;
+  max-width: 20rem;
+  border-radius: 1rem;
+}
+.categories__total {
+  font-size: 1.2rem;
+  color: var(--font-dark-300);
+}
+.categories__btn {
+  background: transparent;
+  color: #753ee0;
+  border: none;
+}
+.categories__posts {
+  margin-top: 4rem;
 }
 
 [data-value=dark] {
