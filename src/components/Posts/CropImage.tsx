@@ -77,6 +77,7 @@ const CropImage: FC<CropProps> = ({
         fileReader.addEventListener(
           'load',
           () => {
+            setUserPickedImage(true);
             setImagePreview(fileReader!.result!?.toString());
             setCroppedImagePV(
               extractImageFileExtensionFromBase64(
@@ -141,10 +142,11 @@ const CropImage: FC<CropProps> = ({
     ctx!.clearRect(0, 0, canvas!?.width, canvas!?.height);
 
     setOpenCrop(false);
+    setUserPickedImage(false);
+    setCorrectImage(false);
     setCroppedImagePV('');
     setImagePreview('');
     setAspect({ aspect: 1 / 1 });
-    setCorrectImage(false);
   };
 
   const handleRatio = (ratio: number = 0) => {

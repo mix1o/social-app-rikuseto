@@ -49,10 +49,12 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       handleFetchPosts();
     }, 500);
   };
+  // console.log(`user Picke ${userPickedImage}`);
 
+  // console.log(`correct ${correctImage}`);
   const checkCorrectPost = () => {
     if (userPickedImage) {
-      setAreFiles(false);
+      console.log('works');
       if (
         post!.headline!.length >= 3 &&
         post!.category!.length > 1 &&
@@ -62,6 +64,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
         setDisable(false);
         return true;
       } else {
+        console.log(3333);
         return false;
       }
     }
@@ -80,13 +83,12 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     setCorrectFormatPost(checkCorrectPost());
 
     return () => setCorrectFormatPost(false);
-  }, [post, message, correctImage]);
+  }, [post, message, correctImage, userPickedImage]);
 
   const onEmojiClick = (event: any, emojiObject: any) => {
     setPost({ ...post, headline: post.headline + emojiObject.emoji });
   };
 
-  console.log(post);
   return (
     <div className="blurred__options create">
       <div
