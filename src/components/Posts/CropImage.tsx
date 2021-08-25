@@ -24,7 +24,6 @@ interface CropProps {
   setPost: Dispatch<SetStateAction<CreatePostI>>;
   setUserPickedImage: Dispatch<SetStateAction<boolean>>;
   setCorrectImage: Dispatch<SetStateAction<boolean>>;
-  setUserImage: Dispatch<SetStateAction<boolean>>;
 }
 
 const CropImage: FC<CropProps> = ({
@@ -33,7 +32,6 @@ const CropImage: FC<CropProps> = ({
   setPost,
   setUserPickedImage,
   setCorrectImage,
-  setUserImage,
 }) => {
   const [aspect, setAspect] = useState({ aspect: 1 / 1 });
   const [imagePreview, setImagePreview] = useState('');
@@ -67,7 +65,6 @@ const CropImage: FC<CropProps> = ({
   };
 
   const onDrop = useCallback((files, rejectedFiles) => {
-    setUserImage(false);
     if (rejectedFiles && rejectedFiles.length >= 1) {
       validateFile(rejectedFiles[0].file);
     }
@@ -125,7 +122,7 @@ const CropImage: FC<CropProps> = ({
             `rikusetoImage.${coppedData64}`
           );
           compressImg(croppedData);
-          setUserImage(true);
+
           return;
         }
       } else {
@@ -134,7 +131,6 @@ const CropImage: FC<CropProps> = ({
           `rikusetoImage.${imagePreview}`
         );
         compressImg(croppedData);
-        setUserImage(true);
       }
     }
   };
@@ -148,6 +144,7 @@ const CropImage: FC<CropProps> = ({
     setCroppedImagePV('');
     setImagePreview('');
     setAspect({ aspect: 1 / 1 });
+    setCorrectImage(false);
   };
 
   const handleRatio = (ratio: number = 0) => {
@@ -272,7 +269,7 @@ const CropImage: FC<CropProps> = ({
               className=" crop-image__btn--full"
               onClick={() => handleReverseFile(false)}
             >
-              Use Original Image
+              {openCrop ? 'Use Original Image' : 'Use This image'}
             </button>
           </div>
         </div>
