@@ -37,7 +37,7 @@ const Header: FC = () => {
 
   const { user } = cookies;
 
-  const [current, send] = useActor(authService);
+  const [, send] = useActor(authService);
 
   const theme = localStorage.getItem('theme');
 
@@ -119,14 +119,14 @@ const Header: FC = () => {
             </p>
             <div className="header__container-links">
               <Link className="header__link" to="/auth">
-                Log in
+                Sign In
               </Link>
               <Link
                 className="header__link header__link--empty"
                 onClick={() => send('SIGN_UP')}
                 to="/auth"
               >
-                Sign in
+                Sign Up
               </Link>
             </div>
           </div>
