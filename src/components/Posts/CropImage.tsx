@@ -17,6 +17,7 @@ import { useDropzone as useDropZone } from 'react-dropzone';
 import Compressor from 'compressorjs';
 import axios from 'axios';
 import { CreatePostI } from '../../interfaces/posts/postInterfaces';
+import { upload } from '../../helpers/UploadImg';
 
 interface CropProps {
   setMessage: Dispatch<SetStateAction<string>>;
@@ -166,7 +167,8 @@ const CropImage: FC<CropProps> = ({
       success(result) {
         const formData = new FormData();
         formData.append('file', result);
-        upload(result);
+        const uploadFunc = async () => await upload(result);
+        console.log(uploadFunc);
       },
       error(err) {
         console.log(err.message);
@@ -174,28 +176,28 @@ const CropImage: FC<CropProps> = ({
     });
   };
 
-  const upload = (data: Blob) => {
-    axios
-      .post('https://api.imgur.com/3/image/', data, {
-        headers: {
-          Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,
-        },
-      })
-      .then(res => {
-        setUserPickedImage(true);
+  // const upload = (data: Blob) => {
+  //   axios
+  //     .post('https://api.imgur.com/3/image/', data, {
+  //       headers: {
+  //         Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,
+  //       },
+  //     })
+  //     .then(res => {
+  //       setUserPickedImage(true);
 
-        if (res.status === 403) {
-          setCorrectImage(false);
-          setMessage('Something went wrong. Please try again');
-          return;
-        }
-        setTimeout(() => {
-          setPost({ ...post, file: res.data.data.link });
-        }, 1000);
-        setCorrectImage(true);
-        setMessage('Your image is correctly uploaded');
-      });
-  };
+  //       if (res.status === 403) {
+  //         setCorrectImage(false);
+  //         setMessage('Something went wrong. Please try again');
+  //         return;
+  //       }
+  //       setTimeout(() => {
+  //         setPost({ ...post, file: res.data.data.link });
+  //       }, 1000);
+  //       setCorrectImage(true);
+  //       setMessage('Your image is correctly uploaded');
+  //     });
+  // };
 
   return (
     <section className="crop-image">
