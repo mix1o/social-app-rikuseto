@@ -42,6 +42,23 @@
     border-radius: 3px;
     margin-bottom: 2rem;
   }
+  &__canvas {
+    position: relative;
+  }
+  &__open--crop {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 5;
+    padding: 0.5rem 0.5rem 1.5rem 1.5rem;
+    background: var(--secondary-bg-500);
+    border: none;
+    border-radius: 0 0 0 10rem;
+    .fa-crop-alt {
+      font-size: ft.$fs-400;
+      color: var(--font-light-100);
+    }
+  }
   &__buttons {
     margin: 2rem 0;
     display: flex;

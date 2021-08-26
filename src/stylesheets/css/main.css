@@ -810,6 +810,23 @@ h6 {
   border-radius: 3px;
   margin-bottom: 2rem;
 }
+.crop-image__canvas {
+  position: relative;
+}
+.crop-image__open--crop {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 5;
+  padding: 0.5rem 0.5rem 1.5rem 1.5rem;
+  background: var(--secondary-bg-500);
+  border: none;
+  border-radius: 0 0 0 10rem;
+}
+.crop-image__open--crop .fa-crop-alt {
+  font-size: 2.1rem;
+  color: var(--font-light-100);
+}
 .crop-image__buttons {
   margin: 2rem 0;
   display: flex;
@@ -1475,6 +1492,7 @@ h6 {
   --font-light-400: #737186;
   --font-light-300: #f8f8f8;
   --font-light-200: #36344b;
+  --font-light-100: #201f2b;
 }
 
 [data-value=light] {
