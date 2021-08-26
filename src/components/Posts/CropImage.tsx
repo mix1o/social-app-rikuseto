@@ -158,7 +158,7 @@ const CropImage: FC<CropProps> = ({
     setAspect({ aspect: ratio });
   };
 
-  const compressImg = (file: any) => {
+  const compressImg = async (file: any) => {
     if (!file) return;
 
     new Compressor(file, {
@@ -166,11 +166,24 @@ const CropImage: FC<CropProps> = ({
       convertSize: 268000,
       success(result) {
         const formData = new FormData();
-        const res = upload(result);
-        console.log(res);
+        const imgurResponse = upload(result);
 
-        console.log('After promise');
-        console.log(res.then(res => console.log(res)));
+        if (imgurResponse) {
+          imgurResponse.then(res => {
+            setUserPickedImage(true);
+            // #FIXME Properly type response
+            if (res!.status === 403) {
+              setCorrectImage(false);
+              setMessage('Something went wrong. Please try again');
+              return;
+            }
+            setTimeout(() => {
+              setPost({ ...post, file: res!.data.data.link });
+            }, 1000);
+            setCorrectImage(true);
+            setMessage('Your image is correctly uploaded');
+          });
+        }
 
         formData.append('file', result);
       },
@@ -179,29 +192,6 @@ const CropImage: FC<CropProps> = ({
       },
     });
   };
-
-  // const upload = (data: Blob) => {
-  //   axios
-  //     .post('https://api.imgur.com/3/image/', data, {
-  //       headers: {
-  //         Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,
-  //       },
-  //     })
-  //     .then(res => {
-  //       setUserPickedImage(true);
-
-  //       if (res.status === 403) {
-  //         setCorrectImage(false);
-  //         setMessage('Something went wrong. Please try again');
-  //         return;
-  //       }
-  //       setTimeout(() => {
-  //         setPost({ ...post, file: res.data.data.link });
-  //       }, 1000);
-  //       setCorrectImage(true);
-  //       setMessage('Your image is correctly uploaded');
-  //     });
-  // };
 
   return (
     <section className="crop-image">
