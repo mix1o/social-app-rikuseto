@@ -41,9 +41,10 @@ const Header: FC = () => {
 
   const theme = localStorage.getItem('theme');
 
-  const [idx, setIdx] = useState(
-    JSON.parse(theme || '').theme === 'dark' ? 0 : 1
-  );
+  // const [idx, setIdx] = useState(
+  //   JSON.parse(theme || '').theme === 'dark' ? 0 : 1
+  // );
+  const [idx, setIdx] = useState(1);
 
   const handleChangeTheme = (property: string) => {
     localStorage.setItem('theme', JSON.stringify({ theme: property }));
