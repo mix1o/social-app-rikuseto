@@ -40,6 +40,7 @@ const Header: FC = () => {
   const [, send] = useActor(authService);
 
   const theme = localStorage.getItem('theme');
+  // #FIXME  można to potem odkomentowac
 
   // const [idx, setIdx] = useState(
   //   JSON.parse(theme || '').theme === 'dark' ? 0 : 1

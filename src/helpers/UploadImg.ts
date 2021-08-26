@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const upload = async (data: Blob) => {
-  const res = axios
+  const res = await axios
     .post('https://api.imgur.com/3/image/', data, {
       headers: {
         Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,

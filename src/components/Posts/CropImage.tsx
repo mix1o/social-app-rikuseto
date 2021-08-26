@@ -166,9 +166,13 @@ const CropImage: FC<CropProps> = ({
       convertSize: 268000,
       success(result) {
         const formData = new FormData();
+        const res = upload(result);
+        console.log(res);
+
+        console.log('After promise');
+        console.log(res.then(res => console.log(res)));
+
         formData.append('file', result);
-        const uploadFunc = async () => await upload(result);
-        console.log(uploadFunc);
       },
       error(err) {
         console.log(err.message);
