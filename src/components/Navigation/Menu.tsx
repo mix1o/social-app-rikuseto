@@ -1,16 +1,8 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion as m } from 'framer-motion';
 import { useCounter } from '../../store/sub';
-import { useCookies } from 'react-cookie';
-
-interface MenuProps {
-  iconsClasses: string;
-  href: string;
-  selected: string;
-  setSelected: Dispatch<SetStateAction<string>>;
-  value: string;
-}
+import { MenuProps } from '../../interfaces/common/menu';
 
 const MenuItemVariant = {
   active: {
@@ -28,7 +20,7 @@ const MenuItem: FC<MenuProps> = ({
   setSelected,
   value,
 }) => {
-  const [state, actions] = useCounter();
+  const [, actions] = useCounter();
   return (
     <m.button
       variants={MenuItemVariant}
@@ -57,9 +49,6 @@ const MENU_ROUTES = {
 
 const Menu = () => {
   const [selected, setSelected] = useState(MENU_ROUTES.MAIN);
-
-  const [cookies] = useCookies();
-  const { user } = cookies;
 
   return (
     <nav className="menu">

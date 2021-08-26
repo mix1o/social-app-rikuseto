@@ -177,7 +177,6 @@ const CropImage: FC<CropProps> = ({
           Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_KEY}`,
         },
       })
-
       .then(res => {
         setUserPickedImage(true);
 

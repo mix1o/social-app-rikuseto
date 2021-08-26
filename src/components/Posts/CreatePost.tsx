@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import Category from './Category';
+import Category from './Category/Category';
 import CropImage from './CropImage';
 import { CreatePostI } from '../../interfaces/posts/postInterfaces';
 import Picker from 'emoji-picker-react';
@@ -27,7 +27,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [message, setMessage] = useState<string>('');
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState<boolean>(false);
-  const [areFiles, setAreFiles] = useState<boolean>(false);
   const [isOpenEmoji, setIsOpenEmoji] = useState<boolean>(false);
 
   const handleChange = (
@@ -49,12 +48,9 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       handleFetchPosts();
     }, 500);
   };
-  // console.log(`user Picke ${userPickedImage}`);
 
-  // console.log(`correct ${correctImage}`);
   const checkCorrectPost = () => {
     if (userPickedImage) {
-      console.log('works');
       if (
         post!.headline!.length >= 3 &&
         post!.category!.length > 1 &&
@@ -62,9 +58,10 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
         correctImage
       ) {
         setDisable(false);
+        setMessage('');
         return true;
       } else {
-        console.log(3333);
+        setMessage('Accept your image');
         return false;
       }
     }
@@ -78,7 +75,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       return false;
     }
   };
-
+  console.log(post);
   useEffect(() => {
     setCorrectFormatPost(checkCorrectPost());
 
