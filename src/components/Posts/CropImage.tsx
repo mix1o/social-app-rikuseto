@@ -54,10 +54,12 @@ const CropImage: FC<CropProps> = ({
           2
         )}MB`
       );
+      setCorrectImage(false);
       return false;
     }
     if (fileType.includes(fileTypes) || fileType.length <= 0) {
       setMessage('Invalid file type');
+      setCorrectImage(false);
       return false;
     }
 
@@ -110,6 +112,7 @@ const CropImage: FC<CropProps> = ({
   };
 
   const handleReverseFile = (useCropped: boolean = false) => {
+    setMessage('Loading image');
     if (imagePreview) {
       if (useCropped) {
         const coppedData64 = canvasRef.current
@@ -146,6 +149,7 @@ const CropImage: FC<CropProps> = ({
     setCorrectImage(false);
     setCroppedImagePV('');
     setImagePreview('');
+    setMessage('');
     setAspect({ aspect: 1 / 1 });
   };
 
@@ -194,18 +198,9 @@ const CropImage: FC<CropProps> = ({
   };
 
   return (
-    <div className="crop-image">
+    <section className="crop-image">
       {imagePreview!?.toString().length >= 1 ? (
         <div>
-          {!openCrop && (
-            <button
-              onClick={() => {
-                setOpenCrop(prevValue => !prevValue);
-              }}
-            >
-              Crop
-            </button>
-          )}
           {openCrop && (
             <>
               <p className="crop-image__info">
@@ -239,7 +234,17 @@ const CropImage: FC<CropProps> = ({
               </div>
             </>
           )}
-          <div style={{ overflowY: 'hidden' }}>
+          <div className="crop-image__canvas" style={{ overflowY: 'hidden' }}>
+            {!openCrop && (
+              <button
+                className="crop-image__open--crop"
+                onClick={() => {
+                  setOpenCrop(prevValue => !prevValue);
+                }}
+              >
+                <i className="fas fa-crop-alt"></i>
+              </button>
+            )}
             <ReactCrop
               src={imagePreview}
               crop={aspect}
@@ -287,7 +292,7 @@ const CropImage: FC<CropProps> = ({
           </p>
         </section>
       )}
-    </div>
+    </section>
   );
 };
 
