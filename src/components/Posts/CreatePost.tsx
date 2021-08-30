@@ -5,6 +5,8 @@ import Category from './Category/Category';
 import CropImage from './CropImage';
 import { CreatePostI } from '../../interfaces/posts/postInterfaces';
 import Picker from 'emoji-picker-react';
+import useNotification from '../../Notifications/useNotification';
+import { checkPermission } from '../../helpers/CheckPermission';
 
 interface CreateProps {
   handleFetchPosts: () => void;
@@ -28,6 +30,8 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState<boolean>(false);
   const [isOpenEmoji, setIsOpenEmoji] = useState<boolean>(false);
+  const { checkNotificationSupport, subscribeToPushNotification } =
+    useNotification();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
@@ -75,15 +79,25 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       return false;
     }
   };
-  console.log(post);
+
   useEffect(() => {
     setCorrectFormatPost(checkCorrectPost());
 
     return () => setCorrectFormatPost(false);
   }, [post, message, correctImage, userPickedImage]);
 
+  useEffect(() => {}, []);
+
   const onEmojiClick = (event: any, emojiObject: any) => {
     setPost({ ...post, headline: post.headline + emojiObject.emoji });
+  };
+
+  const handleNotification = () => {
+    const permission = checkPermission();
+
+    if (permission) {
+      console.log('granted');
+    }
   };
 
   return (
@@ -155,6 +169,25 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
               {message}
             </p>
           )}
+          {checkNotificationSupport && (
+            <label
+              onClick={handleNotification}
+              style={{ color: 'var(--font-dark-600)' }}
+            >
+              <input type="checkbox" />
+              <p>
+                Receive notification{' '}
+                <span>{`${
+                  !checkPermission() ? '(Notifications are disabled)' : ''
+                }`}</span>
+              </p>
+            </label>
+          )}
+          {/* {checkNotificationSupport && info.length >= 2 && (
+          )} */}
+          <button onClick={subscribeToPushNotification}>
+            SUBSCRIBE TO NOTIFICATIOn
+          </button>
 
           <button
             className="create-post__btn-add"
