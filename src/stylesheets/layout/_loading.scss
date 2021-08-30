@@ -1,0 +1,28 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/variables' as var;
+@use '../abstracts/fontSizes' as ft;
+@use '../components/button' as btn;
+
+.skeleton {
+  opacity: 0.7;
+  animation: loading 1.5s linear infinite alternate;
+}
+.skeleton-text {
+  width: 100%;
+  height: 6px;
+  margin-bottom: 2px;
+  border-radius: 12px;
+}
+.skeleton-text:last-child {
+  margin-bottom: 0;
+  width: 80%;
+}
+
+@keyframes loading {
+  0% {
+    background: hsl(200, 20%, 70%);
+  }
+  100% {
+    background: hsl(200, 20%, 95%);
+  }
+}
