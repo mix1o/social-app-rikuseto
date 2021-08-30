@@ -31,6 +31,7 @@
     "react-dropzone": "^11.3.4",
     "react-floater": "^0.7.3",
     "react-image-crop": "^8.6.12",
+    "react-loading-skeleton": "^2.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-select": "^4.3.1",
