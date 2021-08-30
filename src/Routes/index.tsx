@@ -8,6 +8,7 @@ import {
   YourPostsRoute,
 } from './posts';
 import { CategoriesRoutes } from './categories';
+import { ProfileRoutes } from './profile';
 
 interface RouteProps<T> {
   component: FC<T>;
@@ -23,5 +24,6 @@ export const Routes: RouteProps<any>[] = [
   SavedPostsRoute,
   YourPostsRoute,
   CategoriesRoutes,
+  ProfileRoutes,
   //   CreatePostRoute,
 ];
