@@ -22,6 +22,7 @@
 @use 'layout/category';
 @use 'layout/create-post';
 @use 'layout/crop-image';
+@use 'layout/loading';
 // 5. Components
 @use 'components/button';
 
@@ -32,6 +33,7 @@
 @use 'pages/auth';
 @use 'pages/account';
 @use 'pages/categoriesAccount';
+@use 'pages/profile';
 // 7.@usehemes
 @use 'themes/default';
 @use 'themes/dark';
