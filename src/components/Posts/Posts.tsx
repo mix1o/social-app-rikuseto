@@ -6,7 +6,6 @@ import { useCookies } from 'react-cookie';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import { useCounter } from '../../store/sub';
 import Header from '../Header/Header';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 const Posts: FC = () => {
   const [posts, setPosts] = useState<PostInterface[]>();
@@ -82,18 +81,6 @@ const Posts: FC = () => {
               />
             );
           }
-        )}
-        {!posts && (
-          <SkeletonTheme
-            color="var(--light-bg-600)"
-            highlightColor="var(--light-bg-700)"
-          >
-            <Skeleton
-              count={10}
-              height={200}
-              style={{ marginBottom: '10px' }}
-            />
-          </SkeletonTheme>
         )}
       </main>
     </>

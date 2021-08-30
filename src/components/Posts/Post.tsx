@@ -238,280 +238,313 @@ const Post: FC<PostInterfaceExtended> = ({
   };
 
   const [openToolTip, setOpenToolTip] = useState<boolean>(false);
-
+  console.log(file);
   return (
-    <section
-      data-testid="post"
-      className={`post ${disableComments ? 'post__mBottom' : ''}`}
-    >
-      {user && (
-        <div
-          onClick={() => setOpenToolTip(prevState => !prevState)}
-          className="post__container-dots"
+    <>
+      {headline &&
+      author?.firstName &&
+      author?.lastName &&
+      comment &&
+      category &&
+      author?.avatar ? (
+        <section
+          data-testid="post"
+          className={`post ${disableComments ? 'post__mBottom' : ''}`}
         >
-          <Floater
-            open={openToolTip}
-            offset={0}
-            placement="auto"
-            styles={{
-              floater: {
-                filter: 'none',
-              },
-              container: {
-                background: 'transparent',
-                color: 'var(--font-dark-600)',
-                filter: 'none',
-                minHeight: 'none',
-                minWidth: 100,
-                textAlign: 'right',
-                padding: 0,
-                margin: 0,
-              },
-              arrow: {
-                color: 'var(--light-bg-700)',
-                length: 8,
-                spread: 10,
-              },
-            }}
-            content={ActionsPost()}
-          >
-            <button
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--font-dark-600)',
-              }}
+          {user && (
+            <div
+              onClick={() => setOpenToolTip(prevState => !prevState)}
+              className="post__container-dots"
             >
-              <i className="fas fa-ellipsis-v"></i>
-            </button>
-          </Floater>
-        </div>
-      )}
-      <div className="post__author">
-        {author?.avatar ? (
-          <img
-            className="post__image-author"
-            src={author?.avatar}
-            alt="user profile"
-          />
-        ) : (
-          <div className="post__image-author">
+              <Floater
+                open={openToolTip}
+                offset={0}
+                placement="auto"
+                styles={{
+                  floater: {
+                    filter: 'none',
+                  },
+                  container: {
+                    background: 'transparent',
+                    color: 'var(--font-dark-600)',
+                    filter: 'none',
+                    minHeight: 'none',
+                    minWidth: 100,
+                    textAlign: 'right',
+                    padding: 0,
+                    margin: 0,
+                  },
+                  arrow: {
+                    color: 'var(--light-bg-700)',
+                    length: 8,
+                    spread: 10,
+                  },
+                }}
+                content={ActionsPost()}
+              >
+                <button
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--font-dark-600)',
+                  }}
+                >
+                  <i className="fas fa-ellipsis-v"></i>
+                </button>
+              </Floater>
+            </div>
+          )}
+          <div className="post__author">
+            <img
+              className="post__image-author"
+              src={author?.avatar}
+              alt="user profile"
+            />
+
+            <div>
+              <p className="post__author-name">
+                <Link
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  to={
+                    user && user_id === user._id
+                      ? '/account'
+                      : `/profile/${user_id}`
+                  }
+                >
+                  {author?.firstName} {author?.lastName}
+                </Link>
+              </p>
+
+              <p className="post__info">
+                Posted on:{' '}
+                <span className="post__category-name">{category}</span>
+                <span> {dayjs(date).fromNow()}</span>
+              </p>
+            </div>
+          </div>
+          <div className="post__content">
+            {!isEdit && <h3 className="post__headline">{headline}</h3>}
+            {isEdit && (
+              <div className="post__edit-input-container">
+                <input
+                  className="post__edit-input"
+                  value={newHeadline}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setNewHeadline(e.target.value)
+                  }
+                  type="text"
+                />
+                <span className="post__edit-message">{message}</span>
+                <div style={{ marginBottom: '1rem' }}>
+                  <button
+                    onClick={editPost}
+                    className="post__edit-button post__edit-button--edit"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="post__edit-button"
+                    onClick={() => {
+                      setIsEdit(false);
+                      setMessage('');
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+          {file.length > 3 && (
+            <div className="post__image-container">
+              <img className="post__image" src={file} alt={headline} />
+            </div>
+          )}
+          <div
+            style={disableComments ? { paddingBottom: '1rem' } : {}}
+            className="post__actions"
+          >
+            <m.div
+              className="post__container-likes"
+              animate={{ color: liked ? '#753ee0' : 'inherit' }}
+            >
+              <m.button
+                className="post__btn"
+                whileTap={{ scale: 1.2 }}
+                onClick={() => handleLikePost()}
+                aria-label="like or dislike post"
+                type="button"
+              >
+                {liked ? (
+                  <FontAwesomeIcon icon={faStarChonky} />
+                ) : (
+                  <FontAwesomeIcon icon={farBellThin} />
+                )}
+              </m.button>
+              <span className="post__likes">{likes.length}</span>
+            </m.div>
+            <div>
+              {!disableComments && (
+                <button
+                  className="post__btn post__single-action"
+                  onClick={() => setOpenComments(true)}
+                >
+                  <span className="post__count-comments">
+                    {comment?.allComments}{' '}
+                  </span>
+                  comments
+                </button>
+              )}
+              <button className="post__btn post__single-action">
+                <Floater
+                  styles={{
+                    floater: {
+                      filter: 'none',
+                    },
+                    container: {
+                      backgroundColor: 'var(--light-bg-700)',
+                      color: 'var(--font-dark-600)',
+                      filter: 'none',
+                      minHeight: 'none',
+                      padding: 10,
+                    },
+                    arrow: {
+                      color: 'var(--light-bg-700)',
+                      length: 8,
+                      spread: 10,
+                    },
+                  }}
+                  content={ShareSocials()}
+                >
+                  <div style={{ display: 'flex' }}>
+                    Share <i className="fas fa-share"></i>
+                  </div>
+                </Floater>
+              </button>
+            </div>
+          </div>
+          {!disableComments && comment?.topComment && (
+            <>
+              <p className="post__top-comment">
+                <span className="post__top-author">
+                  {commentAuthor?.firstName}
+                </span>
+
+                <span className="post__top-date">
+                  {dayjs(comment.topComment.date).fromNow()}
+                </span>
+
+                <span className="post__top-text">
+                  {comment.topComment.text}
+                </span>
+              </p>
+            </>
+          )}
+          {!disableComments && comment && (
+            <div
+              className="post__comments--count"
+              onClick={() => setOpenComments(true)}
+            >
+              {comment.allComments >= 1 ? (
+                <p className="post__comments-text">
+                  View all comments{' '}
+                  <span className="post__comments-total">
+                    &#40;{comment?.allComments}&#41;
+                  </span>
+                </p>
+              ) : (
+                <p className="post__comments-text">
+                  Be this first one to comment
+                </p>
+              )}
+            </div>
+          )}
+          <Presence exitBeforeEnter>
+            {openComments && (
+              <Comments
+                key={_id}
+                postId={_id}
+                setOpenComments={setOpenComments}
+                fetchTopComment={fetchTopComment}
+              />
+            )}
+          </Presence>
+          {popup && <BlurredMenu setUserOption={setPopup} />}
+        </section>
+      ) : (
+        <div className="post">
+          <div className="post__author">
+            <div className="post__image-author">
+              <SkeletonTheme
+                color="var(--light-bg-700)"
+                highlightColor="var(--light-bg-600)"
+              >
+                <Skeleton
+                  style={{
+                    borderRadius: '100%',
+                    height: '35px',
+                    width: '35px',
+                  }}
+                />
+              </SkeletonTheme>
+            </div>
+            <div>
+              <p className="post__author-name">
+                <SkeletonTheme
+                  color="var(--light-bg-700)"
+                  highlightColor="var(--light-bg-600)"
+                >
+                  <Skeleton width={200} height={10} />
+                </SkeletonTheme>
+              </p>
+              <p className="post__info">
+                <SkeletonTheme
+                  color="var(--light-bg-700)"
+                  highlightColor="var(--light-bg-600)"
+                >
+                  <Skeleton width={150} height={8} />
+                </SkeletonTheme>
+              </p>
+            </div>
+          </div>
+          <div className="post__content" style={{ margin: '2rem 4.5rem' }}>
             <SkeletonTheme
               color="var(--light-bg-700)"
               highlightColor="var(--light-bg-600)"
             >
               <Skeleton
-                style={{ borderRadius: '100%', height: '35px', width: '35px' }}
+                width={300}
+                count={2}
+                height={10}
+                style={{ marginBottom: '5px' }}
               />
+              <Skeleton height={10} width={250} />
             </SkeletonTheme>
           </div>
-        )}
-
-        <div>
-          <p className="post__author-name">
-            <Link
-              style={{ textDecoration: 'none', color: 'inherit' }}
-              to={
-                user && user_id === user._id
-                  ? '/account'
-                  : `/profile/${user_id}`
-              }
-            >
-              {author?.firstName && author?.lastName ? (
-                `${author?.firstName} ${author?.lastName}`
-              ) : (
-                <SkeletonTheme
-                  color="var(--light-bg-700)"
-                  highlightColor="var(--light-bg-600)"
-                >
-                  <Skeleton width={200} />
-                </SkeletonTheme>
-              )}
-            </Link>
-          </p>
-          {category ? (
-            <p className="post__info">
-              Posted on: <span className="post__category-name">{category}</span>
-              <span> {dayjs(date).fromNow()}</span>
-            </p>
-          ) : (
+          <div
+            className="post__actions"
+            style={{
+              padding: '0',
+              justifyContent: 'center',
+            }}
+          >
             <SkeletonTheme
               color="var(--light-bg-700)"
               highlightColor="var(--light-bg-600)"
             >
-              <Skeleton width={100} />
-            </SkeletonTheme>
-          )}
-        </div>
-      </div>
-      <div className="post__content">
-        {!isEdit && (
-          <h3 className="post__headline">
-            {headline || (
-              <SkeletonTheme
-                color="var(--light-bg-700)"
-                highlightColor="var(--light-bg-600)"
-              >
-                <Skeleton count={2} />
-                <Skeleton width={300} />
-              </SkeletonTheme>
-            )}
-          </h3>
-        )}
-        {isEdit && (
-          <div className="post__edit-input-container">
-            <input
-              className="post__edit-input"
-              value={newHeadline}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setNewHeadline(e.target.value)
-              }
-              type="text"
-            />
-            <span className="post__edit-message">{message}</span>
-            <div style={{ marginBottom: '1rem' }}>
-              <button
-                onClick={editPost}
-                className="post__edit-button post__edit-button--edit"
-              >
-                Edit
-              </button>
-              <button
-                className="post__edit-button"
-                onClick={() => {
-                  setIsEdit(false);
-                  setMessage('');
+              <Skeleton
+                height={10}
+                width={120}
+                count={2}
+                style={{
+                  margin: '0rem 1rem 1rem 1rem',
                 }}
-              >
-                Cancel
-              </button>
-            </div>
+              />
+            </SkeletonTheme>
           </div>
-        )}
-      </div>
-      {file.length > 3 && (
-        <div className="post__image-container">
-          <img className="post__image" src={file} alt={headline} />
         </div>
       )}
-      <div
-        style={disableComments ? { paddingBottom: '1rem' } : {}}
-        className="post__actions"
-      >
-        <m.div
-          className="post__container-likes"
-          animate={{ color: liked ? '#753ee0' : 'inherit' }}
-        >
-          <m.button
-            className="post__btn"
-            whileTap={{ scale: 1.2 }}
-            onClick={() => handleLikePost()}
-            aria-label="like or dislike post"
-            type="button"
-          >
-            {liked ? (
-              <FontAwesomeIcon icon={faStarChonky} />
-            ) : (
-              <FontAwesomeIcon icon={farBellThin} />
-            )}
-          </m.button>
-          <span className="post__likes">{likes.length}</span>
-        </m.div>
-        <div>
-          {!disableComments && (
-            <button
-              className="post__btn post__single-action"
-              onClick={() => setOpenComments(true)}
-            >
-              <span className="post__count-comments">
-                {comment?.allComments}{' '}
-              </span>
-              comments
-            </button>
-          )}
-          <button className="post__btn post__single-action">
-            <Floater
-              styles={{
-                floater: {
-                  filter: 'none',
-                },
-                container: {
-                  backgroundColor: 'var(--light-bg-700)',
-                  color: 'var(--font-dark-600)',
-                  filter: 'none',
-                  minHeight: 'none',
-                  padding: 10,
-                },
-                arrow: {
-                  color: 'var(--light-bg-700)',
-                  length: 8,
-                  spread: 10,
-                },
-              }}
-              content={ShareSocials()}
-            >
-              <div style={{ display: 'flex' }}>
-                Share <i className="fas fa-share"></i>
-              </div>
-            </Floater>
-          </button>
-        </div>
-      </div>
-      {!disableComments && comment?.topComment && (
-        <>
-          {commentAuthor?.firstName && comment.topComment.text ? (
-            <p className="post__top-comment">
-              <span className="post__top-author">
-                {commentAuthor?.firstName}
-              </span>
-              {' · '}
-              <span className="post__top-date">
-                {dayjs(comment.topComment.date).fromNow()}
-              </span>{' '}
-              {' · '}
-              <span className="post__top-text">{comment.topComment.text}</span>
-            </p>
-          ) : (
-            <div style={{ margin: '1rem', textAlign: 'center' }}>
-              <SkeletonTheme
-                color="var(--light-bg-700)"
-                highlightColor="var(--light-bg-600)"
-              >
-                <Skeleton width={300} />
-              </SkeletonTheme>
-            </div>
-          )}
-        </>
-      )}
-      {!disableComments && comment && (
-        <div
-          className="post__comments--count"
-          onClick={() => setOpenComments(true)}
-        >
-          {comment.allComments >= 1 ? (
-            <p className="post__comments-text">
-              View all comments{' '}
-              <span className="post__comments-total">
-                &#40;{comment?.allComments}&#41;
-              </span>
-            </p>
-          ) : (
-            <p className="post__comments-text">Be this first one to comment</p>
-          )}
-        </div>
-      )}
-      <Presence exitBeforeEnter>
-        {openComments && (
-          <Comments
-            key={_id}
-            postId={_id}
-            setOpenComments={setOpenComments}
-            fetchTopComment={fetchTopComment}
-          />
-        )}
-      </Presence>
-      {popup && <BlurredMenu setUserOption={setPopup} />}
-    </section>
+    </>
   );
 };
 
