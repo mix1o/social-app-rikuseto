@@ -29,7 +29,8 @@ import {
   TwitterIcon,
   WhatsappIcon,
 } from 'react-share';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
@@ -287,23 +288,76 @@ const Post: FC<PostInterfaceExtended> = ({
         </div>
       )}
       <div className="post__author">
-        <img
-          className="post__image-author"
-          src={author?.avatar}
-          alt="user profile"
-        />
+        {author?.avatar ? (
+          <img
+            className="post__image-author"
+            src={author?.avatar}
+            alt="user profile"
+          />
+        ) : (
+          <div className="post__image-author">
+            <SkeletonTheme
+              color="var(--light-bg-700)"
+              highlightColor="var(--light-bg-600)"
+            >
+              <Skeleton
+                style={{ borderRadius: '100%', height: '35px', width: '35px' }}
+              />
+            </SkeletonTheme>
+          </div>
+        )}
+
         <div>
           <p className="post__author-name">
-            {author?.firstName} {author?.lastName}
+            <Link
+              style={{ textDecoration: 'none', color: 'inherit' }}
+              to={
+                user && user_id === user._id
+                  ? '/account'
+                  : `/profile/${user_id}`
+              }
+            >
+              {author?.firstName && author?.lastName ? (
+                `${author?.firstName} ${author?.lastName}`
+              ) : (
+                <SkeletonTheme
+                  color="var(--light-bg-700)"
+                  highlightColor="var(--light-bg-600)"
+                >
+                  <Skeleton width={200} />
+                </SkeletonTheme>
+              )}
+            </Link>
           </p>
-          <p className="post__info">
-            Posted on: <span className="post__category-name">{category}</span>
-            <span> {dayjs(date).fromNow()}</span>
-          </p>
+          {category ? (
+            <p className="post__info">
+              Posted on: <span className="post__category-name">{category}</span>
+              <span> {dayjs(date).fromNow()}</span>
+            </p>
+          ) : (
+            <SkeletonTheme
+              color="var(--light-bg-700)"
+              highlightColor="var(--light-bg-600)"
+            >
+              <Skeleton width={100} />
+            </SkeletonTheme>
+          )}
         </div>
       </div>
       <div className="post__content">
-        {!isEdit && <h3 className="post__headline">{headline}</h3>}
+        {!isEdit && (
+          <h3 className="post__headline">
+            {headline || (
+              <SkeletonTheme
+                color="var(--light-bg-700)"
+                highlightColor="var(--light-bg-600)"
+              >
+                <Skeleton count={2} />
+                <Skeleton width={300} />
+              </SkeletonTheme>
+            )}
+          </h3>
+        )}
         {isEdit && (
           <div className="post__edit-input-container">
             <input
@@ -370,7 +424,7 @@ const Post: FC<PostInterfaceExtended> = ({
               onClick={() => setOpenComments(true)}
             >
               <span className="post__count-comments">
-                {comment?.allComments}
+                {comment?.allComments}{' '}
               </span>
               comments
             </button>
@@ -405,15 +459,28 @@ const Post: FC<PostInterfaceExtended> = ({
       </div>
       {!disableComments && comment?.topComment && (
         <>
-          <p className="post__top-comment">
-            <span className="post__top-author">{commentAuthor?.firstName}</span>
-            {' · '}
-            <span className="post__top-date">
-              {dayjs(comment.topComment.date).fromNow()}
-            </span>{' '}
-            {' · '}
-            <span className="post__top-text">{comment.topComment.text}</span>
-          </p>
+          {commentAuthor?.firstName && comment.topComment.text ? (
+            <p className="post__top-comment">
+              <span className="post__top-author">
+                {commentAuthor?.firstName}
+              </span>
+              {' · '}
+              <span className="post__top-date">
+                {dayjs(comment.topComment.date).fromNow()}
+              </span>{' '}
+              {' · '}
+              <span className="post__top-text">{comment.topComment.text}</span>
+            </p>
+          ) : (
+            <div style={{ margin: '1rem', textAlign: 'center' }}>
+              <SkeletonTheme
+                color="var(--light-bg-700)"
+                highlightColor="var(--light-bg-600)"
+              >
+                <Skeleton width={300} />
+              </SkeletonTheme>
+            </div>
+          )}
         </>
       )}
       {!disableComments && comment && (
