@@ -5,6 +5,8 @@ import Category from './Category/Category';
 import CropImage from './CropImage';
 import { CreatePostI } from '../../interfaces/posts/postInterfaces';
 import Picker from 'emoji-picker-react';
+import useNotification from '../../Notifications/useNotification';
+import { checkPermission } from '../../helpers/CheckPermission';
 
 interface CreateProps {
   handleFetchPosts: () => void;
@@ -20,6 +22,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     file: '',
     category: '',
     user_id: user ? user._id : '',
+    notification: false,
   });
 
   const [correctImage, setCorrectImage] = useState<boolean>(false);
@@ -28,6 +31,8 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState<boolean>(false);
   const [isOpenEmoji, setIsOpenEmoji] = useState<boolean>(false);
+  const { checkNotificationSupport, subscribeToPushNotification } =
+    useNotification();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
@@ -42,7 +47,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     if (user) {
       axios.post(`${process.env.REACT_APP_API}/posts/create`, post);
     }
-    setPost({ headline: '', file: '', category: '' });
+    setPost({ headline: '', file: '', category: '', notification: false });
     setOpen(false);
     setTimeout(() => {
       handleFetchPosts();
@@ -82,8 +87,22 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     return () => setCorrectFormatPost(false);
   }, [post, message, correctImage, userPickedImage]);
 
+  useEffect(() => {}, []);
+
   const onEmojiClick = (event: any, emojiObject: any) => {
     setPost({ ...post, headline: post.headline + emojiObject.emoji });
+  };
+
+  const handleNotification = () => {
+    const permission = checkPermission();
+
+    if (permission) {
+      console.log('granted');
+    }
+  };
+
+  const sendTest = () => {
+    axios.post(`${process.env.REACT_APP_API}/user/test-notification`, post);
   };
 
   return (
@@ -155,6 +174,31 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
               {message}
             </p>
           )}
+          {checkNotificationSupport && (
+            <label
+              onClick={handleNotification}
+              style={{ color: 'var(--font-dark-600)' }}
+            >
+              <input
+                type="checkbox"
+                onChange={e =>
+                  setPost({ ...post, notification: !post.notification })
+                }
+              />
+              <p>
+                Receive notification{' '}
+                <span>{`${
+                  !checkPermission() ? '(Notifications are disabled)' : ''
+                }`}</span>
+              </p>
+            </label>
+          )}
+          {/* {checkNotificationSupport && info.length >= 2 && (
+          )} */}
+          <button onClick={subscribeToPushNotification}>
+            SUBSCRIBE TO NOTIFICATIOn
+          </button>
+          <button onClick={sendTest}>test noti</button>
 
           <button
             className="create-post__btn-add"

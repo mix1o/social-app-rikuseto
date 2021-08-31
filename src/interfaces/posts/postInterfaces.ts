@@ -18,4 +18,5 @@ export interface CreatePostI {
   file?: string;
   category?: string;
   user_id?: string;
+  notification: boolean;
 }

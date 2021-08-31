@@ -25,15 +25,23 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <script>
-      if ('serviceWorker' in navigator) {
+    <!-- <script>
+      if ('serviceWorker' in navigator && 'PushManager' in window) {
         window.addEventListener('load', () => {
           navigator.serviceWorker
             .register('./service-worker.js')
-            .then(reg => console.log('Success: ', reg.scope))
+            .then(
+              reg => console.log('Happy')
+              // reg.pushManager
+              //   .subscribe({ userVisibleOnly: true })
+              //   .then(sub => console.log(sub))
+            )
             .catch(err => console.log('Something went wrong: ', err));
         });
+        async function askUserPermission() {
+          return await Notification.requestPermission();
+        }
       }
-    </script>
+    </script> -->
   </body>
 </html>

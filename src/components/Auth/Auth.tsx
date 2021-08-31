@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
-import { useService } from '@xstate/react';
+import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
 import ResetPassword from './ResetPassword';
 
 const Auth: FC = () => {
-  const [current] = useService(authService);
+  const [current] = useActor(authService);
 
   return (
     <div className="auth">
