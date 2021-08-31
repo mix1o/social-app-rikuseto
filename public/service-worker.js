@@ -35,30 +35,33 @@ self.addEventListener('activate', e => {
   );
 });
 
-const receivePushNotification = event => {
-  const options = {
-    body: 'This notification was generated from a push!',
-    icon: 'images/example.png',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: '2',
-    },
-    actions: [
-      {
-        action: 'explore',
-        title: 'Explore this new world',
-        icon: 'images/checkmark.png',
-      },
-      { action: 'close', title: 'Close', icon: 'images/xmark.png' },
-    ],
-  };
-  event.waitUntil(
-    self.registration.showNotification('This is my notifiaction', options)
-  );
+const receivePushNotification = e => {
+  self.clients.matchAll().then(c => {
+    if (c.length === 0) {
+      const { title, text, url } = e.data.json();
+
+      const options = {
+        body: text,
+        vibrate: [100, 50, 100],
+        data: {
+          dateOfArrival: Date.now(),
+          primaryKey: '2',
+        },
+        actions: [
+          {
+            action: 'explore',
+            title: 'DIS',
+            // icon: 'images/checkmark.png',
+          },
+          { action: 'close', title: 'Close' },
+        ],
+      };
+      e.waitUntil(self.registration.showNotification(title, options));
+    }
+  });
 };
 
-function openPushNotification(event) {
+const openPushNotification = event => {
   console.log(
     '[Service Worker] Notification click Received.',
     event.notification.data
@@ -66,7 +69,7 @@ function openPushNotification(event) {
 
   event.notification.close();
   event.waitUntil(self.clients.openWindow(event.notification.data));
-}
+};
 
 self.addEventListener('push', receivePushNotification);
 self.addEventListener('notificationclick', openPushNotification);

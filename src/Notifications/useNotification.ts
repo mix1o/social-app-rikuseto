@@ -39,6 +39,7 @@ const useNotification = () => {
     const getExistingSubscription = async () => {
       const existingSubscription = await getUserSubscription();
       if (existingSubscription === null) {
+        // TODO Display to user if he wants to subscripe, Check if user have already addded this SW to his account
         setInfo('Do you want to get notification ?');
       }
       setUserSubscription(existingSubscription);
@@ -77,11 +78,20 @@ const useNotification = () => {
     createNotificationSubscription()
       .then(sub => {
         setUserSubscription(sub);
-        if (sub?.endpoint)
+        if (sub?.endpoint) {
+          const subJSON = JSON.parse(JSON.stringify(sub));
+
           axios.put(`${process.env.REACT_APP_API}/user/update-sw`, {
-            subscriptionEndpoint: sub?.endpoint,
+            subscription: {
+              endpoint: sub?.endpoint,
+              keys: {
+                auth: subJSON.keys.auth,
+                p256dh: subJSON.keys.p256dh,
+              },
+            },
             userId: user._id,
           });
+        }
 
         setLoading(false);
       })

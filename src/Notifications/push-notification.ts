@@ -1,6 +1,3 @@
-const pushServerPublicKey =
-  'BIN2Jc5Vmkmy-S3AUrcMlpKxJpLeVRAfu9WBqUbJ70SJOCWGCGXKY-Xzyh7HDr6KbRDGYHjqZ06OcS3BjD7uAm8';
-
 export const notificationSupport = () =>
   'serviceWorker' in navigator && 'PushManager' in window;
 
@@ -16,7 +13,7 @@ export const createNotificationSubscription = async () => {
 
   return await SW.pushManager.subscribe({
     userVisibleOnly: true,
-    applicationServerKey: pushServerPublicKey,
+    applicationServerKey: process.env.REACT_APP_VAPID_KEY_PUBLIC,
   });
 };
 

@@ -22,6 +22,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     file: '',
     category: '',
     user_id: user ? user._id : '',
+    notification: false,
   });
 
   const [correctImage, setCorrectImage] = useState<boolean>(false);
@@ -46,7 +47,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     if (user) {
       axios.post(`${process.env.REACT_APP_API}/posts/create`, post);
     }
-    setPost({ headline: '', file: '', category: '' });
+    setPost({ headline: '', file: '', category: '', notification: false });
     setOpen(false);
     setTimeout(() => {
       handleFetchPosts();
@@ -98,6 +99,10 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     if (permission) {
       console.log('granted');
     }
+  };
+
+  const sendTest = () => {
+    axios.post(`${process.env.REACT_APP_API}/user/test-notification`, post);
   };
 
   return (
@@ -174,7 +179,12 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
               onClick={handleNotification}
               style={{ color: 'var(--font-dark-600)' }}
             >
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                onChange={e =>
+                  setPost({ ...post, notification: !post.notification })
+                }
+              />
               <p>
                 Receive notification{' '}
                 <span>{`${
@@ -188,6 +198,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           <button onClick={subscribeToPushNotification}>
             SUBSCRIBE TO NOTIFICATIOn
           </button>
+          <button onClick={sendTest}>test noti</button>
 
           <button
             className="create-post__btn-add"
