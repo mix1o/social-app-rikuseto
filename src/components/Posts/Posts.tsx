@@ -42,7 +42,7 @@ const Posts: FC = () => {
   return (
     <>
       <Header />
-      <main style={disabled ? { overflow: 'hidden', height: '50vh' } : {}}>
+      <main style={disabled ? { overflowY: 'hidden', height: '20vh' } : {}}>
         {user && !state.isOpenCommentComponent && (
           <div className="post__wrapper">
             <label className="post__container-input">
