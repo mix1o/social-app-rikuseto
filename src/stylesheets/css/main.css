@@ -739,15 +739,6 @@ h6 {
   font-size: 1.4rem;
 }
 
-.ReactCrop__drag-handle {
-  border: 5px solid red;
-}
-
-.test {
-  max-width: 100%;
-  max-height: 100%;
-}
-
 .crop-image__preview-canvas {
   max-width: 100%;
   max-height: 100%;
@@ -1445,7 +1436,6 @@ h6 {
 
 .categories__headline {
   text-align: center;
-  color: var(--font-dark-300);
   margin-top: 4rem;
   font-size: 2.1rem;
 }
