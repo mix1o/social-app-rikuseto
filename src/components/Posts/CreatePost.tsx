@@ -75,7 +75,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       return false;
     }
   };
-  console.log(post);
+
   useEffect(() => {
     setCorrectFormatPost(checkCorrectPost());
 
