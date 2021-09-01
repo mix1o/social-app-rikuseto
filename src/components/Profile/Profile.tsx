@@ -6,6 +6,7 @@ import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import Header from '../Header/Header';
 import Post from '../Posts/Post';
 import Comment from '../Comments/Comment/Comment';
+import { useCookies } from 'react-cookie';
 
 interface UserDataInterface {
   id: string;
@@ -21,12 +22,21 @@ interface ProfileI {
   comments: CommentsData[];
 }
 
+interface FriendI {
+  friendId: string;
+  roomId: string;
+  userId: string;
+}
+
 const Profile: FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [cookies, setCookie] = useCookies();
+  const { user } = cookies;
 
   const [profile, setProfile] = useState<ProfileI>();
   const [option, setOption] = useState<string>('posts');
 
+  const [isSent, setIsSent] = useState(false);
   const MODE_POSTS = 'posts';
   const MODE_COMMENTS = 'comments';
 
@@ -56,10 +66,58 @@ const Profile: FC = () => {
 
   useEffect(() => {
     getUserData();
-  }, []);
+    if (user) {
+      checkIsFriend();
+      isSentRequest();
+    }
+  }, [user]);
+
+  const handleAddToFriend = () => {
+    const usersIds = {
+      userId: user._id,
+      friendId: profile?.user.id,
+    };
+
+    axios
+      .post(`${process.env.REACT_APP_API}/user/add-friend`, usersIds)
+      .then(res => {
+        setCookie('user', res.data.user);
+        console.log(res.data.user);
+        isSentRequest();
+      });
+  };
+  // TODO Delete sent_requests
+  const checkIsFriend = () => {
+    axios
+      .get(`${process.env.REACT_APP_API}/user/get-current?id=${user._id}`)
+      .then(res => {
+        setCookie('user', res.data.user);
+        validateFriend();
+      });
+  };
+
+  const isSentRequest = () => {
+    user.sent_requests.forEach((request: any) => {
+      if (request.requestedUser == id) {
+        setIsSent(true);
+      }
+    });
+  };
+
+  const [isFriend, setIsFriend] = useState(false);
+  const validateFriend = () => {
+    user.friends.forEach((friend: any) => {
+      if (friend.friendId == id) {
+        setIsFriend(true);
+        setIsSent(false);
+      }
+    });
+  };
+
   return (
     <>
       <Header />
+
       <div className="profile">
         <div className="profile__user">
           <img
@@ -75,6 +133,12 @@ const Profile: FC = () => {
             <p className="profile__total">
               Total posts: {profile?.posts.length}
             </p>
+
+            {!isSent && !isFriend && (
+              <button onClick={handleAddToFriend}>Add to friend</button>
+            )}
+            {isSent && <h1>PENDING</h1>}
+            {isFriend && <h1>You are friends</h1>}
           </div>
         </div>
         <div className="profile__choice">
