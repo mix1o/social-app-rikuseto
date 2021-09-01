@@ -9,7 +9,8 @@ import {
 } from './posts';
 import { CategoriesRoutes } from './categories';
 import { ProfileRoutes } from './profile';
-import { MessagesRoutes } from './messages';
+import { MessagesRoutes, ConversationRoute } from './messages';
+import { NotificationRoutes } from './notifications';
 
 interface RouteProps<T> {
   component: FC<T>;
@@ -27,5 +28,7 @@ export const Routes: RouteProps<any>[] = [
   CategoriesRoutes,
   ProfileRoutes,
   MessagesRoutes,
+  ConversationRoute,
+  NotificationRoutes,
   //   CreatePostRoute,
 ];
