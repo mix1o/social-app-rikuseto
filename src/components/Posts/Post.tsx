@@ -41,11 +41,11 @@ const Post: FC<PostInterfaceExtended> = ({
   likes,
   refreshPosts,
   date,
-  saved,
 }) => {
-  const [cookies] = useCookies();
+  const [cookies, setCookie, removeCookie] = useCookies();
   const { user } = cookies;
   const [liked, setLiked] = useState<boolean | undefined>(false);
+  const [savedPost, setSavedPost] = useState<boolean>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
 
@@ -94,6 +94,11 @@ const Post: FC<PostInterfaceExtended> = ({
 
     const like = LikedElements(user, likes);
     setLiked(like);
+
+    if (user) {
+      checkIsSaved(user);
+    }
+
     return;
   }, [likes, user]);
 
@@ -183,11 +188,28 @@ const Post: FC<PostInterfaceExtended> = ({
       });
   };
 
+  const checkIsSaved = (userUpdate: any) => {
+    if (userUpdate.saved_posts.length > 0) {
+      userUpdate.saved_posts.forEach((element: string) => {
+        if (element === _id) {
+          setSavedPost(true);
+        }
+      });
+    } else {
+      setSavedPost(false);
+    }
+  };
+
   const savePost = () => {
-    axios.put(`${process.env.REACT_APP_API}/posts/save`, {
-      _id,
-      userId: user._id,
-    });
+    axios
+      .put(`${process.env.REACT_APP_API}/posts/save`, {
+        _id,
+        userId: user._id,
+      })
+      .then(res => {
+        checkIsSaved(res.data.updatedUser);
+        setCookie('user', res.data.updatedUser);
+      });
   };
 
   const ActionsPost = () => {
@@ -196,17 +218,16 @@ const Post: FC<PostInterfaceExtended> = ({
         {user && user._id !== user_id && (
           <>
             <button
-              onClick={async () => {
+              onClick={() => {
                 savePost();
-                if (saved) {
-                  setTimeout(() => {
-                    refreshPosts();
-                  }, 200);
-                }
+
+                setTimeout(() => {
+                  refreshPosts();
+                }, 200);
               }}
               className="post__action"
             >
-              {!saved ? 'Save post' : 'Unsave'}
+              {savedPost ? 'Unsave' : 'Save post'}
               <i style={{ marginLeft: '.5rem' }} className="fas fa-flag"></i>
             </button>
             <button className="post__action">
@@ -238,7 +259,7 @@ const Post: FC<PostInterfaceExtended> = ({
   };
 
   const [openToolTip, setOpenToolTip] = useState<boolean>(false);
-  console.log(file);
+
   return (
     <>
       {headline &&
@@ -489,22 +510,22 @@ const Post: FC<PostInterfaceExtended> = ({
               </SkeletonTheme>
             </div>
             <div>
-              <p className="post__author-name">
+              <div className="post__author-name">
                 <SkeletonTheme
                   color="var(--light-bg-700)"
                   highlightColor="var(--light-bg-600)"
                 >
                   <Skeleton width={200} height={10} />
                 </SkeletonTheme>
-              </p>
-              <p className="post__info">
+              </div>
+              <div className="post__info">
                 <SkeletonTheme
                   color="var(--light-bg-700)"
                   highlightColor="var(--light-bg-600)"
                 >
                   <Skeleton width={150} height={8} />
                 </SkeletonTheme>
-              </p>
+              </div>
             </div>
           </div>
           <div className="post__content" style={{ margin: '2rem 4.5rem' }}>
