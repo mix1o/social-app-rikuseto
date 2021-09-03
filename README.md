@@ -11,9 +11,10 @@ App was made with [Nightmare9254].
 - Create and Login to your account
 - Add new new posts with photos, comment on different posts and like them
 - View your liked history and created posts.
-- Buy credits using creditcard
 - Delete your account, change your pasword or user avatar
 - Sort posts by recent and popular
+- View notifications
+- Send message to user
 
 ## Tech Stack
 
