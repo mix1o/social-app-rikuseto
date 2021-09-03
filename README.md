@@ -4,7 +4,7 @@ Social app made with react and nodejs, on which you can easily add Posts, Images
 
 Live preview: [rikuseto]
 
-App was made with [mix1o].
+App was made with [Nightmare9254].
 
 ## What you can do
 
@@ -26,5 +26,5 @@ App was made with [mix1o].
 - google reCaptcha
 - formik
 
-[mix1o]: https://github.com/mix1o
-[rikuseto]: https://mn-social-app.herokuapp.com/
+[Nightmare9254]: https://github.com/Nightmare9254
+[rikuseto]: https://social-rikuseto.netlify.app/
