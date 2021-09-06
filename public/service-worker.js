@@ -5,7 +5,7 @@ const receivePushNotification = e => {
     if (c.length === 0) {
     }
   });
-  const { title, text, url } = e.data.json();
+  const { header, body, url, photo } = e.data.json();
 
   //EG
   // const options = {
@@ -27,29 +27,38 @@ const receivePushNotification = e => {
 
   const options = {
     data: url,
-    body: text,
+    body,
+    url,
+    icon: photo,
     vibrate: [100, 50, 100],
-
     actions: [
       {
-        action: 'Detail',
+        action: 'details',
         title: 'Check it out',
         // icon: 'images/checkmark.png',
       },
-      // #TODO Cancel notification
-      { action: 'Close', title: 'Close' },
+
+      { action: 'close', title: 'Close' },
     ],
   };
   e.waitUntil(self.registration.showNotification(title, options));
 };
 
-const openPushNotification = event => {
-  console.log(
-    '[Service Worker] Notification click Received.',
-    event.notification.data
-  );
+const openPushNotification = e => {
+  const { url } = e.data.json();
 
-  event.notification.close();
+  e.notification.close();
+
+  switch (e.action) {
+    case 'details':
+      client.openWindow(url);
+      break;
+    case 'close':
+      e.notification.close();
+      e.notification.cancel();
+      break;
+  }
+
   event.waitUntil(self.clients.openWindow(event.notification.data));
 };
 
