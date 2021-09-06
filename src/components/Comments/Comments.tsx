@@ -43,6 +43,7 @@ interface SortedElement {
 const Comments: FC<CommentProps> = ({
   postId,
   setOpenComments,
+  authorId: postAuthorId,
   fetchTopComment,
   view = false,
 }) => {
@@ -73,6 +74,7 @@ const Comments: FC<CommentProps> = ({
           commentText,
           postId,
           userId: user._id,
+          postAuthorId,
         })
         .then(() => {
           setCommentText('');
@@ -132,6 +134,7 @@ const Comments: FC<CommentProps> = ({
     return 1;
   };
 
+  const commentId = window.location.href.split('#')[1];
   return (
     <m.section
       variants={commentVariant}
@@ -193,6 +196,7 @@ const Comments: FC<CommentProps> = ({
                   date={date}
                   refreshComments={getAllComments}
                   fetchTopComment={fetchTopComment}
+                  scroll={commentId===_id ? true : false}
                 />
               );
             })}
