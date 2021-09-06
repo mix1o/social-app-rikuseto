@@ -35,8 +35,9 @@ const Profile: FC = () => {
 
   const [profile, setProfile] = useState<ProfileI>();
   const [option, setOption] = useState<string>('posts');
-
+  const [isFriend, setIsFriend] = useState(false);
   const [isSent, setIsSent] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const MODE_POSTS = 'posts';
   const MODE_COMMENTS = 'comments';
 
@@ -68,11 +69,11 @@ const Profile: FC = () => {
     getUserData();
     if (user) {
       checkIsFriend();
-      isSentRequest();
     }
-  }, [user]);
+  }, []);
 
   const handleAddToFriend = () => {
+    setDisabled(true);
     const usersIds = {
       userId: user._id,
       friendId: profile?.user.id,
@@ -81,39 +82,45 @@ const Profile: FC = () => {
     axios
       .post(`${process.env.REACT_APP_API}/user/add-friend`, usersIds)
       .then(res => {
-        setCookie('user', res.data.user);
-        console.log(res.data.user);
-        isSentRequest();
+        if (res.status === 200) {
+          setCookie('user', res.data.user, { path: '/' });
+          isSentRequest(res.data.user);
+        }
       });
   };
-  // TODO Delete sent_requests
   const checkIsFriend = () => {
     axios
       .get(`${process.env.REACT_APP_API}/user/get-current?id=${user._id}`)
       .then(res => {
-        setCookie('user', res.data.user);
-        validateFriend();
+        if (res.status === 200) {
+          setCookie('user', res.data.user, { path: '/' });
+          validateFriend(res.data.user);
+        }
       });
   };
 
-  const isSentRequest = () => {
-    user.sent_requests.forEach((request: any) => {
-      if (request.requestedUser == id) {
-        setIsSent(true);
-      }
-    });
+  const isSentRequest = (person: any) => {
+    console.log(person);
+    if (person.sent_requests) {
+      person.sent_requests.forEach((request: any) => {
+        if (request.requestedUser == id) {
+          setIsSent(true);
+        }
+      });
+    }
   };
 
-  const [isFriend, setIsFriend] = useState(false);
-  const validateFriend = () => {
-    user.friends.forEach((friend: any) => {
-      if (friend.friendId == id) {
-        setIsFriend(true);
-        setIsSent(false);
-      }
-    });
+  const validateFriend = (person: any) => {
+    if (person.friends.length >= 1) {
+      person.friends.forEach((friend: any) => {
+        if (friend.friendId == id) {
+          setIsFriend(true);
+          setIsSent(false);
+        }
+      });
+    }
   };
-
+  // TODO Add Block person option
   return (
     <>
       <Header />
@@ -135,10 +142,20 @@ const Profile: FC = () => {
             </p>
 
             {!isSent && !isFriend && (
-              <button onClick={handleAddToFriend}>Add to friend</button>
+              <button
+                className="profile__add"
+                disabled={disabled}
+                onClick={handleAddToFriend}
+              >
+                Add to friend
+              </button>
             )}
-            {isSent && <h1>PENDING</h1>}
-            {isFriend && <h1>You are friends</h1>}
+            {isSent && (
+              <span className="profile__status">An invitation was sent</span>
+            )}
+            {isFriend && (
+              <span className="profile__status">You are friends</span>
+            )}
           </div>
         </div>
         <div className="profile__choice">
