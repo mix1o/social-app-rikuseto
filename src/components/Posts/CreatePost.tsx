@@ -216,8 +216,13 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
 
 export default CreatePost;
 
-//TODO Zrobić podstrone categories w account
+// TODO wyswietlanie powiadomien (znajomi,komentarze, like) w komponencie notification - REACT
+// TODO Aktualizowanie statusu powiadomienia (seen or not)
 
-//TODO Wyświetlanie postów z ulubionymi kategoriami
+// TODO Mapowanie friendsów w komponencie messages
+// TODO MESSAGES - zapisywanie w mongo
+// TODO STYLE dla messages
 
-//TODO Możliwość przegladania innych profilów userów
+// TODO Wyświetlanie postów z ulubionymi kategoriami
+
+// TODO Friends request
