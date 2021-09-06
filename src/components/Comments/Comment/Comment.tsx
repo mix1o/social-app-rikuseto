@@ -1,6 +1,12 @@
 import axios from 'axios';
-import React, { FC, useState, ChangeEvent } from 'react';
-import { useEffect } from 'react';
+import React, {
+  FC,
+  useState,
+  ChangeEvent,
+  useEffect,
+  useRef,
+  RefObject,
+} from 'react';
 import { useCookies } from 'react-cookie';
 import { LikedElements } from '../../../hooks/LikedElements';
 import { AuthorInterface } from '../../../interfaces/common/common';
@@ -24,14 +30,23 @@ const Comment: FC<SingleCommentProps> = ({
   date,
   refreshComments,
   fetchTopComment,
+  scroll,
 }) => {
   const [cookies] = useCookies();
   const { user } = cookies;
+
   const [liked, setLiked] = useState<boolean | undefined>();
   const [author, setAuthor] = useState<AuthorInterface>();
   const [popup, setPopup] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [newText, setNewText] = useState<string>(text);
+  const [message, setMessage] = useState<string>('');
+  const [openToolTip, setOpenToolTip] = useState<boolean>(false);
+  const location = useLocation();
+  const commentId = window.location.href.split('#')[1];
   dayjs.extend(relativeTime);
 
+  const commentRef = useRef<any>();
   const [displayMessage, setDisplayMessage] = useState<boolean>(false);
 
   const handleLikeComment = () => {
@@ -55,8 +70,6 @@ const Comment: FC<SingleCommentProps> = ({
     const like = LikedElements(user, likes);
     setLiked(like);
   }, [likes]);
-
-  const location = useLocation();
 
   const lastChildManipulation = () => {
     if (location.pathname.includes('post')) {
@@ -82,6 +95,16 @@ const Comment: FC<SingleCommentProps> = ({
       fetchTopComment();
     }, 500);
   };
+
+  useEffect(() => {
+    if (scroll) {
+      setTimeout(() => {
+        commentRef.current.scrollIntoView({ block: 'center' });
+        commentRef.current.style.boxShadow = '0 0 1rem 1px #753ee0';
+        commentRef.current.style.padding = '10px';
+      }, 500);
+    }
+  }, []);
 
   const ActionsComment = () => {
     return (
@@ -116,11 +139,6 @@ const Comment: FC<SingleCommentProps> = ({
     );
   };
 
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [newText, setNewText] = useState<string>(text);
-  const [message, setMessage] = useState<string>('');
-  const [openToolTip, setOpenToolTip] = useState<boolean>(false);
-
   const editComment = () => {
     if (newText === text) {
       setMessage('First you need to edit your post');
@@ -140,6 +158,7 @@ const Comment: FC<SingleCommentProps> = ({
   return (
     <>
       <div
+        ref={commentRef}
         className={`comment ${lastChildManipulation() ? 'comment--last' : ''}`}
       >
         {user && (
