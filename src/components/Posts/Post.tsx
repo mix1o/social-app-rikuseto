@@ -189,26 +189,27 @@ const Post: FC<PostInterfaceExtended> = ({
   };
 
   const checkIsSaved = (userUpdate: any) => {
-    if (userUpdate.saved_posts.length > 0) {
+    setSavedPost(false);
+    if (userUpdate.saved_posts) {
       userUpdate.saved_posts.forEach((element: string) => {
-        if (element === _id) {
+        if (element.toString() === _id.toString()) {
           setSavedPost(true);
+        } else {
+          setSavedPost(false);
         }
       });
-    } else {
-      setSavedPost(false);
     }
   };
 
   const savePost = () => {
     axios
       .put(`${process.env.REACT_APP_API}/posts/save`, {
-        _id,
+        id: _id,
         userId: user._id,
       })
       .then(res => {
         checkIsSaved(res.data.updatedUser);
-        setCookie('user', res.data.updatedUser);
+        setCookie('user', res.data.updatedUser, { path: '/' });
       });
   };
 
@@ -485,6 +486,7 @@ const Post: FC<PostInterfaceExtended> = ({
               <Comments
                 key={_id}
                 postId={_id}
+                authorId={user_id}
                 setOpenComments={setOpenComments}
                 fetchTopComment={fetchTopComment}
               />
