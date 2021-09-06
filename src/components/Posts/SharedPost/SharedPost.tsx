@@ -36,6 +36,7 @@ const SharedPost: FC = () => {
   return (
     <>
       <Header />
+
       <div className="post__container-shared">
         {correct &&
           !loading &&
@@ -64,6 +65,7 @@ const SharedPost: FC = () => {
             fetchTopComment={() => {}}
             setOpenComments={() => {}}
             view={true}
+            authorId={post![0].user_id}
           />
         </>
       )}
