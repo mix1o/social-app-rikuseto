@@ -16,6 +16,7 @@ export interface CommentProps {
   postId: string;
   setOpenComments: React.Dispatch<React.SetStateAction<boolean>>;
   fetchTopComment: () => void;
+  authorId: string;
   view?: boolean;
 }
 
@@ -25,6 +26,7 @@ export interface SingleCommentProps {
   text: string;
   likes: string[];
   date: string;
+  scroll?: boolean;
   refreshComments: () => void;
   fetchTopComment: () => void;
 }
