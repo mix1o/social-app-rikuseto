@@ -452,11 +452,14 @@ const Post: FC<PostInterfaceExtended> = ({
                   {commentAuthor?.firstName}
                 </span>
 
-                <span className="post__top-date">
+                <span
+                  style={{ marginLeft: '.7rem' }}
+                  className="post__top-date"
+                >
                   {dayjs(comment.topComment.date).fromNow()}
                 </span>
 
-                <span className="post__top-text">
+                <span style={{ marginLeft: '1rem' }} className="post__top-text">
                   {comment.topComment.text}
                 </span>
               </p>
