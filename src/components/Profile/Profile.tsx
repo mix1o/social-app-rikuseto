@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { CommentsData } from '../../interfaces/comments/commentsInterfaces';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
@@ -30,7 +30,7 @@ interface FriendI {
 
 const Profile: FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [cookies, setCookie] = useCookies();
+  const [cookies, setCookie, removeCookie] = useCookies();
   const { user } = cookies;
 
   const [profile, setProfile] = useState<ProfileI>();
@@ -40,7 +40,7 @@ const Profile: FC = () => {
   const [disabled, setDisabled] = useState(false);
   const MODE_POSTS = 'posts';
   const MODE_COMMENTS = 'comments';
-
+  const [isReq, setIsReq] = useState(false);
   const getUserData = () => {
     axios.get(`${process.env.REACT_APP_API}/profile?userId=${id}`).then(res => {
       setProfile(res.data);
@@ -65,11 +65,25 @@ const Profile: FC = () => {
     }
   };
 
+  const hasRequests = (person: any) => {
+    person.requests.forEach((request: any) => {
+      if (request.userId.toString() === id.toString()) {
+        console.log('chuj');
+        setIsReq(true);
+      }
+    });
+  };
+
   useEffect(() => {
     getUserData();
+
     if (user) {
       checkIsFriend();
+      isSentRequest(user);
     }
+    return () => {
+      setIsReq(false);
+    };
   }, []);
 
   const handleAddToFriend = () => {
@@ -88,6 +102,7 @@ const Profile: FC = () => {
         }
       });
   };
+
   const checkIsFriend = () => {
     axios
       .get(`${process.env.REACT_APP_API}/user/get-current?id=${user._id}`)
@@ -95,15 +110,15 @@ const Profile: FC = () => {
         if (res.status === 200) {
           setCookie('user', res.data.user, { path: '/' });
           validateFriend(res.data.user);
+          hasRequests(res.data.user);
         }
       });
   };
 
   const isSentRequest = (person: any) => {
-    console.log(person);
     if (person.sent_requests) {
       person.sent_requests.forEach((request: any) => {
-        if (request.requestedUser == id) {
+        if (request.requestedUser === id) {
           setIsSent(true);
         }
       });
@@ -113,14 +128,18 @@ const Profile: FC = () => {
   const validateFriend = (person: any) => {
     if (person.friends.length >= 1) {
       person.friends.forEach((friend: any) => {
-        if (friend.friendId == id) {
+        if (friend.friendId === id) {
           setIsFriend(true);
           setIsSent(false);
         }
       });
     }
   };
-  // TODO Add Block person option
+
+  // console.log('SEND ' + isSent);
+  // console.log('REQ ' + isReq);
+  // console.log('FRIEND ' + isFriend);
+
   return (
     <>
       <Header />
@@ -141,7 +160,7 @@ const Profile: FC = () => {
               Total posts: {profile?.posts.length}
             </p>
 
-            {!isSent && !isFriend && (
+            {!isSent && !isReq && !isFriend && (
               <button
                 className="profile__add"
                 disabled={disabled}
@@ -152,6 +171,9 @@ const Profile: FC = () => {
             )}
             {isSent && (
               <span className="profile__status">An invitation was sent</span>
+            )}
+            {isReq && (
+              <span className="profile__status">Check your notification</span>
             )}
             {isFriend && (
               <span className="profile__status">You are friends</span>
