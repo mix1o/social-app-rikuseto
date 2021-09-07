@@ -49,7 +49,6 @@ const Notifications = () => {
       .then(res => setNotifications(res.data));
   };
 
-  console.log(notifications);
   const optionRequest = (
     option: Option,
     requestId: string,
@@ -63,7 +62,8 @@ const Notifications = () => {
         friendId,
       })
       .then(res => {
-        setCookie('user', res.data.updateUser);
+        if (res.data.updateUser)
+          setCookie('user', res.data.updateUser, { path: '/' });
         getAllNotifications();
       });
   };
