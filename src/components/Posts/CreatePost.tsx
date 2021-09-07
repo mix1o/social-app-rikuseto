@@ -216,7 +216,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
 
 export default CreatePost;
 
-// TODO wyswietlanie powiadomien (znajomi,komentarze, like) w komponencie notification - REACT
 // TODO Aktualizowanie statusu powiadomienia (seen or not)
 
 // TODO Mapowanie friendsów w komponencie messages
