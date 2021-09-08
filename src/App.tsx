@@ -4,7 +4,6 @@ import { Routes } from './Routes';
 import Menu from './components/Navigation/Menu';
 import { useCookies } from 'react-cookie';
 
-import Test from './test';
 const App: FC = () => {
   const html = document.querySelector('html');
 
@@ -25,7 +24,6 @@ const App: FC = () => {
   return (
     <div>
       <Router>
-        <Route exact path="/test" component={Test} />
         <Switch>
           {Routes.map(
             ({ component: Component, url, exact }): ReactChild => (
