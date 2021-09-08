@@ -16,9 +16,7 @@ const SingleConversation = () => {
 
   const getMessages = () => {
     axios
-      .get(
-        `${process.env.REACT_APP_API}/conversations/get-conversation?roomId=${id}`
-      )
+      .get(`${process.env.REACT_APP_API}/user/get-conversation?roomId=${id}`)
       .then(res => setChat(res.data.conversation));
   };
 
