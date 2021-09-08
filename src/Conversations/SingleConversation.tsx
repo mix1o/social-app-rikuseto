@@ -5,7 +5,7 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const socket = io('http://localhost:4000');
+const socket = io(`${process.env.REACT_APP_SOCKET}`);
 
 const SingleConversation = () => {
   const { id, name } = useParams<{ id: string; name: string }>();
