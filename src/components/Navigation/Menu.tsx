@@ -1,5 +1,5 @@
-import { FC, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { FC, useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion as m } from 'framer-motion';
 import { useCounter } from '../../store/sub';
 import { MenuProps } from '../../interfaces/common/menu';
@@ -43,53 +43,66 @@ const MENU_ROUTES = {
   MAIN: 'main',
   NOTIFICATION: 'notification',
   POST: 'post',
-  MESSAGES: 'messages',
+  CONVERSATIONS: 'conversations',
   AUTH: 'auth',
 };
 
 const Menu = () => {
   const [selected, setSelected] = useState(MENU_ROUTES.MAIN);
+  const [visible, setVisible] = useState(true);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname.includes('single-conversation')) {
+      setVisible(false);
+    }
+  }, [location.pathname]);
 
   return (
-    <nav className="menu">
-      <MenuItem
-        href="/"
-        selected={selected}
-        iconsClasses="fas fa-home"
-        setSelected={setSelected}
-        value={MENU_ROUTES.MAIN}
-      />
-      <MenuItem
-        href="/messages"
-        selected={selected}
-        iconsClasses="fas fa-comment-dots"
-        setSelected={setSelected}
-        value={MENU_ROUTES.MESSAGES}
-      />
-      <MenuItem
-        href="/new-post"
-        selected={selected}
-        iconsClasses="fas fa-plus"
-        setSelected={setSelected}
-        value={MENU_ROUTES.POST}
-      />
-      <MenuItem
-        href="/notification"
-        selected={selected}
-        iconsClasses="fas fa-bell "
-        setSelected={setSelected}
-        value={MENU_ROUTES.NOTIFICATION}
-      />
+    <>
+      {visible && (
+        <nav className="menu">
+          <MenuItem
+            href="/"
+            selected={selected}
+            iconsClasses="fas fa-home"
+            setSelected={setSelected}
+            value={MENU_ROUTES.MAIN}
+          />
+          <MenuItem
+            href="/conversations"
+            selected={selected}
+            iconsClasses="fas fa-comment-dots"
+            setSelected={setSelected}
+            value={MENU_ROUTES.CONVERSATIONS}
+          />
+          <MenuItem
+            href="/new-post"
+            selected={selected}
+            iconsClasses="fas fa-plus"
+            setSelected={setSelected}
+            value={MENU_ROUTES.POST}
+          />
+          <MenuItem
+            href="/notification"
+            selected={selected}
+            iconsClasses="fas fa-bell "
+            setSelected={setSelected}
+            value={MENU_ROUTES.NOTIFICATION}
+          />
 
-      <MenuItem
-        // href={`${user ? '/account' : '/auth'}`}
-        href="/account"
-        selected={selected}
-        iconsClasses="fas fa-user"
-        setSelected={setSelected}
-        value={MENU_ROUTES.AUTH}
-      />
-    </nav>
+          <MenuItem
+            // href={`${user ? '/account' : '/auth'}`}
+            href="/account"
+            selected={selected}
+            iconsClasses="fas fa-user"
+            setSelected={setSelected}
+            value={MENU_ROUTES.AUTH}
+          />
+        </nav>
+      )}
+    </>
   );
 };
 
