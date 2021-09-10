@@ -6,6 +6,7 @@ import { authService } from '../Auth/AuthStateMachine';
 import logo from '../../assets/logo/logo.png';
 import BlurredMenu from '../Navigation/BlurredMenu';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../../helpers/useTheme';
 
 const variants = {
   open: {

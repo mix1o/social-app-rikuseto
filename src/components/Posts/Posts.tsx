@@ -15,9 +15,9 @@ const Posts: FC = () => {
   const { user } = cookies;
 
   const fetchPosts = (): void => {
-    axios
-      .get(`${process.env.REACT_APP_API}/posts/get`)
-      .then(res => setPosts(res.data));
+    axios.get(`${process.env.REACT_APP_API}/posts/get`).then(res => {
+      setPosts(res.data);
+    });
   };
 
   const handleFetchPosts = (): void => {
