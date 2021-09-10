@@ -16,29 +16,6 @@
   &__container {
     padding: 1rem;
   }
-  &__container-input {
-    width: 100%;
-    position: fixed;
-    bottom: 0rem;
-    left: 50%;
-    transform: translate(-50%);
-    background-color: var(--light-bg-500);
-    padding: 1rem;
-  }
-  &__input {
-    width: 100%;
-    padding: 0.7rem;
-    border: 2px solid clr.$main-bg-500;
-    color: var(--font-dark-600);
-    font-size: ft.$fs-250;
-    background: var(--light-bg-600);
-  }
-  &__publish {
-    background-color: clr.$main-bg-500;
-    border: none;
-    color: var(--font-dark-600);
-    font-size: ft.$fs-200;
-  }
   &__close-btn {
     font-size: ft.$fs-400;
     background-color: transparent;
@@ -81,22 +58,6 @@
     color: var(--font-dark-300);
     font-size: ft.$fs-300;
     text-align: center;
-  }
-  &__message {
-    color: clr.$warning-500;
-    text-align: center;
-    flex: 1;
-    font-size: ft.$fs-200;
-  }
-  &__emoji {
-    background: transparent;
-    border: none;
-    position: absolute;
-    right: -5px;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--font-dark-600);
-    font-size: ft.$fs-250;
   }
 }
 .comments-shared {

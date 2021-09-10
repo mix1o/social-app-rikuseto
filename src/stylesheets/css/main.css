@@ -454,8 +454,17 @@ h6 {
   font-size: 2.1rem;
   background: transparent;
   border: none;
+  cursor: pointer;
 }
 .menu__item--link {
+  text-decoration: none;
+  color: var(--font-dark-600);
+}
+.menu .fa-home,
+.menu .fa-comment-dots,
+.menu .fa-plus,
+.menu .fa-bell,
+.menu .fa-user {
   color: inherit;
 }
 
@@ -908,6 +917,71 @@ h6 {
     background: #f0f3f5;
   }
 }
+.textarea {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--light-bg-400);
+}
+.textarea__message {
+  text-align: center;
+  flex: 1;
+  color: #e53e3e;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+.textarea__wrapper {
+  display: flex;
+  padding: 1rem;
+  color: var(--font-dark-300);
+}
+.textarea__wrapper:focus-within, .textarea__wrapper:focus-within ~ .textarea__publish {
+  color: #753ee0;
+}
+.textarea__content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0 1rem;
+  background: var(--light-bg-700);
+  border-radius: 21px;
+}
+.textarea__emoji {
+  align-self: end;
+  background: transparent;
+  border: transparent;
+  color: inherit;
+  font-size: 2.1rem;
+  padding: 1rem;
+}
+.textarea__input {
+  border: none;
+  width: 100%;
+  resize: none;
+  background: transparent;
+  padding: 1rem;
+  font-size: 1.4rem;
+  font-family: inherit;
+  line-height: 21px;
+  color: var(--font-dark-600);
+}
+.textarea__publish {
+  align-self: center;
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  font-size: 2.1rem;
+}
+.textarea__publish .fa-location-arrow {
+  transform: scaleY(1.5) rotate(45deg);
+}
+.textarea__avatar {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 100rem;
+  align-self: center;
+}
+
 .post {
   background: var(--light-bg-600);
   max-width: 401px;
@@ -1209,29 +1283,6 @@ h6 {
 .comments__container {
   padding: 1rem;
 }
-.comments__container-input {
-  width: 100%;
-  position: fixed;
-  bottom: 0rem;
-  left: 50%;
-  transform: translate(-50%);
-  background-color: var(--light-bg-500);
-  padding: 1rem;
-}
-.comments__input {
-  width: 100%;
-  padding: 0.7rem;
-  border: 2px solid #753ee0;
-  color: var(--font-dark-600);
-  font-size: 1.4rem;
-  background: var(--light-bg-600);
-}
-.comments__publish {
-  background-color: #753ee0;
-  border: none;
-  color: var(--font-dark-600);
-  font-size: 1.2rem;
-}
 .comments__close-btn {
   font-size: 2.1rem;
   background-color: transparent;
@@ -1274,22 +1325,6 @@ h6 {
   color: var(--font-dark-300);
   font-size: 1.6rem;
   text-align: center;
-}
-.comments__message {
-  color: #e53e3e;
-  text-align: center;
-  flex: 1;
-  font-size: 1.2rem;
-}
-.comments__emoji {
-  background: transparent;
-  border: none;
-  position: absolute;
-  right: -5px;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  color: var(--font-dark-600);
-  font-size: 1.4rem;
 }
 
 .comments-shared .comments__close-btn {
@@ -1685,8 +1720,11 @@ h6 {
   background-color: var(--light-bg-500);
 }
 .conversation__header {
-  background: var(--light-bg-600);
+  background: var(--light-bg-400);
   padding: 0 1rem;
+  position: sticky;
+  top: 0;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1714,7 +1752,6 @@ h6 {
 }
 .conversation__messages {
   overflow-y: scroll;
-  max-height: 85vh;
   font-size: 1.6rem;
   padding: 1rem;
 }
@@ -1755,7 +1792,7 @@ h6 {
   padding: 0.8rem 1rem;
   display: flex;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   max-width: fit-content;
   word-break: break-word;
   margin-top: 0;
@@ -1770,6 +1807,11 @@ h6 {
   width: 3.5rem;
   border-radius: 10rem;
   margin-right: 1rem;
+}
+.conversation__message-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
 }
 .conversation .fa-arrow-left,
 .conversation .fa-ellipsis-v {
@@ -1805,6 +1847,7 @@ h6 {
   --font-light-300: #f8f8f8;
   --font-light-200: #36344b;
   --font-light-100: #201f2b;
+  --main-bg-500: #753ee0;
 }
 
 [data-value=light] {
@@ -1830,6 +1873,7 @@ h6 {
   --font-light-400: #cfcfc9;
   --font-light-300: #eaeae7;
   --font-light-200: #f8f8f8;
+  --main-bg-500: #753ee0;
 }
 
 /*# sourceMappingURL=main.css.map */
