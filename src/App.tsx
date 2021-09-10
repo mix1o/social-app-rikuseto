@@ -19,7 +19,7 @@ const App: FC = () => {
     } else {
       html!.dataset.value = JSON.parse(theme).theme;
     }
-  }, [localStorage.getItem('theme')]);
+  }, [html]);
 
   return (
     <div>
