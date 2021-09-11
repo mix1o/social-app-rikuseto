@@ -13,12 +13,17 @@ const SingleConversation = () => {
 
   const [cookies] = useCookies();
   const { user } = cookies;
-  const [chat, setChat] = useState<{ avatar: string; text: string }[]>([]);
+  const [chat, setChat] = useState<
+    { avatar: string; text: string; userId: string }[]
+  >([]);
   const [message, setMessage] = useState('');
   const getMessages = () => {
     axios
       .get(`${process.env.REACT_APP_API}/user/get-conversation?roomId=${id}`)
-      .then(res => setChat(res.data.conversation));
+      .then(res => {
+        setChat(res.data.conversation);
+        console.log(res.data);
+      });
   };
 
   useEffect(() => {
@@ -28,16 +33,16 @@ const SingleConversation = () => {
   useEffect(() => {
     socket.on('connect', () => {});
 
-    socket.on('message', ({ avatar, text }) => {
-      setChat([...chat, { avatar, text }]);
+    socket.on('message', ({ avatar, text, userId }) => {
+      setChat([...chat, { avatar, text, userId }]);
     });
   }, [chat]);
 
   const renderChat = () => {
-    return chat.map(({ avatar, text }, idx) => {
+    return chat.map(({ avatar, text, userId }, idx) => {
       return (
         <div className="conversation__message-wrapper" key={idx}>
-          {avatar !== user.avatar && (
+          {userId !== user._id && (
             <img
               className="conversation__author-message"
               style={{ alignSelf: 'flex-start' }}
@@ -48,7 +53,7 @@ const SingleConversation = () => {
 
           <p
             className={`conversation__single-message ${
-              avatar === user.avatar ? 'conversation__author' : ''
+              userId === user._id ? 'conversation__author' : ''
             }`}
           >
             {text}
@@ -57,7 +62,7 @@ const SingleConversation = () => {
       );
     });
   };
-
+  console.log(name);
   useEffect(() => {
     if (id !== '') {
       socket.emit('join-room', id);
@@ -68,8 +73,9 @@ const SingleConversation = () => {
     e.preventDefault();
     const avatar = user.avatar;
     const room = id;
-    socket.emit('message', { avatar, text: message, room });
-    setChat([...chat, { avatar, text: message }]);
+
+    socket.emit('message', { avatar, text: message, room, userId: user._id });
+    setChat([...chat, { avatar, text: message, userId: user._id }]);
     setMessage('');
   };
 

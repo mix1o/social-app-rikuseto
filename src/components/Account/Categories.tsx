@@ -126,7 +126,7 @@ const Categories: FC = () => {
         </div>
         <div className="categories__posts">
           {posts?.map(
-            ({ _id, headline, category, file, user_id, likes, date }) => {
+            ({ _id, headline, category, file, userId, likes, date }) => {
               return (
                 <Post
                   key={_id}
@@ -134,7 +134,7 @@ const Categories: FC = () => {
                   headline={headline}
                   category={category}
                   file={file}
-                  user_id={user_id}
+                  userId={userId}
                   likes={likes}
                   refreshPosts={fetchPostByCategory}
                   date={date}

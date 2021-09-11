@@ -38,7 +38,7 @@ const SavedPosts: FC = () => {
             <i className="fas fa-flag" style={{ marginLeft: '1rem' }} />
           </p>
           {posts?.map(
-            ({ _id, headline, category, file, user_id, likes, date }) => {
+            ({ _id, headline, category, file, userId, likes, date }) => {
               return (
                 <Post
                   key={_id}
@@ -46,7 +46,7 @@ const SavedPosts: FC = () => {
                   headline={headline}
                   category={category}
                   file={file}
-                  user_id={user_id}
+                  userId={userId}
                   likes={likes}
                   refreshPosts={handleFetchPosts}
                   date={date}

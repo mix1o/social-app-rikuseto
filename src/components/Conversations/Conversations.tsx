@@ -5,8 +5,8 @@ import axios from 'axios';
 import Header from '../Header/Header';
 
 interface Friends {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   avatar: string;
   roomId: string;
 }
@@ -31,22 +31,22 @@ const Conversations = () => {
     <>
       <Header />
       <div className="conversations">
-        {friends?.map(({ avatar, first_name, last_name, roomId }) => {
+        {friends?.map(({ avatar, firstName, lastName, roomId }) => {
           return (
             <Link
               key={roomId}
               className="conversations__single"
-              to={`/single-conversation/${roomId}/${first_name} ${last_name}`}
+              to={`/single-conversation/${roomId}/${firstName} ${lastName}`}
             >
               <div className="conversations__container-img">
                 <img className="conversations__img" src={avatar} alt="user" />
               </div>
               <div>
                 <p className="conversations__friend-name">
-                  {first_name} {last_name}
+                  {firstName} {lastName}
                 </p>
                 <p className="conversations__last-msg">
-                  {first_name}: Last message
+                  {firstName}: Last message
                 </p>
               </div>
             </Link>

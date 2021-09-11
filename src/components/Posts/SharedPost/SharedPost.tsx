@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { PostInterface } from '../../../interfaces/posts/postInterfaces';
 import Post from '../Post';
@@ -41,11 +41,11 @@ const SharedPost: FC = () => {
         {correct &&
           !loading &&
           post?.map(
-            ({ _id, user_id, headline, category, file, likes, date }) => (
+            ({ _id, userId, headline, category, file, likes, date }) => (
               <Post
                 key={_id}
                 _id={_id}
-                user_id={user_id}
+                userId={userId}
                 headline={headline}
                 category={category}
                 file={file}
@@ -65,7 +65,7 @@ const SharedPost: FC = () => {
             fetchTopComment={() => {}}
             setOpenComments={() => {}}
             view={true}
-            authorId={post![0].user_id}
+            authorId={post![0].userId}
           />
         </>
       )}

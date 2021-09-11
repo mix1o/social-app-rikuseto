@@ -37,7 +37,7 @@ const UserPosts: FC = () => {
             Your posts
           </p>
           {posts?.map(
-            ({ _id, headline, category, file, user_id, likes, date }) => {
+            ({ _id, headline, category, file, userId, likes, date }) => {
               return (
                 <Post
                   key={_id}
@@ -45,7 +45,7 @@ const UserPosts: FC = () => {
                   headline={headline}
                   category={category}
                   file={file}
-                  user_id={user_id}
+                  userId={userId}
                   likes={likes}
                   refreshPosts={getUserPosts}
                   date={date}

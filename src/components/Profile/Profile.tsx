@@ -30,7 +30,7 @@ interface FriendI {
 
 const Profile: FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [cookies, setCookie] = useCookies();
   const { user } = cookies;
 
   const [profile, setProfile] = useState<ProfileI>();
@@ -68,7 +68,6 @@ const Profile: FC = () => {
   const hasRequests = (person: any) => {
     person.requests.forEach((request: any) => {
       if (request.userId.toString() === id.toString()) {
-        console.log('chuj');
         setIsReq(true);
       }
     });
@@ -201,7 +200,7 @@ const Profile: FC = () => {
         {option === MODE_POSTS && (
           <div>
             {profile?.posts?.map(
-              ({ _id, headline, category, file, user_id, likes, date }) => {
+              ({ _id, headline, category, file, userId, likes, date }) => {
                 return (
                   <Post
                     key={_id}
@@ -209,7 +208,7 @@ const Profile: FC = () => {
                     headline={headline}
                     category={category}
                     file={file}
-                    user_id={user_id}
+                    userId={userId}
                     likes={likes}
                     refreshPosts={getUserData}
                     date={date}
@@ -221,13 +220,13 @@ const Profile: FC = () => {
         )}
         {option === MODE_COMMENTS && (
           <div className="profile__comments">
-            {profile?.comments.map(({ _id, text, user_id, likes, date }) => {
+            {profile?.comments.map(({ _id, text, userId, likes, date }) => {
               return (
                 <Comment
                   key={_id}
                   _id={_id}
                   text={text}
-                  user_id={user_id}
+                  userId={userId}
                   likes={likes}
                   date={date}
                   refreshComments={getUserData}

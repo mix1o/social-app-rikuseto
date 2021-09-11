@@ -21,7 +21,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     headline: '',
     file: '',
     category: '',
-    user_id: user ? user._id : '',
+    userId: user ? user._id : '',
     notification: false,
   });
 
