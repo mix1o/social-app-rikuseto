@@ -12,7 +12,6 @@ import { useCounter } from '../../store/sub';
 import BlurredMenu from '../Navigation/BlurredMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
-import Picker from 'emoji-picker-react';
 import CustomTextarea from '../../helpers/CustomTextarea';
 
 const commentVariant = {
@@ -35,9 +34,9 @@ const commentVariant = {
 interface SortedElement {
   date: string;
   likes: string[];
-  post_id: string;
+  postId: string;
   text: string;
-  user_id: string;
+  userId: string;
   _id: string;
 }
 
@@ -169,13 +168,13 @@ const Comments: FC<CommentProps> = ({
         <div className="comments__container">
           {comments
             ?.sort(sortComments)
-            .map(({ _id, text, user_id, likes, date }) => {
+            .map(({ _id, text, userId, likes, date }) => {
               return (
                 <Comment
                   key={_id}
                   _id={_id}
                   text={text}
-                  user_id={user_id}
+                  userId={userId}
                   likes={likes}
                   date={date}
                   refreshComments={getAllComments}
@@ -189,12 +188,14 @@ const Comments: FC<CommentProps> = ({
           )}
         </div>
       </div>
-      <CustomTextarea
-        textValue={commentText}
-        setTextValue={setCommentText}
-        handleAction={handleNewComment}
-        img={user.avatar}
-      />
+      {user && (
+        <CustomTextarea
+          textValue={commentText}
+          setTextValue={setCommentText}
+          handleAction={handleNewComment}
+          img={user.avatar}
+        />
+      )}
       {popup && <BlurredMenu setUserOption={setPopup} />}
     </m.section>
   );

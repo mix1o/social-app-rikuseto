@@ -1,46 +1,39 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion as m } from 'framer-motion';
 import { useCounter } from '../../store/sub';
 import { MenuProps } from '../../interfaces/common/menu';
-import { useTheme } from '../../helpers/useTheme';
 
-const MenuItemVariant = {
-  active: {
-    color: '#753ee0',
-  },
-  disabled: {
-    color: 'inherit',
-  },
-};
+const MenuItem: FC<MenuProps> = memo(
+  ({ href, iconsClasses, selected, setSelected, value }) => {
+    const [state, actions] = useCounter();
 
-const MenuItem: FC<MenuProps> = ({
-  href,
-  iconsClasses,
-  selected,
-  setSelected,
-  value,
-}) => {
-  const [, actions] = useCounter();
+    return (
+      <Link to={href} className="menu__item--link">
+        <m.button
+          initial="disabled"
+          animate={{
+            color:
+              selected === value
+                ? '#753ee0'
+                : state.theme === 'dark'
+                ? '#f8f8f8'
+                : '#36344b',
+          }}
+          whileTap={{ scale: 1.2 }}
+          onClick={() => {
+            setSelected(value);
+            actions.isOpenComment(false);
+          }}
+          className="menu__item"
+        >
+          <i className={`${iconsClasses}`}></i>
+        </m.button>
+      </Link>
+    );
+  }
+);
 
-  return (
-    <Link to={href} className="menu__item--link">
-      <m.button
-        variants={MenuItemVariant}
-        initial="disabled"
-        animate={selected === value ? 'active' : 'disabled'}
-        whileTap={{ scale: 1.2 }}
-        onClick={() => {
-          setSelected(value);
-          actions.isOpenComment(false);
-        }}
-        className="menu__item"
-      >
-        <i className={`${iconsClasses}`}></i>
-      </m.button>
-    </Link>
-  );
-};
 const MENU_ROUTES = {
   MAIN: 'main',
   CONVERSATIONS: 'conversations',

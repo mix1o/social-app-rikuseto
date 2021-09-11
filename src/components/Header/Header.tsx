@@ -7,6 +7,7 @@ import logo from '../../assets/logo/logo.png';
 import BlurredMenu from '../Navigation/BlurredMenu';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../helpers/useTheme';
+import { useCounter } from '../../store/sub';
 
 const variants = {
   open: {
@@ -35,6 +36,7 @@ const Header: FC = () => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [userOption, setUserOption] = useState<boolean>(false);
   const [cookies, , removeCookie] = useCookies();
+  const [, actions] = useCounter();
 
   const { user } = cookies;
 
@@ -48,6 +50,7 @@ const Header: FC = () => {
 
   const handleChangeTheme = (property: string) => {
     localStorage.setItem('theme', JSON.stringify({ theme: property }));
+    actions.theme(property);
     html!.dataset!.value = property;
   };
 

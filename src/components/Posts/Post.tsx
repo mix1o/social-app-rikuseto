@@ -31,10 +31,27 @@ import {
 } from 'react-share';
 import { useLocation, Link } from 'react-router-dom';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-
+import { useCounter } from '../../store/sub';
+interface User {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+}
+interface CookieUser extends User {
+  avatar: string;
+  createdAt: string;
+  categories?: string[];
+  friends?: { friendId: string; roomId: string; _id: string }[];
+  requests?: [];
+  savedPosts?: [];
+  sentRequests?: [];
+  serviceWorkers?: [];
+  _id: string;
+}
 const Post: FC<PostInterfaceExtended> = ({
   _id,
-  user_id,
+  userId,
   headline,
   category,
   file,
@@ -42,17 +59,24 @@ const Post: FC<PostInterfaceExtended> = ({
   refreshPosts,
   date,
 }) => {
-  const [cookies, setCookie, removeCookie] = useCookies();
-  const { user } = cookies;
   const [liked, setLiked] = useState<boolean | undefined>(false);
   const [savedPost, setSavedPost] = useState<boolean>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
+  const [openToolTip, setOpenToolTip] = useState<boolean>(false);
+  const [disableComments, setDisableComments] = useState<boolean>(false);
 
   const [author, setAuthor] = useState<AuthorInterface>();
+
   const [commentAuthor, setCommentAuthor] = useState<AuthorInterface>();
   const [comment, setComment] = useState<TopComment>();
 
+  const [cookies, setCookie] = useCookies();
+  const { user } = cookies;
+
+  const location = useLocation();
+  const [state] = useCounter();
+  const linkShare = `${process.env.REACT_APP_SHARE_LINK}/${_id}`;
   dayjs.extend(relativeTime);
 
   const handleLikePost = () => {
@@ -77,8 +101,9 @@ const Post: FC<PostInterfaceExtended> = ({
       .get(`${process.env.REACT_APP_API}/comments/top?postId=${_id}`)
       .then(res => {
         setComment(res.data);
+
         if (res.data.topComment) {
-          authorOfComment(res.data.topComment.user_id).then(res => {
+          authorOfComment(res.data.topComment.userId).then(res => {
             setCommentAuthor(res);
           });
         }
@@ -90,7 +115,10 @@ const Post: FC<PostInterfaceExtended> = ({
   }, []);
 
   useEffect(() => {
-    authorOfComment(user_id).then(res => setAuthor(res));
+    authorOfComment(userId).then(res => {
+      setAuthor(res);
+      console.log(res);
+    });
 
     const like = LikedElements(user, likes);
     setLiked(like);
@@ -102,10 +130,6 @@ const Post: FC<PostInterfaceExtended> = ({
     return;
   }, [likes, user]);
 
-  const linkShare = `https://social-rikuseto.netlify.app/post/${_id}`;
-
-  const [disableComments, setDisableComments] = useState<boolean>(false);
-  const location = useLocation();
   useEffect(() => {
     if (location.pathname.includes('/post')) {
       setDisableComments(true);
@@ -190,8 +214,8 @@ const Post: FC<PostInterfaceExtended> = ({
 
   const checkIsSaved = (userUpdate: any) => {
     setSavedPost(false);
-    if (userUpdate.saved_posts) {
-      userUpdate.saved_posts.forEach((element: string) => {
+    if (userUpdate.savedPosts) {
+      userUpdate.savedPosts.forEach((element: string) => {
         if (element.toString() === _id.toString()) {
           setSavedPost(true);
         } else {
@@ -216,7 +240,7 @@ const Post: FC<PostInterfaceExtended> = ({
   const ActionsPost = () => {
     return (
       <div className="post__container-dots-actions">
-        {user && user._id !== user_id && (
+        {user && user._id !== userId && (
           <>
             <button
               onClick={() => {
@@ -237,7 +261,7 @@ const Post: FC<PostInterfaceExtended> = ({
             </button>
           </>
         )}
-        {user && user._id === user_id ? (
+        {user && user._id === userId ? (
           <>
             <button onClick={() => setIsEdit(true)} className="post__action">
               Edit
@@ -258,8 +282,6 @@ const Post: FC<PostInterfaceExtended> = ({
       </div>
     );
   };
-
-  const [openToolTip, setOpenToolTip] = useState<boolean>(false);
 
   return (
     <>
@@ -328,9 +350,9 @@ const Post: FC<PostInterfaceExtended> = ({
                 <Link
                   style={{ textDecoration: 'none', color: 'inherit' }}
                   to={
-                    user && user_id === user._id
+                    user && userId === user._id
                       ? '/account'
-                      : `/profile/${user_id}`
+                      : `/profile/${userId}`
                   }
                 >
                   {author?.firstName} {author?.lastName}
@@ -388,7 +410,13 @@ const Post: FC<PostInterfaceExtended> = ({
           >
             <m.div
               className="post__container-likes"
-              animate={{ color: liked ? '#753ee0' : 'var(--font-dark-600)' }}
+              animate={{
+                color: liked
+                  ? '#753ee0'
+                  : state.theme === 'dark'
+                  ? '#f8f8f8'
+                  : '#36344b',
+              }}
             >
               <m.button
                 className="post__btn"
@@ -489,7 +517,7 @@ const Post: FC<PostInterfaceExtended> = ({
               <Comments
                 key={_id}
                 postId={_id}
-                authorId={user_id}
+                authorId={userId}
                 setOpenComments={setOpenComments}
                 fetchTopComment={fetchTopComment}
               />
