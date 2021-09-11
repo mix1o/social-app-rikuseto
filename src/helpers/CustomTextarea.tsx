@@ -9,6 +9,9 @@ import {
   useCallback,
 } from 'react';
 import Picker, { IEmojiData } from 'emoji-picker-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faSmile } from '@fortawesome/free-solid-svg-icons/faSmile';
 
 interface Textarea {
   textValue: string;
@@ -54,7 +57,6 @@ const CustomTextarea: FC<Textarea> = ({
   const getRows = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     const lineHeight = 21;
     const taHeight = e.target.scrollHeight;
-    console.log(taHeight / lineHeight);
     if (taHeight / lineHeight >= 2.1)
       setRows(Math.floor(taHeight / lineHeight)); //Po pierwszym znaku dodaje scollHeight
     return;
@@ -99,13 +101,9 @@ const CustomTextarea: FC<Textarea> = ({
             onClick={() => setOpenEmojiList(prevState => !prevState)}
           >
             {openEmojiList ? (
-              <>
-                <i className="fas fa-times"></i>
-              </>
+              <FontAwesomeIcon icon={faTimes} />
             ) : (
-              <>
-                <i className="fas fa-smile"></i>
-              </>
+              <FontAwesomeIcon icon={faSmile} />
             )}
           </button>
         </div>
