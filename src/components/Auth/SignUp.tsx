@@ -6,14 +6,7 @@ import axios from 'axios';
 import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
 import { useHistory } from 'react-router-dom';
-
-interface UserAccountData {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  confirmPassword: string;
-}
+import { UserAccountData } from '../../interfaces/auth/authInterface';
 
 const SignUp: FC = () => {
   const [, send] = useActor(authService);

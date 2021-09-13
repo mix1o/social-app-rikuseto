@@ -27,7 +27,6 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
         `${process.env.REACT_APP_API}/category/get-categories?userId=${user._id}`
       )
       .then(res => {
-        console.log(res.data);
         setUserCategories(res.data);
       });
   };

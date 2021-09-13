@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, FC, useState } from 'react';
+import { useEffect, FC, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import Header from '../Header/Header';

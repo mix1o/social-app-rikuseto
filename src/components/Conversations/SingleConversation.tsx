@@ -22,7 +22,6 @@ const SingleConversation = () => {
       .get(`${process.env.REACT_APP_API}/user/get-conversation?roomId=${id}`)
       .then(res => {
         setChat(res.data.conversation);
-        console.log(res.data);
       });
   };
 
@@ -62,7 +61,7 @@ const SingleConversation = () => {
       );
     });
   };
-  console.log(name);
+
   useEffect(() => {
     if (id !== '') {
       socket.emit('join-room', id);
