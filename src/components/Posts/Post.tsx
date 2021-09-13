@@ -32,23 +32,7 @@ import {
 import { useLocation, Link } from 'react-router-dom';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useCounter } from '../../store/sub';
-interface User {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-}
-interface CookieUser extends User {
-  avatar: string;
-  createdAt: string;
-  categories?: string[];
-  friends?: { friendId: string; roomId: string; _id: string }[];
-  requests?: [];
-  savedPosts?: [];
-  sentRequests?: [];
-  serviceWorkers?: [];
-  _id: string;
-}
+
 const Post: FC<PostInterfaceExtended> = ({
   _id,
   userId,
@@ -65,7 +49,6 @@ const Post: FC<PostInterfaceExtended> = ({
   const [popup, setPopup] = useState<boolean>(false);
   const [openToolTip, setOpenToolTip] = useState<boolean>(false);
   const [disableComments, setDisableComments] = useState<boolean>(false);
-
   const [author, setAuthor] = useState<AuthorInterface>();
 
   const [commentAuthor, setCommentAuthor] = useState<AuthorInterface>();
@@ -117,7 +100,6 @@ const Post: FC<PostInterfaceExtended> = ({
   useEffect(() => {
     authorOfComment(userId).then(res => {
       setAuthor(res);
-      console.log(res);
     });
 
     const like = LikedElements(user, likes);

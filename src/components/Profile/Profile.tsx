@@ -135,10 +135,6 @@ const Profile: FC = () => {
     }
   };
 
-  // console.log('SEND ' + isSent);
-  // console.log('REQ ' + isReq);
-  // console.log('FRIEND ' + isFriend);
-
   return (
     <>
       <Header />
