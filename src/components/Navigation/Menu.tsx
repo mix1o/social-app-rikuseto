@@ -1,5 +1,5 @@
 import { FC, useState, useEffect, memo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { motion as m } from 'framer-motion';
 import { useCounter } from '../../store/sub';
 import { MenuProps } from '../../interfaces/common/menu';
@@ -7,7 +7,6 @@ import { MenuProps } from '../../interfaces/common/menu';
 const MenuItem: FC<MenuProps> = memo(
   ({ href, iconsClasses, selected, setSelected, value }) => {
     const [state, actions] = useCounter();
-
     return (
       <Link to={href} className="menu__item--link">
         <m.button
@@ -46,6 +45,8 @@ const Menu = () => {
   const [selected, setSelected] = useState(MENU_ROUTES.MAIN);
   const [visible, setVisible] = useState(true);
 
+  const history = useHistory();
+  const [, actions] = useCounter();
   const location = useLocation();
 
   const checkPath = () => {
@@ -63,13 +64,42 @@ const Menu = () => {
       setVisible(false);
       return;
     }
+    if (location.pathname.includes('/post')) {
+      setVisible(false);
+      return;
+    }
     setVisible(true);
   }, [location]);
+
+  const handleOpen = () => {
+    if (location.pathname !== '/') {
+      history.push('/');
+    }
+
+    actions.openCreatePost(true);
+  };
 
   return (
     <>
       {visible && (
         <nav className="menu">
+          <div className="circle-menu">
+            <div className="circle-backface">
+              <button
+                className="menu__item--link"
+                style={{
+                  border: 'none',
+                  borderRadius: '100rem',
+                  color: '#fff',
+                  fontSize: '16px',
+                  background: 'transparent',
+                }}
+                onClick={handleOpen}
+              >
+                <i className="fas fa-plus" />
+              </button>
+            </div>
+          </div>
           <MenuItem
             href="/"
             selected={selected}
@@ -84,13 +114,15 @@ const Menu = () => {
             setSelected={setSelected}
             value={MENU_ROUTES.CONVERSATIONS}
           />
-          <MenuItem
+          <div></div>
+          {/* <MenuItem
             href="/new-post"
             selected={selected}
             iconsClasses="fas fa-plus"
             setSelected={setSelected}
             value={MENU_ROUTES.POST}
-          />
+          /> */}
+
           <MenuItem
             href="/notification"
             selected={selected}
