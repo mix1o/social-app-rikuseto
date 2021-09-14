@@ -218,10 +218,6 @@ export default CreatePost;
 
 // TODO Aktualizowanie statusu powiadomienia (seen or not)
 
-// TODO Mapowanie friendsów w komponencie messages
-// TODO MESSAGES - zapisywanie w mongo
-// TODO STYLE dla messages
-
 // TODO Wyświetlanie postów z ulubionymi kategoriami
 
-// TODO Friends request
+// TODO Dodac avatar przy komentarzu, powiekszyc avatar authora komentarza
