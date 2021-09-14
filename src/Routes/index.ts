@@ -10,11 +10,12 @@ import { CategoriesRoutes } from './categories';
 import { ProfileRoutes } from './profile';
 import { ConversationsRoutes, ConversationRoute } from './conversations';
 import { NotificationRoutes } from './notifications';
+import { NotFoundRoute, NotFoundAllRoute } from './other';
 
 interface RouteProps<T> {
   component: FC<T>;
-  url: string;
-  exact: boolean;
+  url?: string;
+  exact?: boolean;
   permission: boolean;
 }
 
@@ -30,4 +31,6 @@ export const Routes: RouteProps<ReactChild>[] = [
   ConversationsRoutes,
   ConversationRoute,
   NotificationRoutes,
+  NotFoundRoute,
+  NotFoundAllRoute,
 ];
