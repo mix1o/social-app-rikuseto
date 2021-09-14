@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { io } from 'socket.io-client';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Header from '../components/Header/Header';
+import Header from '../Header/Header';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 interface Friends {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   avatar: string;
   roomId: string;
 }
 
 const Conversations = () => {
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
 
   const [friends, setFriends] = useState<Friends[]>();
 
@@ -32,26 +32,22 @@ const Conversations = () => {
     <>
       <Header />
       <div className="conversations">
-        {friends?.map(({ avatar, first_name, last_name, roomId }) => {
+        {friends?.map(({ avatar, firstName, lastName, roomId }) => {
           return (
             <Link
               key={roomId}
               className="conversations__single"
-              to={`/single-conversations/${roomId}/${first_name} ${last_name}`}
+              to={`/single-conversation/${roomId}/${firstName} ${lastName}`}
             >
               <div className="conversations__container-img">
-                <img
-                  className="conversations__img"
-                  src={avatar}
-                  alt="user-image"
-                />
+                <img className="conversations__img" src={avatar} alt="user" />
               </div>
               <div>
                 <p className="conversations__friend-name">
-                  {first_name} {last_name}
+                  {firstName} {lastName}
                 </p>
                 <p className="conversations__last-msg">
-                  {first_name}: Last message
+                  {firstName}: Last message
                 </p>
               </div>
             </Link>

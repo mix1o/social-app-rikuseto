@@ -41,7 +41,7 @@ const receivePushNotification = e => {
       { action: 'close', title: 'Close' },
     ],
   };
-  e.waitUntil(self.registration.showNotification(title, options));
+  e.waitUntil(self.registration.showNotification(header, options));
 };
 
 const openPushNotification = e => {
@@ -51,15 +51,18 @@ const openPushNotification = e => {
 
   switch (e.action) {
     case 'details':
-      client.openWindow(url);
+      self.client.openWindow(url);
       break;
     case 'close':
       e.notification.close();
       e.notification.cancel();
       break;
+
+    default:
+      return;
   }
 
-  event.waitUntil(self.clients.openWindow(event.notification.data));
+  e.waitUntil(self.clients.openWindow(e.notification.data));
 };
 
 self.addEventListener('push', receivePushNotification);

@@ -1,9 +1,11 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import CustomTextarea from '../../helpers/CustomTextarea';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 const socket = io(`${process.env.REACT_APP_SOCKET}`);
 
@@ -11,13 +13,18 @@ const SingleConversation = () => {
   const { id, name } = useParams<{ id: string; name: string }>();
 
   const [cookies] = useCookies();
-  const { user } = cookies;
-  const [chat, setChat] = useState<{ avatar: string; text: string }[]>([]);
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
 
+  const [chat, setChat] = useState<
+    { avatar: string; text: string; userId: string }[]
+  >([]);
+  const [message, setMessage] = useState('');
   const getMessages = () => {
     axios
       .get(`${process.env.REACT_APP_API}/user/get-conversation?roomId=${id}`)
-      .then(res => setChat(res.data.conversation));
+      .then(res => {
+        setChat(res.data.conversation);
+      });
   };
 
   useEffect(() => {
@@ -27,37 +34,27 @@ const SingleConversation = () => {
   useEffect(() => {
     socket.on('connect', () => {});
 
-    socket.on('message', ({ avatar, text }) => {
-      setChat([...chat, { avatar, text }]);
+    socket.on('message', ({ avatar, text, userId }) => {
+      setChat([...chat, { avatar, text, userId }]);
     });
   }, [chat]);
 
-  const [room, setRoomId] = useState();
-
-  const [message, setMessage] = useState({
-    avatar: `${user?.avatar}`,
-    text: '',
-    room: id,
-  });
-
   const renderChat = () => {
-    return chat.map(({ avatar, text }, idx) => {
+    return chat.map(({ avatar, text, userId }, idx) => {
       return (
-        <div
-          style={{ display: 'flex', alignItems: 'center', marginTop: '1rem' }}
-          key={idx}
-        >
-          {avatar !== user.avatar && (
+        <div className="conversation__message-wrapper" key={idx}>
+          {userId !== user._id && (
             <img
               className="conversation__author-message"
               style={{ alignSelf: 'flex-start' }}
               src={avatar}
+              alt="user"
             />
           )}
 
           <p
             className={`conversation__single-message ${
-              avatar === user.avatar ? 'conversation__author' : ''
+              userId === user._id ? 'conversation__author' : ''
             }`}
           >
             {text}
@@ -68,17 +65,19 @@ const SingleConversation = () => {
   };
 
   useEffect(() => {
-    if (message.room !== '') {
-      socket.emit('join-room', message.room);
+    if (id !== '') {
+      socket.emit('join-room', id);
     }
-  }, [message.room]);
+  }, [id]);
 
-  const onMessageSend = (e: any) => {
+  const onMessageSend = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const { avatar, text, room } = message;
-    socket.emit('message', { avatar, text, room });
-    setChat([...chat, { avatar, text }]);
-    setMessage({ ...message, text: '' });
+    const avatar = user.avatar;
+    const room = id;
+
+    socket.emit('message', { avatar, text: message, room, userId: user._id });
+    setChat([...chat, { avatar, text: message, userId: user._id }]);
+    setMessage('');
   };
 
   return (
@@ -91,18 +90,11 @@ const SingleConversation = () => {
         <i className="fas fa-ellipsis-v conversation__actions"></i>
       </div>
       <div className="conversation__messages">{renderChat()}</div>
-      <div className="conversation__container-text">
-        <textarea
-          value={message.text}
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-            setMessage({ ...message, text: e.target.value })
-          }
-          className="conversation__text"
-        ></textarea>
-        <button onClick={onMessageSend} className="conversation__btn">
-          SEND
-        </button>
-      </div>
+      <CustomTextarea
+        textValue={message}
+        setTextValue={setMessage}
+        handleAction={onMessageSend}
+      />
     </div>
   );
 };

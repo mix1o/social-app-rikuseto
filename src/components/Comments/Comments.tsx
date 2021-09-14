@@ -12,7 +12,7 @@ import { useCounter } from '../../store/sub';
 import BlurredMenu from '../Navigation/BlurredMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
-import Picker from 'emoji-picker-react';
+import CustomTextarea from '../../helpers/CustomTextarea';
 
 const commentVariant = {
   hidden: {
@@ -34,11 +34,13 @@ const commentVariant = {
 interface SortedElement {
   date: string;
   likes: string[];
-  post_id: string;
+  postId: string;
   text: string;
-  user_id: string;
+  userId: string;
   _id: string;
 }
+
+type FilterTypes = 'popular' | 'latest' | 'default';
 
 const Comments: FC<CommentProps> = ({
   postId,
@@ -49,49 +51,44 @@ const Comments: FC<CommentProps> = ({
 }) => {
   const [commentText, setCommentText] = useState<string>('');
   const [comments, setComments] = useState<CommentsData[]>();
+  const [filter, setFilter] = useState<string>('default');
+  const [popup, setPopup] = useState<boolean>(false);
+
+  const commentRef = useRef<any>();
+  const [, actions] = useCounter();
   const [cookies] = useCookies();
   const { user } = cookies;
-  const [popup, setPopup] = useState<boolean>(false);
-  const commentRef = useRef<any>();
-  const [message, setMessage] = useState<string>('');
-  const [state, actions] = useCounter();
-  const [openEmojiList, setOpenEmojiList] = useState<boolean>(false);
+
+  const commentId = window.location.href.split('#')[1];
+
+  const MODE_POPULAR = 'popular';
+  const MODE_LATEST = 'latest';
+  const MODE_DEFAULT = 'default';
 
   const handleNewComment = (): void => {
     if (!user) {
       setPopup(true);
       return;
     }
-    if (
-      commentText.length >= 2 ||
-      (commentText.length >= 1 &&
-        (/\d/.test(commentText) ||
-          /[a-zA-Z]/g.test(commentText) ||
-          /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(commentText)))
-    ) {
-      axios
-        .post(`${process.env.REACT_APP_API}/comments/create`, {
-          commentText,
-          postId,
-          userId: user._id,
-          postAuthorId,
-        })
-        .then(() => {
-          setCommentText('');
-          getAllComments();
-          fetchTopComment();
 
-          setTimeout(() => {
-            commentRef.current.scrollTo({
-              top: commentRef.current.scrollHeight,
-              behavior: 'smooth',
-            });
-          }, 300);
-          setOpenEmojiList(false);
-        });
-      return;
-    }
-    setMessage('Text must be at least 1 character');
+    axios
+      .post(`${process.env.REACT_APP_API}/comments/create`, {
+        commentText,
+        postId,
+        userId: user._id,
+        postAuthorId,
+      })
+      .then(() => {
+        setCommentText('');
+        getAllComments();
+        fetchTopComment();
+        setTimeout(() => {
+          commentRef.current.scrollTo({
+            top: commentRef.current.scrollHeight,
+            behavior: 'smooth',
+          });
+        }, 300);
+      });
   };
 
   const getAllComments = (): void => {
@@ -108,17 +105,6 @@ const Comments: FC<CommentProps> = ({
     actions.isOpenComment(true);
   }, []);
 
-  const onEmojiClick = (event: any, emojiObject: any) => {
-    setCommentText(prevState => prevState + emojiObject.emoji);
-    console.log(emojiObject);
-  };
-
-  const MODE_POPULAR = 'popular';
-  const MODE_LATEST = 'latest';
-  const MODE_DEFAULT = 'default';
-
-  const [filter, setFilter] = useState<string>('Default');
-
   const sortComments = (a: SortedElement, b: SortedElement): number => {
     if (filter === MODE_POPULAR) {
       return b.likes.length - a.likes.length;
@@ -133,8 +119,13 @@ const Comments: FC<CommentProps> = ({
 
     return 1;
   };
+  const [open, setOpen] = useState(false);
+  const handleFilterChange = (type: FilterTypes) => {
+    setFilter(type);
+    setOpen(false);
+  };
 
-  const commentId = window.location.href.split('#')[1];
+  console.log(open);
   return (
     <m.section
       variants={commentVariant}
@@ -146,29 +137,59 @@ const Comments: FC<CommentProps> = ({
     >
       <div>
         <div className="comments__header">
-          <div className="comments__filter-container">
+          <div>
             {comments?.length! > 0 && (
               <>
-                <p data-testid="filter-text" className="comments__filter-text">
-                  Filter by
-                </p>
-                <select
-                  value={filter}
-                  onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                    setFilter(e.target.value)
-                  }
-                  className="comments__filter"
-                >
-                  <option value="Default" disabled>
-                    Default
-                  </option>
-                  <option value="popular" className="comments__filter-option">
-                    Most popular
-                  </option>
-                  <option value="latest" className="comments__filter-option">
-                    Latest
-                  </option>
-                </select>
+                <div className="comments__filter">
+                  <div className="comments__current-filter">
+                    <p
+                      onClick={() => setOpen(!open)}
+                      className="comments__filter-text"
+                    >
+                      {filter}
+                    </p>
+                    {!open && (
+                      <button
+                        className="comments__toggle-filter"
+                        onClick={() => setOpen(true)}
+                      >
+                        <i className="fas fa-chevron-down" />
+                      </button>
+                    )}
+                    {open && (
+                      <button
+                        className="comments__toggle-filter"
+                        onClick={() => setOpen(false)}
+                      >
+                        <i className="fas fa-chevron-up" />
+                      </button>
+                    )}
+                  </div>
+                  {open && (
+                    <div className="comments__filter-list">
+                      <button
+                        className="comments__filter-item"
+                        onClick={() => handleFilterChange('default')}
+                      >
+                        Default
+                      </button>
+
+                      <button
+                        className="comments__filter-item"
+                        onClick={() => handleFilterChange('popular')}
+                      >
+                        Most popular
+                      </button>
+
+                      <button
+                        className="comments__filter-item"
+                        onClick={() => handleFilterChange('latest')}
+                      >
+                        Latest
+                      </button>
+                    </div>
+                  )}
+                </div>
               </>
             )}
           </div>
@@ -185,18 +206,18 @@ const Comments: FC<CommentProps> = ({
         <div className="comments__container">
           {comments
             ?.sort(sortComments)
-            .map(({ _id, text, user_id, likes, date }) => {
+            .map(({ _id, text, userId, likes, date }) => {
               return (
                 <Comment
                   key={_id}
                   _id={_id}
                   text={text}
-                  user_id={user_id}
+                  userId={userId}
                   likes={likes}
                   date={date}
                   refreshComments={getAllComments}
                   fetchTopComment={fetchTopComment}
-                  scroll={commentId===_id ? true : false}
+                  scroll={commentId === _id ? true : false}
                 />
               );
             })}
@@ -205,59 +226,14 @@ const Comments: FC<CommentProps> = ({
           )}
         </div>
       </div>
-
-      <div className="comments__container-input">
-        <div style={{ display: 'flex' }}>
-          <div style={{ width: '100%', position: 'relative' }}>
-            <input
-              data-testid="input-comments"
-              className="comments__input"
-              value={commentText}
-              onChange={(e: any) => {
-                setCommentText(e.target.value);
-              }}
-              onKeyDown={(e: any) => {
-                if (e.code === 'Space' && commentText.length === 1) {
-                  setCommentText('');
-                }
-              }}
-              type="text"
-            />
-
-            <button
-              className="comments__emoji"
-              onClick={() => setOpenEmojiList(prevState => !prevState)}
-            >
-              <i className="fas fa-smile"></i>
-            </button>
-          </div>
-          <button
-            data-testid="publish"
-            className="comments__publish"
-            onClick={handleNewComment}
-          >
-            Publish
-          </button>
-        </div>
-
-        {openEmojiList && (
-          <Picker
-            pickerStyle={{
-              width: '100%',
-              background: 'var(--light-bg-400)',
-              boxShadow: 'none',
-              border: '1px solid var(--font-dark-600)',
-              marginTop: '1rem',
-            }}
-            disableSearchBar={true}
-            onEmojiClick={onEmojiClick}
-          />
-        )}
-        <p data-testid="message" className="comments__message">
-          {message}
-        </p>
-      </div>
-
+      {user && (
+        <CustomTextarea
+          textValue={commentText}
+          setTextValue={setCommentText}
+          handleAction={handleNewComment}
+          img={user.avatar}
+        />
+      )}
       {popup && <BlurredMenu setUserOption={setPopup} />}
     </m.section>
   );

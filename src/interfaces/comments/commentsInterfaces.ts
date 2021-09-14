@@ -1,8 +1,8 @@
 export interface CommentsData {
   date: string;
   likes: string[];
-  post_id: string;
-  user_id: string;
+  postId: string;
+  userId: string;
   _id: string;
   text: string;
 }
@@ -22,7 +22,7 @@ export interface CommentProps {
 
 export interface SingleCommentProps {
   _id: string;
-  user_id: string;
+  userId: string;
   text: string;
   likes: string[];
   date: string;

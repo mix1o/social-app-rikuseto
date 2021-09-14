@@ -37,11 +37,13 @@
   min-height: 100vh;
   background-color: var(--light-bg-500);
   &__header {
-    background: var(--light-bg-600);
+    background: var(--light-bg-400);
     padding: 0 1rem;
+    position: sticky;
+    top: 0;
+    width: 100%;
     display: flex;
     align-items: center;
-
     justify-content: space-between;
   }
   &__friend-name {
@@ -67,7 +69,7 @@
   }
   &__messages {
     overflow-y: scroll;
-    max-height: 85vh;
+    // max-height: 85vh;
     font-size: ft.$fs-300;
     padding: 1rem;
   }
@@ -84,7 +86,7 @@
     padding: 0.8rem 1rem;
     display: flex;
     align-items: center;
-    font-size: ft.$fs-200;
+    font-size: ft.$fs-250;
     max-width: fit-content;
     word-break: break-word;
     margin-top: 0;
@@ -99,6 +101,11 @@
     width: 3.5rem;
     border-radius: 10rem;
     margin-right: 1rem;
+  }
+  &__message-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
   }
   .fa-arrow-left,
   .fa-ellipsis-v {

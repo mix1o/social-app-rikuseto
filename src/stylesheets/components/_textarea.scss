@@ -1,0 +1,71 @@
+@use '../components/button' as btn;
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+.textarea {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--light-bg-400);
+
+  &__message {
+    text-align: center;
+    flex: 1;
+    color: clr.$warning-500;
+    font-size: ft.$fs-250;
+    font-weight: ft.$fw-600;
+  }
+  &__wrapper {
+    display: flex;
+    padding: 1rem;
+    color: var(--font-dark-300);
+  }
+  &__wrapper:focus-within,
+  &__wrapper:focus-within ~ &__publish {
+    color: clr.$main-bg-500;
+  }
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 1rem;
+    background: var(--light-bg-700);
+    border-radius: ft.$lh;
+  }
+  &__emoji {
+    align-self: end;
+    background: transparent;
+    border: transparent;
+    color: inherit;
+    font-size: ft.$fs-400;
+    padding: 1rem;
+  }
+
+  &__input {
+    border: none;
+    width: 100%;
+    resize: none;
+    background: transparent;
+    padding: 1rem;
+    font-size: ft.$fs-250;
+    font-family: inherit;
+    line-height: ft.$lh;
+    color: var(--font-dark-600);
+  }
+  &__publish {
+    align-self: center;
+    background-color: transparent;
+    border: none;
+    color: inherit;
+    font-size: ft.$fs-400;
+
+    .fa-location-arrow {
+      transform: scaleY(1.5) rotate(45deg);
+    }
+  }
+  &__avatar {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 100rem;
+    align-self: center;
+  }
+}

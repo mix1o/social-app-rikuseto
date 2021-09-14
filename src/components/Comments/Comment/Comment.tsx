@@ -1,12 +1,5 @@
 import axios from 'axios';
-import React, {
-  FC,
-  useState,
-  ChangeEvent,
-  useEffect,
-  useRef,
-  RefObject,
-} from 'react';
+import { FC, useState, ChangeEvent, useEffect, useRef, useMemo } from 'react';
 import { useCookies } from 'react-cookie';
 import { LikedElements } from '../../../hooks/LikedElements';
 import { AuthorInterface } from '../../../interfaces/common/common';
@@ -21,10 +14,12 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { useLocation } from 'react-router-dom';
 import BlurredMenu from '../../Navigation/BlurredMenu';
 import Floater from 'react-floater';
+import { useCounter } from '../../../store/sub';
+import { CookieUser } from '../../../interfaces/auth/authInterface';
 
 const Comment: FC<SingleCommentProps> = ({
   _id,
-  user_id,
+  userId,
   text,
   likes,
   date,
@@ -33,7 +28,10 @@ const Comment: FC<SingleCommentProps> = ({
   scroll,
 }) => {
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = useMemo(
+    () => (cookies['user'] ? { ...cookies['user'] } : undefined),
+    [cookies]
+  );
 
   const [liked, setLiked] = useState<boolean | undefined>();
   const [author, setAuthor] = useState<AuthorInterface>();
@@ -43,7 +41,8 @@ const Comment: FC<SingleCommentProps> = ({
   const [message, setMessage] = useState<string>('');
   const [openToolTip, setOpenToolTip] = useState<boolean>(false);
   const location = useLocation();
-  const commentId = window.location.href.split('#')[1];
+  const [state] = useCounter();
+
   dayjs.extend(relativeTime);
 
   const commentRef = useRef<any>();
@@ -65,8 +64,7 @@ const Comment: FC<SingleCommentProps> = ({
       });
   };
   useEffect(() => {
-    authorOfComment(user_id).then(res => setAuthor(res));
-
+    authorOfComment(userId).then(res => setAuthor(res));
     const like = LikedElements(user, likes);
     setLiked(like);
   }, [likes]);
@@ -104,17 +102,17 @@ const Comment: FC<SingleCommentProps> = ({
         commentRef.current.style.padding = '10px';
       }, 500);
     }
-  }, []);
+  }, [scroll]);
 
   const ActionsComment = () => {
     return (
       <div className="comment__container-dots-actions">
-        {user && user._id !== user_id && (
+        {user && user._id !== userId && (
           <button className="comment__action-dot">
             Report<i style={{ marginLeft: '.5rem' }} className="fas fa-ban"></i>
           </button>
         )}
-        {user && user._id === user_id ? (
+        {user && user._id === userId ? (
           <>
             <button
               onClick={() => setIsEdit(true)}
@@ -246,7 +244,9 @@ const Comment: FC<SingleCommentProps> = ({
         )}
         <div className="comment__container-likes">
           <m.div
-            animate={liked ? { color: '#753ee0' } : { color: 'inherit' }}
+            animate={{
+              color: liked ? '#753ee0' : state.theme ? '#f8f8f8' : '#36344b',
+            }}
             className="comment__action"
           >
             <m.button

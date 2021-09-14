@@ -20,8 +20,13 @@
     color: var(--font-dark-600);
     font-size: ft.$fs-300;
   }
-  .fa-ellipsis-v {
-    color: inherit;
+  &__container-dots-btn {
+    background: transparent;
+    border: none;
+    color: var(--font-dark-600);
+    .fa-ellipsis-v {
+      color: inherit;
+    }
   }
 
   &__headline {
@@ -29,6 +34,12 @@
     margin-left: 2px;
     font-size: ft.$fs-300;
     overflow-wrap: break-word;
+  }
+  &__top-date {
+    margin-left: 0.7rem;
+  }
+  &__top-text {
+    margin-left: 1rem;
   }
   &__image-container {
     width: 100%;
@@ -51,6 +62,10 @@
     color: var(--font-dark-600);
     margin: 0;
     font-size: ft.$fs-250;
+  }
+  &__author-link {
+    text-decoration: none;
+    color: inherit;
   }
   &__image-author {
     border-radius: 100%;
@@ -84,6 +99,12 @@
     padding: 1rem 2px;
     background-color: var(--light-bg-700);
     margin-right: 5px;
+    .fa-flag,
+    .fa-ban,
+    .fa-edit,
+    .fa-trash-alt {
+      margin-left: 0.5rem;
+    }
   }
 
   &__action {

@@ -18,8 +18,17 @@
     font-size: ft.$fs-400;
     background: transparent;
     border: none;
+    cursor: pointer;
   }
   &__item--link {
+    text-decoration: none;
+    color: var(--font-dark-600);
+  }
+  .fa-home,
+  .fa-comment-dots,
+  .fa-plus,
+  .fa-bell,
+  .fa-user {
     color: inherit;
   }
 }

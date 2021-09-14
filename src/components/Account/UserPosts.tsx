@@ -1,26 +1,25 @@
 import axios from 'axios';
-import React, { useEffect, FC, useState } from 'react';
+import { useEffect, FC, useState, useCallback } from 'react';
 import { useCookies } from 'react-cookie';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import Header from '../Header/Header';
-import { checkUser } from './IsLogged/isLoggedUser';
 import Post from '../Posts/Post';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 const UserPosts: FC = () => {
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const [posts, setPosts] = useState<PostInterface[]>();
 
-  const getUserPosts = () => {
+  const getUserPosts = useCallback(() => {
     axios
       .get(`${process.env.REACT_APP_API}/posts/user-posts?userId=${user._id}`)
       .then(res => setPosts(res.data));
-  };
+  }, [user._id]);
 
   useEffect(() => {
-    checkUser(user);
     getUserPosts();
-  }, []);
+  }, [getUserPosts]);
 
   return (
     <>
@@ -37,7 +36,7 @@ const UserPosts: FC = () => {
             Your posts
           </p>
           {posts?.map(
-            ({ _id, headline, category, file, user_id, likes, date }) => {
+            ({ _id, headline, category, file, userId, likes, date }) => {
               return (
                 <Post
                   key={_id}
@@ -45,7 +44,7 @@ const UserPosts: FC = () => {
                   headline={headline}
                   category={category}
                   file={file}
-                  user_id={user_id}
+                  userId={userId}
                   likes={likes}
                   refreshPosts={getUserPosts}
                   date={date}

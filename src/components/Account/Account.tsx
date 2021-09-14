@@ -1,16 +1,12 @@
-import React, { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 import Header from '../Header/Header';
-import { checkUser } from './IsLogged/isLoggedUser';
 
 const Account: FC = () => {
   const [cookies, , removeCookie] = useCookies();
-  const { user } = cookies;
-
-  useEffect(() => {
-    checkUser(user);
-  }, []);
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
 
   return (
     <>
@@ -21,12 +17,12 @@ const Account: FC = () => {
             <img
               className="account__image"
               src={user.avatar}
-              alt="User photo"
+              alt="User profile"
             />
           </div>
           <div className="account__user-information">
             <h3 className="account__name">
-              {user.first_name} {user.last_name}
+              {user.firstName} {user.lastName}
             </h3>
           </div>
           <div className="account__actions">

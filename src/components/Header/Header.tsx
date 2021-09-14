@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useReducer, useRef } from 'react';
+import { FC, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { motion as m } from 'framer-motion';
 import { useActor } from '@xstate/react';
@@ -6,6 +6,8 @@ import { authService } from '../Auth/AuthStateMachine';
 import logo from '../../assets/logo/logo.png';
 import BlurredMenu from '../Navigation/BlurredMenu';
 import { Link } from 'react-router-dom';
+import { useCounter } from '../../store/sub';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 const variants = {
   open: {
@@ -33,9 +35,10 @@ const Header: FC = () => {
 
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [userOption, setUserOption] = useState<boolean>(false);
-  const [cookies, , removeCookie] = useCookies();
+  const [, actions] = useCounter();
 
-  const { user } = cookies;
+  const [cookies, , removeCookie] = useCookies();
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
 
   const [, send] = useActor(authService);
 
@@ -47,11 +50,12 @@ const Header: FC = () => {
 
   const handleChangeTheme = (property: string) => {
     localStorage.setItem('theme', JSON.stringify({ theme: property }));
+    actions.theme(property);
     html!.dataset!.value = property;
   };
 
   return (
-    <div className="header">
+    <header className="header">
       <div className="header__content">
         <h3 className="header__message">
           <img src={logo} alt="Logo" />
@@ -144,6 +148,7 @@ const Header: FC = () => {
                 className="header__link header__link--empty"
                 onClick={() => {
                   removeCookie('user');
+
                   setOpenMenu(false);
                 }}
               >
@@ -153,9 +158,7 @@ const Header: FC = () => {
           </div>
         )}
       </m.div>
-
-      {userOption && <BlurredMenu setUserOption={setUserOption} />}
-    </div>
+    </header>
   );
 };
 

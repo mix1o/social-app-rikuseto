@@ -2,6 +2,7 @@ import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
+import { CookieUser } from '../../../interfaces/auth/authInterface';
 import {
   CategoryArray,
   CategoryProps,
@@ -15,7 +16,7 @@ const StyledInput = styled.input`
 
 const Category: FC<CategoryProps> = ({ post, setPost }) => {
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const [categories, setCategories] = useState<CategoryArray[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -27,7 +28,6 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
         `${process.env.REACT_APP_API}/category/get-categories?userId=${user._id}`
       )
       .then(res => {
-        console.log(res.data);
         setUserCategories(res.data);
       });
   };

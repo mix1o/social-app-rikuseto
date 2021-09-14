@@ -1,6 +1,6 @@
 export interface PostInterface {
   _id: string;
-  user_id: string;
+  userId: string;
   headline: string;
   category: string;
   file: string;
@@ -17,6 +17,6 @@ export interface CreatePostI {
   headline?: string;
   file?: string;
   category?: string;
-  user_id?: string;
+  userId?: string;
   notification: boolean;
 }

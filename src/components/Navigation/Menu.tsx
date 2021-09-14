@@ -1,50 +1,45 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion as m } from 'framer-motion';
 import { useCounter } from '../../store/sub';
 import { MenuProps } from '../../interfaces/common/menu';
 
-const MenuItemVariant = {
-  active: {
-    color: '#753ee0',
-  },
-  disabled: {
-    color: 'inherit',
-  },
-};
+const MenuItem: FC<MenuProps> = memo(
+  ({ href, iconsClasses, selected, setSelected, value }) => {
+    const [state, actions] = useCounter();
 
-const MenuItem: FC<MenuProps> = ({
-  href,
-  iconsClasses,
-  selected,
-  setSelected,
-  value,
-}) => {
-  const [, actions] = useCounter();
-  return (
-    <m.button
-      variants={MenuItemVariant}
-      initial="disabled"
-      animate={selected === value ? 'active' : 'disabled'}
-      whileTap={{ scale: 1.2 }}
-      onClick={() => {
-        setSelected(value);
-        actions.isOpenComment(false);
-      }}
-      className="menu__item"
-    >
+    return (
       <Link to={href} className="menu__item--link">
-        <i className={`${iconsClasses}`}></i>
+        <m.button
+          initial="disabled"
+          animate={{
+            color:
+              selected === value
+                ? '#753ee0'
+                : state.theme === 'dark'
+                ? '#f8f8f8'
+                : '#36344b',
+          }}
+          whileTap={{ scale: 1.2 }}
+          onClick={() => {
+            setSelected(value);
+            actions.isOpenComment(false);
+          }}
+          className="menu__item"
+        >
+          <i className={`${iconsClasses}`}></i>
+        </m.button>
       </Link>
-    </m.button>
-  );
-};
+    );
+  }
+);
+
 const MENU_ROUTES = {
   MAIN: 'main',
-  NOTIFICATION: 'notification',
-  POST: 'post',
   CONVERSATIONS: 'conversations',
-  AUTH: 'auth',
+  POST: 'new-post',
+  NOTIFICATION: 'notification',
+  AUTH: 'account',
 };
 
 const Menu = () => {
@@ -53,11 +48,23 @@ const Menu = () => {
 
   const location = useLocation();
 
+  const checkPath = () => {
+    const split = location.pathname.split('/').slice(1, 2);
+
+    if (split[0].length <= 1) return setSelected(MENU_ROUTES.MAIN);
+
+    setSelected(split[0]);
+    return;
+  };
+
   useEffect(() => {
-    if (location.pathname.includes('single-conversation')) {
+    checkPath();
+    if (location.pathname.includes('/single-conversation')) {
       setVisible(false);
+      return;
     }
-  }, [location.pathname]);
+    setVisible(true);
+  }, [location]);
 
   return (
     <>
@@ -93,7 +100,6 @@ const Menu = () => {
           />
 
           <MenuItem
-            // href={`${user ? '/account' : '/auth'}`}
             href="/account"
             selected={selected}
             iconsClasses="fas fa-user"

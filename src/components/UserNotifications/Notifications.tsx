@@ -5,6 +5,7 @@ import Header from '../Header/Header';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from 'react-router-dom';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 interface NotificationsI {
   friendsRequests: [
@@ -39,8 +40,8 @@ interface NotificationsI {
 type Option = 'accept' | 'decline';
 
 const Notifications = () => {
-  const [cookies, setCookie, removeCookie] = useCookies();
-  const { user } = cookies;
+  const [cookies, setCookie] = useCookies();
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const [notifications, setNotifications] = useState<NotificationsI>();
   dayjs.extend(relativeTime);
   const getAllNotifications = () => {
@@ -99,7 +100,7 @@ const Notifications = () => {
                       <img
                         className="notifications__img"
                         src={avatar}
-                        alt="photo"
+                        alt="user profile"
                       />
                     </div>
                     <div className="notifications__info">

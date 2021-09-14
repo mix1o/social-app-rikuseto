@@ -15,26 +15,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Floater from 'react-floater';
-import {
-  EmailShareButton,
-  FacebookShareButton,
-  RedditShareButton,
-  TelegramShareButton,
-  TwitterShareButton,
-  WhatsappShareButton,
-  EmailIcon,
-  FacebookIcon,
-  RedditIcon,
-  TelegramIcon,
-  TwitterIcon,
-  WhatsappIcon,
-} from 'react-share';
+
 import { useLocation, Link } from 'react-router-dom';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import { useCounter } from '../../store/sub';
+import { CookieUser } from '../../interfaces/auth/authInterface';
+import ShareButton from './SharedPost/ShareButton';
+import PostActions from './PostActions';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
-  user_id,
+  userId,
   headline,
   category,
   file,
@@ -42,17 +33,26 @@ const Post: FC<PostInterfaceExtended> = ({
   refreshPosts,
   date,
 }) => {
-  const [cookies, setCookie, removeCookie] = useCookies();
-  const { user } = cookies;
   const [liked, setLiked] = useState<boolean | undefined>(false);
-  const [savedPost, setSavedPost] = useState<boolean>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
-
+  const [openToolTip, setOpenToolTip] = useState<boolean>(false);
+  const [disableComments, setDisableComments] = useState<boolean>(false);
   const [author, setAuthor] = useState<AuthorInterface>();
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [newHeadline, setNewHeadline] = useState<string>(headline);
+  const [message, setMessage] = useState<string>('');
+  const [showFloater, setShowFloater] = useState(false);
+
   const [commentAuthor, setCommentAuthor] = useState<AuthorInterface>();
   const [comment, setComment] = useState<TopComment>();
 
+  const [cookies] = useCookies();
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
+
+  const location = useLocation();
+  const [state] = useCounter();
+  const linkShare = `${process.env.REACT_APP_SHARE_LINK}/${_id}`;
   dayjs.extend(relativeTime);
 
   const handleLikePost = () => {
@@ -77,8 +77,9 @@ const Post: FC<PostInterfaceExtended> = ({
       .get(`${process.env.REACT_APP_API}/comments/top?postId=${_id}`)
       .then(res => {
         setComment(res.data);
+
         if (res.data.topComment) {
-          authorOfComment(res.data.topComment.user_id).then(res => {
+          authorOfComment(res.data.topComment.userId).then(res => {
             setCommentAuthor(res);
           });
         }
@@ -90,87 +91,21 @@ const Post: FC<PostInterfaceExtended> = ({
   }, []);
 
   useEffect(() => {
-    authorOfComment(user_id).then(res => setAuthor(res));
+    authorOfComment(userId).then(res => {
+      setAuthor(res);
+    });
 
     const like = LikedElements(user, likes);
     setLiked(like);
 
-    if (user) {
-      checkIsSaved(user);
-    }
-
     return;
-  }, [likes, user]);
+  }, [likes, user?._id]); //jak jest sam user to napierdala network
 
-  const linkShare = `https://social-rikuseto.netlify.app/post/${_id}`;
-
-  const [disableComments, setDisableComments] = useState<boolean>(false);
-  const location = useLocation();
   useEffect(() => {
     if (location.pathname.includes('/post')) {
       setDisableComments(true);
     }
   }, [location.pathname]);
-
-  const ShareSocials = () => {
-    return (
-      <>
-        <div className="post__container-socials">
-          <FacebookShareButton url={linkShare}>
-            <FacebookIcon size={40} round={true} />
-          </FacebookShareButton>
-          <RedditShareButton url={linkShare}>
-            <RedditIcon size={40} round={true} />
-          </RedditShareButton>
-          <WhatsappShareButton url={linkShare}>
-            <WhatsappIcon size={40} round={true} />
-          </WhatsappShareButton>
-          <TelegramShareButton url={linkShare}>
-            <TelegramIcon size={40} round={true} />
-          </TelegramShareButton>
-          <TwitterShareButton url={linkShare}>
-            <TwitterIcon size={40} round={true} />
-          </TwitterShareButton>
-          <EmailShareButton url={linkShare}>
-            <EmailIcon size={40} round={true} />
-          </EmailShareButton>
-        </div>
-        <p className="post__share-info">Or just copy link</p>
-        <div className="post__container-link">
-          <a href={linkShare} className="post__link">
-            {linkShare}
-          </a>
-        </div>
-
-        <button
-          onClick={() => {
-            navigator.clipboard.writeText(linkShare);
-          }}
-          className="post__btn-copy"
-        >
-          Copy link
-          <i className="far fa-copy"></i>
-        </button>
-      </>
-    );
-  };
-
-  const deletePost = () => {
-    axios.delete(`${process.env.REACT_APP_API}/posts/delete`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        postId: _id,
-      },
-    });
-    window.location.reload();
-  };
-
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-
-  const [newHeadline, setNewHeadline] = useState<string>(headline);
-  const [message, setMessage] = useState<string>('');
 
   const editPost = () => {
     if (newHeadline === headline) {
@@ -187,79 +122,6 @@ const Post: FC<PostInterfaceExtended> = ({
         refreshPosts();
       });
   };
-
-  const checkIsSaved = (userUpdate: any) => {
-    setSavedPost(false);
-    if (userUpdate.saved_posts) {
-      userUpdate.saved_posts.forEach((element: string) => {
-        if (element.toString() === _id.toString()) {
-          setSavedPost(true);
-        } else {
-          setSavedPost(false);
-        }
-      });
-    }
-  };
-
-  const savePost = () => {
-    axios
-      .put(`${process.env.REACT_APP_API}/posts/save`, {
-        id: _id,
-        userId: user._id,
-      })
-      .then(res => {
-        checkIsSaved(res.data.updatedUser);
-        setCookie('user', res.data.updatedUser, { path: '/' });
-      });
-  };
-
-  const ActionsPost = () => {
-    return (
-      <div className="post__container-dots-actions">
-        {user && user._id !== user_id && (
-          <>
-            <button
-              onClick={() => {
-                savePost();
-
-                setTimeout(() => {
-                  refreshPosts();
-                }, 200);
-              }}
-              className="post__action"
-            >
-              {savedPost ? 'Unsave' : 'Save post'}
-              <i style={{ marginLeft: '.5rem' }} className="fas fa-flag"></i>
-            </button>
-            <button className="post__action">
-              Report
-              <i style={{ marginLeft: '.5rem' }} className="fas fa-ban"></i>
-            </button>
-          </>
-        )}
-        {user && user._id === user_id ? (
-          <>
-            <button onClick={() => setIsEdit(true)} className="post__action">
-              Edit
-              <i style={{ marginLeft: '.5rem' }} className="fas fa-edit"></i>
-            </button>
-            <button
-              onClick={deletePost}
-              className="post__action post__action--delete"
-            >
-              Delete
-              <i
-                style={{ marginLeft: '.5rem' }}
-                className="fas fa-trash-alt"
-              ></i>
-            </button>
-          </>
-        ) : null}
-      </div>
-    );
-  };
-
-  const [openToolTip, setOpenToolTip] = useState<boolean>(false);
 
   return (
     <>
@@ -302,15 +164,16 @@ const Post: FC<PostInterfaceExtended> = ({
                     spread: 10,
                   },
                 }}
-                content={ActionsPost()}
+                content={
+                  <PostActions
+                    setIsEdit={setIsEdit}
+                    id={_id}
+                    userId={userId}
+                    refreshPosts={refreshPosts}
+                  />
+                }
               >
-                <button
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'var(--font-dark-600)',
-                  }}
-                >
+                <button className="post__container-dots-btn">
                   <i className="fas fa-ellipsis-v"></i>
                 </button>
               </Floater>
@@ -326,11 +189,11 @@ const Post: FC<PostInterfaceExtended> = ({
             <div>
               <p className="post__author-name">
                 <Link
-                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  className="post__author-link"
                   to={
-                    user && user_id === user._id
+                    user && userId === user._id
                       ? '/account'
-                      : `/profile/${user_id}`
+                      : `/profile/${userId}`
                   }
                 >
                   {author?.firstName} {author?.lastName}
@@ -388,7 +251,13 @@ const Post: FC<PostInterfaceExtended> = ({
           >
             <m.div
               className="post__container-likes"
-              animate={{ color: liked ? '#753ee0' : 'inherit' }}
+              animate={{
+                color: liked
+                  ? '#753ee0'
+                  : state.theme === 'dark'
+                  ? '#f8f8f8'
+                  : '#36344b',
+              }}
             >
               <m.button
                 className="post__btn"
@@ -417,7 +286,11 @@ const Post: FC<PostInterfaceExtended> = ({
                   comments
                 </button>
               )}
-              <button className="post__btn post__single-action">
+              <button
+                onClick={() => setShowFloater(prevVal => !prevVal)}
+                onBlur={() => setShowFloater(false)}
+                className="post__btn post__single-action"
+              >
                 <Floater
                   styles={{
                     floater: {
@@ -436,7 +309,8 @@ const Post: FC<PostInterfaceExtended> = ({
                       spread: 10,
                     },
                   }}
-                  content={ShareSocials()}
+                  content={ShareButton({ link: linkShare })}
+                  open={showFloater}
                 >
                   <div style={{ display: 'flex' }}>
                     Share <i className="fas fa-share"></i>
@@ -452,14 +326,11 @@ const Post: FC<PostInterfaceExtended> = ({
                   {commentAuthor?.firstName}
                 </span>
 
-                <span
-                  style={{ marginLeft: '.7rem' }}
-                  className="post__top-date"
-                >
+                <span className="post__top-date">
                   {dayjs(comment.topComment.date).fromNow()}
                 </span>
 
-                <span style={{ marginLeft: '1rem' }} className="post__top-text">
+                <span className="post__top-text">
                   {comment.topComment.text}
                 </span>
               </p>
@@ -489,7 +360,7 @@ const Post: FC<PostInterfaceExtended> = ({
               <Comments
                 key={_id}
                 postId={_id}
-                authorId={user_id}
+                authorId={userId}
                 setOpenComments={setOpenComments}
                 fetchTopComment={fetchTopComment}
               />

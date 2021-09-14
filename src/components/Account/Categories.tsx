@@ -1,10 +1,10 @@
 import axios from 'axios';
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import Header from '../Header/Header';
-import { checkUser } from './IsLogged/isLoggedUser';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import Post from '../Posts/Post';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 interface CategoryI {
   _id: string;
@@ -20,15 +20,15 @@ const Categories: FC = () => {
   const [search, setSearch] = useState<string>('');
 
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
 
-  const userFavoriteCategories = () => {
+  const userFavoriteCategories = useCallback(() => {
     axios
       .get(
         `${process.env.REACT_APP_API}/category/get-categories?userId=${user._id}`
       )
       .then(res => setUserCategories(res.data));
-  };
+  }, [user._id]);
 
   const fetchCategories = () => {
     axios
@@ -47,7 +47,7 @@ const Categories: FC = () => {
     }, 500);
   };
 
-  const fetchPostByCategory = () => {
+  const fetchPostByCategory = useCallback(() => {
     if (search.length > 0) {
       axios
         .get(
@@ -55,17 +55,16 @@ const Categories: FC = () => {
         )
         .then(res => setPosts(res.data));
     }
-  };
+  }, [search]);
 
   useEffect(() => {
     if (search.length === 0) setPosts([]);
   }, [search]);
 
   useEffect(() => {
-    checkUser(user);
     fetchCategories();
     userFavoriteCategories();
-  }, []);
+  }, [userFavoriteCategories]);
 
   useEffect(() => {
     const time = setTimeout(() => {
@@ -73,7 +72,7 @@ const Categories: FC = () => {
     }, 1000);
 
     return () => clearTimeout(time);
-  }, [search]);
+  }, [fetchPostByCategory]);
 
   return (
     <>
@@ -104,6 +103,7 @@ const Categories: FC = () => {
                 if (element._id === _id) {
                   text = 'Remove';
                 }
+                return null;
               });
 
               return (
@@ -126,7 +126,7 @@ const Categories: FC = () => {
         </div>
         <div className="categories__posts">
           {posts?.map(
-            ({ _id, headline, category, file, user_id, likes, date }) => {
+            ({ _id, headline, category, file, userId, likes, date }) => {
               return (
                 <Post
                   key={_id}
@@ -134,7 +134,7 @@ const Categories: FC = () => {
                   headline={headline}
                   category={category}
                   file={file}
-                  user_id={user_id}
+                  userId={userId}
                   likes={likes}
                   refreshPosts={fetchPostByCategory}
                   date={date}

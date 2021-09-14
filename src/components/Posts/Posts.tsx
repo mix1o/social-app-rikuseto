@@ -15,9 +15,9 @@ const Posts: FC = () => {
   const { user } = cookies;
 
   const fetchPosts = (): void => {
-    axios
-      .get(`${process.env.REACT_APP_API}/posts/get`)
-      .then(res => setPosts(res.data));
+    axios.get(`${process.env.REACT_APP_API}/posts/get`).then(res => {
+      setPosts(res.data);
+    });
   };
 
   const handleFetchPosts = (): void => {
@@ -49,14 +49,14 @@ const Posts: FC = () => {
               <img
                 className="post__image-author"
                 src={user.avatar}
-                alt={user.first_name}
+                alt={user.firstName}
               />
               <input
                 disabled={open ? true : false}
                 className="post__input"
                 onClick={() => setOpen(true)}
                 type="text"
-                placeholder={`${user.first_name}, what's is on your mind`}
+                placeholder={`${user.firstName}, what's is on your mind`}
               />
             </label>
           </div>
@@ -66,7 +66,7 @@ const Posts: FC = () => {
         )}
 
         {posts?.map(
-          ({ _id, headline, category, file, user_id, likes, date }) => {
+          ({ _id, headline, category, file, userId, likes, date }) => {
             return (
               <Post
                 key={_id}
@@ -74,7 +74,7 @@ const Posts: FC = () => {
                 headline={headline}
                 category={category}
                 file={file}
-                user_id={user_id}
+                userId={userId}
                 likes={likes}
                 refreshPosts={handleFetchPosts}
                 date={date}
