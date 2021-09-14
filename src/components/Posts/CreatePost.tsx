@@ -4,9 +4,10 @@ import { useCookies } from 'react-cookie';
 import Category from './Category/Category';
 import CropImage from './CropImage';
 import { CreatePostI } from '../../interfaces/posts/postInterfaces';
-import Picker from 'emoji-picker-react';
+
 import useNotification from '../../Notifications/useNotification';
 import { checkPermission } from '../../helpers/CheckPermission';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 interface CreateProps {
   handleFetchPosts: () => void;
@@ -15,7 +16,7 @@ interface CreateProps {
 
 const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
 
   const [post, setPost] = useState<CreatePostI>({
     headline: '',
@@ -30,7 +31,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
   const [message, setMessage] = useState<string>('');
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState<boolean>(false);
-  const [isOpenEmoji, setIsOpenEmoji] = useState<boolean>(false);
   const { checkNotificationSupport, subscribeToPushNotification } =
     useNotification();
 
@@ -136,26 +136,8 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
               placeholder="Write something interesting"
               className="create-post__title"
             />
-            <button
-              className="create-post__btn-emoji"
-              onClick={() => setIsOpenEmoji(prevState => !prevState)}
-            >
-              <i className="fas fa-smile" />
-            </button>
           </label>
-          {isOpenEmoji && (
-            <Picker
-              pickerStyle={{
-                width: '100%',
-                background: 'var(--light-bg-400)',
-                boxShadow: 'none',
-                border: '1px solid var(--font-dark-600)',
-                marginTop: '1rem',
-              }}
-              disableSearchBar={true}
-              onEmojiClick={onEmojiClick}
-            />
-          )}
+
           <Category
             chooseCategory={post.category}
             setPost={setPost}

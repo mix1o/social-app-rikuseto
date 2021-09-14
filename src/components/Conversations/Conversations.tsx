@@ -3,6 +3,7 @@ import { useCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../Header/Header';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 interface Friends {
   firstName: string;
@@ -13,7 +14,7 @@ interface Friends {
 
 const Conversations = () => {
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
 
   const [friends, setFriends] = useState<Friends[]>();
 

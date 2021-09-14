@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { CategoryItemI } from '../../../interfaces/posts/category';
 
 const CategoryItem: FC<CategoryItemI> = ({

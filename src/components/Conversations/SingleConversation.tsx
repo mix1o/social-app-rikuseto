@@ -5,6 +5,7 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import CustomTextarea from '../../helpers/CustomTextarea';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 const socket = io(`${process.env.REACT_APP_SOCKET}`);
 
@@ -12,7 +13,8 @@ const SingleConversation = () => {
   const { id, name } = useParams<{ id: string; name: string }>();
 
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
+
   const [chat, setChat] = useState<
     { avatar: string; text: string; userId: string }[]
   >([]);

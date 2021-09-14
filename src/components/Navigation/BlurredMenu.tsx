@@ -5,11 +5,9 @@ import SignUp from '../Auth/SignUp';
 import ResetPassword from '../Auth/ResetPassword';
 import React from 'react';
 
-interface Blur {
+const BlurredMenu: React.FC<{
   setUserOption: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const BlurredMenu: React.FC<Blur> = ({ setUserOption }) => {
+}> = ({ setUserOption }) => {
   const [current, send] = useActor(authService);
 
   return (
