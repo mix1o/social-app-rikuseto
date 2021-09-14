@@ -52,7 +52,7 @@ const Post: FC<PostInterfaceExtended> = ({
 
   const location = useLocation();
   const [state] = useCounter();
-  const linkShare = `${process.env.REACT_APP_SHARE_LINK}/${_id}`;
+  const linkShare = `https://social-rikuseto.netlify.app/post/${_id}`;
   dayjs.extend(relativeTime);
 
   const handleLikePost = () => {
@@ -99,7 +99,7 @@ const Post: FC<PostInterfaceExtended> = ({
     setLiked(like);
 
     return;
-  }, [likes, user?._id]); //jak jest sam user to napierdala network
+  }, [likes, user?._id]);
 
   useEffect(() => {
     if (location.pathname.includes('/post')) {
@@ -313,7 +313,7 @@ const Post: FC<PostInterfaceExtended> = ({
                   open={showFloater}
                 >
                   <div style={{ display: 'flex' }}>
-                    Share <i className="fas fa-share"></i>
+                    share <i className="fas fa-share"></i>
                   </div>
                 </Floater>
               </button>
