@@ -1,26 +1,26 @@
-import React, { useEffect, FC, useState } from 'react';
-import { checkUser } from './IsLogged/isLoggedUser';
+import { useEffect, FC, useState, useCallback } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import Post from '../Posts/Post';
 import Header from '../Header/Header';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 const SavedPosts: FC = () => {
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
+
   const [posts, setPosts] = useState<PostInterface[]>();
 
-  const handleFetchPosts = () => {
+  const handleFetchPosts = useCallback(() => {
     axios
       .get(`${process.env.REACT_APP_API}/posts/saved-posts?userId=${user._id}`)
       .then(res => setPosts(res.data));
-  };
+  }, [user._id]);
 
   useEffect(() => {
-    checkUser(user);
     handleFetchPosts();
-  }, []);
+  }, [handleFetchPosts]);
 
   return (
     <>

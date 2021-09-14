@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { CommentsData } from '../../interfaces/comments/commentsInterfaces';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
@@ -20,12 +20,6 @@ interface ProfileI {
   user: UserDataInterface;
   posts: PostInterface[];
   comments: CommentsData[];
-}
-
-interface FriendI {
-  friendId: string;
-  roomId: string;
-  userId: string;
 }
 
 const Profile: FC = () => {

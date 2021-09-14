@@ -1,32 +1,17 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 import Header from '../Header/Header';
-import { checkUser } from './IsLogged/isLoggedUser';
 
 const Account: FC = () => {
   const [cookies, , removeCookie] = useCookies();
-
-  const {
-    user,
-  }: {
-    [name: string]: CookieUser;
-  } = cookies;
-
-  // const [user]: CookieUser[] = useMemo(
-  //   (): CookieUser[] => [{ ...cookies['user'] }],
-  //   [cookies]
-  // );
-
-  useEffect(() => {
-    checkUser(user._id);
-  }, [user]);
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
 
   return (
     <>
       <Header />
-      {user._id && (
+      {user && (
         <div className="account">
           <div className="account__container-avatar">
             <img

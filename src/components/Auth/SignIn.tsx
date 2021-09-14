@@ -8,6 +8,7 @@ import { authService } from './AuthStateMachine';
 import { AuthSchema2 as AuthSchema } from '../../Formik/ValidationSchemas';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { MessageI } from '../../interfaces/auth/authInterface';
 
 interface UserLoginData {
   email: string;
@@ -18,20 +19,23 @@ const SignIn: FC = () => {
   const [, setCookie] = useCookies();
   const [, send] = useActor(authService);
   const history = useHistory();
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState<MessageI>({
+    message: '',
+    status: 0,
+  });
 
   const handleLogIn = (values: UserLoginData) => {
     axios
       .post(`${process.env.REACT_APP_API}/auth/login`, values)
       .then(res => {
         if (res.status === 203) {
-          setMessage(res.data.message);
+          setMessage({ message: res.data.message, status: res.status });
         }
         if (res.data.valid) {
-          setMessage(res.data.message);
+          setMessage({ message: res.data.message, status: res.status });
           setCookie('user', res.data.user);
           history.push('/');
-          window.location.reload();
+          // window.location.reload();
         }
       })
       .catch(err => console.log(err));
@@ -78,12 +82,19 @@ const SignIn: FC = () => {
             </div>
           </Form>
         </Formik>
-        {message && <p className="auth__message">{message}</p>}
+        {message.message && (
+          <p
+            className={`auth__message ${
+              message.status === 203 ? 'auth__message--refused' : null
+            } `}
+          >
+            {message.message}
+          </p>
+        )}
         <div>
           <p className="auth__form-link">
-            Don't have account yet ?
+            Don't have account yet ?{' '}
             <span className="auth__form-next" onClick={() => send('SIGN_UP')}>
-              {' '}
               Sign Up
             </span>
           </p>

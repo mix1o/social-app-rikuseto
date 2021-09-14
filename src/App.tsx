@@ -15,15 +15,7 @@ const App: FC = () => {
   const html = document.querySelector('html');
 
   const [cookies] = useCookies();
-  // const { user } = cookies; Normal
-  // const {
-  //   user,
-  // }: {
-  //   [name: string]: CookieUser;
-  // } = cookies;
-
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
-  //Return undefined if user not found
 
   const [, actions] = useCounter();
 
@@ -46,11 +38,11 @@ const App: FC = () => {
         <Switch>
           {Routes.map(({ component, url, exact, permission }): ReactChild => {
             return permission === false ? (
-              <Route path={url} exact={exact} component={component} />
+              <Route path={url} exact={exact} component={component} key={url} />
             ) : user ? (
-              <Route path={url} exact={exact} component={component} />
+              <Route path={url} exact={exact} component={component} key={url} />
             ) : (
-              <Redirect to={{ pathname: '/auth' }} />
+              <Redirect to={{ pathname: '/auth' }} key={url} />
             );
           })}
         </Switch>

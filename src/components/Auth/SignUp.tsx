@@ -5,21 +5,20 @@ import { AuthSchema } from '../../Formik/ValidationSchemas';
 import axios from 'axios';
 import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
-import { useHistory } from 'react-router-dom';
-import { UserAccountData } from '../../interfaces/auth/authInterface';
+import { MessageI, UserAccountData } from '../../interfaces/auth/authInterface';
 
 const SignUp: FC = () => {
   const [, send] = useActor(authService);
-  const [message, setMessage] = useState('');
-  const history = useHistory();
+  const [message, setMessage] = useState<MessageI>({
+    message: '',
+    status: 0,
+  });
 
   const createAccount = (values: UserAccountData) => {
     axios
       .post(`${process.env.REACT_APP_API}/auth/create-account`, values)
       .then(res => {
-        setMessage(res.data.message);
-        window.location.reload();
-        history.push('/');
+        setMessage({ message: res.data.message, status: res.status });
       })
       .catch(e => console.log(e));
   };
@@ -84,11 +83,20 @@ const SignUp: FC = () => {
             </button>
           </Form>
         </Formik>
-        {message && <p className="auth__message">{message}</p>}
+        {message.status && (
+          <p
+            className={`auth__message ${
+              message.status === 200
+                ? 'auth__message--accepted'
+                : 'auth__message--refused'
+            }`}
+          >
+            {message.message}
+          </p>
+        )}
         <p className="auth__form-link">
-          Already a member ?
+          Already a member ?{' '}
           <span className="auth__form-next" onClick={() => send('SIGN_IN')}>
-            {' '}
             Login now
           </span>
         </p>
