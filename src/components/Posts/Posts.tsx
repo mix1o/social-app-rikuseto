@@ -9,7 +9,7 @@ import Header from '../Header/Header';
 
 const Posts: FC = () => {
   const [posts, setPosts] = useState<PostInterface[]>();
-  const [open, setOpen] = useState<boolean>(false);
+  // const [open, setOpen] = useState<boolean>(false);
 
   const [cookies] = useCookies();
   const { user } = cookies;
@@ -28,21 +28,12 @@ const Posts: FC = () => {
     fetchPosts();
   }, []);
 
-  const [state] = useCounter();
-
-  const [disabled, setDisabled] = useState<boolean>(false);
-  useEffect(() => {
-    if (state.isOpenCommentComponent) {
-      setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
-  }, [state.isOpenCommentComponent]);
+  const [state, actions] = useCounter();
 
   return (
     <>
       <Header />
-      <main style={disabled ? { overflowY: 'hidden', height: '20vh' } : {}}>
+      <main>
         {user && !state.isOpenCommentComponent && (
           <div className="post__wrapper">
             <label className="post__container-input">
@@ -52,18 +43,16 @@ const Posts: FC = () => {
                 alt={user.firstName}
               />
               <input
-                disabled={open ? true : false}
+                disabled={state.open ? true : false}
                 className="post__input"
-                onClick={() => setOpen(true)}
+                onClick={() => actions.openCreatePost(true)}
                 type="text"
                 placeholder={`${user.firstName}, what's is on your mind`}
               />
             </label>
           </div>
         )}
-        {open && (
-          <CreatePost handleFetchPosts={handleFetchPosts} setOpen={setOpen} />
-        )}
+        {state.open && <CreatePost handleFetchPosts={handleFetchPosts} />}
 
         {posts?.map(
           ({ _id, headline, category, file, userId, likes, date }) => {
