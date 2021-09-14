@@ -15,7 +15,6 @@ import {
 } from '../../helpers/ImageFunctions';
 import { useDropzone as useDropZone } from 'react-dropzone';
 import Compressor from 'compressorjs';
-import axios from 'axios';
 import { CreatePostI } from '../../interfaces/posts/postInterfaces';
 import { upload } from '../../helpers/UploadImg';
 
