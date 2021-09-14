@@ -11,8 +11,8 @@ interface NotificationsI {
   friendsRequests: [
     {
       avatar: string;
-      first_name: string;
-      last_name: string;
+      firstName: string;
+      lastName: string;
       request: {
         date: string;
         requestedUser: string;
@@ -31,7 +31,7 @@ interface NotificationsI {
       state: number;
       status: boolean;
       url: string;
-      user_id: string;
+      userId: string;
       _id: string;
     }
   ];
@@ -49,7 +49,6 @@ const Notifications = () => {
       .get(`${process.env.REACT_APP_API}/user/get-requests?id=${user._id}`)
       .then(res => setNotifications(res.data));
   };
-
   const optionRequest = (
     option: Option,
     requestId: string,
@@ -82,8 +81,8 @@ const Notifications = () => {
             (
               {
                 avatar,
-                first_name,
-                last_name,
+                firstName,
+                lastName,
                 request: { status, requestedUser, date, _id, userId },
               },
               idx
@@ -107,7 +106,7 @@ const Notifications = () => {
                       <p className="notifications__header">
                         Friend request from{' '}
                         <span>
-                          {first_name} {last_name}
+                          {firstName} {lastName}
                         </span>
                       </p>
                     </div>
@@ -138,56 +137,58 @@ const Notifications = () => {
           )}
         </div>
         <div className="notifications__elements">
-          {notifications?.notifications.map(
-            (
-              { body, date, header, photo, state, status, url, user_id, _id },
-              idx
-            ) => {
-              let displayImg = false;
+          {notifications?.notifications
+            .reverse()
+            .map(
+              (
+                { body, date, header, photo, state, status, url, userId, _id },
+                idx
+              ) => {
+                let displayImg = false;
 
-              if (url.includes('#')) displayImg = true;
+                if (url.includes('#')) displayImg = true;
 
-              return (
-                <div
-                  key={idx}
-                  className={`notifications__request ${
-                    status ? 'notifications__request--active' : ''
-                  }
+                return (
+                  <div
+                    key={idx}
+                    className={`notifications__request ${
+                      status ? 'notifications__request--active' : ''
+                    }
                   ${!displayImg ? 'notifications__requests--padding' : ''}
                   `}
-                >
-                  <Link className="notifications__link" to={`/${url}`}>
-                    <div className="notifications__view">
-                      {displayImg && (
-                        <div className="notifications__container-img">
-                          <img
-                            className="notifications__img"
-                            src={photo}
-                            alt="photo"
-                          />
+                  >
+                    <Link className="notifications__link" to={`/${url}`}>
+                      <div className="notifications__view">
+                        {displayImg && (
+                          <div className="notifications__container-img">
+                            <img
+                              className="notifications__img"
+                              src={photo}
+                              alt="user profile"
+                            />
+                          </div>
+                        )}
+                        <div className="notifications__info">
+                          <p className="notifications__header">{header}</p>
                         </div>
-                      )}
-                      <div className="notifications__info">
-                        <p className="notifications__header">{header}</p>
                       </div>
-                    </div>
 
-                    <div
-                      className={`notifications__action ${
-                        displayImg ? 'notifications__action--lower' : ''
-                      }`}
-                    >
-                      <p className="notifications__body">{body}</p>
-                      <p className="notifications__date">
-                        {dayjs(date).fromNow()}
-                      </p>
-                    </div>
-                  </Link>
-                  <i className="fas fa-ellipsis-v " />
-                </div>
-              );
-            }
-          )}
+                      <div
+                        className={`notifications__action ${
+                          displayImg ? 'notifications__action--lower' : ''
+                        }`}
+                      >
+                        <p className="notifications__body">{body}</p>
+                        <p className="notifications__date">
+                          {dayjs(date).fromNow()}
+                        </p>
+                      </div>
+                    </Link>
+                    <i className="fas fa-ellipsis-v " />
+                  </div>
+                );
+              }
+            )}
         </div>
       </div>
     </>
