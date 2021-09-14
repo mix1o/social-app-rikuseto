@@ -3,6 +3,7 @@ import { Action, createStore } from 'react-sweet-state';
 type State = {
   isOpenCommentComponent: boolean;
   theme: string;
+  open: boolean;
 };
 
 type Actions = typeof actions;
@@ -10,13 +11,13 @@ type Actions = typeof actions;
 const initialState: State = {
   isOpenCommentComponent: false,
   theme: 'light',
+  open: false,
 };
 
 const actions = {
   isOpenComment:
     (arg: boolean): Action<State> =>
     ({ getState, setState }) => {
-      const { isOpenCommentComponent } = getState();
       setState({
         ...getState,
         isOpenCommentComponent: arg,
@@ -25,8 +26,12 @@ const actions = {
   theme:
     (arg: string): Action<State> =>
     ({ getState, setState }) => {
-      const { theme } = getState();
       setState({ ...getState, theme: arg });
+    },
+  openCreatePost:
+    (arg: boolean): Action<State> =>
+    ({ getState, setState }) => {
+      setState({ open: arg });
     },
 };
 
