@@ -8,15 +8,17 @@ import { CreatePostI } from '../../interfaces/posts/postInterfaces';
 import useNotification from '../../Notifications/useNotification';
 import { checkPermission } from '../../helpers/CheckPermission';
 import { CookieUser } from '../../interfaces/auth/authInterface';
+import { useCounter } from '../../store/sub';
 
 interface CreateProps {
   handleFetchPosts: () => void;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
+const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
+
+  const [, actions] = useCounter();
 
   const [post, setPost] = useState<CreatePostI>({
     headline: '',
@@ -48,7 +50,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
       axios.post(`${process.env.REACT_APP_API}/posts/create`, post);
     }
     setPost({ headline: '', file: '', category: '', notification: false });
-    setOpen(false);
+    actions.openCreatePost(false);
     setTimeout(() => {
       handleFetchPosts();
     }, 500);
@@ -89,10 +91,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
 
   useEffect(() => {}, []);
 
-  const onEmojiClick = (event: any, emojiObject: any) => {
-    setPost({ ...post, headline: post.headline + emojiObject.emoji });
-  };
-
   const handleNotification = () => {
     const permission = checkPermission();
 
@@ -109,7 +107,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
     <div className="blurred__options create">
       <div
         className="blurred__blurred-bg"
-        onClick={() => setOpen(prevVal => !prevVal)}
+        onClick={() => actions.openCreatePost(false)}
       ></div>
       <div
         style={{
@@ -177,10 +175,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts, setOpen }) => {
           )}
           {/* {checkNotificationSupport && info.length >= 2 && (
           )} */}
-          <button onClick={subscribeToPushNotification}>
-            SUBSCRIBE TO NOTIFICATIOn
-          </button>
-          <button onClick={sendTest}>test noti</button>
 
           <button
             className="create-post__btn-add"
@@ -202,4 +196,28 @@ export default CreatePost;
 
 // TODO Wyświetlanie postów z ulubionymi kategoriami
 
-// TODO Dodac avatar przy komentarzu, powiekszyc avatar authora komentarza
+// TODO Szukanie kategorii, userow, postow
+
+// TODO FILRTOWANIE POSTOW
+
+// TODO Login details
+
+// TODO COMPONENT HELP
+
+// TODO RESET HASLA
+
+// TODO CLOSE LOGIN POPUP WHEN SUCESS
+
+// TODO REMOVE NOTIFICAITONS SERVICE WORKER | Styles for checkbox
+
+// TODO Conversations last message, find new friends when user doesnt have any friend
+
+// TODO FLOATER Post
+
+// TODO SCROLL Message
+
+// TODO Pagination posts,comments, messages
+
+// TODO UPLOAD AVATARA
+
+// TODO USUWANIE WIADOMOSCI
