@@ -1,5 +1,5 @@
 import { useField } from 'formik';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 
 interface FieldProps {
