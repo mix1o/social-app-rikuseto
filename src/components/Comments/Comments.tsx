@@ -40,6 +40,8 @@ interface SortedElement {
   _id: string;
 }
 
+type FilterTypes = 'popular' | 'latest' | 'default';
+
 const Comments: FC<CommentProps> = ({
   postId,
   setOpenComments,
@@ -49,7 +51,7 @@ const Comments: FC<CommentProps> = ({
 }) => {
   const [commentText, setCommentText] = useState<string>('');
   const [comments, setComments] = useState<CommentsData[]>();
-  const [filter, setFilter] = useState<string>('Default');
+  const [filter, setFilter] = useState<string>('default');
   const [popup, setPopup] = useState<boolean>(false);
 
   const commentRef = useRef<any>();
@@ -117,7 +119,13 @@ const Comments: FC<CommentProps> = ({
 
     return 1;
   };
+  const [open, setOpen] = useState(false);
+  const handleFilterChange = (type: FilterTypes) => {
+    setFilter(type);
+    setOpen(false);
+  };
 
+  console.log(open);
   return (
     <m.section
       variants={commentVariant}
@@ -129,29 +137,59 @@ const Comments: FC<CommentProps> = ({
     >
       <div>
         <div className="comments__header">
-          <div className="comments__filter-container">
+          <div>
             {comments?.length! > 0 && (
               <>
-                <p data-testid="filter-text" className="comments__filter-text">
-                  Filter by
-                </p>
-                <select
-                  value={filter}
-                  onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                    setFilter(e.target.value)
-                  }
-                  className="comments__filter"
-                >
-                  <option value="Default" disabled>
-                    Default
-                  </option>
-                  <option value="popular" className="comments__filter-option">
-                    Most popular
-                  </option>
-                  <option value="latest" className="comments__filter-option">
-                    Latest
-                  </option>
-                </select>
+                <div className="comments__filter">
+                  <div className="comments__current-filter">
+                    <p
+                      onClick={() => setOpen(!open)}
+                      className="comments__filter-text"
+                    >
+                      {filter}
+                    </p>
+                    {!open && (
+                      <button
+                        className="comments__toggle-filter"
+                        onClick={() => setOpen(true)}
+                      >
+                        <i className="fas fa-chevron-down" />
+                      </button>
+                    )}
+                    {open && (
+                      <button
+                        className="comments__toggle-filter"
+                        onClick={() => setOpen(false)}
+                      >
+                        <i className="fas fa-chevron-up" />
+                      </button>
+                    )}
+                  </div>
+                  {open && (
+                    <div className="comments__filter-list">
+                      <button
+                        className="comments__filter-item"
+                        onClick={() => handleFilterChange('default')}
+                      >
+                        Default
+                      </button>
+
+                      <button
+                        className="comments__filter-item"
+                        onClick={() => handleFilterChange('popular')}
+                      >
+                        Most popular
+                      </button>
+
+                      <button
+                        className="comments__filter-item"
+                        onClick={() => handleFilterChange('latest')}
+                      >
+                        Latest
+                      </button>
+                    </div>
+                  )}
+                </div>
               </>
             )}
           </div>

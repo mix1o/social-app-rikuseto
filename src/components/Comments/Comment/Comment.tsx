@@ -1,12 +1,5 @@
 import axios from 'axios';
-import React, {
-  FC,
-  useState,
-  ChangeEvent,
-  useEffect,
-  useRef,
-  RefObject,
-} from 'react';
+import { FC, useState, ChangeEvent, useEffect, useRef, useMemo } from 'react';
 import { useCookies } from 'react-cookie';
 import { LikedElements } from '../../../hooks/LikedElements';
 import { AuthorInterface } from '../../../interfaces/common/common';
@@ -22,6 +15,7 @@ import { useLocation } from 'react-router-dom';
 import BlurredMenu from '../../Navigation/BlurredMenu';
 import Floater from 'react-floater';
 import { useCounter } from '../../../store/sub';
+import { CookieUser } from '../../../interfaces/auth/authInterface';
 
 const Comment: FC<SingleCommentProps> = ({
   _id,
@@ -34,7 +28,10 @@ const Comment: FC<SingleCommentProps> = ({
   scroll,
 }) => {
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = useMemo(
+    () => (cookies['user'] ? { ...cookies['user'] } : undefined),
+    [cookies]
+  );
 
   const [liked, setLiked] = useState<boolean | undefined>();
   const [author, setAuthor] = useState<AuthorInterface>();
@@ -45,7 +42,7 @@ const Comment: FC<SingleCommentProps> = ({
   const [openToolTip, setOpenToolTip] = useState<boolean>(false);
   const location = useLocation();
   const [state] = useCounter();
-  const commentId = window.location.href.split('#')[1]; //co to kurwa jest XD
+
   dayjs.extend(relativeTime);
 
   const commentRef = useRef<any>();
@@ -68,7 +65,6 @@ const Comment: FC<SingleCommentProps> = ({
   };
   useEffect(() => {
     authorOfComment(userId).then(res => setAuthor(res));
-
     const like = LikedElements(user, likes);
     setLiked(like);
   }, [likes]);
@@ -106,7 +102,7 @@ const Comment: FC<SingleCommentProps> = ({
         commentRef.current.style.padding = '10px';
       }, 500);
     }
-  }, []);
+  }, [scroll]);
 
   const ActionsComment = () => {
     return (
