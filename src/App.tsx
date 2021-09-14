@@ -25,26 +25,38 @@ const App: FC = () => {
     if (theme === null) {
       localStorage.setItem('theme', JSON.stringify({ theme: 'light' }));
       html!.dataset.value = 'light';
-      actions.theme('light');
     } else {
       html!.dataset.value = JSON.parse(theme).theme;
-      actions.theme('dark');
     }
+    const parsed = JSON.parse(theme || 'light');
+    actions.theme(parsed.theme);
   }, [html, actions]);
 
   return (
     <div>
       <Router>
         <Switch>
-          {Routes.map(({ component, url, exact, permission }): ReactChild => {
-            return permission === false ? (
-              <Route path={url} exact={exact} component={component} key={url} />
-            ) : user ? (
-              <Route path={url} exact={exact} component={component} key={url} />
-            ) : (
-              <Redirect to={{ pathname: '/auth' }} key={url} />
-            );
-          })}
+          {Routes.map(
+            ({ component, url, exact, permission }, idx): ReactChild => {
+              return permission === false ? (
+                <Route
+                  path={url}
+                  exact={exact}
+                  component={component}
+                  key={idx}
+                />
+              ) : user ? (
+                <Route
+                  path={url}
+                  exact={exact}
+                  component={component}
+                  key={idx}
+                />
+              ) : (
+                <Redirect to={{ pathname: '/auth' }} key={idx} />
+              );
+            }
+          )}
         </Switch>
         {user && <Menu />}
       </Router>
