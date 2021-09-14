@@ -5,6 +5,11 @@ interface User {
   password: string;
 }
 
+export interface MessageI {
+  message: string;
+  status: number;
+}
+
 export interface UserAccountData extends User {
   confirmPassword: string;
 }
@@ -22,7 +27,7 @@ export interface CookieUser extends User {
   categories?: string[];
   friends?: { friendId: string; roomId: string; _id: string }[];
   requests?: Request[];
-  savedPosts?: [];
+  savedPosts: string[];
   sentRequests?: Omit<Request, 'userId'>[];
   serviceWorkers?: {
     endpoint: string;
