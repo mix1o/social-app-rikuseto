@@ -444,6 +444,7 @@ h6 {
   width: 100%;
   display: flex;
   background-color: var(--light-bg-400);
+  align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
   z-index: 1;
@@ -466,6 +467,33 @@ h6 {
 .menu .fa-bell,
 .menu .fa-user {
   color: inherit;
+}
+
+.circle-menu {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(to bottom, transparent 48%, var(--light-bg-500) 48% 53%);
+  padding: 1rem 0;
+  position: absolute;
+  border-radius: 10rem;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 2px solid var(--light-bg-700);
+}
+
+.circle-backface {
+  background-color: #753ee0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10rem;
 }
 
 .blurred__options {
@@ -521,8 +549,8 @@ h6 {
   font-weight: 600;
 }
 .comment__author-image {
-  height: 2.3rem;
-  width: 2.3rem;
+  height: 3rem;
+  width: 3rem;
   border-radius: 100%;
   margin-right: 0.5rem;
 }
@@ -584,10 +612,6 @@ h6 {
 
 .comment:last-child {
   margin-bottom: 9rem;
-}
-
-.comment--last:last-child {
-  margin-bottom: 2rem;
 }
 
 .comment--last:first-child {
@@ -917,11 +941,43 @@ h6 {
     background: #f0f3f5;
   }
 }
+.btn {
+  background: #753ee0;
+  color: var(--font-light-300);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 1.2rem;
+  font-size: 1.6rem;
+  text-decoration: none;
+  background: transparent;
+  color: var(--font-dark-600);
+  border: 1px solid #753ee0;
+}
+.btn:hover {
+  background: #471a9e;
+  border: 2px solid #946ae7;
+  margin: -2px;
+  cursor: pointer;
+}
+.btn:active {
+  background: #946ae7;
+  border: 2px solid #471a9e;
+  margin: -2px;
+  cursor: pointer;
+}
+.btn:disabled {
+  background: #d3c2f5;
+  border: 2px solid;
+  margin: -2px;
+  cursor: not-allowed;
+}
+
 .textarea {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: var(--light-bg-400);
+  background-color: var(--light-bg-600);
 }
 .textarea__message {
   text-align: center;
@@ -937,6 +993,14 @@ h6 {
 }
 .textarea__wrapper:focus-within, .textarea__wrapper:focus-within ~ .textarea__publish {
   color: #753ee0;
+}
+.textarea__input:focus {
+  border: 1px solid #753ee0;
+  border-top-left-radius: 21px;
+  border-bottom-left-radius: 21px;
+}
+.textarea__input::placeholder {
+  font-size: 1.2rem;
 }
 .textarea__content {
   display: flex;
@@ -964,6 +1028,7 @@ h6 {
   font-family: inherit;
   line-height: 21px;
   color: var(--font-dark-600);
+  outline: none;
 }
 .textarea__publish {
   align-self: center;
@@ -1350,6 +1415,7 @@ h6 {
   bottom: 0;
   transform: translateY(100%);
   width: 20ch;
+  z-index: 10;
 }
 .comments__filter-item {
   background: var(--light-bg-500);
@@ -1790,7 +1856,7 @@ h6 {
   background-color: var(--light-bg-500);
 }
 .conversation__header {
-  background: var(--light-bg-400);
+  background-color: var(--light-bg-600);
   padding: 0 1rem;
   position: sticky;
   top: 0;
@@ -1810,6 +1876,7 @@ h6 {
   display: flex;
   background: var(--light-bg-500);
   padding: 0 1rem;
+  background-color: red;
 }
 .conversation__text {
   width: 100%;
@@ -1863,7 +1930,7 @@ h6 {
   display: flex;
   align-items: center;
   font-size: 1.4rem;
-  max-width: fit-content;
+  max-width: 70%;
   word-break: break-word;
   margin-top: 0;
   margin-bottom: 0;
@@ -1871,6 +1938,7 @@ h6 {
 .conversation__author {
   background-color: #753ee0;
   margin-left: auto;
+  color: var(--font-light-300);
 }
 .conversation__author-message {
   height: 3.5rem;

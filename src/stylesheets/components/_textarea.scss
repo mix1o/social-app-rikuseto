@@ -5,7 +5,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: var(--light-bg-400);
+  background-color: var(--light-bg-600);
 
   &__message {
     text-align: center;
@@ -22,6 +22,14 @@
   &__wrapper:focus-within,
   &__wrapper:focus-within ~ &__publish {
     color: clr.$main-bg-500;
+  }
+  &__input:focus {
+    border: 1px solid clr.$main-bg-500;
+    border-top-left-radius: ft.$lh;
+    border-bottom-left-radius: ft.$lh;
+  }
+  &__input::placeholder {
+    font-size: ft.$fs-200;
   }
   &__content {
     display: flex;
@@ -50,6 +58,7 @@
     font-family: inherit;
     line-height: ft.$lh;
     color: var(--font-dark-600);
+    outline: none;
   }
   &__publish {
     align-self: center;

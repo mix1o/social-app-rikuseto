@@ -8,6 +8,7 @@
   width: 100%;
   display: flex;
   background-color: var(--light-bg-400);
+  align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
   z-index: 1;
@@ -31,4 +32,35 @@
   .fa-user {
     color: inherit;
   }
+}
+
+.circle-menu {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(
+    to bottom,
+    transparent 48%,
+    var(--light-bg-500) 48% 53%
+  );
+
+  padding: 1rem 0;
+  position: absolute;
+  border-radius: 10rem;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 2px solid var(--light-bg-700);
+}
+.circle-backface {
+  background-color: #753ee0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10rem;
 }

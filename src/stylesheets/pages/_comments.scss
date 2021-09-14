@@ -63,6 +63,7 @@
     bottom: 0;
     transform: translateY(100%);
     width: 20ch;
+    z-index: 10;
   }
   &__filter-item {
     background: var(--light-bg-500);

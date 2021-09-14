@@ -1,0 +1,9 @@
+@use '../components/button' as btn;
+@use '../abstracts/colors' as clr;
+.btn {
+  @include btn.btn();
+  text-decoration: none;
+  background: transparent;
+  color: var(--font-dark-600);
+  border: 1px solid clr.$main-bg-500;
+}

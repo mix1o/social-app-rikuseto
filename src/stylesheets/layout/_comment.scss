@@ -26,8 +26,8 @@
     font-weight: 600;
   }
   &__author-image {
-    height: 2.3rem;
-    width: 2.3rem;
+    height: 3rem;
+    width: 3rem;
     border-radius: 100%;
     margin-right: 0.5rem;
   }
@@ -90,9 +90,7 @@
 .comment:last-child {
   margin-bottom: 9rem;
 }
-.comment--last:last-child {
-  margin-bottom: 2rem;
-}
+
 .comment--last:first-child {
   margin-top: 0;
 }

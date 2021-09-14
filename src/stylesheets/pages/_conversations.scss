@@ -37,7 +37,7 @@
   min-height: 100vh;
   background-color: var(--light-bg-500);
   &__header {
-    background: var(--light-bg-400);
+    background-color: var(--light-bg-600);
     padding: 0 1rem;
     position: sticky;
     top: 0;
@@ -57,6 +57,7 @@
     display: flex;
     background: var(--light-bg-500);
     padding: 0 1rem;
+    background-color: red;
   }
   &__text {
     width: 100%;
@@ -87,7 +88,7 @@
     display: flex;
     align-items: center;
     font-size: ft.$fs-250;
-    max-width: fit-content;
+    max-width: 70%;
     word-break: break-word;
     margin-top: 0;
     margin-bottom: 0;
@@ -95,6 +96,7 @@
   &__author {
     background-color: clr.$main-bg-500;
     margin-left: auto;
+    color: var(--font-light-300);
   }
   &__author-message {
     height: 3.5rem;
