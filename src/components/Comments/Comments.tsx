@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ChangeEvent, FC, useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 import Comment from './Comment/Comment';
@@ -125,7 +125,6 @@ const Comments: FC<CommentProps> = ({
     setOpen(false);
   };
 
-  console.log(open);
   return (
     <m.section
       variants={commentVariant}
@@ -232,6 +231,7 @@ const Comments: FC<CommentProps> = ({
           setTextValue={setCommentText}
           handleAction={handleNewComment}
           img={user.avatar}
+          placeholder={`Add comment as ${user.firstName} ${user.lastName}`}
         />
       )}
       {popup && <BlurredMenu setUserOption={setPopup} />}
