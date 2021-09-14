@@ -47,8 +47,15 @@
   }
   &__message {
     text-align: center;
-    font-size: ft.$fs-200;
+    font-size: ft.$fs-250;
+    margin: 2rem auto;
+    line-height: 2rem;
+    max-width: 40ch;
+  }
+  &__message--accepted {
+    color: clr.$pass-500;
+  }
+  &__message--refused {
     color: clr.$warning-500;
-    margin: 2rem 0;
   }
 }
