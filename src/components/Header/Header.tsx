@@ -4,10 +4,10 @@ import { motion as m } from 'framer-motion';
 import { useActor } from '@xstate/react';
 import { authService } from '../Auth/AuthStateMachine';
 import logo from '../../assets/logo/logo.png';
-import BlurredMenu from '../Navigation/BlurredMenu';
 import { Link } from 'react-router-dom';
 import { useCounter } from '../../store/sub';
 import { CookieUser } from '../../interfaces/auth/authInterface';
+import { useHistory } from 'react-router-dom';
 
 const variants = {
   open: {
@@ -34,8 +34,8 @@ const Header: FC = () => {
   const html = document.querySelector('html');
 
   const [openMenu, setOpenMenu] = useState<boolean>(false);
-  const [userOption, setUserOption] = useState<boolean>(false);
   const [, actions] = useCounter();
+  const history = useHistory();
 
   const [cookies, , removeCookie] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
@@ -58,7 +58,9 @@ const Header: FC = () => {
     <header className="header">
       <div className="header__content">
         <h3 className="header__message">
-          <img src={logo} alt="Logo" />
+          <Link to="/">
+            <img src={logo} alt="Logo" />
+          </Link>
         </h3>
         <button
           className="header__nav-button"
@@ -148,8 +150,8 @@ const Header: FC = () => {
                 className="header__link header__link--empty"
                 onClick={() => {
                   removeCookie('user');
-
                   setOpenMenu(false);
+                  history.push('/');
                 }}
               >
                 Log out
