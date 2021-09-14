@@ -18,6 +18,7 @@ interface Textarea {
   setTextValue: Dispatch<SetStateAction<string>>;
   handleAction: (e: MouseEvent<HTMLButtonElement>) => void;
   img?: string;
+  placeholder?: string;
 }
 
 const CustomTextarea: FC<Textarea> = ({
@@ -25,6 +26,7 @@ const CustomTextarea: FC<Textarea> = ({
   setTextValue,
   handleAction,
   img,
+  placeholder = 'Aa',
 }) => {
   const [openEmojiList, setOpenEmojiList] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -82,7 +84,7 @@ const CustomTextarea: FC<Textarea> = ({
             data-testid="input-comments"
             className="textarea__input"
             value={textValue}
-            placeholder="Aa"
+            placeholder={placeholder}
             rows={rows <= 5 ? rows : 5}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
               setTextValue(e.target.value);
