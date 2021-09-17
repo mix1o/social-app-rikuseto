@@ -12,10 +12,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useLocation } from 'react-router-dom';
-import BlurredMenu from '../../Navigation/BlurredMenu';
+import { BlurredMenu } from '../../Account/Animations/Popup';
 import Floater from 'react-floater';
 import { useCounter } from '../../../store/sub';
 import { CookieUser } from '../../../interfaces/auth/authInterface';
+import { AnimatePresence as Presence } from 'framer-motion';
 
 const Comment: FC<SingleCommentProps> = ({
   _id,
@@ -267,7 +268,9 @@ const Comment: FC<SingleCommentProps> = ({
         </div>
         {displayMessage && <p className="comment__information">Deleting...</p>}
       </div>
-      {popup && <BlurredMenu setUserOption={setPopup} />}
+      <Presence initial={false} exitBeforeEnter>
+        {popup && <BlurredMenu stateHandler={setPopup} />}
+      </Presence>
     </>
   );
 };

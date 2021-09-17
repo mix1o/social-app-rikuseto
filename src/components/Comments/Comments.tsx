@@ -3,13 +3,13 @@ import { FC, useRef, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 import Comment from './Comment/Comment';
-import { motion as m } from 'framer-motion';
+import { motion as m, AnimatePresence as Presence } from 'framer-motion';
 import {
   CommentsData,
   CommentProps,
 } from '../../interfaces/comments/commentsInterfaces';
 import { useCounter } from '../../store/sub';
-import BlurredMenu from '../Navigation/BlurredMenu';
+import { BlurredMenu } from '../Account/Animations/Popup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import CustomTextarea from '../../helpers/CustomTextarea';
@@ -234,7 +234,9 @@ const Comments: FC<CommentProps> = ({
           placeholder={`Add comment as ${user.firstName} ${user.lastName}`}
         />
       )}
-      {popup && <BlurredMenu setUserOption={setPopup} />}
+      <Presence initial={false} exitBeforeEnter>
+        {popup && <BlurredMenu stateHandler={setPopup} />}
+      </Presence>
     </m.section>
   );
 };
