@@ -3,6 +3,7 @@ import CreatePost from '../components/Posts/CreatePost';
 import SharedPost from '../components/Posts/SharedPost/SharedPost';
 import SavedPosts from '../components/Account/SavedPosts';
 import UserPosts from '../components/Account/UserPosts';
+import Details from '../components/Account/Details/Details';
 
 export const PostsRoute = {
   component: Posts,
@@ -27,13 +28,19 @@ export const SharedPostRoute = {
 
 export const SavedPostsRoute = {
   component: SavedPosts,
-  url: '/saved-posts',
+  url: '/account/saved-posts',
   exact: true,
   permission: true,
 };
 export const YourPostsRoute = {
   component: UserPosts,
-  url: '/your-posts',
+  url: '/account/your-posts',
+  exact: true,
+  permission: true,
+};
+export const UserDetails = {
+  component: Details,
+  url: '/account/details',
   exact: true,
   permission: true,
 };
