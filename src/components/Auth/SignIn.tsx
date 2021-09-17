@@ -33,7 +33,7 @@ const SignIn: FC = () => {
         }
         if (res.data.valid) {
           setMessage({ message: res.data.message, status: res.status });
-          setCookie('user', res.data.user);
+          setCookie('user', res.data.user, { path: '/' });
           history.push('/');
           // window.location.reload();
         }

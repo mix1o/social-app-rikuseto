@@ -496,34 +496,27 @@ h6 {
   border-radius: 10rem;
 }
 
-.blurred__options {
+.blurred {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  max-height: 100vh;
+  height: 100%;
   display: grid;
-  grid-template-areas: "center";
-  z-index: 3;
-}
-.blurred__blurred-bg {
+  place-content: center;
+  z-index: 20;
   background-color: rgba(var(--secondary-bg-600), 0.8);
-  z-index: 2;
-  width: 100vw;
-  height: 100vh;
-  grid-area: center;
+}
+.blurred__content {
+  width: clamp(1500px, fit-content, 80vw);
+  border: 1px solid var(--light-bg-700);
 }
 .blurred__option {
   border: 1px solid var(--light-bg-700);
   min-width: 350px;
-  max-width: 450px;
-  grid-area: center;
   background: var(--light-bg-500);
-  align-self: center;
-  justify-self: center;
   padding: 2rem;
   border-radius: 3px;
-  z-index: 3;
 }
 
 .comment {
@@ -1959,6 +1952,77 @@ h6 {
 }
 .conversation .fa-arrow-left {
   margin-right: 2rem;
+}
+
+.details__header {
+  margin: 2rem 1rem;
+}
+.details__section {
+  border-bottom: 1px solid var(--light-bg-700);
+  max-width: 550px;
+  margin: 0 auto;
+}
+.details__personal-section {
+  padding: 1rem;
+  background: var(--light-bg-600);
+  color: var(--font-dark-600);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.details__description {
+  color: var(--font-dark-300);
+  font-size: 1.2rem;
+}
+.details__value {
+  margin-left: 2rem;
+  font-size: 1.2rem;
+}
+.details__btn {
+  padding: 0.5rem 1rem;
+  font-size: 1.6rem;
+  color: #753ee0;
+  background: transparent;
+  border: none;
+}
+.details__btn--close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+.details__update-btn {
+  background: #753ee0;
+  color: var(--font-light-300);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 1.2rem;
+  font-size: 1.6rem;
+  font-size: 1.4rem;
+  padding: 0.5rem 1rem;
+}
+.details__update-btn:hover {
+  background: #471a9e;
+  border: 2px solid #946ae7;
+  margin: -2px;
+  cursor: pointer;
+}
+.details__update-btn:active {
+  background: #946ae7;
+  border: 2px solid #471a9e;
+  margin: -2px;
+  cursor: pointer;
+}
+.details__update-btn:disabled {
+  background: #d3c2f5;
+  border: 2px solid;
+  margin: -2px;
+  cursor: not-allowed;
+}
+.details__popup {
+  position: relative;
+  background: var(--light-bg-600);
+  padding: 1rem;
 }
 
 [data-value=dark] {

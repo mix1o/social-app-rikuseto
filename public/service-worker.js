@@ -3,9 +3,27 @@ const self = this;
 const receivePushNotification = e => {
   self.clients.matchAll().then(c => {
     if (c.length === 0) {
+      const { header, body, url, photo } = e.data.json();
+
+      const options = {
+        data: url,
+        body,
+        url,
+        icon: photo,
+        vibrate: [100, 50, 100],
+        actions: [
+          {
+            action: 'details',
+            title: 'Check it out',
+            // icon: 'images/checkmark.png',
+          },
+
+          { action: 'close', title: 'Close' },
+        ],
+      };
+      e.waitUntil(self.registration.showNotification(header, options));
     }
   });
-  const { header, body, url, photo } = e.data.json();
 
   //EG
   // const options = {
@@ -24,24 +42,6 @@ const receivePushNotification = e => {
   //     },
   //   ],
   // };
-
-  const options = {
-    data: url,
-    body,
-    url,
-    icon: photo,
-    vibrate: [100, 50, 100],
-    actions: [
-      {
-        action: 'details',
-        title: 'Check it out',
-        // icon: 'images/checkmark.png',
-      },
-
-      { action: 'close', title: 'Close' },
-    ],
-  };
-  e.waitUntil(self.registration.showNotification(header, options));
 };
 
 const openPushNotification = e => {
@@ -65,5 +65,25 @@ const openPushNotification = e => {
   e.waitUntil(self.clients.openWindow(e.notification.data));
 };
 
+const onChangeSubscription = e => {
+  e.waitUntil(
+    fetch(`${process.env.REACT_APP_API}/sw/update-sw`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        old_endpoint: e.oldSubscription ? e.oldSubscription.endpoint : null,
+        new_endpoint: e.newSubscription ? e.newSubscription.endpoint : null,
+        new_p256dh: e.newSubscription
+          ? e.newSubscription.toJSON().keys.p256dh
+          : null,
+        new_auth: e.newSubscription
+          ? e.newSubscription.toJSON().keys.auth
+          : null,
+      }),
+    })
+  );
+}; //TODO get user from cookies
+
 self.addEventListener('push', receivePushNotification);
 self.addEventListener('notificationclick', openPushNotification);
+self.addEventListener('pushsubscriptionchange', onChangeSubscription);

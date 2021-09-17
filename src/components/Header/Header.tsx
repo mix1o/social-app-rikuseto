@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { useCounter } from '../../store/sub';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 import { useHistory } from 'react-router-dom';
+import Toggle from '../Account/Animations/Toggle';
 
 const variants = {
   open: {
@@ -98,11 +99,11 @@ const Header: FC = () => {
               <span className="header__marked">off</span>
             )}
           </p>
-          <m.div
+          <Toggle
             className={`${
               idx === 1 ? 'container-theme-disabled' : 'container-theme--active'
-            } container-theme`}
-            onClick={() => {
+            }`}
+            toggleHandler={() => {
               if (idx === 0) {
                 handleChangeTheme('light');
                 setIdx(1);
@@ -114,9 +115,7 @@ const Header: FC = () => {
                 return;
               }
             }}
-          >
-            <m.div layout className="circle-theme"></m.div>
-          </m.div>
+          />
         </div>
         {!user && (
           <div className="header__section">
@@ -148,7 +147,8 @@ const Header: FC = () => {
               </Link>
               <button
                 className="header__link header__link--empty"
-                onClick={() => {
+                onClick={e => {
+                  e.stopPropagation();
                   removeCookie('user');
                   setOpenMenu(false);
                   history.push('/');

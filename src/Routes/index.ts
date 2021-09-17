@@ -5,6 +5,7 @@ import {
   SharedPostRoute,
   SavedPostsRoute,
   YourPostsRoute,
+  UserDetails,
 } from './posts';
 import { CategoriesRoutes } from './categories';
 import { ProfileRoutes } from './profile';
@@ -32,5 +33,6 @@ export const Routes: RouteProps<ReactChild>[] = [
   ConversationRoute,
   NotificationRoutes,
   NotFoundRoute,
+  UserDetails,
   NotFoundAllRoute,
 ];
