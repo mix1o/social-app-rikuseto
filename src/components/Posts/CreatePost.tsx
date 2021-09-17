@@ -221,3 +221,5 @@ export default CreatePost;
 // TODO UPLOAD AVATARA
 
 // TODO USUWANIE WIADOMOSCI
+
+// TODO Type profile user, typo
