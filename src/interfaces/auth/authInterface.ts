@@ -28,6 +28,7 @@ export interface CookieUser extends User {
   friends?: { friendId: string; roomId: string; _id: string }[];
   requests?: Request[];
   savedPosts: string[];
+  pushNotification: boolean;
   sentRequests?: Omit<Request, 'userId'>[];
   serviceWorkers?: {
     endpoint: string;

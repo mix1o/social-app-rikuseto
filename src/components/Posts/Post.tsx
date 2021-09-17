@@ -8,7 +8,7 @@ import { AuthorInterface } from '../../interfaces/common/common';
 import { motion as m, AnimatePresence as Presence } from 'framer-motion';
 import { TopComment } from '../../interfaces/comments/commentsInterfaces';
 import { authorOfComment } from '../../helpers/AuthorOfComment';
-import BlurredMenu from '../Navigation/BlurredMenu';
+import { BlurredMenu } from '../Account/Animations/Popup';
 import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -355,6 +355,7 @@ const Post: FC<PostInterfaceExtended> = ({
               )}
             </div>
           )}
+
           <Presence exitBeforeEnter>
             {openComments && (
               <Comments
@@ -366,7 +367,9 @@ const Post: FC<PostInterfaceExtended> = ({
               />
             )}
           </Presence>
-          {popup && <BlurredMenu setUserOption={setPopup} />}
+          <Presence initial={false} exitBeforeEnter>
+            {popup && <BlurredMenu stateHandler={setPopup} />}
+          </Presence>
         </section>
       ) : (
         <div className="post">
