@@ -80,7 +80,7 @@ const useNotification = () => {
         if (sub?.endpoint) {
           const subJSON = JSON.parse(JSON.stringify(sub));
 
-          axios.put(`${process.env.REACT_APP_API}/user/update-sw`, {
+          axios.put(`${process.env.REACT_APP_API}/sw/add-sw`, {
             subscription: {
               endpoint: sub?.endpoint,
               keys: {
