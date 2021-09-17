@@ -26,15 +26,15 @@ const Account: FC = () => {
             </h3>
           </div>
           <div className="account__actions">
-            <div className="account__section">
+            <Link to="/account/details" className="account__section">
               <i className="fas fa-user"></i>
               <div>
                 <p className="account__heading">Login details</p>
                 <p className="account__description">Check or edit your data</p>
               </div>
               <i className="fas fa-chevron-right"></i>
-            </div>
-            <Link to="/saved-posts" className="account__section">
+            </Link>
+            <Link to="/account/saved-posts" className="account__section">
               <i className="fas fa-flag"></i>
               <div>
                 <p className="account__heading">Saved posts</p>
@@ -42,7 +42,7 @@ const Account: FC = () => {
               </div>
               <i className="fas fa-chevron-right"></i>
             </Link>
-            <Link to="/your-posts" className="account__section">
+            <Link to="/account/your-posts" className="account__section">
               <i className="fas fa-pen"></i>
               <div>
                 <p className="account__heading">Your posts</p>
