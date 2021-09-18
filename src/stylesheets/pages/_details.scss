@@ -42,11 +42,54 @@
   &__update-btn {
     @include btn.btn();
     font-size: ft.$fs-250;
+    width: 100%;
+    margin-top: 1rem;
     padding: 0.5rem 1rem;
+  }
+  .blurred__content {
+    width: 80vw;
   }
   &__popup {
     position: relative;
     background: var(--light-bg-600);
     padding: 1rem;
+    width: 100%;
+  }
+  &__input {
+    width: 100%;
+    background: transparent;
+    border: 2px solid clr.$main-bg-500;
+    padding: 0.5rem;
+    color: var(--font-dark-600);
+    font-size: ft.$fs-250;
+    margin-bottom: 1rem;
+  }
+  &__input::placeholder {
+    font-size: ft.$fs-200;
+  }
+  &__error {
+    color: clr.$warning-500;
+    text-align: center;
+  }
+  &__date,
+  &__preferences {
+    background-color: var(--light-bg-600);
+    padding: 1rem;
+    margin: 2rem 0;
+  }
+  &__date-marked {
+    color: clr.$main-bg-500;
+  }
+  &__heading {
+    color: var(--font-dark-300);
+  }
+  &__single-option {
+    display: flex;
+    align-items: center;
+  }
+  &__single-description {
+    margin-right: 3rem;
+    color: var(--font-dark-600);
+    font-size: ft.$fs-200;
   }
 }
