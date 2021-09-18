@@ -200,8 +200,6 @@ export default CreatePost;
 
 // TODO FILRTOWANIE POSTOW
 
-// TODO Login details
-
 // TODO COMPONENT HELP
 
 // TODO RESET HASLA
