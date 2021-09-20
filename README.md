@@ -1,31 +1,28 @@
-# Rikuseto
+# Esitolo
 
-Social app made with react and nodejs, on which you can easily add Posts, Images, you can also comment them and like whichever you like. Everything you've liked will be shown in history tab.
+Project
 
-Live preview: [rikuseto]
+## Demo
 
-App was made with [Nightmare9254].
+Live Demo: [rikuseto](https://social-rikuseto.netlify.app/)
 
-## What you can do
+| ![signup](https://user-images.githubusercontent.com/49620354/133896745-714c2c07-1975-4bfa-aed6-348b62a1c31d.JPG) | ![account](https://user-images.githubusercontent.com/49620354/133896744-21990dc3-e7a2-498a-ba1b-af9fab877422.JPG) |
+| :--------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------- |
+| ![Main](https://user-images.githubusercontent.com/49620354/133896746-bc7a0eea-ddae-400c-9805-8f69f846c3b3.JPG)   |                                                                                                                   |
 
-- Create and Login to your account
-- Add new new posts with photos, comment on different posts and like them
-- View your liked history and created posts.
-- Delete your account, change your pasword or user avatar
-- Sort posts by recent and popular
-- View notifications
-- Send message to user
+### Demo account
+
+- Login: johny.john@rikuseto.com
+- Password: qweQWE123!@#
 
 ## Tech Stack
 
-- ReactJS
-- NodeJS
-- Express
-- Mongoose
-- MongoDB
-- SCSS
-- google reCaptcha
-- formik
+**Client:** React, typescipt, react-cookie, axios, socket.io-client, @xstate/react, dropzone,
+react-sweet-state
 
-[Nightmare9254]: https://github.com/Nightmare9254
-[rikuseto]: https://social-rikuseto.netlify.app/
+**Server:** Node, Express, mongoose, bcryptjs, uuid, socket.io, web-push,
+
+## Authors
+
+- [@Nightmare9254](https://www.github.com/Nightmare9254)
+- [@mix1o](https://github.com/mix1o)
