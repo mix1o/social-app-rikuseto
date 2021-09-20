@@ -172,8 +172,6 @@ export default CreatePost;
 
 // TODO FILRTOWANIE POSTOW
 
-// TODO Login details
-
 // TODO COMPONENT HELP
 
 // TODO RESET HASLA
@@ -193,3 +191,5 @@ export default CreatePost;
 // TODO UPLOAD AVATARA
 
 // TODO USUWANIE WIADOMOSCI
+
+// TODO Type profile user, typo

@@ -2003,6 +2003,8 @@ h6 {
   padding: 1.2rem;
   font-size: 1.6rem;
   font-size: 1.4rem;
+  width: 100%;
+  margin-top: 1rem;
   padding: 0.5rem 1rem;
 }
 .details__update-btn:hover {
@@ -2023,10 +2025,50 @@ h6 {
   margin: -2px;
   cursor: not-allowed;
 }
+.details .blurred__content {
+  width: 80vw;
+}
 .details__popup {
   position: relative;
   background: var(--light-bg-600);
   padding: 1rem;
+  width: 100%;
+}
+.details__input {
+  width: 100%;
+  background: transparent;
+  border: 2px solid #753ee0;
+  padding: 0.5rem;
+  color: var(--font-dark-600);
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+.details__input::placeholder {
+  font-size: 1.2rem;
+}
+.details__error {
+  color: #e53e3e;
+  text-align: center;
+}
+.details__date, .details__preferences {
+  background-color: var(--light-bg-600);
+  padding: 1rem;
+  margin: 2rem 0;
+}
+.details__date-marked {
+  color: #753ee0;
+}
+.details__heading {
+  color: var(--font-dark-300);
+}
+.details__single-option {
+  display: flex;
+  align-items: center;
+}
+.details__single-description {
+  margin-right: 3rem;
+  color: var(--font-dark-600);
+  font-size: 1.2rem;
 }
 
 [data-value=dark] {

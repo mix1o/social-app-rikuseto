@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 
@@ -20,7 +20,7 @@ const PostActions: FC<PostActionsI> = ({
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const [savedPost, setSavedPost] = useState<boolean>(false);
 
-  const checkIsSaved = (updatedUserPosts: []) => {
+  const checkIsSaved = (updatedUserPosts: string[]) => {
     setSavedPost(false);
     if (updatedUserPosts) {
       updatedUserPosts.forEach((element: string) => {
@@ -32,6 +32,10 @@ const PostActions: FC<PostActionsI> = ({
       });
     }
   };
+
+  useEffect(() => {
+    checkIsSaved(user.savedPosts);
+  }, []);
 
   const savePost = () => {
     axios

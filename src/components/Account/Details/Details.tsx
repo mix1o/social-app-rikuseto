@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { CookieUser } from '../../../interfaces/auth/authInterface';
 import Header from '../../Header/Header';
@@ -39,6 +39,16 @@ const Details = () => {
     const [newValue, setNewValue] = useState(value);
     const [oldPassword, setOldPassword] = useState<string>('');
     const [errors, setErrors] = useState<string[]>([]);
+
+    const [message, setMessage] = useState<string>('');
+
+    useEffect(() => {
+      setNewValue(value);
+      setOldPassword('');
+      setErrors([]);
+      setMessage('');
+    }, [open]);
+
     const updateData = () => {
       axios
         .put(`${process.env.REACT_APP_API}/user/update-details`, {
@@ -47,11 +57,19 @@ const Details = () => {
           newValue,
           oldPassword,
         })
-        .then(res => console.log(res.data));
+        .then(res => {
+          console.log(res.data);
+          if (res.data.valid) {
+            setCookie('user', res.data.user, { path: '/' });
+          }
+          setMessage(res.data.message);
+        });
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       setNewValue(e.target.value);
+      setMessage('');
+
       const validated = DetailsValidation(type, e.target.value);
       validated
         ?.then(() => {
@@ -68,6 +86,18 @@ const Details = () => {
       }
 
       return 'text';
+    };
+
+    const checkIsNewValueCorrect = (): boolean => {
+      if (errors.length > 0 || message.length > 0) return true;
+
+      if (newValue === value) return true;
+
+      if (type === 'password') {
+        if (oldPassword.length === 0 && newValue?.length !== 0) return true;
+      }
+
+      return false;
     };
 
     return (
@@ -96,22 +126,30 @@ const Details = () => {
                     type={typeCheck()}
                     value={oldPassword}
                     className="details__input d"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setOldPassword(e.target.value)
-                    }
+                    placeholder="Enter your old password"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      setOldPassword(e.target.value);
+                      setMessage('');
+                    }}
                   />
                   <input
                     type="password"
                     className="details__input"
+                    placeholder="Enter a new password"
                     value={newValue}
                     onChange={handleChange}
                   />
                 </>
               )}
 
+              <p className="details__error">{errors[0]}</p>
+              <p className="details__error">{message}</p>
               <button
+                disabled={checkIsNewValueCorrect()}
                 className="details__update-btn"
-                onClick={() => updateData()}
+                onClick={() => {
+                  updateData();
+                }}
               >
                 Update
               </button>
@@ -140,6 +178,14 @@ const Details = () => {
       <Header />
       <main className="details">
         <h2 className="details__header">Account Details</h2>
+        <section className="details__date">
+          <h3 style={{ textAlign: 'center' }}>
+            You joined{' '}
+            <span className="details__date-marked">
+              {dayjs(user.createdAt).fromNow()}
+            </span>
+          </h3>
+        </section>
         <section className="details__section">
           <PersonalDetail
             value={`${user.firstName}`}
@@ -154,21 +200,22 @@ const Details = () => {
           <PersonalDetail value={user.email} description="Email" type="email" />
           <PersonalDetail description="Password" type="password" />
         </section>
-        <section>
-          <h3>
-            You joined <span>{dayjs(user.createdAt).fromNow()}</span>
-          </h3>
-        </section>
-        <section>
-          Receive Push notifications
-          <Toggle
-            className={`${
-              toggle ? 'container-theme--active' : 'container-theme-disabled'
-            }`}
-            toggleHandler={() => {
-              handleToggle();
-            }}
-          />
+
+        <section className="details__preferences">
+          <h3 className="details__heading">Set your preferences</h3>
+          <div className="details__single-option">
+            <p className="details__single-description">
+              Receive Push notifications
+            </p>
+            <Toggle
+              className={`${
+                toggle ? 'container-theme--active' : 'container-theme-disabled'
+              }`}
+              toggleHandler={() => {
+                handleToggle();
+              }}
+            />
+          </div>
         </section>
       </main>
     </div>

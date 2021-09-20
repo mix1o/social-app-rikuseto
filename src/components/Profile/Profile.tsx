@@ -27,6 +27,8 @@ const Profile: FC = () => {
   const [cookies, setCookie] = useCookies();
   const { user } = cookies;
 
+  console.log(user);
+
   const [profile, setProfile] = useState<ProfileI>();
   const [option, setOption] = useState<string>('posts');
   const [isFriend, setIsFriend] = useState(false);
@@ -109,8 +111,8 @@ const Profile: FC = () => {
   };
 
   const isSentRequest = (person: any) => {
-    if (person.sent_requests) {
-      person.sent_requests.forEach((request: any) => {
+    if (person.sentRequests) {
+      person.sentRequests.forEach((request: any) => {
         if (request.requestedUser === id) {
           setIsSent(true);
         }
