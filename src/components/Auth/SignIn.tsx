@@ -34,8 +34,11 @@ const SignIn: FC = () => {
         if (res.data.valid) {
           setMessage({ message: res.data.message, status: res.status });
           setCookie('user', res.data.user, { path: '/' });
-          history.push('/');
-          // window.location.reload();
+          if (window.location.href.includes('/auth')) history.push('/');
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         }
       })
       .catch(err => console.log(err));
@@ -85,16 +88,19 @@ const SignIn: FC = () => {
         {message.message && (
           <p
             className={`auth__message ${
-              message.status === 203 ? 'auth__message--refused' : null
-            } `}
+              message.status === 200
+                ? 'auth__message--accepted'
+                : 'auth__message--refused'
+            }`}
           >
             {message.message}
           </p>
         )}
         <div>
           <p className="auth__form-link">
-            Don't have account yet ?{' '}
+            Don't have account yet ?
             <span className="auth__form-next" onClick={() => send('SIGN_UP')}>
+              {' '}
               Sign Up
             </span>
           </p>

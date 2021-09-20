@@ -3,13 +3,13 @@ import { ChangeEvent, FC, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { CookieUser } from '../../../interfaces/auth/authInterface';
 import Header from '../../Header/Header';
-import Toggle from '../Animations/Toggle';
+import Toggle from '../../Animations/Toggle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import BlurredContent from '../Animations/Popup';
+import BlurredContent from '../../Animations/Popup';
 import { DetailsValidation } from '../../../Formik/ValidationSchemas';
 
 type ToUpdate = 'firstName' | 'lastName' | 'email' | 'password';

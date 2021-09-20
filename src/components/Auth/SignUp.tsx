@@ -83,7 +83,7 @@ const SignUp: FC = () => {
             </button>
           </Form>
         </Formik>
-        {message.status && (
+        {message.message && (
           <p
             className={`auth__message ${
               message.status === 200
@@ -97,7 +97,7 @@ const SignUp: FC = () => {
         <p className="auth__form-link">
           Already a member ?{' '}
           <span className="auth__form-next" onClick={() => send('SIGN_IN')}>
-            Login now
+            Sign in
           </span>
         </p>
       </main>
