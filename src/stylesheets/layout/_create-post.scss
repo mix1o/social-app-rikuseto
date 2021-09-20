@@ -6,6 +6,9 @@
 .create-post {
   display: flex;
   flex-flow: column;
+  min-width: 35em;
+  padding: 2rem;
+  background: var(--light-bg-600);
 
   &__title {
     font-size: ft.$fs-300;
@@ -16,7 +19,6 @@
     background: var(--light-bg-550);
     color: var(--font-dark-600);
   }
-
   &__file-input {
     visibility: hidden;
     position: absolute;
@@ -24,7 +26,6 @@
     left: 0;
     width: 0;
   }
-
   &__message {
     color: clr.$warning-500;
     text-align: center;
@@ -48,6 +49,4 @@
     position: absolute;
     font-size: ft.$fs-250;
   }
-}
-.ReactCrop__drag-handle {
 }

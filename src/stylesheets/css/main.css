@@ -315,13 +315,14 @@ h6 {
 
 .container-theme {
   width: 50px;
-  background: #d9d9d9;
+  background: var(--font-light-400);
   height: 20px;
   padding: 0 2px;
   border-radius: 100px;
   display: flex;
   align-items: center;
   margin: 2rem 0;
+  border: none;
 }
 
 .circle-theme {
@@ -700,6 +701,9 @@ h6 {
 .create-post {
   display: flex;
   flex-flow: column;
+  min-width: 35em;
+  padding: 2rem;
+  background: var(--light-bg-600);
 }
 .create-post__title {
   font-size: 1.6rem;
