@@ -4,7 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { PostInterface } from '../../../interfaces/posts/postInterfaces';
 import Post from '../Post';
 import Header from '../../Header/Header';
-import { BlurredMenu } from '../../Account/Animations/Popup';
+import { BlurredMenu } from '../../Animations/Popup';
 import Comments from '../../Comments/Comments';
 import { AnimatePresence as Presence } from 'framer-motion';
 

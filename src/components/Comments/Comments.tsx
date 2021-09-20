@@ -9,7 +9,7 @@ import {
   CommentProps,
 } from '../../interfaces/comments/commentsInterfaces';
 import { useCounter } from '../../store/sub';
-import { BlurredMenu } from '../Account/Animations/Popup';
+import { BlurredMenu } from '../Animations/Popup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import CustomTextarea from '../../helpers/CustomTextarea';

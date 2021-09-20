@@ -8,7 +8,8 @@ import { Link } from 'react-router-dom';
 import { useCounter } from '../../store/sub';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 import { useHistory } from 'react-router-dom';
-import Toggle from '../Account/Animations/Toggle';
+import Toggle from '../Animations/Toggle';
+import { AnimatePresence as Presence } from 'framer-motion';
 
 const variants = {
   open: {
@@ -70,96 +71,105 @@ const Header: FC = () => {
           <i className="fas fa-sliders-h" />
         </button>
       </div>
-
-      <m.div
-        initial="closed"
-        animate={openMenu ? 'open' : 'closed'}
-        variants={variants}
-        className="header__menu"
-      >
-        <div className="header__container">
-          <h4 className="header__heading-main">Menu</h4>
-          <button onClick={() => setOpenMenu(false)} className="header__close">
-            <i className="fas fa-times" />
-          </button>
-        </div>
-        <div className="header__section">
-          <p className="header__heading-section">Useful links</p>
-          <p>About us</p>
-          <p>Contact</p>
-          <p>Support</p>
-        </div>
-        <div className="header__section">
-          <p className="header__heading-section">Theme</p>
-          <p className="header__information">
-            Dark mode is:{' '}
-            {idx === 0 ? (
-              <span className="header__marked">on</span>
-            ) : (
-              <span className="header__marked">off</span>
-            )}
-          </p>
-          <Toggle
-            className={`${
-              idx === 1 ? 'container-theme-disabled' : 'container-theme--active'
-            }`}
-            toggleHandler={() => {
-              if (idx === 0) {
-                handleChangeTheme('light');
-                setIdx(1);
-                return;
-              }
-              if (idx === 1) {
-                handleChangeTheme('dark');
-                setIdx(0);
-                return;
-              }
-            }}
-          />
-        </div>
-        {!user && (
-          <div className="header__section">
-            <p className="header__heading-section">
-              Log in to use all functionality
-            </p>
-            <div className="header__container-links">
-              <Link className="header__link" to="/auth">
-                Sign In
-              </Link>
-              <Link
-                className="header__link header__link--empty"
-                onClick={() => send('SIGN_UP')}
-                to="/auth"
-              >
-                Sign Up
-              </Link>
-            </div>
-          </div>
-        )}
-        {user && (
-          <div className="header__section">
-            <p className="header__heading-section">
-              Check your settings account
-            </p>
-            <div className="header__container-links">
-              <Link className="header__link" to="/account">
-                Account
-              </Link>
+      <Presence exitBeforeEnter>
+        {openMenu && (
+          <m.div
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={variants}
+            className="header__menu"
+          >
+            <div className="header__container">
+              <h4 className="header__heading-main">Menu</h4>
               <button
-                className="header__link header__link--empty"
-                onClick={e => {
-                  e.stopPropagation();
-                  removeCookie('user');
-                  setOpenMenu(false);
-                  history.push('/');
-                }}
+                onClick={() => setOpenMenu(false)}
+                className="header__close"
               >
-                Log out
+                <i className="fas fa-times" />
               </button>
             </div>
-          </div>
+            <section className="header__section">
+              <h5 className="header__heading-section">Useful links</h5>
+              <p>About us</p>
+              <p>Contact</p>
+              <p>Support</p>
+            </section>
+            <section className="header__section">
+              <p className="header__heading-section">Theme</p>
+              <p className="header__information">
+                Dark mode is:{' '}
+                {idx === 0 ? (
+                  <span className="header__marked">on</span>
+                ) : (
+                  <span className="header__marked">off</span>
+                )}
+              </p>
+              <Toggle
+                className={`${
+                  idx === 1
+                    ? 'container-theme-disabled'
+                    : 'container-theme--active'
+                }`}
+                toggleHandler={() => {
+                  if (idx === 0) {
+                    handleChangeTheme('light');
+                    setIdx(1);
+                    return;
+                  }
+                  if (idx === 1) {
+                    handleChangeTheme('dark');
+                    setIdx(0);
+                    return;
+                  }
+                }}
+              />
+            </section>
+            {!user && (
+              <section className="header__section">
+                <p className="header__heading-section">
+                  Log in to use all functionality
+                </p>
+                <div className="header__container-links">
+                  <Link className="header__link" to="/auth">
+                    Sign In
+                  </Link>
+                  <Link
+                    className="header__link header__link--empty"
+                    onClick={() => send('SIGN_UP')}
+                    to="/auth"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              </section>
+            )}
+            {user && (
+              <section className="header__section">
+                <p className="header__heading-section">
+                  Check your settings account
+                </p>
+                <div className="header__container-links">
+                  <Link className="header__link" to="/account">
+                    Account
+                  </Link>
+                  <button
+                    className="header__link header__link--empty"
+                    onClick={e => {
+                      e.stopPropagation();
+                      removeCookie('user');
+                      setOpenMenu(false);
+                      history.push('/');
+                    }}
+                  >
+                    Log out
+                  </button>
+                </div>
+              </section>
+            )}
+          </m.div>
         )}
-      </m.div>
+      </Presence>
     </header>
   );
 };

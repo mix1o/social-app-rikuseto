@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useLocation } from 'react-router-dom';
-import { BlurredMenu } from '../../Account/Animations/Popup';
+import { BlurredMenu } from '../../Animations/Popup';
 import Floater from 'react-floater';
 import { useCounter } from '../../../store/sub';
 import { CookieUser } from '../../../interfaces/auth/authInterface';

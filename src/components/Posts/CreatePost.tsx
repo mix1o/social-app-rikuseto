@@ -99,94 +99,66 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
     }
   };
 
-  const sendTest = () => {
-    axios.post(`${process.env.REACT_APP_API}/user/test-notification`, post);
-  };
-
   return (
-    <div className="blurred__options create">
-      <div
-        className="blurred__blurred-bg"
-        onClick={() => actions.openCreatePost(false)}
-      ></div>
-      <div
-        style={{
-          position: 'relative',
-          height: '70vh',
-          overflow: 'scroll',
-        }}
-        className="blurred__option"
-      >
-        <section
-          style={{
-            marginTop: '2rem',
-          }}
-          className="create-post"
-        >
-          <h2 data-testid="create-post__header">Create new post</h2>
-          <label className="create-post__label">
-            <input
-              data-testid="headline"
-              value={post.headline}
-              onChange={e => handleChange(e)}
-              type="text"
-              name="headline"
-              placeholder="Write something interesting"
-              className="create-post__title"
-            />
-          </label>
+    <section className="create-post">
+      <h2 data-testid="create-post__header">Create new post</h2>
+      <label className="create-post__label">
+        <input
+          data-testid="headline"
+          value={post.headline}
+          onChange={e => handleChange(e)}
+          type="text"
+          name="headline"
+          placeholder="Write something interesting"
+          className="create-post__title"
+        />
+      </label>
 
-          <Category
-            chooseCategory={post.category}
-            setPost={setPost}
-            post={post}
+      <Category chooseCategory={post.category} setPost={setPost} post={post} />
+      <CropImage
+        setMessage={setMessage}
+        post={post}
+        setPost={setPost}
+        setUserPickedImage={setUserPickedImage}
+        setCorrectImage={setCorrectImage}
+      />
+      {disable && <p>Loading image...</p>}
+      {!correctFormatPost && post!.headline!.length > 0 && (
+        <p data-testid="message" className="create-post__message">
+          {message}
+        </p>
+      )}
+      {checkNotificationSupport && (
+        <label
+          onClick={handleNotification}
+          style={{ color: 'var(--font-dark-600)' }}
+        >
+          <input
+            type="checkbox"
+            onChange={e =>
+              setPost({ ...post, notification: !post.notification })
+            }
           />
-          <CropImage
-            setMessage={setMessage}
-            post={post}
-            setPost={setPost}
-            setUserPickedImage={setUserPickedImage}
-            setCorrectImage={setCorrectImage}
-          />
-          {disable && <p>Loading image...</p>}
-          {!correctFormatPost && post!.headline!.length > 0 && (
-            <p data-testid="message" className="create-post__message">
-              {message}
-            </p>
-          )}
-          {checkNotificationSupport && (
-            <label
-              onClick={handleNotification}
-              style={{ color: 'var(--font-dark-600)' }}
-            >
-              <input
-                type="checkbox"
-                onChange={e =>
-                  setPost({ ...post, notification: !post.notification })
-                }
-              />
-              <p>
-                Receive notification{' '}
-                <span>{`${
-                  !checkPermission() ? '(Notifications are disabled)' : ''
-                }`}</span>
-              </p>
-            </label>
-          )}
-          {/* {checkNotificationSupport && info.length >= 2 && (
+          <p>
+            Receive notification{' '}
+            <span>{`${
+              !checkPermission() ? '(Notifications are disabled)' : ''
+            }`}</span>
+          </p>
+        </label>
+      )}
+      {/* {checkNotificationSupport && info.length >= 2 && (
           )} */}
 
-          <button
-            className="create-post__btn-add"
-            data-testid="button"
-            disabled={!correctFormatPost}
-            onClick={() => createNewPost()}
-          >
-            Create post
-          </button>
-        </section>
-      </div>
-    </div>
+      <button
+        className="create-post__btn-add"
+        data-testid="button"
+        disabled={!correctFormatPost}
+        onClick={() => createNewPost()}
+      >
+        Create post
+      </button>
+    </section>
   );
 };
 

@@ -6,10 +6,11 @@ import { useCookies } from 'react-cookie';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import { useCounter } from '../../store/sub';
 import Header from '../Header/Header';
+import { motion as m, AnimatePresence as Presence } from 'framer-motion';
+import BlurredContent from '../Animations/Popup';
 
 const Posts: FC = () => {
   const [posts, setPosts] = useState<PostInterface[]>();
-  // const [open, setOpen] = useState<boolean>(false);
 
   const [cookies] = useCookies();
   const { user } = cookies;
@@ -52,7 +53,13 @@ const Posts: FC = () => {
             </label>
           </div>
         )}
-        {state.open && <CreatePost handleFetchPosts={handleFetchPosts} />}
+        <Presence>
+          {state.open && (
+            <BlurredContent closeHandler={() => actions.openCreatePost(false)}>
+              <CreatePost handleFetchPosts={handleFetchPosts} />
+            </BlurredContent>
+          )}
+        </Presence>
 
         {posts?.map(
           ({ _id, headline, category, file, userId, likes, date }) => {

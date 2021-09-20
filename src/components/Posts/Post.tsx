@@ -8,7 +8,7 @@ import { AuthorInterface } from '../../interfaces/common/common';
 import { motion as m, AnimatePresence as Presence } from 'framer-motion';
 import { TopComment } from '../../interfaces/comments/commentsInterfaces';
 import { authorOfComment } from '../../helpers/AuthorOfComment';
-import { BlurredMenu } from '../Account/Animations/Popup';
+import { BlurredMenu } from '../Animations/Popup';
 import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
