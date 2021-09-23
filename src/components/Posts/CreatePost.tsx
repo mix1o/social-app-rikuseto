@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState, useEffect } from 'react';
+import { ChangeEvent, FC, useState, useEffect, memo } from 'react';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import Category from './Category/Category';
@@ -121,6 +121,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
         setPost={setPost}
         setUserPickedImage={setUserPickedImage}
         setCorrectImage={setCorrectImage}
+        correctImage={correctImage}
       />
       {disable && <p>Loading image...</p>}
       {!correctFormatPost && post!.headline!.length > 0 && (
@@ -131,15 +132,23 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
       {checkNotificationSupport && (
         <label
           onClick={handleNotification}
-          style={{ color: 'var(--font-dark-600)' }}
+          style={{
+            color: 'var(--font-dark-600)',
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '12px',
+            marginBottom: '1rem',
+            justifyContent: 'center',
+          }}
         >
           <input
             type="checkbox"
             onChange={e =>
               setPost({ ...post, notification: !post.notification })
             }
+            className="create-post__notifications"
           />
-          <p>
+          <p className="create-post__notifications-text">
             Receive notification{' '}
             <span>{`${
               !checkPermission() ? '(Notifications are disabled)' : ''
@@ -162,21 +171,13 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
   );
 };
 
-export default CreatePost;
+export default memo(CreatePost);
 
-// TODO Aktualizowanie statusu powiadomienia (seen or not)
-
-// TODO Wyświetlanie postów z ulubionymi kategoriami
-
-// TODO Szukanie kategorii, userow, postow
-
-// TODO FILRTOWANIE POSTOW
+// TODO STYLE MAIN PAGE SZUKAJKA
 
 // TODO COMPONENT HELP
 
 // TODO RESET HASLA
-
-// TODO CLOSE LOGIN POPUP WHEN SUCESS
 
 // TODO REMOVE NOTIFICAITONS SERVICE WORKER | Styles for checkbox
 
