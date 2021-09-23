@@ -13,6 +13,9 @@ import { BlurredMenu } from '../Animations/Popup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import CustomTextarea from '../../helpers/CustomTextarea';
+import { commentsOptions } from '../../helpers/filterOptions';
+import Select from 'react-select';
+import { mainSelect } from '../../helpers/selectStyles.styled';
 
 const commentVariant = {
   hidden: {
@@ -119,11 +122,6 @@ const Comments: FC<CommentProps> = ({
 
     return 1;
   };
-  const [open, setOpen] = useState(false);
-  const handleFilterChange = (type: FilterTypes) => {
-    setFilter(type);
-    setOpen(false);
-  };
 
   return (
     <m.section
@@ -136,60 +134,16 @@ const Comments: FC<CommentProps> = ({
     >
       <div>
         <div className="comments__header">
-          <div>
+          <div style={{ width: '40%' }}>
             {comments?.length! > 0 && (
-              <>
-                <div className="comments__filter">
-                  <div className="comments__current-filter">
-                    <p
-                      onClick={() => setOpen(!open)}
-                      className="comments__filter-text"
-                    >
-                      {filter}
-                    </p>
-                    {!open && (
-                      <button
-                        className="comments__toggle-filter"
-                        onClick={() => setOpen(true)}
-                      >
-                        <i className="fas fa-chevron-down" />
-                      </button>
-                    )}
-                    {open && (
-                      <button
-                        className="comments__toggle-filter"
-                        onClick={() => setOpen(false)}
-                      >
-                        <i className="fas fa-chevron-up" />
-                      </button>
-                    )}
-                  </div>
-                  {open && (
-                    <div className="comments__filter-list">
-                      <button
-                        className="comments__filter-item"
-                        onClick={() => handleFilterChange('default')}
-                      >
-                        Default
-                      </button>
-
-                      <button
-                        className="comments__filter-item"
-                        onClick={() => handleFilterChange('popular')}
-                      >
-                        Most popular
-                      </button>
-
-                      <button
-                        className="comments__filter-item"
-                        onClick={() => handleFilterChange('latest')}
-                      >
-                        Latest
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </>
+              <div className="comments__filter">
+                <Select
+                  options={commentsOptions}
+                  defaultValue={commentsOptions[0]}
+                  onChange={value => setFilter(value!.value)}
+                  styles={mainSelect}
+                />
+              </div>
             )}
           </div>
           <button
