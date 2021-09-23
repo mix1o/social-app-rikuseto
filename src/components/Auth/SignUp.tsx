@@ -19,6 +19,11 @@ const SignUp: FC = () => {
       .post(`${process.env.REACT_APP_API}/auth/create-account`, values)
       .then(res => {
         setMessage({ message: res.data.message, status: res.status });
+        if (res.status === 200) {
+          setTimeout(() => {
+            send('SIGN_IN');
+          }, 1000);
+        }
       })
       .catch(e => console.log(e));
   };
