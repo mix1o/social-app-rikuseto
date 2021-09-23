@@ -1,3 +1,4 @@
+import React from 'react';
 import { useActor } from '@xstate/react';
 import { authService } from '../Auth/AuthStateMachine';
 import SignIn from '../Auth/SignIn';
