@@ -6,6 +6,7 @@ export interface CategoryArray {
   name: string;
   totalPosts: number;
   user_id: string;
+  view?: boolean;
 }
 
 export interface CategoryProps {
