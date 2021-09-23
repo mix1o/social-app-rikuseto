@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useCallback } from 'react';
 import CreatePost from './CreatePost';
 import Post from './Post';
 import axios from 'axios';
@@ -8,28 +8,145 @@ import { useCounter } from '../../store/sub';
 import Header from '../Header/Header';
 import { motion as m, AnimatePresence as Presence } from 'framer-motion';
 import BlurredContent from '../Animations/Popup';
+import Select from 'react-select';
+import { mainSelect } from '../../helpers/selectStyles.styled';
+import { handleInputChange } from 'react-select/src/utils';
+
+const MODE_HOME = 'home';
+const MODE_ALL = 'all';
+type filterT = 'popular' | 'latest' | 'top' | 'default';
+
+interface popularInterface {
+  _id: string;
+  totalPosts: number;
+  name: string;
+}
+
+type singleOptions = {
+  label: string;
+  options: { label: string; value: string | number }[] | any;
+  value?: string;
+};
 
 const Posts: FC = () => {
-  const [posts, setPosts] = useState<PostInterface[]>();
-
   const [cookies] = useCookies();
   const { user } = cookies;
+  const [state, actions] = useCounter();
+
+  const [posts, setPosts] = useState<PostInterface[]>();
+  const [topCategory, setTopCategory] = useState<string | undefined>('');
+  const [filter, setFilter] = useState<filterT | undefined>('default');
+  const [selectOptions, setSelectOptions] = useState<singleOptions[]>([]);
+
+  const [popularCategories, setPopularCategories] =
+    useState<popularInterface[]>();
+
+  const [postTypes, setPostTypes] = useState<string>(
+    user ? MODE_HOME : MODE_ALL
+  );
+  const [filters, setFilters] = useState(user ? 0 : 1);
+
+  useEffect(() => {
+    fetchPosts();
+    getPopularCategories();
+  }, [postTypes]);
+
+  useEffect(() => {
+    setSelectOptions(formatPopularCategories());
+  }, [popularCategories, filters]);
 
   const fetchPosts = (): void => {
-    axios.get(`${process.env.REACT_APP_API}/posts/get`).then(res => {
+    let url = '';
+
+    if (postTypes === MODE_ALL) url = '/posts/get';
+    if (postTypes === MODE_HOME && user)
+      url = `/posts/get-categories?id=${user._id}`;
+
+    axios.get(`${process.env.REACT_APP_API}${url}`).then(res => {
       setPosts(res.data);
     });
   };
 
-  const handleFetchPosts = (): void => {
-    fetchPosts();
+  const sortPosts = (a: PostInterface, b: PostInterface) => {
+    switch (filter) {
+      case 'popular':
+        return b.likes.length - a.likes.length;
+      case 'latest':
+        return new Date(a.date) > new Date(b.date) ? -1 : 1;
+      case 'top':
+        return 0;
+      case 'default':
+        return 0;
+      default:
+        return 0;
+    }
   };
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+  const getPopularCategories = () => {
+    axios
+      .get(`${process.env.REACT_APP_API}/category/popular-categories`)
+      .then(res => setPopularCategories(res.data));
+  };
 
-  const [state, actions] = useCounter();
+  const filterByCategory = (element: PostInterface) => {
+    if (topCategory !== '' && filters !== 0)
+      return element.category === topCategory;
+    return true;
+  };
+
+  const closeHandler = useCallback(() => {
+    actions.openCreatePost(false);
+  }, [posts]);
+
+  const formatPopularCategories = () => {
+    const mainOptions: singleOptions = {
+      label: 'Popular categories',
+      options: [{ label: 'Default', value: '' }],
+    };
+
+    const options: singleOptions[] = [
+      {
+        label: 'Filter by',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Popular', value: 'popular' },
+          { label: 'Top', value: 'top' },
+          { label: 'Latest', value: 'latest' },
+        ],
+      },
+    ];
+
+    if (filters === 1) {
+      popularCategories?.forEach(
+        (element: { name: string; totalPosts: number; _id: string }) => {
+          const e: any = {
+            label: element.name,
+            value: element.name,
+          };
+
+          mainOptions.options.push(e);
+        }
+      );
+
+      options.push(mainOptions);
+    }
+
+    return options;
+  };
+
+  const handleSelectChange = (value: string | undefined) => {
+    console.log(value);
+    if (
+      value === 'popular' ||
+      value === 'latest' ||
+      value === 'default' ||
+      value === 'top'
+    ) {
+      setFilter(value);
+    } else {
+      setTopCategory(value);
+    }
+  };
 
   return (
     <>
@@ -55,14 +172,53 @@ const Posts: FC = () => {
         )}
         <Presence>
           {state.open && (
-            <BlurredContent closeHandler={() => actions.openCreatePost(false)}>
-              <CreatePost handleFetchPosts={handleFetchPosts} />
+            <BlurredContent closeHandler={closeHandler}>
+              <CreatePost handleFetchPosts={fetchPosts} />
             </BlurredContent>
           )}
         </Presence>
 
-        {posts?.map(
-          ({ _id, headline, category, file, userId, likes, date }) => {
+        {user && (
+          <div className="post__displaying">
+            <button
+              className={`post__option-displaying ${
+                filters === 0 ? 'post__filter-active' : ''
+              }`}
+              onClick={() => {
+                setPostTypes(MODE_HOME);
+                setFilters(0);
+              }}
+            >
+              Home <i className="fas fa-home" />
+            </button>
+            <button
+              className={`post__option-displaying ${
+                filters === 1 ? 'post__filter-active' : ''
+              }`}
+              onClick={() => {
+                setPostTypes(MODE_ALL);
+                setFilters(1);
+              }}
+            >
+              All posts <i className="fas fa-book" />
+            </button>
+          </div>
+        )}
+
+        <div className="post__manage-data post__manage-data--padding">
+          <h4>Filter posts</h4>
+
+          <Select
+            options={selectOptions}
+            styles={mainSelect}
+            onChange={value => handleSelectChange(value?.value)}
+            placeholder="Choose filter"
+          />
+        </div>
+        {posts
+          ?.sort(sortPosts)
+          ?.filter(filterByCategory)
+          ?.map(({ _id, headline, category, file, userId, likes, date }) => {
             return (
               <Post
                 key={_id}
@@ -72,12 +228,11 @@ const Posts: FC = () => {
                 file={file}
                 userId={userId}
                 likes={likes}
-                refreshPosts={handleFetchPosts}
+                refreshPosts={fetchPosts}
                 date={date}
               />
             );
-          }
-        )}
+          })}
       </main>
     </>
   );
