@@ -12,6 +12,7 @@ import { ProfileRoutes } from './profile';
 import { ConversationsRoutes, ConversationRoute } from './conversations';
 import { NotificationRoutes } from './notifications';
 import { NotFoundRoute, NotFoundAllRoute } from './other';
+import { SearchedDataRoute } from './search';
 
 interface RouteProps<T> {
   component: FC<T>;
@@ -33,6 +34,7 @@ export const Routes: RouteProps<ReactChild>[] = [
   ConversationRoute,
   NotificationRoutes,
   NotFoundRoute,
+  SearchedDataRoute,
   UserDetails,
   NotFoundAllRoute,
 ];
