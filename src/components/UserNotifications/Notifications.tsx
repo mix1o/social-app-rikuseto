@@ -49,6 +49,7 @@ const Notifications = () => {
       .get(`${process.env.REACT_APP_API}/user/get-requests?id=${user._id}`)
       .then(res => setNotifications(res.data));
   };
+  console.log(notifications);
   const optionRequest = (
     option: Option,
     requestId: string,
@@ -71,6 +72,13 @@ const Notifications = () => {
   useEffect(() => {
     getAllNotifications();
   }, []);
+
+  const changeStatus = (id: string, status: boolean) => {
+    if (!status)
+      return axios
+        .put(`${process.env.REACT_APP_API}/user/notification-status?id=${id}`)
+        .then(res => console.log(res.data));
+  };
 
   return (
     <>
@@ -140,16 +148,16 @@ const Notifications = () => {
           {notifications?.notifications
             .reverse()
             .map(
-              (
-                { body, date, header, photo, state, status, url, userId, _id },
-                idx
-              ) => {
+              ({ body, date, header, photo, state, status, url, _id }, idx) => {
                 let displayImg = false;
 
                 if (url.includes('#')) displayImg = true;
 
                 return (
                   <div
+                    style={
+                      !status ? { background: 'rgba(66, 44, 84, 0.8)' } : {}
+                    }
                     key={idx}
                     className={`notifications__request ${
                       status ? 'notifications__request--active' : ''
@@ -157,7 +165,11 @@ const Notifications = () => {
                   ${!displayImg ? 'notifications__requests--padding' : ''}
                   `}
                   >
-                    <Link className="notifications__link" to={`/${url}`}>
+                    <Link
+                      onClick={() => changeStatus(_id, status)}
+                      className="notifications__link"
+                      to={`/${url}`}
+                    >
                       <div className="notifications__view">
                         {displayImg && (
                           <div className="notifications__container-img">
