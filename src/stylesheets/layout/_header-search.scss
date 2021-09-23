@@ -1,0 +1,61 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+@use '../components/button' as btn;
+
+.searched {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: var(--light-bg-600);
+  border-radius: 3px;
+  &__user-link {
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--font-dark-600);
+    display: flex;
+    align-items: center;
+  }
+  &__user-profile {
+    max-width: 2.5rem;
+    max-height: 2.5rem;
+    border-radius: 100rem;
+    aspect-ratio: 1/1;
+    margin-right: 1rem;
+  }
+  &__name {
+    font-size: ft.$fs-250;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+    color: var(--font-dark-600);
+  }
+  &__name--display {
+    display: flex;
+    flex-direction: column;
+  }
+  &__category {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  &__category--count {
+    color: var(--font-dark-300);
+    font-size: ft.$fs-200;
+  }
+  &__category--action {
+    background-color: transparent;
+    color: clr.$main-bg-500;
+    border: none;
+    padding: 0 0.5rem;
+    font-size: ft.$fs-250;
+  }
+}
+
+.searched-view__user-profile {
+  max-height: 5rem;
+  max-width: 5rem;
+}

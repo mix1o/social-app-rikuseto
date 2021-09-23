@@ -7,6 +7,7 @@
   margin: 2rem 0;
   border: 1px solid var(--secondary-bg-200);
   border-radius: 5px 5px 0 0;
+  position: relative;
 
   &__search {
     position: relative;
@@ -80,6 +81,10 @@
   &__user {
     padding: 0.5rem 1rem;
     border-bottom: 1px solid var(--secondary-bg-300);
+    width: 100%;
+    position: absolute;
+    top: 2rem;
+    left: 0;
   }
   &__other {
     padding: 0.5rem 1rem;

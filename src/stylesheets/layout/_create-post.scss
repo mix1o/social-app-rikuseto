@@ -6,9 +6,12 @@
 .create-post {
   display: flex;
   flex-flow: column;
-  min-width: 35em;
+  min-width: 35rem;
   padding: 2rem;
   background: var(--light-bg-600);
+  max-width: 35rem;
+  height: 70vh;
+  overflow-y: scroll;
 
   &__title {
     font-size: ft.$fs-300;
@@ -31,6 +34,7 @@
     text-align: center;
     font-size: ft.$fs-200;
     margin: 2rem 0;
+    max-width: 300px;
   }
   &__btn-add {
     @include btn.btn();
@@ -48,5 +52,12 @@
     transform: translate(-50%, -50%);
     position: absolute;
     font-size: ft.$fs-250;
+  }
+  &__notifications {
+    accent-color: clr.$main-bg-500;
+    margin-right: 1rem;
+  }
+  &__notifications-text {
+    color: var(--font-dark-300);
   }
 }
