@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useCallback, ChangeEvent, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { motion as m } from 'framer-motion';
 import { useActor } from '@xstate/react';
@@ -10,6 +10,10 @@ import { CookieUser } from '../../interfaces/auth/authInterface';
 import { useHistory } from 'react-router-dom';
 import Toggle from '../Animations/Toggle';
 import { AnimatePresence as Presence } from 'framer-motion';
+import { CategoryArray } from '../../interfaces/posts/category';
+import { PostInterface } from '../../interfaces/posts/postInterfaces';
+import { SearchedCategory, SearchedUser } from '../Utils/SearchElements';
+import { handleFetch } from '../../helpers/handleSearch';
 
 const variants = {
   open: {
@@ -32,13 +36,20 @@ const variants = {
   },
 };
 
+interface responseInterface {
+  categories: Omit<CategoryArray, 'user_id'>[];
+  posts: PostInterface[];
+  users: CookieUser[];
+}
+
 const Header: FC = () => {
   const html = document.querySelector('html');
 
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [, actions] = useCounter();
   const history = useHistory();
-
+  const [hideElem, setHideElem] = useState(false);
+  const [value, setValue] = useState('');
   const [cookies, , removeCookie] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
 
@@ -56,14 +67,62 @@ const Header: FC = () => {
     html!.dataset!.value = property;
   };
 
+  const resetSearch = () => {
+    setHideElem(false);
+    setLoading(true);
+    setResponseData({
+      categories: [],
+      posts: [],
+      users: [],
+    });
+  };
+
+  const [responseData, setResponseData] = useState<
+    | responseInterface
+    | {
+        categories: [];
+        posts: [];
+        users: [];
+      }
+  >();
+
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const delay = setTimeout(async () => {
+      if (value.length > 0) {
+        const data = await handleFetch(value, '3');
+        if (data) setLoading(false);
+        setResponseData(data);
+      }
+    }, 1000);
+
+    if (value.length > 0 && openMenu) {
+      setHideElem(true);
+    }
+
+    if (value.length === 0) {
+      resetSearch();
+    }
+
+    if (openMenu === false) {
+      setValue('');
+      resetSearch();
+    }
+
+    return () => clearTimeout(delay);
+  }, [value, openMenu]);
+
   return (
     <header className="header">
       <div className="header__content">
-        <h3 className="header__message">
-          <Link to="/">
-            <img src={logo} alt="Logo" />
-          </Link>
-        </h3>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <h3 className="header__message">
+            <Link to="/">
+              <img src={logo} alt="Logo" />
+            </Link>
+          </h3>
+        </div>
         <button
           className="header__nav-button"
           onClick={() => setOpenMenu(true)}
@@ -89,43 +148,104 @@ const Header: FC = () => {
                 <i className="fas fa-times" />
               </button>
             </div>
-            <section className="header__section">
-              <h5 className="header__heading-section">Useful links</h5>
-              <p>About us</p>
-              <p>Contact</p>
-              <p>Support</p>
-            </section>
-            <section className="header__section">
-              <p className="header__heading-section">Theme</p>
-              <p className="header__information">
-                Dark mode is:{' '}
-                {idx === 0 ? (
-                  <span className="header__marked">on</span>
-                ) : (
-                  <span className="header__marked">off</span>
-                )}
-              </p>
-              <Toggle
-                className={`${
-                  idx === 1
-                    ? 'container-theme-disabled'
-                    : 'container-theme--active'
-                }`}
-                toggleHandler={() => {
-                  if (idx === 0) {
-                    handleChangeTheme('light');
-                    setIdx(1);
-                    return;
-                  }
-                  if (idx === 1) {
-                    handleChangeTheme('dark');
-                    setIdx(0);
-                    return;
-                  }
-                }}
+            <label className="header__label">
+              <input
+                className="header__input"
+                type="text"
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setValue(e.target.value)
+                }
               />
-            </section>
-            {!user && (
+              <button className="header__btn-search">
+                <i className="fas fa-search" />
+              </button>
+            </label>
+            {hideElem && !loading && (
+              <section>
+                {responseData!.users?.length > 0 && (
+                  <p className="header__heading-section">Users</p>
+                )}
+                <article className="header__heading-article">
+                  {responseData?.users.map(
+                    ({ firstName, lastName, avatar, _id }) => (
+                      <SearchedUser
+                        key={_id}
+                        avatar={avatar}
+                        firstName={firstName}
+                        lastName={lastName}
+                        _id={_id}
+                      />
+                    )
+                  )}
+                  {responseData!.categories?.length > 0 && (
+                    <p className="header__search-title  header__heading-section">
+                      Categories
+                    </p>
+                  )}
+                </article>
+                <article>
+                  {responseData?.categories.map(({ name, totalPosts, _id }) => (
+                    <SearchedCategory
+                      key={_id}
+                      name={name}
+                      totalPosts={totalPosts}
+                      _id={_id}
+                    />
+                  ))}
+                </article>
+                {(responseData!.categories?.length > 0 ||
+                  responseData!.users.length > 0) && (
+                  <Link className="header__see-more" to={`/search/${value}`}>
+                    See more
+                  </Link>
+                )}
+              </section>
+            )}
+            {hideElem && loading && (
+              <p className="header__loading">Loading...</p>
+            )}
+
+            {!hideElem && (
+              <>
+                <section className="header__section">
+                  <h5 className="header__heading-section">Useful links</h5>
+                  <p>About us</p>
+                  <p>Contact</p>
+                  <p>Support</p>
+                </section>
+                <section className="header__section">
+                  <p className="header__heading-section">Theme</p>
+                  <p className="header__information">
+                    Dark mode is:{' '}
+                    {idx === 0 ? (
+                      <span className="header__marked">on</span>
+                    ) : (
+                      <span className="header__marked">off</span>
+                    )}
+                  </p>
+                  <Toggle
+                    className={`${
+                      idx === 1
+                        ? 'container-theme-disabled'
+                        : 'container-theme--active'
+                    }`}
+                    toggleHandler={() => {
+                      if (idx === 0) {
+                        handleChangeTheme('light');
+                        setIdx(1);
+                        return;
+                      }
+                      if (idx === 1) {
+                        handleChangeTheme('dark');
+                        setIdx(0);
+                        return;
+                      }
+                    }}
+                  />
+                </section>
+              </>
+            )}
+            {!user && !hideElem && (
               <section className="header__section">
                 <p className="header__heading-section">
                   Log in to use all functionality
@@ -144,7 +264,7 @@ const Header: FC = () => {
                 </div>
               </section>
             )}
-            {user && (
+            {user && !hideElem && (
               <section className="header__section">
                 <p className="header__heading-section">
                   Check your settings account
