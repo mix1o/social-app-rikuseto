@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
@@ -8,11 +8,18 @@ import {
   CategoryProps,
 } from '../../../interfaces/posts/category';
 import CategoryItem from './CategoryItem';
+import AsyncSelect from 'react-select/async';
+import { mainSelect } from '../../../helpers/selectStyles.styled';
 
 const StyledInput = styled.input`
   border-bottom-width: ${(props: { open: boolean }) =>
     props.open ? ' 1px' : '0'};
 `;
+
+type singleOptions = {
+  label: string;
+  value: string;
+}[];
 
 const Category: FC<CategoryProps> = ({ post, setPost }) => {
   const [cookies] = useCookies();
@@ -20,16 +27,16 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
   const [categories, setCategories] = useState<CategoryArray[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [userCategories, setUserCategories] = useState<CategoryArray[]>([]);
-
-  const getCategory = () => {
-    axios
-      .get(
+  const [userCategories, setUserCategories] = useState<singleOptions>();
+  const getCategory = async () => {
+    try {
+      const response = await axios.get(
         `${process.env.REACT_APP_API}/category/get-categories?userId=${user._id}`
-      )
-      .then(res => {
-        setUserCategories(res.data);
-      });
+      );
+      return setUserCategories(formatCategories(response.data, 'Favorites'));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -41,23 +48,55 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
     setSelectedCategory(value);
   };
 
-  const handleSearchFetch = () => {
+  const getCategories = (inputValue: string) => {
     const params = new URLSearchParams({
-      value: selectedCategory,
+      value: inputValue,
     });
     axios
       .get(`${process.env.REACT_APP_API}/category/filter?${params.toString()}`)
       .then(res => setCategories(res.data));
   };
 
-  useEffect(() => {
-    if (selectedCategory.length > 0) handleSearchFetch();
-    if (selectedCategory === '') setCategories([]);
-  }, [selectedCategory]);
+  const handleSearchFetch = async (inputValue: string) => {
+    const params = new URLSearchParams({
+      value: inputValue,
+    });
+
+    const response = await fetch(
+      `${process.env.REACT_APP_API}/category/filter?${params.toString()}` // AXIOS IS ALREADY DEAD[*]
+    );
+    const result = await response.json();
+
+    return formatCategories(result, 'Other searched');
+  };
+
+  const formatCategories = (arr: CategoryArray[], type: string) => {
+    const options: { label: string; value: string }[] = [];
+    arr?.forEach(({ name, totalPosts }) => {
+      const obj = {
+        label: `${name} ${totalPosts} unique posts`,
+        value: name,
+      };
+      options.push(obj);
+    });
+
+    return options;
+  };
 
   return (
     <div className="category">
-      <div className="category__search">
+      <AsyncSelect
+        cacheOptions
+        defaultOptions={userCategories}
+        styles={mainSelect}
+        placeholder="Choose category"
+        loadOptions={inputValue => handleSearchFetch(inputValue)}
+        onChange={inputValue =>
+          setPost({ ...post, category: inputValue?.value })
+        }
+      />
+
+      {/* <div className="category__search">
         <StyledInput
           type="text"
           placeholder={`Find category`}
@@ -135,7 +174,7 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
             </div>
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
