@@ -18,6 +18,7 @@ const Categories: FC = () => {
   const [posts, setPosts] = useState<PostInterface[]>();
 
   const [search, setSearch] = useState<string>('');
+  const [isSearched, setIsSearched] = useState<boolean>(false);
 
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
@@ -48,12 +49,16 @@ const Categories: FC = () => {
   };
 
   const fetchPostByCategory = useCallback(() => {
+    setIsSearched(false);
     if (search.length > 0) {
       axios
         .get(
           `${process.env.REACT_APP_API}/posts/get-by-category?category=${search}`
         )
-        .then(res => setPosts(res.data));
+        .then(res => {
+          setPosts(res.data);
+          setIsSearched(true);
+        });
     }
   }, [search]);
 
@@ -125,6 +130,12 @@ const Categories: FC = () => {
             })}
         </div>
         <div className="categories__posts">
+          {isSearched && posts?.length === 0 && (
+            <h3 style={{ textAlign: 'center' }}>
+              We don't found posts with{' '}
+              <span style={{ color: '#753eed' }}>{search}</span> category
+            </h3>
+          )}
           {posts?.map(
             ({ _id, headline, category, file, userId, likes, date }) => {
               return (
