@@ -18,6 +18,11 @@
     height: 11rem;
     border-radius: 1rem;
   }
+  &__info {
+    text-align: center;
+    font-size: ft.$fs-250;
+    color: var(--font-dark-300);
+  }
   &__name {
     color: var(--font-dark-600);
     font-weight: bold;
