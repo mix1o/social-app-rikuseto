@@ -191,6 +191,9 @@ const Profile: FC = () => {
         </div>
         {option === MODE_POSTS && (
           <div>
+            {profile?.posts?.length === 0 && (
+              <p className="profile__info">This user has no posts yet</p>
+            )}
             {profile?.posts?.map(
               ({ _id, headline, category, file, userId, likes, date }) => {
                 return (
@@ -212,6 +215,9 @@ const Profile: FC = () => {
         )}
         {option === MODE_COMMENTS && (
           <div className="profile__comments">
+            {profile?.comments?.length === 0 && (
+              <p className="profile__info">This user has no comments yet</p>
+            )}
             {profile?.comments.map(({ _id, text, userId, likes, date }) => {
               return (
                 <Comment
