@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useCallback } from 'react';
+import { FC, useEffect, useState, useCallback, useRef, LegacyRef } from 'react';
 import CreatePost from './CreatePost';
 import Post from './Post';
 import axios from 'axios';
@@ -10,23 +10,15 @@ import { motion as m, AnimatePresence as Presence } from 'framer-motion';
 import BlurredContent from '../Animations/Popup';
 import Select from 'react-select';
 import { mainSelect } from '../../helpers/selectStyles.styled';
-import { handleInputChange } from 'react-select/src/utils';
+import {
+  popularInterface,
+  singleOptions,
+  singleOptionsWithGroup,
+} from '../../interfaces/posts/category';
 
 const MODE_HOME = 'home';
 const MODE_ALL = 'all';
 type filterT = 'popular' | 'latest' | 'top' | 'default';
-
-interface popularInterface {
-  _id: string;
-  totalPosts: number;
-  name: string;
-}
-
-type singleOptions = {
-  label: string;
-  options: { label: string; value: string | number }[] | any;
-  value?: string;
-};
 
 const Posts: FC = () => {
   const [cookies] = useCookies();
@@ -36,8 +28,10 @@ const Posts: FC = () => {
   const [posts, setPosts] = useState<PostInterface[]>();
   const [topCategory, setTopCategory] = useState<string | undefined>('');
   const [filter, setFilter] = useState<filterT | undefined>('default');
-  const [selectOptions, setSelectOptions] = useState<singleOptions[]>([]);
-
+  const [selectOptions, setSelectOptions] = useState<singleOptionsWithGroup[]>(
+    []
+  );
+  const selectRef = useRef<any>();
   const [popularCategories, setPopularCategories] =
     useState<popularInterface[]>();
 
@@ -99,12 +93,12 @@ const Posts: FC = () => {
   }, [posts]);
 
   const formatPopularCategories = () => {
-    const mainOptions: singleOptions = {
+    const mainOptions: singleOptionsWithGroup = {
       label: 'Popular categories',
       options: [{ label: 'Default', value: '' }],
     };
 
-    const options: singleOptions[] = [
+    const options: singleOptionsWithGroup[] = [
       {
         label: 'Filter by',
         options: [
@@ -117,16 +111,14 @@ const Posts: FC = () => {
     ];
 
     if (filters === 1) {
-      popularCategories?.forEach(
-        (element: { name: string; totalPosts: number; _id: string }) => {
-          const e: any = {
-            label: element.name,
-            value: element.name,
-          };
+      popularCategories?.forEach(singlePost => {
+        const e: singleOptions = {
+          label: singlePost.name,
+          value: singlePost.name,
+        };
 
-          mainOptions.options.push(e);
-        }
-      );
+        mainOptions.options.push(e);
+      });
 
       options.push(mainOptions);
     }
@@ -135,7 +127,6 @@ const Posts: FC = () => {
   };
 
   const handleSelectChange = (value: string | undefined) => {
-    console.log(value);
     if (
       value === 'popular' ||
       value === 'latest' ||
@@ -187,6 +178,7 @@ const Posts: FC = () => {
               onClick={() => {
                 setPostTypes(MODE_HOME);
                 setFilters(0);
+                // selectInputRef.current.select.clearValue(); fix
               }}
             >
               Home <i className="fas fa-home" />
@@ -198,6 +190,7 @@ const Posts: FC = () => {
               onClick={() => {
                 setPostTypes(MODE_ALL);
                 setFilters(1);
+                // selectInputRef.current.select.clearValue(); fix
               }}
             >
               All posts <i className="fas fa-book" />
@@ -207,12 +200,14 @@ const Posts: FC = () => {
 
         <div className="post__manage-data post__manage-data--padding">
           <h4>Filter posts</h4>
-
           <Select
+            ref={selectRef}
             options={selectOptions}
             styles={mainSelect}
             onChange={value => handleSelectChange(value?.value)}
             placeholder="Choose filter"
+            defaultValue={selectOptions}
+            maxMenuHeight={300}
           />
         </div>
         {posts

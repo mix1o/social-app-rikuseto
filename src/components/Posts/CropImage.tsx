@@ -27,6 +27,15 @@ interface CropProps {
   correctImage: boolean;
 }
 
+interface ICrop {
+  aspect?: number | undefined;
+  x?: number | undefined;
+  y?: number | undefined;
+  width?: number | undefined;
+  height?: number | undefined;
+  unit?: 'px' | '%' | undefined;
+}
+
 const CropImage: FC<CropProps> = ({
   setMessage,
   post,
@@ -39,6 +48,9 @@ const CropImage: FC<CropProps> = ({
   const [imagePreview, setImagePreview] = useState('');
   const [croppedImagePV, setCroppedImagePV] = useState('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const cropRefWrapper = useRef<HTMLDivElement>(null);
+  const cropRef = useRef<ReactCrop>(null);
+
   const [openCrop, setOpenCrop] = useState(false);
 
   const maxFileSize = 5000000;
@@ -107,6 +119,19 @@ const CropImage: FC<CropProps> = ({
 
   const handleCropChange = (newCrop: any) => {
     setAspect(newCrop);
+
+    const windowHeight = window.innerHeight / 2;
+    const image = document.querySelector('.ReactCrop__image');
+
+    if (!image) return;
+
+    if (newCrop.y + newCrop.height >= windowHeight - 50) {
+      // cropRefWrapper.current?.scrollBy(0, 10);
+    }
+
+    // console.log(`window height: ${windowHeight}`);
+    // console.log(newCrop.y + newCrop.height);
+    // console.log(`image: ${image.clientHeight}`);
   };
 
   const handleOnCropComplete = (crop: any, percentCrop: any) => {
@@ -195,6 +220,12 @@ const CropImage: FC<CropProps> = ({
     });
   };
 
+  const checkHeight = () => {
+    return {
+      maxHeight: `${(window.innerHeight / 2).toString()}px`,
+    };
+  };
+
   return (
     <section className="crop-image">
       {imagePreview!?.toString().length >= 1 ? (
@@ -232,7 +263,7 @@ const CropImage: FC<CropProps> = ({
               </div>
             </>
           )}
-          <div className="crop-image__canvas" style={{ overflowY: 'hidden' }}>
+          <div className="crop-image__canvas" ref={cropRefWrapper}>
             {!openCrop && (
               <button
                 className="crop-image__open--crop"
@@ -250,12 +281,15 @@ const CropImage: FC<CropProps> = ({
               onChange={handleCropChange}
               ruleOfThirds={true}
               disabled={!openCrop}
+              ref={cropRef}
             />
 
-            <canvas
-              className="crop-image__preview-canvas"
-              ref={canvasRef}
-            ></canvas>
+            <div style={checkHeight()} className="crop-image__canvas-wrapper">
+              <canvas
+                className="crop-image__preview-canvas"
+                ref={canvasRef}
+              ></canvas>
+            </div>
           </div>
           <div className="crop-image__buttons">
             <button className="crop-image__btn" onClick={clearCrop}>
