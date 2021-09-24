@@ -150,7 +150,7 @@ const Header: FC = () => {
             </div>
             <label className="header__label">
               <input
-                className="header__input"
+                className="header__input  auth-form__input"
                 type="text"
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   setValue(e.target.value)
@@ -161,7 +161,7 @@ const Header: FC = () => {
               </button>
             </label>
             {hideElem && !loading && (
-              <section>
+              <section className="header__searched-content">
                 {responseData!.users?.length > 0 && (
                   <p className="header__heading-section">Users</p>
                 )}
