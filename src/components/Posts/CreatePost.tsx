@@ -132,14 +132,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
       {checkNotificationSupport && (
         <label
           onClick={handleNotification}
-          style={{
-            color: 'var(--font-dark-600)',
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: '12px',
-            marginBottom: '1rem',
-            justifyContent: 'center',
-          }}
+          className="create-post__notification-label"
         >
           <input
             type="checkbox"
@@ -172,8 +165,6 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
 };
 
 export default memo(CreatePost);
-
-// TODO STYLE MAIN PAGE SZUKAJKA
 
 // TODO COMPONENT HELP
 

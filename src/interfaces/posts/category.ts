@@ -21,3 +21,20 @@ export interface CategoryItemI {
   handleSetCategory: (value: string) => void;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
+
+export type singleOptions = {
+  label: string;
+  value: string;
+};
+
+export interface popularInterface {
+  _id: string;
+  totalPosts: number;
+  name: string;
+}
+
+export type singleOptionsWithGroup = {
+  label: string;
+  options: { label: string; value: string | number }[];
+  value?: string;
+};

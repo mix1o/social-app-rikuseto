@@ -43,8 +43,6 @@ interface SortedElement {
   _id: string;
 }
 
-type FilterTypes = 'popular' | 'latest' | 'default';
-
 const Comments: FC<CommentProps> = ({
   postId,
   setOpenComments,
@@ -54,7 +52,7 @@ const Comments: FC<CommentProps> = ({
 }) => {
   const [commentText, setCommentText] = useState<string>('');
   const [comments, setComments] = useState<CommentsData[]>();
-  const [filter, setFilter] = useState<string>('default');
+  const [filter, setFilter] = useState<string | undefined>('default');
   const [popup, setPopup] = useState<boolean>(false);
 
   const commentRef = useRef<any>();
@@ -140,7 +138,7 @@ const Comments: FC<CommentProps> = ({
                 <Select
                   options={commentsOptions}
                   defaultValue={commentsOptions[0]}
-                  onChange={value => setFilter(value!.value)}
+                  onChange={value => setFilter(value?.value)}
                   styles={mainSelect}
                 />
               </div>
