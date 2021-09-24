@@ -23,10 +23,10 @@
     background-color: var(--light-bg-600);
     border: 1px solid clr.$main-bg-500;
     width: 100%;
-    padding: 0.5rem 1rem;
-    border-radius: 10rem;
+    padding: 1rem;
+    border-radius: 3px;
     color: var(--font-dark-600);
-    font-size: ft.$fs-250;
+    font-size: ft.$fs-300;
   }
   &__loading {
     text-align: center;
@@ -45,7 +45,13 @@
     font-size: ft.$fs-250;
   }
   .fa-search {
-    font-size: ft.$fs-250;
+    font-size: ft.$fs-300;
+  }
+  &__searched-content {
+    max-height: 50vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    pointer-events: fill;
   }
   &__input:focus {
     outline: none;

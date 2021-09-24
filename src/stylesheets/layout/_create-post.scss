@@ -60,4 +60,11 @@
   &__notifications-text {
     color: var(--font-dark-300);
   }
+  &__notification-label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: ft.$fs-250;
+    color: var(--font-dark-600);
+  }
 }
