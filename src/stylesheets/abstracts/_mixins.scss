@@ -1,0 +1,3 @@
+@mixin border($side: '') {
+  border#{$side}: 1px solid var(--light-bg-700);
+}

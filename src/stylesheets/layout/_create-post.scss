@@ -1,0 +1,70 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/variables' as var;
+@use '../abstracts/fontSizes' as ft;
+@use '../components/button' as btn;
+
+.create-post {
+  display: flex;
+  flex-flow: column;
+  min-width: 35rem;
+  padding: 2rem;
+  background: var(--light-bg-600);
+  max-width: 35rem;
+  height: 70vh;
+  overflow-y: scroll;
+
+  &__title {
+    font-size: ft.$fs-300;
+    padding: 1rem;
+    width: 100%;
+    border: 1px solid var(--secondary-bg-300);
+    border-radius: 3px;
+    background: var(--light-bg-550);
+    color: var(--font-dark-600);
+  }
+  &__file-input {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+  }
+  &__message {
+    color: clr.$warning-500;
+    text-align: center;
+    font-size: ft.$fs-200;
+    margin: 2rem 0;
+    max-width: 300px;
+  }
+  &__btn-add {
+    @include btn.btn();
+    align-self: flex-end;
+  }
+  &__label {
+    position: relative;
+  }
+  &__btn-emoji {
+    top: 50%;
+    right: -0.5rem;
+    background-color: transparent;
+    border: none;
+    color: var(--font-dark-600);
+    transform: translate(-50%, -50%);
+    position: absolute;
+    font-size: ft.$fs-250;
+  }
+  &__notifications {
+    accent-color: clr.$main-bg-500;
+    margin-right: 1rem;
+  }
+  &__notifications-text {
+    color: var(--font-dark-300);
+  }
+  &__notification-label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: ft.$fs-250;
+    color: var(--font-dark-600);
+  }
+}

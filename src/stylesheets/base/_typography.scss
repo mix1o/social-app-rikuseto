@@ -1,0 +1,32 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--font-dark-600);
+  font-weight: ft.$fw-600;
+  margin: 1rem 0;
+}
+h1 {
+  font-size: ft.$fs-600;
+}
+h2 {
+  font-size: ft.$fs-500;
+}
+h3 {
+  font-size: ft.$fs-400;
+}
+h4 {
+  font-size: ft.$fs-300;
+}
+h4 {
+  font-size: ft.$fs-200;
+}
+
+h6 {
+  font-size: ft.$fs-100;
+}

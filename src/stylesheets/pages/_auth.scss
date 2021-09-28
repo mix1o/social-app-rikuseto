@@ -1,0 +1,61 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+@use '../abstracts/media' as qr;
+
+.auth {
+  height: 100vh;
+
+  @include qr.media('>=tablet') {
+    display: flex;
+    justify-content: center;
+
+    background-image: url('https://img.freepik.com/free-vector/social-tree-concept-illustration_114360-4898.jpg?size=338&ext=jpg&ga=GA1.2.1424524701.1621555200');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  &__main {
+    margin: 0 1rem;
+    height: 100%;
+    display: grid;
+    place-content: center;
+    @include qr.media('>=tablet') {
+      background: var(--light-bg-500);
+      padding: 0 2rem;
+    }
+  }
+  &__header {
+    display: flex;
+    flex-flow: column;
+    align-self: flex-end;
+  }
+  &__sub-headline {
+    font-size: ft.$fs-300;
+    margin: 0.5rem 0;
+    padding-bottom: 2.5rem;
+    color: var(--font-dark-600);
+    font-weight: ft.$fw-400;
+  }
+  &__form-link {
+    text-align: center;
+    font-size: ft.$fs-300;
+    color: var(--font-dark-600);
+    font-weight: ft.$fw-600;
+  }
+  &__form-next {
+    cursor: pointer;
+    color: clr.$main-bg-500;
+  }
+  &__message {
+    text-align: center;
+    font-size: ft.$fs-250;
+    margin: 2rem auto;
+    line-height: 2rem;
+    max-width: 40ch;
+  }
+  &__message--accepted {
+    color: clr.$pass-500;
+  }
+  &__message--refused {
+    color: clr.$warning-500;
+  }
+}

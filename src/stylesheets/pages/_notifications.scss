@@ -1,0 +1,91 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+@use '../components/button' as btn;
+
+.notifications {
+  &__request {
+    margin: 1rem 0;
+    background: var(--light-bg-600);
+    color: var(--font-dark-600);
+    padding: 1rem 1.5rem;
+    position: relative;
+  }
+  &__requests--padding {
+    padding: 0 1.5rem 1rem 1.5rem;
+  }
+  &__view {
+    display: flex;
+    align-items: center;
+  }
+  &__img {
+    width: 3.7rem;
+    height: 3.7rem;
+    border-radius: 10rem;
+    margin-right: 1rem;
+  }
+  &__action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
+  &__btn {
+    @include btn.btn();
+    font-size: ft.$fs-200;
+    padding: 0.4rem;
+    margin-right: 1rem;
+    border: 2px solid clr.$main-bg-500;
+  }
+  &__header {
+    font-size: ft.$fs-250;
+  }
+  &__date {
+    font-size: ft.$fs-200;
+    color: var(--font-dark-300);
+    margin: 0;
+  }
+  &__status {
+    font-size: ft.$fs-200;
+  }
+  &__btn--reject {
+    @include btn.btnEmpty();
+    padding: 0.4rem;
+    font-size: ft.$fs-200;
+  }
+  .fa-ellipsis-v {
+    font-size: ft.$fs-250;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+  }
+  &__body {
+    font-size: ft.$fs-200;
+    margin: 0;
+    color: var(--font-dark-300);
+  }
+  &__action--lower {
+    margin-top: 1rem;
+  }
+  &__link {
+    text-decoration: none;
+    color: inherit;
+  }
+  &__message {
+    color: var(--font-dark-300);
+    font-size: ft.$fs-250;
+    text-align: center;
+  }
+}
+.animation {
+  &__container {
+    transform: rotateZ(270deg);
+    max-width: 6ch;
+    margin: 0 auto;
+  }
+  &__item {
+    min-height: 0.5rem;
+    max-width: 5ch;
+    margin-top: 0.5rem;
+    background-color: clr.$main-bg-500;
+  }
+}

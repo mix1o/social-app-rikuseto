@@ -1,0 +1,127 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/variables' as var;
+@use '../abstracts/fontSizes' as ft;
+@use '../components/button' as btn;
+
+.comments {
+  background: var(--light-bg-500);
+  z-index: 5;
+  height: 75vh;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  overflow-y: scroll;
+  border-radius: 10px 10px 0 0;
+
+  &__container {
+    padding: 1rem;
+  }
+  &__close-btn {
+    font-size: ft.$fs-400;
+    background-color: transparent;
+    color: var(--font-dark-600);
+    border: none;
+  }
+  &__icon {
+    color: inherit;
+  }
+  &__header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: var(--light-bg-600);
+    border-top: 2px solid clr.$main-bg-500;
+    display: flex;
+    z-index: 10;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+  }
+  &__filter {
+    position: relative;
+  }
+  &__filter-text {
+    color: var(--font-dark-600);
+    font-size: ft.$fs-250;
+  }
+
+  &__current-filter {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid var(--light-bg-700);
+    background: var(--light-bg-500);
+    align-items: center;
+    padding: 0 1rem;
+    cursor: pointer;
+    width: 20ch;
+  }
+  &__filter-list {
+    display: flex;
+    flex-flow: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    transform: translateY(100%);
+    width: 20ch;
+    z-index: 10;
+  }
+  &__filter-item {
+    background: var(--light-bg-500);
+    color: var(--font-dark-600);
+    text-align: start;
+    padding: 1rem;
+    font-size: ft.$fs-250;
+    width: 100%;
+    border: none;
+    border-left: 1px solid var(--light-bg-700);
+    border-right: 1px solid var(--light-bg-700);
+    cursor: pointer;
+  }
+  &__filter-item:last-child {
+    border-bottom: 1px solid var(--light-bg-700);
+  }
+  &__filter-item:hover {
+    background: var(--light-bg-700);
+  }
+  &__filter-text::first-letter {
+    text-transform: uppercase;
+  }
+  &__toggle-filter {
+    border: none;
+    background: transparent;
+    margin-left: 1rem;
+    color: var(--font-dark-600);
+    font-size: ft.$fs-300;
+
+    .fa-chevron-down,
+    .fa-chevron-up {
+      font-size: inherit;
+      color: inherit;
+    }
+  }
+  &__info {
+    color: var(--font-dark-300);
+    font-size: ft.$fs-300;
+    text-align: center;
+  }
+}
+.comments-shared {
+  .comments__close-btn {
+    display: none;
+  }
+  .comments__header {
+    border: none;
+    z-index: 1;
+    background: transparent;
+    position: static;
+  }
+  .comments__container-input {
+    position: static;
+    transform: none;
+    margin-bottom: 5rem;
+  }
+}
+.emoji-picker-react .emoji-group:before {
+  background: var(--light-bg-700);
+  padding-left: 1rem;
+}

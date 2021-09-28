@@ -1,0 +1,123 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+@use '../components/button' as btn;
+
+// Component Conversations START
+.conversations {
+  &__single {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--font-dark-600);
+    background: var(--light-bg-600);
+    margin-top: 1rem;
+    padding: 1rem;
+  }
+  &__img {
+    max-width: 4rem;
+    max-height: 4rem;
+    border-radius: 10rem;
+    margin-right: 1rem;
+  }
+  &__friend-name {
+    font-size: ft.$fs-250;
+    margin: 0;
+  }
+  &__last-msg {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    color: var(--font-dark-300);
+  }
+}
+// Component Conversations END
+
+// Component SingleConversation START
+.conversation {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--light-bg-500);
+  &__header {
+    background-color: var(--light-bg-600);
+    padding: 0 1rem;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__friend-name {
+    margin-right: auto;
+  }
+  &__container-text {
+    position: fixed;
+    bottom: 0.5rem;
+    left: 0;
+    width: 100%;
+    display: flex;
+    background: var(--light-bg-500);
+    padding: 0 1rem;
+    background-color: red;
+  }
+  &__text {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid clr.$main-bg-500;
+    color: var(--font-dark-600);
+    outline: none;
+    font-size: ft.$fs-200;
+    background-color: var(--light-bg-600);
+  }
+  &__messages {
+    overflow-y: scroll;
+    // max-height: 85vh;
+    font-size: ft.$fs-300;
+    padding: 1rem;
+  }
+  &__btn {
+    @include btn.btn();
+    padding: 0 1rem;
+    font-size: ft.$fs-200;
+    letter-spacing: 1px;
+  }
+  &__single-message {
+    background-color: var(--light-bg-700);
+    color: var(--font-dark-600);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    display: flex;
+    align-items: center;
+    font-size: ft.$fs-250;
+    max-width: 70%;
+    word-break: break-word;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  &__author {
+    background-color: clr.$main-bg-500;
+    margin-left: auto;
+    color: var(--font-light-300);
+  }
+  &__author-message {
+    height: 3.5rem;
+    width: 3.5rem;
+    border-radius: 10rem;
+    margin-right: 1rem;
+  }
+  &__message-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+  }
+  .fa-arrow-left,
+  .fa-ellipsis-v {
+    color: var(--font-dark-600);
+    font-size: ft.$fs-300;
+    max-width: 25px;
+  }
+  .fa-arrow-left {
+    margin-right: 2rem;
+  }
+}
+
+// Component SingleConversation END

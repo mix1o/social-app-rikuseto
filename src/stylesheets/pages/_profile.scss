@@ -1,0 +1,71 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+@use '../components/button' as btn;
+
+.profile {
+  &__user {
+    background: linear-gradient(
+      to bottom,
+      transparent 30%,
+      var(--light-bg-600) 30% 70%
+    );
+
+    text-align: center;
+    padding: 1rem 0;
+  }
+  &__image {
+    width: 13rem;
+    height: 11rem;
+    border-radius: 1rem;
+  }
+  &__info {
+    text-align: center;
+    font-size: ft.$fs-250;
+    color: var(--font-dark-300);
+  }
+  &__name {
+    color: var(--font-dark-600);
+    font-weight: bold;
+    font-size: ft.$fs-300;
+  }
+  &__date,
+  &__total {
+    font-size: ft.$fs-200;
+    color: var(--font-dark-600);
+  }
+  &__choice {
+    border-top: 2px solid var(--light-bg-700);
+
+    margin: 1rem 0;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  &__btn {
+    margin-top: 1rem;
+    border: none;
+    background-color: transparent;
+    font-size: ft.$fs-250;
+    color: var(--font-dark-600);
+  }
+  &__btn--active {
+    border-bottom: 2px solid clr.$main-bg-500;
+  }
+  &__comments {
+    padding: 1rem;
+  }
+  &__add {
+    @include btn.btn();
+    font-size: ft.$fs-250;
+    padding: 1rem;
+  }
+  &__status {
+    font-size: ft.$fs-250;
+    color: #fff;
+    padding: 1rem;
+    background: clr.$main-bg-500;
+    margin: 0 1rem;
+    display: inline-block;
+  }
+}

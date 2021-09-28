@@ -1,0 +1,23 @@
+.searched {
+  background: transparent;
+  &__header {
+    padding: 2rem 0.5rem;
+    background: var(--light-bg-600);
+    border-bottom: 1px solid #753eef;
+    margin-top: 0;
+  }
+  &__section {
+    margin-bottom: 2rem;
+    padding: 0.5rem 0;
+    background: transparent;
+    margin-top: 1rem;
+  }
+  &__section-wrapper {
+    margin-top: 1rem;
+  }
+  &__background {
+    background: var(--light-bg-600);
+    margin-bottom: 0;
+    padding: 1.5rem 1rem;
+  }
+}

@@ -1,0 +1,28 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/variables' as var;
+@use '../abstracts/mixins' as mix;
+
+.blurred {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-content: center;
+  z-index: 20;
+  background-color: rgba(var(--secondary-bg-600), 0.8);
+
+  &__content {
+    width: clamp(1500px, fit-content, 80vw);
+    @include mix.border();
+  }
+
+  &__option {
+    @include mix.border();
+    min-width: var.$form-width;
+    background: var(--light-bg-500);
+    padding: 2rem;
+    border-radius: 3px;
+  }
+}

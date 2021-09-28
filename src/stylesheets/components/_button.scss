@@ -1,0 +1,68 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+
+@mixin btnBasicPseudo(
+  $pseudoClass,
+  $bg-color,
+  $border-color: transparent,
+  $cursor: pointer
+) {
+  &:#{$pseudoClass} {
+    background: $bg-color;
+    outline: 1px solid $border-color;
+    cursor: $cursor;
+  }
+}
+@mixin btnEmptyPseudo(
+  $pseudoClass,
+  $bg-color,
+  $shadowIn: null 2px 2px,
+  $bg: clr.$main-bg-500,
+  $cursor: pointer
+) {
+  &:#{$pseudoClass} {
+    box-shadow: $shadowIn 0px 0px $bg-color;
+    border-color: clr.$main-bg-500;
+    padding: inherit inherit 2px 2px;
+    color: $bg;
+    cursor: $cursor;
+  }
+}
+
+@mixin btnBasic($padding: 0.5rem 1rem, $fs: ft.$fs-200) {
+  background: clr.$main-bg-500;
+  color: var(--font-light-300);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: $padding;
+  font-size: $fs;
+}
+
+@mixin btn() {
+  @include btnBasic(1.2rem, ft.$fs-300);
+  @include btnBasicPseudo('hover', clr.$main-bg-700, clr.$main-bg-400);
+  @include btnBasicPseudo('active', clr.$main-bg-400, clr.$main-bg-700);
+  @include btnBasicPseudo('disabled', clr.$main-bg-200, null, not-allowed);
+}
+
+@mixin btnEmpty($clr: clr.$main-bg-500) {
+  background: transparent;
+  color: $clr;
+  border: 2px solid clr.$main-bg-500;
+  border-radius: 2px;
+  font-weight: ft.$fw-500;
+  padding: 1rem;
+  font-size: ft.$fs-300;
+  cursor: pointer;
+
+  @include btnEmptyPseudo('hover', clr.$main-bg-300, inset -2px 2px, $clr);
+  @include btnEmptyPseudo('active', clr.$main-bg-300, null 2px 2px, $clr);
+  @include btnEmptyPseudo(
+    'disabled',
+    clr.$main-bg-300,
+    null 0 0,
+    $clr,
+    not-allowed
+  );
+}

@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Allow: /README.md
+
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /.gitignore
+Disallow: /.env
+Disallow: /node_modules
+Disallow: /build
