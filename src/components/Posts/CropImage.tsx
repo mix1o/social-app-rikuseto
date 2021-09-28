@@ -193,31 +193,32 @@ const CropImage: FC<CropProps> = ({
 
   const compressImg = async (file: any) => {
     if (!file) return;
-    compressAndUpload(file);
+    // compressAndUpload(file);
     new Compressor(file, {
       quality: 0.6,
       convertSize: 268000,
       success(result) {
         const formData = new FormData();
-        const imgurResponse = upload(result);
+        const imgurResponse = upload(result).then(res => res);
 
-        if (imgurResponse) {
-          imgurResponse.then(res => {
-            // #FIXME Properly type response
-            if (res!.status === 403) {
-              setCorrectImage(false);
-              setMessage('Something went wrong. Please try again');
-              return;
-            }
-            setTimeout(() => {
-              setPost({ ...post, file: res!.data.data.link });
-            }, 1000);
-            setCorrectImage(true);
-            setMessage('Your image is correctly uploaded');
-          });
-        }
+        console.log(imgurResponse);
+        // if (imgurResponse) {
+        //   imgurResponse.then(res => {
+        //     // #FIXME Properly type response
+        //     if (res!.status === 403) {
+        //       setCorrectImage(false);
+        //       setMessage('Something went wrong. Please try again');
+        //       return;
+        //     }
+        //     setTimeout(() => {
+        //       setPost({ ...post, file: res!.data.data.link });
+        //     }, 1000);
+        //     setCorrectImage(true);
+        //     setMessage('Your image is correctly uploaded');
+        //   });
+        // }
 
-        formData.append('file', result);
+        // formData.append('file', result);
       },
       error(err) {
         console.log(err.message);
