@@ -1,5 +1,9 @@
 import axios from 'axios';
+<<<<<<< HEAD
 import { ChangeEvent, FC, useEffect, useState } from 'react';
+=======
+import { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
+>>>>>>> cc0a44623577adcae02c4c35173bafe4f439a3dd
 import { useCookies } from 'react-cookie';
 import { CookieUser } from '../../../interfaces/auth/authInterface';
 import Header from '../../Header/Header';
@@ -11,7 +15,10 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import BlurredContent from '../../Animations/Popup';
 import { DetailsValidation } from '../../../Formik/ValidationSchemas';
+<<<<<<< HEAD
 import { AnimatePresence as Presence } from 'framer-motion';
+=======
+>>>>>>> cc0a44623577adcae02c4c35173bafe4f439a3dd
 
 type ToUpdate = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -109,6 +116,7 @@ const Details = () => {
           {type === 'password' ? '*********' : value}
         </p>
 
+<<<<<<< HEAD
         <Presence>
           {open && (
             <BlurredContent closeHandler={() => setOpen(false)}>
@@ -165,6 +173,62 @@ const Details = () => {
             </BlurredContent>
           )}
         </Presence>
+=======
+        {open && (
+          <BlurredContent closeHandler={() => setOpen(false)}>
+            <section className="details__popup">
+              <p className="details__description">{description}:</p>
+              {type !== 'password' && (
+                <input
+                  type={typeCheck()}
+                  value={newValue}
+                  onChange={handleChange}
+                  className="details__input"
+                />
+              )}
+              {type === 'password' && (
+                <>
+                  <input
+                    type={typeCheck()}
+                    value={oldPassword}
+                    className="details__input d"
+                    placeholder="Enter your old password"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      setOldPassword(e.target.value);
+                      setMessage('');
+                    }}
+                  />
+                  <input
+                    type="password"
+                    className="details__input"
+                    placeholder="Enter a new password"
+                    value={newValue}
+                    onChange={handleChange}
+                  />
+                </>
+              )}
+
+              <p className="details__error">{errors[0]}</p>
+              <p className="details__error">{message}</p>
+              <button
+                disabled={checkIsNewValueCorrect()}
+                className="details__update-btn"
+                onClick={() => {
+                  updateData();
+                }}
+              >
+                Update
+              </button>
+              <button
+                className="details__btn--close details__btn"
+                onClick={() => setOpen(prevState => !prevState)}
+              >
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            </section>
+          </BlurredContent>
+        )}
+>>>>>>> cc0a44623577adcae02c4c35173bafe4f439a3dd
 
         <button
           className="details__btn"

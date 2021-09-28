@@ -254,7 +254,6 @@ const Header: FC = () => {
                   <Link className="header__link" to="/auth">
                     Sign In
                   </Link>
-
                   <Link
                     className="header__link header__link--empty"
                     onClick={() => send('SIGN_UP')}

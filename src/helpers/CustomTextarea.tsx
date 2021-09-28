@@ -59,7 +59,6 @@ const CustomTextarea: FC<Textarea> = ({
   const getRows = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     const lineHeight = 21;
     const taHeight = e.target.scrollHeight;
-
     if (taHeight / lineHeight >= 2.1)
       setRows(Math.floor(taHeight / lineHeight)); //Po pierwszym znaku dodaje scollHeight
     return;
