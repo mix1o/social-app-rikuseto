@@ -33,22 +33,26 @@ const compressImg = async (file: any) => {
     convertSize: 268000,
     success(result) {
       const formData = new FormData();
-      const imgurResponse = upload(result).then(res => console.log(res));
+      (async () => {
+        try {
+          const fileData = await upload(result);
 
-      // if (imgurResponse) {
-      //   if (imgurResponse!.status === 403) {
-      //     return {
-      //       accepted: false,
-      //       message: 'Something went wrong. Please try again',
-      //     };
-      //   }
+          if (fileData!.status === 403) {
+            return {
+              accepted: false,
+              message: 'Something went wrong. Please try again',
+            };
+          }
 
-      //   return {
-      //     accepted: true,
-      //     message: 'Your image is correctly uploaded',
-      //     file: imgurResponse!.data.data.link,
-      //   };
-      // }
+          return {
+            accepted: true,
+            message: 'Your image is correctly uploaded',
+            file: fileData!.data.data.link,
+          };
+        } catch (err) {
+          console.log(err);
+        }
+      })();
 
       formData.append('file', result);
     },
@@ -60,10 +64,10 @@ const compressImg = async (file: any) => {
 
 export const useFiles = () => {
   return {
-    validateFile(fileToValidate: any, maxFileSize: number) {
+    validateFile(fileToValidate: File | null, maxFileSize: number) {
       return validateFile(fileToValidate, maxFileSize);
     },
-    compressAndUpload(file: any) {
+    compressAndUpload(file: File | null) {
       return compressImg(file);
     },
   };

@@ -141,7 +141,7 @@ const CropImage: FC<CropProps> = ({
     }, 200);
   };
 
-  const handleReverseFile = (useCropped: boolean = false) => {
+  const handleReverseFile = async (useCropped: boolean = false) => {
     setMessage('Loading image');
     setCorrectImage(false);
     if (imagePreview) {
@@ -157,8 +157,9 @@ const CropImage: FC<CropProps> = ({
             `rikusetoImage.${croppedData64}`
           );
           setUserPickedImage(true);
-          compressImg(croppedData);
-
+          // compressImg(croppedData);
+          const uploadedImage = await compressAndUpload(croppedData);
+          console.log(uploadedImage);
           return;
         }
       } else {
@@ -167,7 +168,9 @@ const CropImage: FC<CropProps> = ({
           `rikusetoImage.${imagePreview}`
         );
         setUserPickedImage(true);
-        compressImg(croppedData);
+        // compressImg(croppedData);
+        const uploadedImage = await compressAndUpload(croppedData);
+        console.log(uploadedImage);
       }
     }
   };
@@ -191,40 +194,50 @@ const CropImage: FC<CropProps> = ({
     setAspect({ aspect: ratio });
   };
 
-  const compressImg = async (file: any) => {
-    if (!file) return;
-    // compressAndUpload(file);
-    new Compressor(file, {
-      quality: 0.6,
-      convertSize: 268000,
-      success(result) {
-        const formData = new FormData();
-        const imgurResponse = upload(result).then(res => res);
+  // const compressImg = async (file: any) => {
+  //   if (!file) return;
+  //   // compressAndUpload(file);
+  //   new Compressor(file, {
+  //     quality: 0.6,
+  //     convertSize: 268000,
+  //     success(result) {
+  //       const formData = new FormData();
+  //       const imgurResponse = upload(result).then(res => {
+  //         if (res!.status === 403) {
+  //           setCorrectImage(false);
+  //           setMessage('Something went wrong. Please try again');
+  //           return;
+  //         }
+  //         setTimeout(() => {
+  //           setPost({ ...post, file: res!.data.data.link });
+  //         }, 1000);
+  //         setCorrectImage(true);
+  //         setMessage('Your image is correctly uploaded');
+  //       });
 
-        console.log(imgurResponse);
-        // if (imgurResponse) {
-        //   imgurResponse.then(res => {
-        //     // #FIXME Properly type response
-        //     if (res!.status === 403) {
-        //       setCorrectImage(false);
-        //       setMessage('Something went wrong. Please try again');
-        //       return;
-        //     }
-        //     setTimeout(() => {
-        //       setPost({ ...post, file: res!.data.data.link });
-        //     }, 1000);
-        //     setCorrectImage(true);
-        //     setMessage('Your image is correctly uploaded');
-        //   });
-        // }
+  //       // if (imgurResponse) {
+  //       //   imgurResponse.then(res => {
+  //       //     // #FIXME Properly type response
+  //       //     if (res!.status === 403) {
+  //       //       setCorrectImage(false);
+  //       //       setMessage('Something went wrong. Please try again');
+  //       //       return;
+  //       //     }
+  //       //     setTimeout(() => {
+  //       //       setPost({ ...post, file: res!.data.data.link });
+  //       //     }, 1000);
+  //       //     setCorrectImage(true);
+  //       //     setMessage('Your image is correctly uploaded');
+  //       //   });
+  //       // }
 
-        // formData.append('file', result);
-      },
-      error(err) {
-        console.log(err.message);
-      },
-    });
-  };
+  //       // formData.append('file', result);
+  //     },
+  //     error(err) {
+  //       console.log(err.message);
+  //     },
+  //   });
+  // };
 
   const checkHeight = () => {
     return {
