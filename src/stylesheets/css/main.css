@@ -99,24 +99,24 @@ select {
 }
 
 button,
-[type='button'],
-[type='reset'],
-[type='submit'] {
+[type=button],
+[type=reset],
+[type=submit] {
   -webkit-appearance: button;
 }
 
 button::-moz-focus-inner,
-[type='button']::-moz-focus-inner,
-[type='reset']::-moz-focus-inner,
-[type='submit']::-moz-focus-inner {
+[type=button]::-moz-focus-inner,
+[type=reset]::-moz-focus-inner,
+[type=submit]::-moz-focus-inner {
   border-style: none;
   padding: 0;
 }
 
 button:-moz-focusring,
-[type='button']:-moz-focusring,
-[type='reset']:-moz-focusring,
-[type='submit']:-moz-focusring {
+[type=button]:-moz-focusring,
+[type=reset]:-moz-focusring,
+[type=submit]:-moz-focusring {
   outline: 1px dotted ButtonText;
 }
 
@@ -141,23 +141,23 @@ textarea {
   overflow: auto;
 }
 
-[type='checkbox'],
-[type='radio'] {
+[type=checkbox],
+[type=radio] {
   box-sizing: border-box;
   padding: 0;
 }
 
-[type='number']::-webkit-inner-spin-button,
-[type='number']::-webkit-outer-spin-button {
+[type=number]::-webkit-inner-spin-button,
+[type=number]::-webkit-outer-spin-button {
   height: auto;
 }
 
-[type='search'] {
+[type=search] {
   -webkit-appearance: textfield;
   outline-offset: -2px;
 }
 
-[type='search']::-webkit-search-decoration {
+[type=search]::-webkit-search-decoration {
   -webkit-appearance: none;
 }
 
@@ -183,7 +183,7 @@ template {
 }
 
 :root {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 10px;
 }
 
@@ -325,7 +325,7 @@ h6 {
   position: relative;
 }
 .header__search-title::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -1rem;
@@ -581,11 +581,7 @@ h6 {
 .circle-menu {
   width: 50px;
   height: 50px;
-  background: linear-gradient(
-    to bottom,
-    transparent 48%,
-    var(--light-bg-500) 48% 53%
-  );
+  background: linear-gradient(to bottom, transparent 48%, var(--light-bg-500) 48% 53%);
   padding: 1rem 0;
   position: absolute;
   border-radius: 10rem;
@@ -1205,8 +1201,7 @@ h6 {
   padding: 1rem;
   color: var(--font-dark-300);
 }
-.textarea__wrapper:focus-within,
-.textarea__wrapper:focus-within ~ .textarea__publish {
+.textarea__wrapper:focus-within, .textarea__wrapper:focus-within ~ .textarea__publish {
   color: #753ee0;
 }
 .textarea__input:focus {
@@ -1745,7 +1740,7 @@ h6 {
   .auth {
     display: flex;
     justify-content: center;
-    background-image: url('https://img.freepik.com/free-vector/social-tree-concept-illustration_114360-4898.jpg?size=338&ext=jpg&ga=GA1.2.1424524701.1621555200');
+    background-image: url("https://img.freepik.com/free-vector/social-tree-concept-illustration_114360-4898.jpg?size=338&ext=jpg&ga=GA1.2.1424524701.1621555200");
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -1875,8 +1870,7 @@ h6 {
   color: var(--font-dark-300);
   opacity: 0.9;
 }
-.account__description,
-.account__heading {
+.account__description, .account__heading {
   margin: 0;
   padding: 0;
   margin-left: 1rem;
@@ -1967,11 +1961,7 @@ h6 {
 }
 
 .profile__user {
-  background: linear-gradient(
-    to bottom,
-    transparent 30%,
-    var(--light-bg-600) 30% 70%
-  );
+  background: linear-gradient(to bottom, transparent 30%, var(--light-bg-600) 30% 70%);
   text-align: center;
   padding: 1rem 0;
 }
@@ -1990,8 +1980,7 @@ h6 {
   font-weight: bold;
   font-size: 1.6rem;
 }
-.profile__date,
-.profile__total {
+.profile__date, .profile__total {
   font-size: 1.2rem;
   color: var(--font-dark-600);
 }
@@ -2407,8 +2396,7 @@ h6 {
   color: #e53e3e;
   text-align: center;
 }
-.details__date,
-.details__preferences {
+.details__date, .details__preferences {
   background-color: var(--light-bg-600);
   padding: 1rem;
   margin: 2rem 0;
@@ -2429,7 +2417,7 @@ h6 {
   font-size: 1.2rem;
 }
 
-[data-value='dark'] {
+[data-value=dark] {
   --secondary-bg-100: #919191;
   --secondary-bg-200: #787878;
   --secondary-bg-300: #6b6b6b;
@@ -2456,7 +2444,7 @@ h6 {
   --main-bg-500: #753ee0;
 }
 
-[data-value='light'] {
+[data-value=light] {
   --secondary-bg-100: #919191;
   --secondary-bg-200: #787878;
   --secondary-bg-300: #6b6b6b;
