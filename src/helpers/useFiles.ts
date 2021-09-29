@@ -30,27 +30,24 @@ const validateFile = (
 
 const compressImg = async (
   file: File | null,
-  uploadImage: (file: any) => void
+  uploadImage: (status: number, link: string) => void
 ) => {
   if (!file) return { accepted: false, message: 'Empty file' };
 
-  const compressor = new Compressor(file, {
+  new Compressor(file, {
     quality: 0.6,
     convertSize: 268000,
 
     success(result) {
       const formData = new FormData();
 
-      (async () => {
-        try {
-          const fileData = await upload(result);
-          uploadImage(fileData);
-        } catch (err) {
-          console.log(err);
-        }
-      })();
+      const fileData = upload(result).then(res => {
+        uploadImage(res.status, res.data.link);
+      });
+
       formData.append('file', result);
     },
+
     error(err) {
       console.log(err.message);
     },
@@ -69,14 +66,14 @@ const uploadProfileImage = async (
       `rikusetoImage.${imageData64}`
     );
 
-    const updateUserProfile = async (fileData: any) => {
-      console.log(fileData);
-      if (fileData!.status === 200) {
+    const updateUserProfile = async (status: number, link: string) => {
+      if (status === 200) {
+        console.log(link);
         const response = await axios.put(
           `${process.env.REACT_APP_API}/user/update-avatar`,
           {
             userId: id,
-            avatar: fileData.data.data.link,
+            avatar: link,
           }
         );
         return true;

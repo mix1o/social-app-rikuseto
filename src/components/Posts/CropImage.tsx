@@ -56,7 +56,6 @@ const CropImage: FC<CropProps> = ({
     if (rejectedFiles && rejectedFiles.length >= 1) {
       const validate = validateFile(rejectedFiles[0].file, 5000000);
       setMessage(validate.message);
-      setCorrectImage(validate.accepted);
     }
 
     if (files && files.length >= 1) {
@@ -109,6 +108,7 @@ const CropImage: FC<CropProps> = ({
   const handleReverseFile = async (useCropped: boolean = false) => {
     setMessage('Loading image');
     setCorrectImage(false);
+
     if (imagePreview) {
       if (useCropped) {
         const croppedData64 = canvasRef.current
