@@ -168,12 +168,11 @@ const CropImage: FC<CropProps> = ({
           console.log(res);
 
           if (res!.status === 200) {
-            console.log(res.data.link);
             setTimeout(() => {
-              setPost({ ...post, file: res.data.data.link });
+              setPost({ ...post, file: res.data.link });
               setCorrectImage(true);
-              setMessage('Your image is correctly uploaded');
-            }, 500);
+              setMessage('JAR JAR');
+            }, 200);
             return false;
           }
 

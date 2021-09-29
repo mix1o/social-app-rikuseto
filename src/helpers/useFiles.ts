@@ -70,6 +70,7 @@ const uploadProfileImage = async (
     );
 
     const updateUserProfile = async (fileData: any) => {
+      console.log(fileData);
       if (fileData!.status === 200) {
         const response = await axios.put(
           `${process.env.REACT_APP_API}/user/update-avatar`,
