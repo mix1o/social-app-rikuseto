@@ -43,8 +43,8 @@ const compressImg = async (
 
       (async () => {
         try {
-          const fileData = await upload(result);
-          uploadImage(fileData);
+          // const fileData = await upload(result);
+          uploadImage('123');
         } catch (err) {
           console.log(err);
         }
@@ -73,11 +73,14 @@ const uploadProfileImage = async (
       if (fileData!.status === 403) {
         return false;
       }
-      console.log(fileData);
-      axios.put(`${process.env.REACT_APP_API}/user/update-avatar`, {
-        userId: id,
-        avatar: fileData.data.data.link,
-      });
+
+      const response = await axios.put(
+        `${process.env.REACT_APP_API}/user/update-avatar`,
+        {
+          userId: id,
+          avatar: fileData.data.data.link,
+        }
+      );
     };
 
     compressImg(croppedData, updateUserProfile);

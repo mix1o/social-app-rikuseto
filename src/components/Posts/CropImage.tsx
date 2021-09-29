@@ -166,12 +166,14 @@ const CropImage: FC<CropProps> = ({
         (async () => {
           try {
             const fileData = await upload(result);
-            console.log(fileData.data.data.link);
 
             if (fileData.status === 200) {
-              setPost({ ...post, file: fileData.data.data.link });
-              setCorrectImage(true);
-              setMessage('Your image is correctly uploaded');
+              console.log(fileData.data.data.link);
+              setTimeout(() => {
+                setPost({ ...post, file: fileData.data.data.link });
+                setCorrectImage(true);
+                setMessage('Your image is correctly uploaded');
+              }, 500);
               return false;
             }
 
