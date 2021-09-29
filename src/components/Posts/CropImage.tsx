@@ -163,26 +163,24 @@ const CropImage: FC<CropProps> = ({
       convertSize: 268000,
       success(result) {
         const formData = new FormData();
-        (async () => {
-          try {
-            const fileData = await upload(result);
 
-            if (fileData.status === 200) {
-              console.log(fileData.data.data.link);
-              setTimeout(() => {
-                setPost({ ...post, file: fileData.data.data.link });
-                setCorrectImage(true);
-                setMessage('Your image is correctly uploaded');
-              }, 500);
-              return false;
-            }
+        const fileData = upload(result).then(res => {
+          console.log(res);
 
-            setCorrectImage(false);
-            setMessage('Something went wrong. Please try again');
-          } catch (err) {
-            console.log(err);
+          if (res!.status === 200) {
+            console.log(res.data.link);
+            setTimeout(() => {
+              setPost({ ...post, file: res.data.data.link });
+              setCorrectImage(true);
+              setMessage('Your image is correctly uploaded');
+            }, 500);
+            return false;
           }
-        })();
+
+          setCorrectImage(false);
+          setMessage('Something went wrong. Please try again');
+        });
+
         formData.append('file', result);
       },
       error(err) {
