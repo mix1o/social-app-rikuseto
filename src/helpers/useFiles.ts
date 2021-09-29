@@ -55,8 +55,6 @@ const compressImg = async (
       console.log(err.message);
     },
   });
-
-  console.log(compressor);
 };
 
 const uploadProfileImage = async (
@@ -75,7 +73,7 @@ const uploadProfileImage = async (
       if (fileData!.status === 403) {
         return false;
       }
-
+      console.log(fileData);
       axios.put(`${process.env.REACT_APP_API}/user/update-avatar`, {
         userId: id,
         avatar: fileData.data.data.link,

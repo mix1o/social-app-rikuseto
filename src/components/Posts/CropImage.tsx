@@ -172,7 +172,7 @@ const CropImage: FC<CropProps> = ({
               setMessage('Something went wrong. Please try again');
               return;
             }
-
+            console.log(file);
             setPost({ ...post, file: fileData.data.data.link });
             setCorrectImage(true);
 
