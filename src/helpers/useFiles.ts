@@ -2,6 +2,7 @@ import Compressor from 'compressorjs';
 import { RefObject } from 'react';
 import { base64StringTtoFile } from './ImageFunctions';
 import { upload } from './UploadImg';
+import axios from 'axios';
 
 const validateFile = (
   fileToValidate: any,
@@ -27,32 +28,23 @@ const validateFile = (
   return { accepted: true, message: '' };
 };
 
-const compressImg = async (file: any) => {
+const compressImg = async (
+  file: File | null,
+  uploadImage: (file: any) => void
+) => {
   if (!file) return { accepted: false, message: 'Empty file' };
 
-  new Compressor(file, {
+  const compressor = new Compressor(file, {
     quality: 0.6,
     convertSize: 268000,
+
     success(result) {
       const formData = new FormData();
 
       (async () => {
         try {
           const fileData = await upload(result);
-          console.log(`log from useFiles`);
-          console.log(fileData);
-          if (fileData!.status === 403) {
-            return {
-              accepted: false,
-              message: 'Something went wrong. Please try again',
-            };
-          }
-
-          return {
-            accepted: true,
-            message: 'Your image is correctly uploaded',
-            file: fileData!.data.data.link,
-          };
+          uploadImage(fileData);
         } catch (err) {
           console.log(err);
         }
@@ -63,20 +55,34 @@ const compressImg = async (file: any) => {
       console.log(err.message);
     },
   });
+
+  console.log(compressor);
 };
 
-const uploadImage = async (
+const uploadProfileImage = async (
   canvas: RefObject<HTMLCanvasElement>,
-  image: Blob
+  image: Blob,
+  id: string
 ) => {
-  const croppedData64 = canvas.current?.toDataURL(`image/${image}`).toString();
-  if (croppedData64) {
+  const imageData64 = canvas.current?.toDataURL(`image/${image}`).toString();
+  if (imageData64) {
     const croppedData = base64StringTtoFile(
-      croppedData64,
-      `rikusetoImage.${croppedData64}`
+      imageData64,
+      `rikusetoImage.${imageData64}`
     );
 
-    const uploadedImage = await compressImg(croppedData);
+    const updateUserProfile = async (fileData: any) => {
+      if (fileData!.status === 403) {
+        return false;
+      }
+
+      axios.put(`${process.env.REACT_APP_API}/user/update-avatar`, {
+        userId: id,
+        avatar: fileData.data.data.link,
+      });
+    };
+
+    compressImg(croppedData, updateUserProfile);
   }
 };
 
@@ -86,10 +92,16 @@ export const useFiles = () => {
       return validateFile(fileToValidate, maxFileSize);
     },
     compressAndUpload(file: File | null) {
-      return compressImg(file);
+      return compressImg(file, () => {
+        console.log(123);
+      });
     },
-    uploadImage(canvas: RefObject<HTMLCanvasElement>, image: Blob) {
-      return uploadImage(canvas, image);
+    uploadProfileImage(
+      canvas: RefObject<HTMLCanvasElement>,
+      image: Blob,
+      id: string
+    ) {
+      return uploadProfileImage(canvas, image, id);
     },
   };
 };

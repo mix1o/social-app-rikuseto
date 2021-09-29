@@ -51,29 +51,6 @@ const CropImage: FC<CropProps> = ({
   const fileTypes = 'image/jpeg, image/jpg, image/png, image/gif';
 
   const { validateFile, compressAndUpload } = useFiles();
-  // const validateFile = (fileToValidate: any) => {
-  //   const fileSize = fileToValidate.size;
-  //   const fileType = fileToValidate.type;
-
-  //   if (fileSize >= maxFileSize) {
-  //     setMessage(
-  //       `File is to larger, ${(fileSize / 1000000).toFixed(
-  //         2
-  //       )}MB is to big. Max file size is ${(maxFileSize / 1000000).toFixed(
-  //         2
-  //       )}MB`
-  //     );
-  //     setCorrectImage(false);
-  //     return false;
-  //   }
-  //   if (fileType.includes(fileTypes) || fileType.length <= 0) {
-  //     setMessage('Invalid file type');
-  //     setCorrectImage(false);
-  //     return false;
-  //   }
-
-  //   return true;
-  // };
 
   const onDrop = useCallback((files, rejectedFiles) => {
     if (rejectedFiles && rejectedFiles.length >= 1) {
@@ -120,18 +97,6 @@ const CropImage: FC<CropProps> = ({
     if (!disabledModal) setDisabledModal(true);
 
     setAspect(newCrop);
-    const windowHeight = window.innerHeight / 2;
-    const image = document.querySelector('.ReactCrop__image');
-
-    if (!image) return;
-
-    if (newCrop.y + newCrop.height >= windowHeight - 50) {
-      // cropRefWrapper.current?.scrollBy(0, 10);
-    }
-
-    // console.log(`window height: ${windowHeight}`);
-    // console.log(newCrop.y + newCrop.height);
-    // console.log(`image: ${image.clientHeight}`);
   };
 
   const handleOnCropComplete = (crop: any, percentCrop: any) => {
@@ -156,20 +121,18 @@ const CropImage: FC<CropProps> = ({
             croppedData64,
             `rikusetoImage.${croppedData64}`
           );
-          setUserPickedImage(true);
 
-          const uploadedImage = await compressImg(croppedData);
-          console.log(uploadedImage);
+          compressImg(croppedData);
+
+          setUserPickedImage(true);
         }
       }
       const croppedData = base64StringTtoFile(
         imagePreview,
         `rikusetoImage.${imagePreview}`
       );
-      setUserPickedImage(true);
 
-      const uploadedImage = await compressImg(croppedData);
-      console.log(uploadedImage);
+      compressImg(croppedData);
     }
   };
 

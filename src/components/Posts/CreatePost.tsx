@@ -68,7 +68,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
         setMessage('');
         return true;
       } else {
-        setMessage('Accept your image');
+        setMessage('Choose your image');
         return false;
       }
     }
@@ -87,7 +87,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
     setCorrectFormatPost(checkCorrectPost());
 
     return () => setCorrectFormatPost(false);
-  }, [post, message, correctImage, userPickedImage]);
+  }, [post, correctImage, userPickedImage]);
 
   useEffect(() => {}, []);
 
