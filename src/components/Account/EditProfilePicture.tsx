@@ -1,20 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import ReactCrop from 'react-image-crop';
 import { image64toCanvasRef } from '../../helpers/ImageFunctions';
 import { useFiles } from '../../helpers/useFiles';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
-const EditProfilePicture = ({
-  image,
-  setImage,
-}: {
-  image: any;
-  setImage: any;
-}) => {
+const EditProfilePicture = ({ image }: { image: any; setImage: any }) => {
   const [message, setMessage] = useState('');
   const [imagePreview, setImagePreview] = useState<any>('');
   const [aspect, setAspect] = useState<any>({ aspect: 1 / 1 });
-  const { validateFile, uploadImage } = useFiles();
+  const [cookies] = useCookies();
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
+  const { validateFile, uploadProfileImage } = useFiles();
   const [img2, setImg] = useState('');
+
   const convertToBase = () => {
     const validate = validateFile(image[0], 1000000);
     setMessage(validate.message);
@@ -41,7 +40,7 @@ const EditProfilePicture = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handelUpdateProfile = () => {
-    uploadImage(canvasRef, imagePreview);
+    uploadProfileImage(canvasRef, imagePreview, user._id);
   };
 
   return (
@@ -73,6 +72,7 @@ const EditProfilePicture = ({
       />
       <canvas style={{ display: 'none' }} ref={canvasRef}></canvas>
       <button onClick={handelUpdateProfile}>ADD</button>
+      <p>{message}</p>
     </div>
   );
 };
