@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import ReactCrop from 'react-image-crop';
+import { image64toCanvasRef } from '../../helpers/ImageFunctions';
 import { useFiles } from '../../helpers/useFiles';
 
 const EditProfilePicture = ({
@@ -9,8 +11,10 @@ const EditProfilePicture = ({
   setImage: any;
 }) => {
   const [message, setMessage] = useState('');
-  const { validateFile } = useFiles();
-
+  const [imagePreview, setImagePreview] = useState<any>('');
+  const [aspect, setAspect] = useState<any>({ aspect: 1 / 1 });
+  const { validateFile, uploadImage } = useFiles();
+  const [img2, setImg] = useState('');
   const convertToBase = () => {
     const validate = validateFile(image[0], 1000000);
     setMessage(validate.message);
@@ -21,7 +25,7 @@ const EditProfilePicture = ({
       fileReader.addEventListener(
         'load',
         () => {
-          console.log(fileReader!.result!?.toString());
+          setImagePreview(fileReader!.result!?.toString());
           setMessage('');
         },
         false
@@ -33,7 +37,44 @@ const EditProfilePicture = ({
     convertToBase();
   }, []);
 
-  return <div>{message}</div>;
+  const imageCropSize = 150;
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const handelUpdateProfile = () => {
+    uploadImage(canvasRef, imagePreview);
+  };
+
+  return (
+    <div>
+      <ReactCrop
+        src={imagePreview}
+        crop={aspect}
+        onChange={(newCrop: any) => {
+          setAspect(newCrop);
+        }}
+        onComplete={(crop, pv) => {
+          image64toCanvasRef(canvasRef.current, imagePreview, pv);
+        }}
+        circularCrop={true}
+        onImageLoaded={({ height, width }) => {
+          setAspect({
+            width: width > imageCropSize ? imageCropSize : 0,
+            height: height > imageCropSize ? imageCropSize : 0,
+            x: width > imageCropSize ? width / 2 - imageCropSize / 2 : 0,
+            y: height > imageCropSize ? height / 2 - imageCropSize / 2 : 0,
+            aspect: 1,
+          });
+          return false;
+        }}
+        minHeight={Math.floor(imageCropSize / 5)}
+        minWidth={Math.floor(imageCropSize / 5)}
+        maxWidth={imageCropSize}
+        maxHeight={imageCropSize}
+      />
+      <canvas style={{ display: 'none' }} ref={canvasRef}></canvas>
+      <button onClick={handelUpdateProfile}>ADD</button>
+    </div>
+  );
 };
 
 export default EditProfilePicture;

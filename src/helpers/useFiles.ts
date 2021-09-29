@@ -1,4 +1,6 @@
 import Compressor from 'compressorjs';
+import { RefObject } from 'react';
+import { base64StringTtoFile } from './ImageFunctions';
 import { upload } from './UploadImg';
 
 const validateFile = (
@@ -33,10 +35,12 @@ const compressImg = async (file: any) => {
     convertSize: 268000,
     success(result) {
       const formData = new FormData();
+
       (async () => {
         try {
           const fileData = await upload(result);
-
+          console.log(`log from useFiles`);
+          console.log(fileData);
           if (fileData!.status === 403) {
             return {
               accepted: false,
@@ -53,13 +57,27 @@ const compressImg = async (file: any) => {
           console.log(err);
         }
       })();
-
       formData.append('file', result);
     },
     error(err) {
       console.log(err.message);
     },
   });
+};
+
+const uploadImage = async (
+  canvas: RefObject<HTMLCanvasElement>,
+  image: Blob
+) => {
+  const croppedData64 = canvas.current?.toDataURL(`image/${image}`).toString();
+  if (croppedData64) {
+    const croppedData = base64StringTtoFile(
+      croppedData64,
+      `rikusetoImage.${croppedData64}`
+    );
+
+    const uploadedImage = await compressImg(croppedData);
+  }
 };
 
 export const useFiles = () => {
@@ -69,6 +87,9 @@ export const useFiles = () => {
     },
     compressAndUpload(file: File | null) {
       return compressImg(file);
+    },
+    uploadImage(canvas: RefObject<HTMLCanvasElement>, image: Blob) {
+      return uploadImage(canvas, image);
     },
   };
 };

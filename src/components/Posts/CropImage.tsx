@@ -157,21 +157,19 @@ const CropImage: FC<CropProps> = ({
             `rikusetoImage.${croppedData64}`
           );
           setUserPickedImage(true);
-          // compressImg(croppedData);
-          const uploadedImage = await compressAndUpload(croppedData);
+
+          const uploadedImage = await compressImg(croppedData);
           console.log(uploadedImage);
-          return;
         }
-      } else {
-        const croppedData = base64StringTtoFile(
-          imagePreview,
-          `rikusetoImage.${imagePreview}`
-        );
-        setUserPickedImage(true);
-        // compressImg(croppedData);
-        const uploadedImage = await compressAndUpload(croppedData);
-        console.log(uploadedImage);
       }
+      const croppedData = base64StringTtoFile(
+        imagePreview,
+        `rikusetoImage.${imagePreview}`
+      );
+      setUserPickedImage(true);
+
+      const uploadedImage = await compressImg(croppedData);
+      console.log(uploadedImage);
     }
   };
 
@@ -194,51 +192,39 @@ const CropImage: FC<CropProps> = ({
     setAspect({ aspect: ratio });
   };
 
-  // const compressImg = async (file: any) => {
-  //   if (!file) return;
-  //   // compressAndUpload(file);
-  //   new Compressor(file, {
-  //     quality: 0.6,
-  //     convertSize: 268000,
-  //     success(result) {
-  //       const formData = new FormData();
-  //       const imgurResponse = upload(result).then(res => {
-  //         if (res!.status === 403) {
-  //           setCorrectImage(false);
-  //           setMessage('Something went wrong. Please try again');
-  //           return;
-  //         }
-  //         setTimeout(() => {
-  //           setPost({ ...post, file: res!.data.data.link });
-  //         }, 1000);
-  //         setCorrectImage(true);
-  //         setMessage('Your image is correctly uploaded');
-  //       });
+  const compressImg = async (file: any) => {
+    if (!file) return { accepted: false, message: 'Empty file' };
 
-  //       // if (imgurResponse) {
-  //       //   imgurResponse.then(res => {
-  //       //     // #FIXME Properly type response
-  //       //     if (res!.status === 403) {
-  //       //       setCorrectImage(false);
-  //       //       setMessage('Something went wrong. Please try again');
-  //       //       return;
-  //       //     }
-  //       //     setTimeout(() => {
-  //       //       setPost({ ...post, file: res!.data.data.link });
-  //       //     }, 1000);
-  //       //     setCorrectImage(true);
-  //       //     setMessage('Your image is correctly uploaded');
-  //       //   });
-  //       // }
+    new Compressor(file, {
+      quality: 0.6,
+      convertSize: 268000,
+      success(result) {
+        const formData = new FormData();
+        (async () => {
+          try {
+            const fileData = await upload(result);
+            if (fileData!.status === 403) {
+              setCorrectImage(false);
+              setMessage('Something went wrong. Please try again');
+              return;
+            }
 
-  //       // formData.append('file', result);
-  //     },
-  //     error(err) {
-  //       console.log(err.message);
-  //     },
-  //   });
-  // };
-
+            setTimeout(() => {
+              setPost({ ...post, file: fileData.data.data.link });
+            }, 1000);
+            setCorrectImage(true);
+            setMessage('Your image is correctly uploaded');
+          } catch (err) {
+            console.log(err);
+          }
+        })();
+        formData.append('file', result);
+      },
+      error(err) {
+        console.log(err.message);
+      },
+    });
+  };
   const checkHeight = () => {
     return {
       maxHeight: `${(window.innerHeight / 2).toString()}px`,
