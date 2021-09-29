@@ -57,6 +57,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
   };
 
   const checkCorrectPost = () => {
+    console.log(post);
     if (userPickedImage) {
       if (
         post!.headline!.length >= 3 &&

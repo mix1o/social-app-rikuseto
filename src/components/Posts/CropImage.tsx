@@ -166,16 +166,16 @@ const CropImage: FC<CropProps> = ({
         (async () => {
           try {
             const fileData = await upload(result);
+
             if (fileData!.status === 403) {
               setCorrectImage(false);
               setMessage('Something went wrong. Please try again');
               return;
             }
 
-            setTimeout(() => {
-              setPost({ ...post, file: fileData.data.data.link });
-            }, 1000);
+            setPost({ ...post, file: fileData.data.data.link });
             setCorrectImage(true);
+
             setMessage('Your image is correctly uploaded');
           } catch (err) {
             console.log(err);
