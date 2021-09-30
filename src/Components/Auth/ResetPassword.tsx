@@ -7,6 +7,7 @@ import TextField from '../FormFields/TextField';
 
 const ResetPassword: FC = () => {
   const [, send] = useActor(authService);
+
   return (
     <>
       <main className="auth__main">

@@ -5,35 +5,15 @@ import TextField from '../FormFields/TextField';
 import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
 import { AuthSchema2 as AuthSchema } from '../../Validations/AuthSchemas';
-import { useState } from 'react';
 
-import { BaseUserData, MessageI } from '../../Interfaces/auth/authInterface';
+import { BaseUserData } from '../../Interfaces/auth/authInterface';
 import { useAuth } from '../../Hooks/useAuth';
 
 const SignIn: FC = () => {
   const [, send] = useActor(authService);
-  const { signIn, loading } = useAuth();
+  const { signIn, loading, message } = useAuth();
 
-  const [message, setMessage] = useState<MessageI>({
-    message: '',
-    status: 0,
-  });
-
-  const handleLogIn = async (values: BaseUserData) => {
-    try {
-      const response: any = await signIn(values);
-
-      setMessage({
-        message: response.message,
-        status: response.status,
-      });
-    } catch (err: any) {
-      setMessage({
-        message: err,
-        status: 0,
-      });
-    }
-  };
+  const handleLogIn = async (values: BaseUserData) => await signIn(values);
 
   return (
     <>
