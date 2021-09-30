@@ -1,58 +1,50 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import ReactCrop from 'react-image-crop';
 import { image64toCanvasRef } from '../../helpers/ImageFunctions';
 import { useFiles } from '../../helpers/useFiles';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 
-const EditProfilePicture = ({ image }: { image: any; setImage: any }) => {
-  const [message, setMessage] = useState('');
-  const [imagePreview, setImagePreview] = useState<any>('');
-  const [aspect, setAspect] = useState<any>({ aspect: 1 / 1 });
+const EditProfilePicture = ({
+  image,
+  closeModal,
+}: {
+  image: string;
+  closeModal: () => void;
+}) => {
+  const [aspect, setAspect] = useState<ReactCrop.Crop>({ aspect: 1 / 1 });
+  const [disableBtn, setDisableBtn] = useState(false);
+
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
-  const { validateFile, uploadProfileImage } = useFiles();
-  const [img2, setImg] = useState('');
-
-  const convertToBase = () => {
-    const validate = validateFile(image[0], 1000000);
-    setMessage(validate.message);
-    if (validate.accepted) {
-      const fileReader = new FileReader();
-
-      fileReader.readAsDataURL(image[0]);
-      fileReader.addEventListener(
-        'load',
-        () => {
-          setImagePreview(fileReader!.result!?.toString());
-          setMessage('');
-        },
-        false
-      );
-    }
-  };
-
-  useEffect(() => {
-    convertToBase();
-  }, []);
+  const { uploadProfileImage } = useFiles();
 
   const imageCropSize = 150;
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const handelUpdateProfile = () => {
-    uploadProfileImage(canvasRef, imagePreview, user._id);
+  const handelUpdateProfile = async () => {
+    setDisableBtn(true);
+    const t = await uploadProfileImage(canvasRef, image, user._id);
+    console.log(t);
   };
 
   return (
-    <div>
+    <section className="profile">
+      <div className="profile__header">
+        <h3 className="profile__title">Crop your new profile picture</h3>
+        <button className="profile__btn--close" onClick={closeModal}>
+          <i className="fas fa-times"></i>
+        </button>
+      </div>
+
       <ReactCrop
-        src={imagePreview}
+        src={image}
         crop={aspect}
-        onChange={(newCrop: any) => {
+        onChange={newCrop => {
           setAspect(newCrop);
         }}
         onComplete={(crop, pv) => {
-          image64toCanvasRef(canvasRef.current, imagePreview, pv);
+          image64toCanvasRef(canvasRef.current, image, pv);
         }}
         circularCrop={true}
         onImageLoaded={({ height, width }) => {
@@ -71,9 +63,15 @@ const EditProfilePicture = ({ image }: { image: any; setImage: any }) => {
         maxHeight={imageCropSize}
       />
       <canvas style={{ display: 'none' }} ref={canvasRef}></canvas>
-      <button onClick={handelUpdateProfile}>ADD</button>
-      <p>{message}</p>
-    </div>
+
+      <button
+        onClick={handelUpdateProfile}
+        className="profile__btn--update"
+        disabled={disableBtn}
+      >
+        ADD
+      </button>
+    </section>
   );
 };
 

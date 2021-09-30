@@ -7,13 +7,39 @@ import Header from '../Header/Header';
 import EditProfilePicture from './EditProfilePicture';
 import { AnimatePresence as Presence } from 'framer-motion';
 import Floater from 'react-floater';
+import { useFiles } from '../../helpers/useFiles';
 const Account: FC = () => {
-  const [cookies, , removeCookie] = useCookies();
-  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const [openFloater, setOpenFloater] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
-  const [image, setImage] = useState<FileList>();
+  const [message, setMessage] = useState('');
+  const [image, setImage] = useState<string>('');
+
+  const [cookies, , removeCookie] = useCookies();
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
+  const { validateFile } = useFiles();
+
   const closeHandler = () => setOpenEdit(prevState => !prevState);
+
+  const convertToBase = (image: FileList) => {
+    setOpenFloater(false);
+    const validate = validateFile(image[0], 1000000);
+    setMessage(validate.message);
+    if (validate.accepted) {
+      const fileReader = new FileReader();
+
+      fileReader.readAsDataURL(image[0]);
+
+      fileReader.addEventListener(
+        'load',
+        () => {
+          setImage(fileReader!.result!?.toString());
+          setMessage('');
+          closeHandler();
+        },
+        false
+      );
+    }
+  };
 
   return (
     <>
@@ -22,6 +48,7 @@ const Account: FC = () => {
         <div className="account">
           <div className="account__container-avatar">
             <div className="account__avatar">
+              <p>{message}</p>
               <img
                 className="account__image"
                 src={user.avatar}
@@ -58,9 +85,7 @@ const Account: FC = () => {
                       accept="image/jpeg, image/jpg, image/png, image/gif"
                       multiple={false}
                       onChange={e => {
-                        if (e.target.files) setImage(e.target.files);
-                        closeHandler();
-                        setOpenFloater(false);
+                        if (e.target.files) convertToBase(e.target.files);
                       }}
                     />
                     Upload a photo...
@@ -79,7 +104,7 @@ const Account: FC = () => {
             <Presence>
               {openEdit && (
                 <BlurredContent closeHandler={closeHandler}>
-                  <EditProfilePicture image={image} setImage={setImage} />
+                  <EditProfilePicture image={image} closeModal={closeHandler} />
                 </BlurredContent>
               )}
             </Presence>
