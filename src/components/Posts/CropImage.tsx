@@ -42,15 +42,15 @@ const CropImage: FC<CropProps> = ({
   const [croppedImagePV, setCroppedImagePV] = useState('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cropRefWrapper = useRef<HTMLDivElement>(null);
-  const cropRef = useRef<ReactCrop>(null);
   const [{ disabledModal }, { setDisabledModal }] = useCounter();
+  const [disableBtn, setDisablelBtn] = useState(false);
 
   const [openCrop, setOpenCrop] = useState(false);
 
   const maxFileSize = 5000000;
   const fileTypes = 'image/jpeg, image/jpg, image/png, image/gif';
 
-  const { validateFile, compressAndUpload } = useFiles();
+  const { validateFile } = useFiles();
 
   const onDrop = useCallback((files, rejectedFiles) => {
     if (rejectedFiles && rejectedFiles.length >= 1) {
@@ -106,6 +106,7 @@ const CropImage: FC<CropProps> = ({
   };
 
   const handleReverseFile = async (useCropped: boolean = false) => {
+    setDisablelBtn(true);
     setMessage('Loading image');
     setCorrectImage(false);
 
@@ -144,6 +145,7 @@ const CropImage: FC<CropProps> = ({
     setOpenCrop(false);
     setUserPickedImage(false);
     setCorrectImage(false);
+    setDisablelBtn(false);
     setCroppedImagePV('');
     setImagePreview('');
     setMessage('');
@@ -165,8 +167,6 @@ const CropImage: FC<CropProps> = ({
         const formData = new FormData();
 
         const fileData = upload(result).then(res => {
-          console.log(res);
-
           if (res!.status === 200) {
             setTimeout(() => {
               setPost({ ...post, file: res.data.link });
@@ -177,6 +177,7 @@ const CropImage: FC<CropProps> = ({
           }
 
           setCorrectImage(false);
+          setDisablelBtn(false);
           setMessage('Something went wrong. Please try again');
         });
 
@@ -186,11 +187,6 @@ const CropImage: FC<CropProps> = ({
         console.log(err.message);
       },
     });
-  };
-  const checkHeight = () => {
-    return {
-      maxHeight: `${(window.innerHeight / 2).toString()}px`,
-    };
   };
 
   return (
@@ -248,11 +244,10 @@ const CropImage: FC<CropProps> = ({
               onChange={handleCropChange}
               ruleOfThirds={true}
               disabled={!openCrop}
-              ref={cropRef}
             />
 
             {croppedImagePV && (
-              <div style={checkHeight()} className="crop-image__canvas-wrapper">
+              <div className="crop-image__canvas-wrapper">
                 <canvas
                   className="crop-image__preview-canvas"
                   ref={canvasRef}
@@ -268,7 +263,7 @@ const CropImage: FC<CropProps> = ({
               <button
                 className="crop-image__btn"
                 onClick={() => handleReverseFile(true)}
-                disabled={correctImage}
+                disabled={disableBtn}
               >
                 Use Cropped Image
               </button>
@@ -276,7 +271,7 @@ const CropImage: FC<CropProps> = ({
             <button
               className=" crop-image__btn--full"
               onClick={() => handleReverseFile(false)}
-              disabled={correctImage}
+              disabled={disableBtn}
             >
               {openCrop ? 'Use Original Image' : 'Use This image'}
             </button>
