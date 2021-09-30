@@ -1,4 +1,4 @@
-import SearchedData from '../components/Searching/SearchedData';
+import SearchedData from '../Components/Searching/SearchedData';
 
 export const SearchedDataRoute = {
   component: SearchedData,

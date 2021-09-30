@@ -1,4 +1,4 @@
-import Profile from '../components/Profile/Profile';
+import Profile from '../Components/Profile/Profile';
 
 export const ProfileRoutes = {
   component: Profile,

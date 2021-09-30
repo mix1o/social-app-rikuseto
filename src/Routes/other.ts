@@ -1,4 +1,4 @@
-import NotFound from '../components/NotFound/NotFound';
+import NotFound from '../Components/NotFound/NotFound';
 
 export const NotFoundRoute = {
   component: NotFound,

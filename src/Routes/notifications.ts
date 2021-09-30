@@ -1,4 +1,4 @@
-import Notifications from '../components/UserNotifications/Notifications';
+import Notifications from '../Components/UserNotifications/Notifications';
 
 export const NotificationRoutes = {
   component: Notifications,

@@ -1,5 +1,5 @@
-import Conversations from '../components/Conversations/Conversations';
-import SingleConversation from '../components/Conversations/SingleConversation';
+import Conversations from '../Components/Conversations/Conversations';
+import SingleConversation from '../Components/Conversations/SingleConversation';
 
 export const ConversationsRoutes = {
   component: Conversations,

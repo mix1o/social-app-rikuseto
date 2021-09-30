@@ -1,4 +1,4 @@
-import Categories from '../components/Account/Categories';
+import Categories from '../Components/Account/Categories';
 
 export const CategoriesRoutes = {
   component: Categories,

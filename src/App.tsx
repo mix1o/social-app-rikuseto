@@ -6,12 +6,11 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { Routes } from './Routes';
-import Menu from './components/Navigation/Menu';
+import Menu from './Components/Navigation/Menu';
 import { useCookies } from 'react-cookie';
 import { useCounter } from './store/sub';
-import { CookieUser } from './interfaces/auth/authInterface';
-import { createNotificationSubscription } from './Notifications/push-notification';
-import Details from './components/Account/Details/Details';
+import { CookieUser } from './Interfaces/auth/authInterface';
+import { createNotificationSubscription } from './Hooks/Notifications/push-notification';
 
 const App: FC = () => {
   const html = document.querySelector('html');
