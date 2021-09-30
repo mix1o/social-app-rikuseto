@@ -52,6 +52,9 @@
     position: relative;
     overflow-y: scroll;
   }
+  &__canvas-wrapper {
+    max-height: 50vh;
+  }
   &__open--crop {
     position: absolute;
     top: 0;

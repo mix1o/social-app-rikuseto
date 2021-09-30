@@ -231,7 +231,7 @@ h6 {
   top: 0;
   left: 0;
   margin-bottom: 2rem;
-  z-index: 3;
+  z-index: 10;
 }
 .header__label {
   display: flex;
@@ -966,6 +966,9 @@ h6 {
   position: relative;
   overflow-y: scroll;
 }
+.crop-image__canvas-wrapper {
+  max-height: 50vh;
+}
 .crop-image__open--crop {
   position: absolute;
   top: 0;
@@ -1181,6 +1184,68 @@ h6 {
   background: var(--light-bg-600);
   margin-bottom: 0;
   padding: 1.5rem 1rem;
+}
+
+.profile {
+  max-width: 450px;
+  background-color: var(--light-bg-600);
+}
+.profile__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  color: var(--font-dark-300);
+}
+.profile__title {
+  margin: 0;
+  padding-block: 1rem;
+  font-size: 1.6rem;
+  font-weight: 400;
+  text-align: left;
+  color: inherit;
+}
+.profile__btn--update {
+  background: #753ee0;
+  color: var(--font-light-300);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 1.2rem;
+  font-size: 1.6rem;
+  font-size: 1.4rem;
+  min-width: calc(100% - 2rem);
+  margin: 1rem;
+  padding: 0.5rem;
+}
+.profile__btn--update:hover {
+  background: #471a9e;
+  outline: 1px solid #946ae7;
+  cursor: pointer;
+}
+.profile__btn--update:active {
+  background: #946ae7;
+  outline: 1px solid #471a9e;
+  cursor: pointer;
+}
+.profile__btn--update:disabled {
+  background: #d3c2f5;
+  outline: 1px solid;
+  cursor: not-allowed;
+}
+.profile__btn--close {
+  border: none;
+  background: transparent;
+  font-size: 1.4rem;
+  color: inherit;
+  cursor: pointer;
+}
+.profile__btn--close:hover {
+  transform: scale(1.1);
+  color: var(--main-bg-500);
+}
+.profile .ReactCrop {
+  border-block: 1px solid var(--light-bg-700);
 }
 
 .textarea {
