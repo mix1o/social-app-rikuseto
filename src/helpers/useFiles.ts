@@ -56,7 +56,7 @@ const compressImg = async (
 
 const uploadProfileImage = async (
   canvas: RefObject<HTMLCanvasElement>,
-  image: Blob,
+  image: string,
   id: string
 ) => {
   const imageData64 = canvas.current?.toDataURL(`image/${image}`).toString();
@@ -68,7 +68,6 @@ const uploadProfileImage = async (
 
     const updateUserProfile = async (status: number, link: string) => {
       if (status === 200) {
-        console.log(link);
         const response = await axios.put(
           `${process.env.REACT_APP_API}/user/update-avatar`,
           {
@@ -76,9 +75,9 @@ const uploadProfileImage = async (
             avatar: link,
           }
         );
-        return true;
+        return { message: 'Image updated successfully', status: true };
       }
-      return false;
+      return { message: 'Image updated successfully', status: false };
     };
 
     compressImg(croppedData, updateUserProfile);
@@ -97,7 +96,7 @@ export const useFiles = () => {
     },
     uploadProfileImage(
       canvas: RefObject<HTMLCanvasElement>,
-      image: Blob,
+      image: string,
       id: string
     ) {
       return uploadProfileImage(canvas, image, id);

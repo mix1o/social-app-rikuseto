@@ -1,3 +1,5 @@
+import { RefObject } from 'react';
+
 export const base64StringTtoFile = (base64String: string, filename: string) => {
   const arr = base64String.split(',');
 
@@ -24,28 +26,32 @@ export function extractImageFileExtensionFromBase64(base64Data: string) {
 
 export const image64toCanvasRef = (
   canvasRef: any,
-  image64: any,
+  image64: string,
   percentCrop: any
 ) => {
-  const canvas = canvasRef;
-  const ctx = canvas.getContext('2d');
-  const image = new Image();
-  image.src = image64;
+  if (canvasRef !== null) {
+    const canvas = canvasRef;
+    const ctx = canvas.getContext('2d');
+    const image = new Image();
+    image.src = image64;
 
-  canvas.width = (percentCrop.width * image.width) / 100;
-  canvas.height = (percentCrop.height * image.height) / 100;
+    canvas.width = (percentCrop.width * image.width) / 100;
+    canvas.height = (percentCrop.height * image.height) / 100;
 
-  image.onload = () => {
-    ctx.drawImage(
-      image,
-      (percentCrop.x * image.width) / 100,
-      (percentCrop.y * image.height) / 100,
-      (percentCrop.width * image.width) / 100,
-      (percentCrop.height * image.height) / 100,
-      0,
-      0,
-      (percentCrop.width * image.width) / 100,
-      (percentCrop.height * image.height) / 100
-    );
-  };
+    image.onload = () => {
+      if (ctx) {
+        ctx.drawImage(
+          image,
+          (percentCrop.x * image.width) / 100,
+          (percentCrop.y * image.height) / 100,
+          (percentCrop.width * image.width) / 100,
+          (percentCrop.height * image.height) / 100,
+          0,
+          0,
+          (percentCrop.width * image.width) / 100,
+          (percentCrop.height * image.height) / 100
+        );
+      }
+    };
+  }
 };
