@@ -244,14 +244,11 @@ const CropImage: FC<CropProps> = ({
               ruleOfThirds={true}
               disabled={!openCrop}
             />
-
             {croppedImagePV && (
-              <div className="crop-image__canvas-wrapper">
-                <canvas
-                  className="crop-image__preview-canvas"
-                  ref={canvasRef}
-                ></canvas>
-              </div>
+              <canvas
+                className="crop-image__preview-canvas"
+                ref={canvasRef}
+              ></canvas>
             )}
           </div>
           <div className="crop-image__buttons">
