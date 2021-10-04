@@ -12,20 +12,18 @@ interface responseInterface {
 export const handleFetch = async (
   value: string,
   limit: string
-): Promise<responseInterface | undefined> => {
-  try {
-    const params = new URLSearchParams({
+): Promise<{ data: responseInterface; status: number }> => {
+  const params = new URLSearchParams();
+
+  const response = await axios.get(`${process.env.REACT_APP_API}/search`, {
+    params: {
       limit,
       q: value,
-    });
-
-    const response = await axios.get(
-      `${process.env.REACT_APP_API}/search?${params.toString()}`
-    );
-
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    return undefined;
-  }
+    },
+  });
+  console.log(response.status);
+  return {
+    data: response.data,
+    status: response.status,
+  };
 };
