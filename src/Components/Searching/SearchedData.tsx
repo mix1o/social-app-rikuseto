@@ -27,8 +27,13 @@ const SearchedData: FC = () => {
   >();
 
   const fetchData = async () => {
-    const response = await handleFetch(value, '');
+    const { data, status } = await handleFetch(value, '');
+
+    if (status === 200) {
+      setResponseData(data);
+    }
   };
+
   useEffect(() => {
     fetchData();
   }, [value]);

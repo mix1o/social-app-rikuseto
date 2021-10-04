@@ -87,13 +87,19 @@ const Header: FC = () => {
   >();
 
   const [loading, setLoading] = useState<boolean>(true);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
+    setMessage('');
     const delay = setTimeout(async () => {
       if (value.length > 0) {
-        const data = await handleFetch(value, '3');
-        if (data) setLoading(false);
-        setResponseData(data);
+        const { data, status } = await handleFetch(value, '3');
+        if (data && status === 200) {
+          setResponseData(data);
+        }
+
+        setLoading(false);
+        if (status === 203) setMessage('Not found');
       }
     }, 1000);
 
@@ -204,7 +210,9 @@ const Header: FC = () => {
             {hideElem && loading && (
               <p className="header__loading">Loading...</p>
             )}
-
+            {hideElem && !loading && (
+              <p className="header__loading">{message}</p>
+            )}
             {!hideElem && (
               <>
                 <section className="header__section">
