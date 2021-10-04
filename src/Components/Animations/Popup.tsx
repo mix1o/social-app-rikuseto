@@ -48,7 +48,7 @@ const BlurredBG: FC<{
   handler: () => void;
 }> = ({ children, handler }) => {
   const [{ disabledModal }] = useCounter();
-  console.log(disabledModal);
+
   const checkDisabled = () => {
     if (disabledModal) return null;
 
