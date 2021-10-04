@@ -3,12 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router';
-import { Event, SingleOrArray } from 'xstate';
-import {
-  authService,
-  MachineEvents,
-} from '../Components/Auth/AuthStateMachine';
-import { createParams } from '../Helpers/createParams';
+import { authService } from '../Components/Auth/AuthStateMachine';
 import {
   BaseUserData,
   CookieUser,
@@ -22,7 +17,7 @@ interface ISignInResponse {
 }
 
 export const useAuth = () => {
-  const [, setCookie] = useCookies();
+  const [, setCookie, removeCookie] = useCookies();
   const history = useHistory();
   const [, send] = useActor(authService);
   const [loading, setLoading] = useState(false);
@@ -44,7 +39,6 @@ export const useAuth = () => {
   const checkResponse = (
     status: number,
     message: string,
-
     user?: CookieUser
   ) => {
     setLoading(false);
@@ -65,14 +59,15 @@ export const useAuth = () => {
   const signIn = async (values: BaseUserData) => {
     setLoading(true);
 
-    const params = createParams(values);
-
     try {
       const {
         status,
         data: { message, user },
       }: AxiosResponse<ISignInResponse> = await axios.get(
-        `${process.env.REACT_APP_API}/auth?${params}`
+        `${process.env.REACT_APP_API}/auth`,
+        {
+          params: values,
+        }
       );
 
       checkResponse(status, message, user);
@@ -102,8 +97,45 @@ export const useAuth = () => {
           send('SIGN_IN');
         }, 2000);
       }
-    } catch (err) {
-      return {};
+    } catch (err: any) {
+      setMessage({ message: err, status: err.status });
+    }
+  };
+
+  const removeAccount = async ({
+    email,
+    password,
+    userId,
+  }: {
+    email: string;
+    password: string;
+    userId: string;
+  }) => {
+    setLoading(true);
+
+    try {
+      const {
+        status,
+        data: { message },
+      }: AxiosResponse<IMessage> = await axios.delete(
+        `${process.env.REACT_APP_API}/auth`,
+        {
+          params: {
+            email,
+            password,
+            userId,
+          },
+        }
+      );
+      console.log(message);
+      setMessage({ message, status });
+      setLoading(false);
+      // if (status === 200) {
+      //   setTimeout(() => removeCookie('user'), 1000);
+      //   history.push('/');
+      // }
+    } catch (err: any) {
+      setMessage({ message: err, status: err.status });
     }
   };
 
@@ -112,5 +144,6 @@ export const useAuth = () => {
     loading,
     message,
     signUp,
+    removeAccount,
   };
 };
