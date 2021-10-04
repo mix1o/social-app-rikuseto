@@ -63,11 +63,9 @@ export const useAuth = () => {
       const {
         status,
         data: { message, user },
-      }: AxiosResponse<ISignInResponse> = await axios.get(
-        `${process.env.REACT_APP_API}/auth`,
-        {
-          params: values,
-        }
+      }: AxiosResponse<ISignInResponse> = await axios.post(
+        `${process.env.REACT_APP_API}/auth/login`,
+        values
       );
 
       checkResponse(status, message, user);
@@ -83,7 +81,7 @@ export const useAuth = () => {
         data: { message },
         status,
       }: AxiosResponse<IMessage> = await axios.post(
-        `${process.env.REACT_APP_API}/auth`,
+        `${process.env.REACT_APP_API}/auth/create-account`,
         values
       );
 
