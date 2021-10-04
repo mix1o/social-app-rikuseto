@@ -65,3 +65,30 @@ export const DetailsValidation = (type: ToUpdate, value: string) => {
       return null;
   }
 };
+
+export const deleteAccountSchema = (email: string) => {
+  const emailRegexp = new RegExp(email);
+
+  return yup.object({
+    email: yup
+      .string()
+      .email('Email is not  valid')
+      .matches(emailRegexp, 'Email must match account email')
+      .defined('Email is required'),
+    password: yup
+      .string()
+      .min(8, 'Password to short! Must be at least 8 characters long')
+      .matches(
+        /^(?=.*?[0-9])(?=.*?[a-z])(?=.*?[A-Z])/,
+        'Password must contains at least one lower and uppercase letter and one number'
+      )
+      .defined('Password is required'),
+    verifyText: yup
+      .string()
+      .matches(
+        /(delete my account)/i,
+        'Field must match the following: delete my account'
+      )
+      .defined('Type: delete my account'),
+  });
+};

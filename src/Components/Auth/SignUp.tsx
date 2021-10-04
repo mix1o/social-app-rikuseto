@@ -1,33 +1,17 @@
 import { Form, Formik } from 'formik';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import TextField from '../FormFields/TextField';
 import { AuthSchema } from '../../Validations/AuthSchemas';
-import axios from 'axios';
 import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
-import { MessageI, UserAccountData } from '../../Interfaces/auth/authInterface';
+import { useAuth } from '../../Hooks/useAuth';
+import { CreateUser } from '../../Interfaces/auth/authInterface';
 
 const SignUp: FC = () => {
   const [, send] = useActor(authService);
-  const [message, setMessage] = useState<MessageI>({
-    message: '',
-    status: 0,
-  });
+  const { loading, message, signUp } = useAuth();
 
-  const createAccount = (values: UserAccountData) => {
-    console.log(values);
-    axios
-      .post(`${process.env.REACT_APP_API}/auth/create-account`, values)
-      .then(res => {
-        setMessage({ message: res.data.message, status: res.status });
-        if (res.status === 200) {
-          setTimeout(() => {
-            send('SIGN_IN');
-          }, 1000);
-        }
-      })
-      .catch(e => console.log(e));
-  };
+  const createAccount = async (values: CreateUser) => await signUp(values);
 
   return (
     <>
@@ -84,7 +68,11 @@ const SignUp: FC = () => {
               id="password2"
             />
 
-            <button type="submit" className="btn auth-form__submit">
+            <button
+              type="submit"
+              className="btn auth-form__submit"
+              disabled={loading}
+            >
               Sign Up
             </button>
           </Form>

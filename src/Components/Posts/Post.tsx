@@ -125,12 +125,7 @@ const Post: FC<PostInterfaceExtended> = ({
 
   return (
     <>
-      {headline &&
-      author?.firstName &&
-      author?.lastName &&
-      comment &&
-      category &&
-      author?.avatar ? (
+      {headline && comment && category ? (
         <section
           data-testid="post"
           className={`post ${disableComments ? 'post__mBottom' : ''}`}
@@ -197,7 +192,11 @@ const Post: FC<PostInterfaceExtended> = ({
                       : `/profile/${userId}`
                   }
                 >
-                  {author?.firstName} {author?.lastName}
+                  {author?.status === 200 ? (
+                    (author?.firstName, author?.lastName)
+                  ) : (
+                    <em className="removed-author">(Deleted)</em>
+                  )}
                 </Link>
               </p>
 
@@ -324,7 +323,11 @@ const Post: FC<PostInterfaceExtended> = ({
             <>
               <p className="post__top-comment">
                 <span className="post__top-author">
-                  {commentAuthor?.firstName}
+                  {commentAuthor?.status === 200 ? (
+                    commentAuthor?.firstName
+                  ) : (
+                    <em className="removed-author">(Deleted)</em>
+                  )}
                 </span>
 
                 <span className="post__top-date">

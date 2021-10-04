@@ -1,12 +1,12 @@
 import { FC, useEffect } from 'react';
-import SignIn from './SignIn';
-import SignUp from './SignUp';
 import { useActor } from '@xstate/react';
-import { authService } from './AuthStateMachine';
-import ResetPassword from './ResetPassword';
 import { useCookies } from 'react-cookie';
-import { CookieUser } from '../../Interfaces/auth/authInterface';
 import { useHistory } from 'react-router-dom';
+import { authService } from '../Components/Auth/AuthStateMachine';
+import { CookieUser } from '../Interfaces/auth/authInterface';
+import SignIn from '../Components/Auth/SignIn';
+import SignUp from '../Components/Auth/SignUp';
+import ResetPassword from '../Components/Auth/ResetPassword';
 
 const Auth: FC = () => {
   const [current] = useActor(authService);

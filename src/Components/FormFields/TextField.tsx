@@ -32,7 +32,8 @@ const TextField: FC<FieldProps> = ({ ...rest }) => {
         className="auth-form__label"
         focus={focus || meta.touched || meta.value}
       >
-        {rest.label} <span className="auth-form__error">{error}</span>
+        {error ? null : rest.label}
+        <span className="auth-form__error">{error}</span>
       </Placeholder>
       <input
         {...rest}

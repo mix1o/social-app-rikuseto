@@ -1,8 +1,15 @@
+import { useActor } from '@xstate/react';
 import axios, { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router';
-import { BaseUserData, CookieUser } from '../Interfaces/auth/authInterface';
+import { authService } from '../Components/Auth/AuthStateMachine';
+import {
+  BaseUserData,
+  CookieUser,
+  CreateUser,
+  IMessage,
+} from '../Interfaces/auth/authInterface';
 
 interface ISignInResponse {
   message: string;
@@ -10,13 +17,22 @@ interface ISignInResponse {
 }
 
 export const useAuth = () => {
-  const [, setCookie] = useCookies();
+  const [, setCookie, removeCookie] = useCookies();
   const history = useHistory();
+  const [, send] = useActor(authService);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<IMessage>({
+    message: '',
+    status: 0,
+  });
 
   useEffect(() => {
     return () => {
       setLoading(false);
+      setMessage({
+        message: '',
+        status: 0,
+      });
     };
   }, []);
 
@@ -26,46 +42,108 @@ export const useAuth = () => {
     user?: CookieUser
   ) => {
     setLoading(false);
-    if (status === 203) return { message: message, status: status };
 
     if (status === 200) {
-      setCookie('user', user, { path: '/' });
+      if (user) setCookie('user', user, { path: '/' });
 
       if (window.location.href.includes('/auth')) history.push('/');
 
       setTimeout(() => {
         window.location.reload();
       }, 500);
-      return { message: message, status: status };
+      setMessage({ message: message, status: status });
     }
-    return { message: message, status: status };
+    setMessage({ message: message, status: status });
   };
 
   const signIn = async (values: BaseUserData) => {
-    const params = new URLSearchParams({
-      email: values.email,
-      password: values.password,
-    });
     setLoading(true);
+
     try {
       const {
         status,
         data: { message, user },
       }: AxiosResponse<ISignInResponse> = await axios.get(
-        `${process.env.REACT_APP_API}/auth?${params.toString()}`
+        `${process.env.REACT_APP_API}/auth`,
+        {
+          params: values,
+        }
       );
-      const result = checkResponse(status, message, user);
 
-      return result;
+      checkResponse(status, message, user);
     } catch (err: any) {
-      return {
-        error: err,
-      };
+      setMessage({ message: err, status: err.status });
+    }
+  };
+
+  const signUp = async (values: CreateUser) => {
+    setLoading(true);
+    try {
+      const {
+        data: { message },
+        status,
+      }: AxiosResponse<IMessage> = await axios.post(
+        `${process.env.REACT_APP_API}/auth`,
+        values
+      );
+
+      setMessage({
+        message,
+        status,
+      });
+
+      if (status === 200) {
+        setTimeout(() => {
+          send('SIGN_IN');
+        }, 2000);
+      }
+    } catch (err: any) {
+      setMessage({ message: err, status: err.status });
+    }
+  };
+
+  const removeAccount = async ({
+    email,
+    password,
+    userId,
+  }: {
+    email: string;
+    password: string;
+    userId: string;
+  }) => {
+    setLoading(true);
+
+    try {
+      const {
+        status,
+        data: { message },
+      }: AxiosResponse<IMessage> = await axios.delete(
+        `${process.env.REACT_APP_API}/auth`,
+        {
+          params: {
+            email,
+            password,
+            userId,
+          },
+        }
+      );
+      console.log(message);
+      setMessage({ message, status });
+      setLoading(false);
+      // if (status === 200) {
+      //   setTimeout(() => removeCookie('user'), 1000);
+      //   history.push('/');
+      // }
+    } catch (err: any) {
+      setMessage({ message: err, status: err.status });
     }
   };
 
   return {
     signIn,
     loading,
+    message,
+    signUp,
+    removeAccount,
   };
 };

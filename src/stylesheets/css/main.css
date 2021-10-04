@@ -1670,6 +1670,11 @@ h6 {
   color: #fff;
 }
 
+.removed-author {
+  font-weight: 300;
+  color: var(--font-light-400);
+}
+
 .post:last-child {
   margin-bottom: 10rem;
 }
@@ -2377,7 +2382,6 @@ h6 {
 }
 .details__section {
   border-bottom: 1px solid var(--light-bg-700);
-  max-width: 550px;
   margin: 0 auto;
 }
 .details__personal-section {
@@ -2480,6 +2484,33 @@ h6 {
   margin-right: 3rem;
   color: var(--font-dark-600);
   font-size: 1.2rem;
+}
+.details__btn--remove {
+  background: #753ee0;
+  color: var(--font-light-300);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 1.2rem;
+  font-size: 1.6rem;
+  font-size: 1.4rem;
+  display: block;
+  margin: 1rem auto;
+}
+.details__btn--remove:hover {
+  background: #471a9e;
+  outline: 1px solid #946ae7;
+  cursor: pointer;
+}
+.details__btn--remove:active {
+  background: #946ae7;
+  outline: 1px solid #471a9e;
+  cursor: pointer;
+}
+.details__btn--remove:disabled {
+  background: #d3c2f5;
+  outline: 1px solid;
+  cursor: not-allowed;
 }
 
 [data-value=dark] {

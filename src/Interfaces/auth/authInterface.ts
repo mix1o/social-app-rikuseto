@@ -8,12 +8,12 @@ export interface User extends BaseUserData {
   firstName: string;
 }
 
-export interface MessageI {
+export interface IMessage {
   message: string;
-  status: number;
+  status?: number;
 }
 
-export interface UserAccountData extends User {
+export interface CreateUser extends User {
   confirmPassword: string;
 }
 

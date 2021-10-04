@@ -8,7 +8,6 @@
   }
   &__section {
     border-bottom: 1px solid var(--light-bg-700);
-    max-width: 550px;
     margin: 0 auto;
   }
   &__personal-section {
@@ -91,5 +90,11 @@
     margin-right: 3rem;
     color: var(--font-dark-600);
     font-size: ft.$fs-200;
+  }
+  &__btn--remove {
+    @include btn.btn();
+    font-size: ft.$fs-250;
+    display: block;
+    margin: 1rem auto;
   }
 }

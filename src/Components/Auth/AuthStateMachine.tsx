@@ -5,7 +5,7 @@ type MachineStateInterface =
   | { value: 'signUp'; context: undefined }
   | { value: 'resetPassword'; context: undefined };
 
-type MachineEvents =
+export type MachineEvents =
   | { type: 'SIGN_UP' }
   | { type: 'SIGN_IN' }
   | { type: 'RESET_PASSWORD' };
