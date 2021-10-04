@@ -32,6 +32,11 @@ const Conversations = () => {
   return (
     <>
       <Header />
+      {friends?.length === 0 && (
+        <h3 className="conversations__info">
+          You don't have friends yet. Find someone to write a message
+        </h3>
+      )}
       {friends ? (
         <div className="conversations">
           {friends?.map(({ avatar, firstName, lastName, roomId }) => {
