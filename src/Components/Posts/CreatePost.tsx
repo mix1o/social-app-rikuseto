@@ -46,18 +46,21 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
     if (user) {
       axios.post(`${process.env.REACT_APP_API}/posts/create`, post);
     }
+
     setPost({ headline: '', file: '', category: '', notification: false });
     actions.openCreatePost(false);
     setTimeout(() => {
       handleFetchPosts();
     }, 500);
   };
-
+  useEffect(() => {
+    console.log(post);
+  }, [post]);
   const checkCorrectPost = () => {
     if (userPickedImage) {
       if (
-        post!.headline!.length >= 3 &&
-        post!.category!.length > 1 &&
+        post!.headline!.trim().length >= 3 &&
+        post!.category!.trim().length >= 1 &&
         post!.file!.length > 3 &&
         correctImage
       ) {
@@ -167,18 +170,10 @@ export default memo(CreatePost);
 
 // TODO RESET HASLA
 
-// TODO REMOVE NOTIFICAITONS SERVICE WORKER | Styles for checkbox
-
-// TODO Conversations last message, find new friends when user doesnt have any friend
-
 // TODO SCROLL Message
 
 // TODO Pagination posts,comments, messages
 
-// TODO UPLOAD AVATARA
-
 // TODO USUWANIE WIADOMOSCI
 
-// TODO Type profile user, typo
-
-// TODO button full
+// TODO DELETED USER
