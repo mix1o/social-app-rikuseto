@@ -1,9 +1,10 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import ReactCrop from 'react-image-crop';
 import { image64toCanvasRef } from '../../Helpers/imageFunctions';
 import { useFiles } from '../../Hooks/useFiles';
 import { CookieUser } from '../../Interfaces/auth/authInterface';
+import { useCounter } from '../../store/sub';
 
 const EditProfilePicture = ({
   image,
@@ -12,21 +13,27 @@ const EditProfilePicture = ({
   image: string;
   closeModal: () => void;
 }) => {
-  const [aspect, setAspect] = useState<ReactCrop.Crop>({ aspect: 1 / 1 });
+  const [aspect, setAspect] = useState<ReactCrop.Crop>({
+    aspect: 1 / 1,
+  });
   const [disableBtn, setDisableBtn] = useState(false);
 
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const { uploadProfileImage } = useFiles();
+  const [{ disabledModal }, { setDisabledModal }] = useCounter();
 
-  const imageCropSize = 150;
+  const imageCropSize = 450;
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handelUpdateProfile = async () => {
     setDisableBtn(true);
     const t = await uploadProfileImage(canvasRef, image, user._id);
-    console.log(t);
   };
+
+  useEffect((): (() => void) => {
+    return () => setDisabledModal(false);
+  }, []);
 
   return (
     <section className="profile">
@@ -41,10 +48,14 @@ const EditProfilePicture = ({
         src={image}
         crop={aspect}
         onChange={newCrop => {
+          setDisabledModal(true);
           setAspect(newCrop);
         }}
         onComplete={(crop, pv) => {
           image64toCanvasRef(canvasRef.current, image, pv);
+          setTimeout(() => {
+            setDisabledModal(false);
+          }, 500);
         }}
         circularCrop={true}
         onImageLoaded={({ height, width }) => {
@@ -57,10 +68,6 @@ const EditProfilePicture = ({
           });
           return false;
         }}
-        minHeight={Math.floor(imageCropSize / 5)}
-        minWidth={Math.floor(imageCropSize / 5)}
-        maxWidth={imageCropSize}
-        maxHeight={imageCropSize}
       />
       <canvas style={{ display: 'none' }} ref={canvasRef}></canvas>
 
