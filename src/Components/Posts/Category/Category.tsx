@@ -9,6 +9,7 @@ import {
 } from '../../../Interfaces/posts/category';
 
 import AsyncSelect from 'react-select/async';
+import AsyncCreatableSelect from 'react-select/async-creatable';
 import { mainSelect } from '../../../Helpers/selectStyles.styled';
 
 const Category: FC<CategoryProps> = ({ post, setPost }) => {
@@ -31,16 +32,12 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
   }, []);
 
   const handleSearchFetch = async (inputValue: string) => {
-    const params = new URLSearchParams({
-      value: inputValue,
-    });
-
-    const response = await fetch(
-      `${process.env.REACT_APP_API}/category/filter?${params.toString()}` // AXIOS IS ALREADY DEAD[*]
+    const response = await axios.get(
+      `${process.env.REACT_APP_API}/category/filter`,
+      { params: { value: inputValue } }
     );
-    const result = await response.json();
 
-    return formatCategories(result, 'Other searched');
+    return formatCategories(response.data, 'Other searched');
   };
 
   const formatCategories = (arr: CategoryArray[], type: string) => {
@@ -58,15 +55,17 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
 
   return (
     <div className="category">
-      <AsyncSelect
+      <AsyncCreatableSelect
         cacheOptions
         defaultOptions={userCategories}
         styles={mainSelect}
         placeholder="Choose category"
         loadOptions={inputValue => handleSearchFetch(inputValue)}
-        onChange={inputValue =>
-          setPost({ ...post, category: inputValue?.value })
-        }
+        onChange={inputValue => {
+          if (inputValue?.value !== undefined) {
+            setPost({ ...post, category: inputValue?.value });
+          }
+        }}
         loadingMessage={value => 'Searching ...'}
         isClearable={true}
         maxMenuHeight={300}
