@@ -39,12 +39,11 @@ const SingleConversation = () => {
     getMessages();
   }, []);
 
+  console.log(user.friends);
   useEffect(() => {
-    user?.friends?.forEach(friend => {
-      if (friend.roomId !== id) {
-        history.push('/not-found');
-      }
-    });
+    const isFriend = user.friends?.findIndex(friend => friend.roomId === id);
+    console.log(isFriend);
+    if (isFriend === -1) history.push('/not-found');
 
     if (id !== '') {
       socket.emit('join-room', id);
