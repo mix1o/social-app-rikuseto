@@ -37,12 +37,12 @@ const SingleConversation = () => {
 
   useEffect(() => {
     getMessages();
+    console.log('xd');
   }, []);
 
-  console.log(user.friends);
   useEffect(() => {
     const isFriend = user.friends?.findIndex(friend => friend.roomId === id);
-    console.log(isFriend);
+
     if (isFriend === -1) history.push('/not-found');
 
     if (id !== '') {
@@ -66,12 +66,52 @@ const SingleConversation = () => {
     socket.on('message', ({ avatar, text, userId }) => {
       setChat([...chat, { avatar, text, userId }]);
     });
+
+    socket.on('delete', ({ idx, userId, avatar }) => {
+      changeChat(idx, userId, avatar);
+    });
   }, [chat]);
+
+  const deleteMessage = (
+    idx: number,
+    userId: string,
+    avatar: string,
+    room: string
+  ) => {
+    socket.emit('delete', { idx, userId, avatar, room });
+    changeChat(idx, userId, avatar);
+  };
+
+  const changeChat = async (idx: number, userId: string, avatar: string) => {
+    console.log(idx);
+    const deleted = {
+      avatar: avatar,
+      text: 'Message deleted',
+      userId: userId,
+    };
+
+    const newChat = [...chat];
+    newChat.splice(idx, 1);
+    setChat(newChat);
+    // setChat([...newChat, deleted]);
+
+    // const newChat = [...chat];
+    // newChat[idx] = deleted;
+
+    // console.log(newChat);
+    // setChat(newChat);
+  };
 
   const renderChat = useCallback(() => {
     return chat.map(({ avatar, text, userId }, idx) => {
       return (
-        <div className="conversation__message-wrapper" key={idx}>
+        <div
+          onClick={() => {
+            if (userId === user._id) deleteMessage(idx, userId, avatar, id);
+          }}
+          className="conversation__message-wrapper"
+          key={idx}
+        >
           {userId !== user._id && (
             <img
               className="conversation__author-message"
