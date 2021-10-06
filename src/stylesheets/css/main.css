@@ -2315,6 +2315,7 @@ h6 {
 }
 .conversation__messages {
   overflow-y: scroll;
+  max-height: 85vh;
   font-size: 1.6rem;
   padding: 1rem;
 }
