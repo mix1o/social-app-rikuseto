@@ -1676,6 +1676,7 @@ h6 {
 .removed-author {
   font-weight: 300;
   color: var(--font-light-400);
+  font-size: 1.4rem;
 }
 
 .post:last-child {
