@@ -1,7 +1,7 @@
 import Categories from '../Components/Account/Categories';
 
 export const CategoriesRoutes = {
-  component: Categories,
+  Component: Categories,
   url: '/categories',
   exact: true,
   permission: true,

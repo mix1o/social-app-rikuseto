@@ -37,25 +37,22 @@ const App: FC = () => {
       <Router>
         <Switch>
           {Routes.map(
-            ({ component, url, exact, permission }, idx): ReactChild => {
-              return permission === false ? (
+            ({ Component, url, exact, permission }, idx): ReactChild =>
+              permission === true ? (
                 <Route
-                  path={url}
                   exact={exact}
-                  component={component}
                   key={idx}
-                />
-              ) : user ? (
-                <Route
-                  path={url}
-                  exact={exact}
-                  component={component}
-                  key={idx}
+                  path={user ? url : '/auth'}
+                  component={Component}
                 />
               ) : (
-                <Redirect to={{ pathname: '/auth' }} key={idx} />
-              );
-            }
+                <Route
+                  component={Component}
+                  exact={exact}
+                  path={url}
+                  key={idx}
+                />
+              )
           )}
         </Switch>
         {user && <Menu />}

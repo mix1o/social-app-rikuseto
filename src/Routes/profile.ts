@@ -1,7 +1,7 @@
 import Profile from '../Components/Profile/Profile';
 
 export const ProfileRoutes = {
-  component: Profile,
+  Component: Profile,
   url: '/profile/:id',
   exact: true,
   permission: false,

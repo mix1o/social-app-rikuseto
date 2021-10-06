@@ -15,7 +15,7 @@ import { NotFoundRoute, NotFoundAllRoute } from './other';
 import { SearchedDataRoute } from './search';
 
 interface RouteProps<T> {
-  component: FC<T>;
+  Component: FC<T>;
   url?: string;
   exact?: boolean;
   permission: boolean;

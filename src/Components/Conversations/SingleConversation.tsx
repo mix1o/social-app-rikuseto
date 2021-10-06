@@ -1,4 +1,4 @@
-import { MouseEvent, useCallback, useEffect, useState } from 'react';
+import { MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { useCookies } from 'react-cookie';
@@ -37,7 +37,6 @@ const SingleConversation = () => {
 
   useEffect(() => {
     getMessages();
-    console.log('xd');
   }, []);
 
   useEffect(() => {
@@ -60,6 +59,8 @@ const SingleConversation = () => {
     setMessage('');
   };
 
+  const lastMessage = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     socket.on('connect', () => {});
 
@@ -70,47 +71,40 @@ const SingleConversation = () => {
     socket.on('delete', ({ idx, userId, avatar }) => {
       changeChat(idx, userId, avatar);
     });
+
+    if (lastMessage.current !== null) {
+      lastMessage?.current.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [chat]);
 
   const deleteMessage = (
     idx: number,
     userId: string,
     avatar: string,
-    room: string
+    room: string,
+    messageId: string | undefined
   ) => {
-    socket.emit('delete', { idx, userId, avatar, room });
+    socket.emit('delete', { idx, userId, avatar, room, messageId });
     changeChat(idx, userId, avatar);
   };
 
   const changeChat = async (idx: number, userId: string, avatar: string) => {
-    console.log(idx);
-    const deleted = {
-      avatar: avatar,
-      text: 'Message deleted',
-      userId: userId,
-    };
-
     const newChat = [...chat];
     newChat.splice(idx, 1);
     setChat(newChat);
-    // setChat([...newChat, deleted]);
-
-    // const newChat = [...chat];
-    // newChat[idx] = deleted;
-
-    // console.log(newChat);
-    // setChat(newChat);
   };
-
+  console.log(user.friends);
   const renderChat = useCallback(() => {
-    return chat.map(({ avatar, text, userId }, idx) => {
+    return chat.map(({ avatar, text, userId, _id }, idx) => {
       return (
         <div
           onClick={() => {
-            if (userId === user._id) deleteMessage(idx, userId, avatar, id);
+            if (userId === user._id)
+              deleteMessage(idx, userId, avatar, id, _id);
           }}
           className="conversation__message-wrapper"
           key={idx}
+          ref={chat.length - 1 === idx ? lastMessage : null}
         >
           {userId !== user._id && (
             <img

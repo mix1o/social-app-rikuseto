@@ -2,14 +2,14 @@ import Account from '../Components/Account/Account';
 import Auth from '../Pages/Auth';
 
 export const AuthRoute = {
-  component: Auth,
+  Component: Auth,
   url: '/auth',
   exact: true,
   permission: false,
 };
 
 export const AccountRoute = {
-  component: Account,
+  Component: Account,
   url: '/account',
   exact: true,
   permission: true,

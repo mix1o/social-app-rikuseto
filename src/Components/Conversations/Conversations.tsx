@@ -14,7 +14,7 @@ interface Friends {
 }
 
 const Conversations = () => {
-  const [cookies] = useCookies();
+  const [cookies, setCookie] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
 
   const [friends, setFriends] = useState<Friends[]>();
@@ -25,8 +25,19 @@ const Conversations = () => {
       .then(res => setFriends(res.data.friends));
   };
 
+  const updateUser = () => {
+    axios
+      .get(`${process.env.REACT_APP_API}/user/get-current?id=${user._id}`)
+      .then(res => {
+        if (res.status === 200) {
+          setCookie('user', res.data.user, { path: '/' });
+        }
+      });
+  };
+
   useEffect(() => {
     getFriends();
+    updateUser();
   }, []);
 
   return (
