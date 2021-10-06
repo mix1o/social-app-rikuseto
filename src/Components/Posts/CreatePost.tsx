@@ -170,10 +170,6 @@ export default memo(CreatePost);
 
 // TODO RESET HASLA
 
-// TODO SCROLL Message
-
 // TODO Pagination posts,comments, messages
-
-// TODO USUWANIE WIADOMOSCI
 
 // TODO DELETED USER
