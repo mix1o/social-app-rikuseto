@@ -53,9 +53,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
       handleFetchPosts();
     }, 500);
   };
-  useEffect(() => {
-    console.log(post);
-  }, [post]);
+
   const checkCorrectPost = () => {
     if (userPickedImage) {
       if (
