@@ -14,7 +14,7 @@
   background-color: rgba(var(--secondary-bg-600), 0.8);
 
   &__content {
-    width: clamp(1500px, fit-content, 80vw);
+    width: fit-content;
     @include mix.border();
   }
 
