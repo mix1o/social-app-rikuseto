@@ -10,7 +10,6 @@ import Menu from './Components/Navigation/Menu';
 import { useCookies } from 'react-cookie';
 import { useCounter } from './store/sub';
 import { CookieUser } from './Interfaces/auth/authInterface';
-import { createNotificationSubscription } from './Hooks/Notifications/push-notification';
 
 const App: FC = () => {
   const html = document.querySelector('html');
@@ -33,11 +32,6 @@ const App: FC = () => {
     actions.theme(parsed.theme);
   }, [html, actions]);
 
-  useEffect(() => {
-    createNotificationSubscription().then(sub => {
-      console.log(sub?.endpoint);
-    });
-  }, []);
   return (
     <div>
       <Router>
