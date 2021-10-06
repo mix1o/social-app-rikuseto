@@ -8,6 +8,8 @@ import Post from '../Posts/Post';
 import Comment from '../Comments/Comment/Comment';
 import { useCookies } from 'react-cookie';
 import { CookieUser } from '../../Interfaces/auth/authInterface';
+import { Presence } from 'framer-motion/types/components/AnimateSharedLayout/types';
+import { BlurredMenu } from '../Animations/Popup';
 
 interface UserDataInterface {
   id: string;
@@ -82,6 +84,8 @@ const Profile: FC = () => {
 
   const handleAddToFriend = () => {
     setDisabled(true);
+    console.log(123);
+
     const usersIds = {
       userId: user._id,
       friendId: profile?.user.id,
@@ -153,7 +157,7 @@ const Profile: FC = () => {
             {!isSent && !isReq && !isFriend && (
               <button
                 className="profile__add"
-                disabled={disabled}
+                disabled={user ? false : true || disabled}
                 onClick={handleAddToFriend}
               >
                 Add to friend

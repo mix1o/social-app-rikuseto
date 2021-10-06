@@ -184,20 +184,20 @@ const Post: FC<PostInterfaceExtended> = ({
 
             <div>
               <p className="post__author-name">
-                <Link
-                  className="post__author-link"
-                  to={
-                    user && userId === user._id
-                      ? '/account'
-                      : `/profile/${userId}`
-                  }
-                >
-                  {author?.status === 200 ? (
-                    (author?.firstName, author?.lastName)
-                  ) : (
-                    <em className="removed-author">(Deleted)</em>
-                  )}
-                </Link>
+                {author?.status === 200 ? (
+                  <Link
+                    className="post__author-link"
+                    to={
+                      user && userId === user._id
+                        ? '/account'
+                        : `/profile/${userId}`
+                    }
+                  >
+                    {`${author?.firstName} ${author?.lastName}`}
+                  </Link>
+                ) : (
+                  <em className="removed-author">(Deleted)</em>
+                )}
               </p>
 
               <p className="post__info">
@@ -262,7 +262,7 @@ const Post: FC<PostInterfaceExtended> = ({
               <m.button
                 className="post__btn"
                 whileTap={{ scale: 1.2 }}
-                onClick={() => handleLikePost()}
+                onClick={handleLikePost}
                 aria-label="like or dislike post"
                 type="button"
               >
@@ -322,13 +322,15 @@ const Post: FC<PostInterfaceExtended> = ({
           {!disableComments && comment?.topComment && (
             <>
               <p className="post__top-comment">
-                <span className="post__top-author">
-                  {commentAuthor?.status === 200 ? (
-                    commentAuthor?.firstName
-                  ) : (
-                    <em className="removed-author">(Deleted)</em>
-                  )}
-                </span>
+                {commentAuthor && (
+                  <span className="post__top-author">
+                    {commentAuthor?.status === 200 ? (
+                      commentAuthor?.firstName
+                    ) : (
+                      <em className="removed-author">(Deleted)</em>
+                    )}
+                  </span>
+                )}
 
                 <span className="post__top-date">
                   {dayjs(comment.topComment.date).fromNow()}

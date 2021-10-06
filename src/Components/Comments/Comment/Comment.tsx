@@ -153,7 +153,7 @@ const Comment: FC<SingleCommentProps> = ({
         refreshComments();
       });
   };
-
+  console.log(author);
   return (
     <>
       <div
@@ -208,9 +208,14 @@ const Comment: FC<SingleCommentProps> = ({
             src={author?.avatar}
             alt="user profile"
           />
-          <p className="comment__author-name">
-            {author?.firstName} {author?.lastName}
-          </p>
+          {author?.status === 200 ? (
+            <p className="comment__author-name">
+              {author?.firstName} {author?.lastName}
+            </p>
+          ) : (
+            <em className="removed-author">(Deleted)</em>
+          )}
+
           <p className="comment__date">{dayjs(date).fromNow()}</p>
         </div>
         {!isEdit && <p className="comment__content">{text}</p>}
