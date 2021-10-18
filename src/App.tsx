@@ -5,12 +5,12 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
-import { Routes } from './Routes';
-import Menu from './Components/Navigation/Menu';
+import { Routes } from './routes';
+import Menu from './components/Navigation/Menu';
 import { useCookies } from 'react-cookie';
 import { useCounter } from './store/sub';
-import { CookieUser } from './Interfaces/auth/authInterface';
-import { createNotificationSubscription } from './Hooks/Notifications/push-notification';
+import { CookieUser } from './interfaces/auth/authInterface';
+import { createNotificationSubscription } from './hooks/Notifications/push-notification';
 
 const App: FC = () => {
   const html = document.querySelector('html');

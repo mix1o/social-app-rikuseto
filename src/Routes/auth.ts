@@ -1,5 +1,5 @@
-import Account from '../Components/Account/Account';
-import Auth from '../Pages/Auth';
+import Account from '../pages/Account/Account';
+import Auth from '../pages/Auth/Auth';
 
 export const AuthRoute = {
   component: Auth,

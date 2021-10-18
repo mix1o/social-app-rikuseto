@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
 import { Form, Formik } from 'formik';
-import { AuthSchema3 as AuthSchema } from '../../Validations/AuthSchemas';
+import { AuthSchema3 as AuthSchema } from '../../validations/AuthSchemas';
 import TextField from '../FormFields/TextField';
 
 const ResetPassword: FC = () => {

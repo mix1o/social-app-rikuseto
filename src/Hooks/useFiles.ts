@@ -1,9 +1,9 @@
 import Compressor from 'compressorjs';
 import { RefObject } from 'react';
 
-import { upload } from '../API/uploadImg';
+import { upload } from '../api/uploadImg';
 import axios from 'axios';
-import { base64StringTtoFile } from '../Helpers/imageFunctions';
+import { base64StringTtoFile } from '../helpers/imageFunctions';
 
 const validateFile = (
   fileToValidate: any,

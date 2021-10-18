@@ -3,7 +3,7 @@ import { useCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../Header/Header';
-import { CookieUser } from '../../Interfaces/auth/authInterface';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 interface Friends {

@@ -4,10 +4,10 @@ import TextField from '../FormFields/TextField';
 
 import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
-import { AuthSchema2 as AuthSchema } from '../../Validations/AuthSchemas';
+import { AuthSchema2 as AuthSchema } from '../../validations/AuthSchemas';
 
-import { BaseUserData } from '../../Interfaces/auth/authInterface';
-import { useAuth } from '../../Hooks/useAuth';
+import { BaseUserData } from '../../interfaces/auth/authInterface';
+import { useAuth } from '../../hooks/useAuth';
 
 const SignIn: FC = () => {
   const [, send] = useActor(authService);

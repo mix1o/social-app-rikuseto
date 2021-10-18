@@ -5,7 +5,7 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
 import CustomTextarea from '../FormFields/CustomTextarea';
-import { CookieUser } from '../../Interfaces/auth/authInterface';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 const socket = io(`${process.env.REACT_APP_SOCKET}`);
 

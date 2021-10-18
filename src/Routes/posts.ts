@@ -1,9 +1,9 @@
-import Posts from '../Components/Posts/Posts';
-import CreatePost from '../Components/Posts/CreatePost';
-import SharedPost from '../Components/Posts/SharedPost/SharedPost';
-import SavedPosts from '../Components/Account/SavedPosts';
-import UserPosts from '../Components/Account/UserPosts';
-import Details from '../Components/Account/Details/Details';
+import Posts from '../components/Posts/Posts';
+import CreatePost from '../components/CreatePost/CreatePost';
+import SharedPost from '../components/SharedPost/SharedPost';
+import SavedPosts from '../components/Details/SavedPosts';
+import UserPosts from '../components/Details/UserPosts';
+import Details from '../components/Details/Details';
 
 export const PostsRoute = {
   component: Posts,

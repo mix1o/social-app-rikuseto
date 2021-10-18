@@ -1,11 +1,11 @@
 import { Form, Formik } from 'formik';
 import { FC } from 'react';
 import TextField from '../FormFields/TextField';
-import { AuthSchema } from '../../Validations/AuthSchemas';
+import { AuthSchema } from '../../validations/AuthSchemas';
 import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
-import { useAuth } from '../../Hooks/useAuth';
-import { CreateUser } from '../../Interfaces/auth/authInterface';
+import { useAuth } from '../../hooks/useAuth';
+import { CreateUser } from '../../interfaces/auth/authInterface';
 
 const SignUp: FC = () => {
   const [, send] = useActor(authService);

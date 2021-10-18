@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import { motion as m } from 'framer-motion';
 import { useCounter } from '../../store/sub';
-import { MenuProps } from '../../Interfaces/common/menu';
+import { MenuProps } from '../../interfaces/common/menu';
 
 const MenuItem: FC<MenuProps> = ({
   href,

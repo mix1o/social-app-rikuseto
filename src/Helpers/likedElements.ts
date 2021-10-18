@@ -1,4 +1,4 @@
-import { CookieUser } from '../Interfaces/auth/authInterface';
+import { CookieUser } from '../interfaces/auth/authInterface';
 
 export const LikedElements = (
   user: CookieUser,

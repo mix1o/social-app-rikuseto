@@ -1,20 +1,20 @@
 import { FC, useEffect, useState, useCallback, useRef, LegacyRef } from 'react';
-import CreatePost from './CreatePost';
-import Post from './Post';
+import CreatePost from '../CreatePost/CreatePost';
+import Post from '../Post/Post';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import { PostInterface } from '../../Interfaces/posts/postInterfaces';
+import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import { useCounter } from '../../store/sub';
 import Header from '../Header/Header';
 import { motion as m, AnimatePresence as Presence } from 'framer-motion';
 import BlurredContent from '../Animations/Popup';
 import Select from 'react-select';
-import { mainSelect } from '../../Helpers/selectStyles.styled';
+import { mainSelect } from '../../helpers/selectStyles.styled';
 import {
   popularInterface,
   singleOptions,
   singleOptionsWithGroup,
-} from '../../Interfaces/posts/category';
+} from '../../interfaces/posts/category';
 
 const MODE_HOME = 'home';
 const MODE_ALL = 'all';

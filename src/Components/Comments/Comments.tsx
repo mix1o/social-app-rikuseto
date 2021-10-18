@@ -2,20 +2,20 @@ import axios from 'axios';
 import { FC, useRef, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
-import Comment from './Comment/Comment';
+import Comment from './Comment';
 import { motion as m, AnimatePresence as Presence } from 'framer-motion';
 import {
   CommentsData,
   CommentProps,
-} from '../../Interfaces/comments/commentsInterfaces';
+} from '../../interfaces/comments/commentsInterfaces';
 import { useCounter } from '../../store/sub';
 import { BlurredMenu } from '../Animations/Popup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import CustomTextarea from '../FormFields/CustomTextarea';
-import { commentsOptions } from '../../Helpers/filterOptions';
+import { commentsOptions } from '../../helpers/filterOptions';
 import Select from 'react-select';
-import { mainSelect } from '../../Helpers/selectStyles.styled';
+import { mainSelect } from '../../helpers/selectStyles.styled';
 
 const commentVariant = {
   hidden: {

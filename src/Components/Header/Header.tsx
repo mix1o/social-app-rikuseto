@@ -3,17 +3,18 @@ import { useCookies } from 'react-cookie';
 import { motion as m } from 'framer-motion';
 import { useActor } from '@xstate/react';
 import { authService } from '../Auth/AuthStateMachine';
-import logo from '../../Assets/logo/logo.png';
+import logo from '../../assets/logo/logo.png';
 import { Link } from 'react-router-dom';
 import { useCounter } from '../../store/sub';
-import { CookieUser } from '../../Interfaces/auth/authInterface';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 import { useHistory } from 'react-router-dom';
 import Toggle from '../Animations/Toggle';
 import { AnimatePresence as Presence } from 'framer-motion';
-import { CategoryArray } from '../../Interfaces/posts/category';
-import { PostInterface } from '../../Interfaces/posts/postInterfaces';
-import { SearchedCategory, SearchedUser } from '../Utils/SearchElements';
-import { handleFetch } from '../../Helpers/handleSearch';
+import { CategoryArray } from '../../interfaces/posts/category';
+import { PostInterface } from '../../interfaces/posts/postInterfaces';
+import SearchCategory from '../Search/SearchCategory';
+import SearchUser from '../Search/SearchUser';
+import { handleFetch } from '../../helpers/handleSearch';
 
 const variants = {
   open: {
@@ -174,7 +175,7 @@ const Header: FC = () => {
                 <article className="header__heading-article">
                   {responseData?.users.map(
                     ({ firstName, lastName, avatar, _id }) => (
-                      <SearchedUser
+                      <SearchUser
                         key={_id}
                         avatar={avatar}
                         firstName={firstName}
@@ -191,7 +192,7 @@ const Header: FC = () => {
                 </article>
                 <article>
                   {responseData?.categories.map(({ name, totalPosts, _id }) => (
-                    <SearchedCategory
+                    <SearchCategory
                       key={_id}
                       name={name}
                       totalPosts={totalPosts}

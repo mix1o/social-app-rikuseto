@@ -3,13 +3,13 @@ import axios, { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router';
-import { authService } from '../Components/Auth/AuthStateMachine';
+import { authService } from '../components/Auth/AuthStateMachine';
 import {
   BaseUserData,
   CookieUser,
   CreateUser,
   IMessage,
-} from '../Interfaces/auth/authInterface';
+} from '../interfaces/auth/authInterface';
 
 interface ISignInResponse {
   message: string;
