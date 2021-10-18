@@ -21,6 +21,7 @@ const Placeholder = styled.label<{ focus: boolean }>`
 const TextField: FC<FieldProps> = ({ ...rest }) => {
   const [field, meta] = useField(rest);
   const error = meta.touched && meta.error ? meta.error : '';
+
   const [focus, setFocus] = useState(false);
   return (
     <label
@@ -33,11 +34,14 @@ const TextField: FC<FieldProps> = ({ ...rest }) => {
         focus={focus || meta.touched || meta.value}
       >
         {error ? null : rest.label}
-        <span className="auth-form__error">{error}</span>
+        <span className="auth-form__error" data-testid="message">
+          {error}
+        </span>
       </Placeholder>
       <input
         {...rest}
         {...field}
+        placeholder={rest.label}
         className={`auth-form__input ${
           error ? 'auth-form__input--error' : null
         }`}

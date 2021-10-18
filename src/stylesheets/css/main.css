@@ -474,6 +474,9 @@ h6 {
   background: var(--light-bg-550);
   color: var(--font-dark-600);
 }
+.auth-form__input::placeholder {
+  color: transparent;
+}
 .auth-form__error {
   color: #e53e3e;
   font-weight: 400;

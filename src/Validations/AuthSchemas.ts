@@ -5,7 +5,7 @@ export const AuthSchema = yup.object({
   firstName: yup
     .string()
     .min(2, 'Must be at least 2 characters long')
-    .defined('First Name is  required'),
+    .defined('First Name is required'),
   lastName: yup
     .string()
     .min(2, 'Must be at least 2 characters long')

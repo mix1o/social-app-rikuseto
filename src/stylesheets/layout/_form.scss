@@ -28,6 +28,9 @@
     background: var(--light-bg-550);
     color: var(--font-dark-600);
   }
+  &__input::placeholder {
+    color: transparent;
+  }
   &__error {
     color: clr.$warning-500;
     font-weight: ft.$fw-500;

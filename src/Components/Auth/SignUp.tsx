@@ -17,7 +17,7 @@ const SignUp: FC = () => {
     <>
       <main className="auth__main">
         <div className="auth__header">
-          <h1>Sign up</h1>
+          <h1 data-testid="heading">Sign up</h1>
           <p className="auth__sub-headline">Please sign in to continue.</p>
         </div>
         <Formik
@@ -72,6 +72,7 @@ const SignUp: FC = () => {
               type="submit"
               className="btn auth-form__submit"
               disabled={loading}
+              data-testid="btn-sign-up"
             >
               Sign Up
             </button>

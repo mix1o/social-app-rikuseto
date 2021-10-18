@@ -51,8 +51,7 @@ const Comment: FC<SingleCommentProps> = ({
 
   const handleLikeComment = () => {
     if (!user) {
-      setPopup(true);
-      return;
+      return setPopup(true);
     }
     axios
       .post(`${process.env.REACT_APP_API}/comments/like`, {
@@ -64,6 +63,7 @@ const Comment: FC<SingleCommentProps> = ({
         fetchTopComment();
       });
   };
+
   useEffect(() => {
     authorOfComment(userId).then(res => setAuthor(res));
     const like = LikedElements(user, likes);
@@ -249,6 +249,7 @@ const Comment: FC<SingleCommentProps> = ({
               color: liked ? '#753ee0' : state.theme ? '#f8f8f8' : '#36344b',
             }}
             className="comment__action"
+            data-testid="comment-action"
           >
             <m.button
               whileTap={{ scale: 1.2 }}
@@ -256,6 +257,7 @@ const Comment: FC<SingleCommentProps> = ({
               onClick={() => {
                 handleLikeComment();
               }}
+              data-testid="btn-like"
             >
               {liked ? (
                 <FontAwesomeIcon icon={faStarChonky} />
@@ -263,7 +265,9 @@ const Comment: FC<SingleCommentProps> = ({
                 <FontAwesomeIcon icon={farBellThin} />
               )}
             </m.button>
-            <p className="comment__likes">{likes.length}</p>
+            <p className="comment__likes" data-testid="comment-likes-count">
+              {likes.length}
+            </p>
           </m.div>
         </div>
         {displayMessage && <p className="comment__information">Deleting...</p>}
