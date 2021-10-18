@@ -30,6 +30,9 @@ const CustomTextarea: FC<Textarea> = ({
   const [openEmojiList, setOpenEmojiList] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [rows, setRows] = useState(1);
+  const fontSize = parseInt(
+    getComputedStyle(document.body).getPropertyValue('--font-size')
+  );
 
   const onEmojiClick = (
     event: MouseEvent<Element, globalThis.MouseEvent>,
@@ -57,9 +60,10 @@ const CustomTextarea: FC<Textarea> = ({
 
   const getRows = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     const lineHeight = 21;
-    const taHeight = e.target.scrollHeight;
-    if (taHeight / lineHeight >= 2.1)
-      setRows(Math.floor(taHeight / lineHeight)); //Po pierwszym znaku dodaje scollHeight
+    const textareaHeight = e.target.scrollHeight;
+
+    if (textareaHeight / lineHeight >= 2.1)
+      setRows(Math.floor(textareaHeight / lineHeight));
     return;
   }, []);
 
@@ -84,6 +88,9 @@ const CustomTextarea: FC<Textarea> = ({
             className="textarea__input"
             value={textValue}
             placeholder={placeholder}
+            style={{
+              height: 21 * (rows <= 5 ? rows : 5) + fontSize * 2.2,
+            }}
             rows={rows <= 5 ? rows : 5}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
               setTextValue(e.target.value);

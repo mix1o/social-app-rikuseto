@@ -183,8 +183,9 @@ template {
 }
 
 :root {
+  --font-size: 10px;
   font-family: "Roboto", sans-serif;
-  font-size: 10px;
+  font-size: var(--font-size);
 }
 
 h1,
@@ -620,7 +621,7 @@ h6 {
   background-color: rgba(var(--secondary-bg-600), 0.8);
 }
 .blurred__content {
-  width: clamp(1500px, fit-content, 80vw);
+  width: fit-content;
   border: 1px solid var(--light-bg-700);
 }
 .blurred__option {
@@ -1313,7 +1314,7 @@ h6 {
   border: none;
   color: inherit;
   font-size: 2.1rem;
-  padding-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 .textarea__publish .fa-location-arrow {
   transform: scaleY(1.5) rotate(45deg);
@@ -1323,7 +1324,7 @@ h6 {
   height: 3.5rem;
   border-radius: 100rem;
   align-self: end;
-  padding-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .post {
@@ -1678,6 +1679,7 @@ h6 {
 .removed-author {
   font-weight: 300;
   color: var(--font-light-400);
+  font-size: 1.4rem;
 }
 
 .post:last-child {
@@ -2522,6 +2524,61 @@ h6 {
   background: #d3c2f5;
   outline: 1px solid;
   cursor: not-allowed;
+}
+.details__remove {
+  background: var(--light-bg-600);
+  padding: 1rem;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+.details__header {
+  color: var(--font-dark-600);
+  font-size: 2.1rem;
+}
+.details__remove-info {
+  max-width: 350px;
+  font-size: 1.4rem;
+  text-align: center;
+  color: var(--font-dark-300);
+  margin-bottom: 3rem;
+}
+.details__btn--delete {
+  background: #753ee0;
+  color: var(--font-light-300);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 1.2rem;
+  font-size: 1.6rem;
+  background: #e53e3e;
+}
+.details__btn--delete:hover {
+  background: #471a9e;
+  outline: 1px solid #946ae7;
+  cursor: pointer;
+}
+.details__btn--delete:active {
+  background: #946ae7;
+  outline: 1px solid #471a9e;
+  cursor: pointer;
+}
+.details__btn--delete:disabled {
+  background: #d3c2f5;
+  outline: 1px solid;
+  cursor: not-allowed;
+}
+.details__btn--delete:hover {
+  background: #e92525;
+  outline-color: #e53e3e;
+}
+.details__btn--delete:active {
+  background: #f78989;
+  outline-color: #e53e3e;
+}
+.details__btn--delete:disabled {
+  background: #ffa1a1;
+  outline-color: #e53e3e;
 }
 
 [data-value=dark] {

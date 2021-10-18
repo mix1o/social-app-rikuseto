@@ -82,6 +82,8 @@ const Profile: FC = () => {
 
   const handleAddToFriend = () => {
     setDisabled(true);
+    console.log(123);
+
     const usersIds = {
       userId: user._id,
       friendId: profile?.user.id,
@@ -153,7 +155,7 @@ const Profile: FC = () => {
             {!isSent && !isReq && !isFriend && (
               <button
                 className="profile__add"
-                disabled={disabled}
+                disabled={user ? false : true || disabled}
                 onClick={handleAddToFriend}
               >
                 Add to friend

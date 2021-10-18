@@ -12,11 +12,9 @@ const RemoveAccount = () => {
   const { removeAccount, message, loading } = useAuth();
 
   return (
-    <section className="details__popup">
-      <h3 className="details__description">
-        Are you sure you want to do this?
-      </h3>
-      <p>
+    <section className="details__remove">
+      <h3 className="details__header">Are you sure you want to do this?</h3>
+      <p className="details__remove-info">
         We will immediately delete your account, along with all of your friends,
         saved posts, categories and private messages.
       </p>
@@ -43,7 +41,7 @@ const RemoveAccount = () => {
             label="Confirm your password"
             type="password"
             id="password"
-            key="passwword-field"
+            key="password-field"
           />
           <TextField
             name="verifyText"
@@ -52,16 +50,22 @@ const RemoveAccount = () => {
             id="verifyText"
             key="verifyText-field"
           />
-          <p
-            className={`auth__message ${
-              message.status === 200
-                ? 'auth__message--accepted'
-                : 'auth__message--refused'
-            }`}
+          {message.message && (
+            <p
+              className={`auth__message ${
+                message.status === 200
+                  ? 'auth__message--accepted'
+                  : 'auth__message--refused'
+              }`}
+            >
+              {message.message}
+            </p>
+          )}
+          <button
+            type="submit"
+            disabled={loading}
+            className="details__btn--delete"
           >
-            {message.message}
-          </p>
-          <button type="submit" disabled={loading}>
             Delete this account
           </button>
         </Form>

@@ -28,9 +28,6 @@
     border-top-left-radius: ft.$lh;
     border-bottom-left-radius: ft.$lh;
   }
-  // &__input::placeholder {
-  //   font-size: ft.$fs-200;
-  // }
   &__content {
     display: flex;
     justify-content: space-between;
@@ -66,8 +63,7 @@
     border: none;
     color: inherit;
     font-size: ft.$fs-400;
-    padding-bottom: 1rem;
-
+    margin-bottom: 0.75rem;
     .fa-location-arrow {
       transform: scaleY(1.5) rotate(45deg);
     }
@@ -77,6 +73,6 @@
     height: 3.5rem;
     border-radius: 100rem;
     align-self: end;
-    padding-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
 }

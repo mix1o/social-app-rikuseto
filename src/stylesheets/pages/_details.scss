@@ -1,6 +1,7 @@
 @use '../abstracts/colors' as clr;
 @use '../abstracts/fontSizes' as ft;
 @use '../components/button' as btn;
+@use '../abstracts/variables' as var;
 
 .details {
   &__header {
@@ -96,5 +97,40 @@
     font-size: ft.$fs-250;
     display: block;
     margin: 1rem auto;
+  }
+  // Remove account
+  &__remove {
+    background: var(--light-bg-600);
+    padding: 1rem;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+  }
+  &__header {
+    color: var(--font-dark-600);
+    font-size: ft.$fs-400;
+  }
+  &__remove-info {
+    max-width: var.$form-width;
+    font-size: ft.$fs-250;
+    text-align: center;
+    color: var(--font-dark-300);
+    margin-bottom: 3rem;
+  }
+  &__btn--delete {
+    @include btn.btn();
+    background: clr.$warning-500;
+  }
+  &__btn--delete:hover {
+    background: clr.$warning-600;
+    outline-color: clr.$warning-500;
+  }
+  &__btn--delete:active {
+    background: clr.$warning-400;
+    outline-color: clr.$warning-500;
+  }
+  &__btn--delete:disabled {
+    background: clr.$warning-350;
+    outline-color: clr.$warning-500;
   }
 }

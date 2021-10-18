@@ -22,7 +22,7 @@ export const mainSelect: StylesConfig<
     borderBottom: '1px solid var(--light-bg-700)',
   }),
   singleValue: () => ({
-    fontSize: '1.2rem',
+    fontSize: '1.4rem',
     color: 'var(--font-dark-600)',
   }),
   menu: provided => ({

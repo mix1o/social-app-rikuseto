@@ -1,13 +1,13 @@
 import NotFound from '../pages/NotFound/NotFound';
 
 export const NotFoundRoute = {
-  component: NotFound,
+  Component: NotFound,
   url: '/not-found',
   exact: true,
   permission: false,
 };
 
 export const NotFoundAllRoute = {
-  component: NotFound,
+  Component: NotFound,
   permission: false,
 };

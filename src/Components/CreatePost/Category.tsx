@@ -44,7 +44,9 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
     const options: { label: string; value: string }[] = [];
     arr?.forEach(({ name, totalPosts }) => {
       const obj = {
-        label: `${name} ${totalPosts} unique posts`,
+        label: `${name}, ${totalPosts} unique post${
+          totalPosts <= 1 ? '' : 's'
+        } `,
         value: name,
       };
       options.push(obj);

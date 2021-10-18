@@ -1,7 +1,7 @@
 import Notifications from '../pages/Notifications/Notifications';
 
 export const NotificationRoutes = {
-  component: Notifications,
+  Component: Notifications,
   url: '/notification',
   exact: true,
   permission: true,

@@ -125,13 +125,12 @@ export const useAuth = () => {
           },
         }
       );
-      console.log(message);
       setMessage({ message, status });
       setLoading(false);
-      // if (status === 200) {
-      //   setTimeout(() => removeCookie('user'), 1000);
-      //   history.push('/');
-      // }
+      if (status === 200) {
+        setTimeout(() => removeCookie('user'), 200);
+        history.push('/');
+      }
     } catch (err: any) {
       setMessage({ message: err, status: err.status });
     }

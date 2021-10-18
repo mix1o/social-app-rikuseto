@@ -6,40 +6,40 @@ import UserPosts from '../components/Details/UserPosts';
 import Details from '../components/Details/Details';
 
 export const PostsRoute = {
-  component: Posts,
+  Component: Posts,
   url: '/',
   exact: true,
   permission: false,
 };
 
 export const CreatePostRoute = {
-  component: CreatePost,
+  Component: CreatePost,
   url: '/new-post',
   exact: true,
   permission: true,
 };
 
 export const SharedPostRoute = {
-  component: SharedPost,
+  Component: SharedPost,
   url: '/post/:id',
   exact: true,
   permission: false,
 };
 
 export const SavedPostsRoute = {
-  component: SavedPosts,
+  Component: SavedPosts,
   url: '/account/saved-posts',
   exact: true,
   permission: true,
 };
 export const YourPostsRoute = {
-  component: UserPosts,
+  Component: UserPosts,
   url: '/account/your-posts',
   exact: true,
   permission: true,
 };
 export const UserDetails = {
-  component: Details,
+  Component: Details,
   url: '/account/details',
   exact: true,
   permission: true,
