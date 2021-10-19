@@ -6,7 +6,7 @@ import Header from '../Header/Header';
 import Toggle from '../Animations/Toggle';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { ToUpdate } from '../../validations/UserDetailsSchema';
+import { ToUpdate } from '../../validations/userDetailsSchema';
 import PersonalDetail from './DetailsItem';
 import BlurredContent from '../Animations/Popup';
 import { AnimatePresence as Presence } from 'framer-motion';

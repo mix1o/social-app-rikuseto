@@ -2,9 +2,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import {
-  DetailsValidation,
+  detailsValidation,
   ToUpdate,
-} from '../../validations/UserDetailsSchema';
+} from '../../validations/userDetailsSchema';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
@@ -55,7 +55,7 @@ const PersonalDetail: FC<{
     setMessage('');
 
     try {
-      await DetailsValidation(type, e.target.value);
+      await detailsValidation(type, e.target.value);
       setErrors([]);
     } catch (err: any) {
       setErrors(err.errors);
