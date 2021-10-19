@@ -2,7 +2,7 @@ import { Form, Formik } from 'formik';
 import { useCookies } from 'react-cookie';
 import { useAuth } from '../../hooks/useAuth';
 import { CookieUser } from '../../interfaces/auth/authInterface';
-import { deleteAccountSchema } from '../../validations/UserDetailsSchema';
+import { deleteAccountSchema } from '../../validations/userDetailsSchema';
 import TextField from '../FormFields/TextField';
 
 const RemoveAccount = () => {
