@@ -7,7 +7,7 @@ export enum ToUpdate {
   PASSWORD = 'password',
 }
 
-export const DetailsValidation = (type: ToUpdate, value: string) => {
+export const detailsValidation = (type: ToUpdate, value: string) => {
   switch (type) {
     case ToUpdate.FIRST_NAME:
       return yup

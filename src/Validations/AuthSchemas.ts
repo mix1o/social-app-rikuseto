@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const AuthSchema = yup.object({
+export const registrationSchema = yup.object({
   email: yup.string().email('Email is not  valid').defined('Email is required'),
   firstName: yup
     .string()
@@ -24,7 +24,7 @@ export const AuthSchema = yup.object({
     .defined('Confirm password is required'),
 });
 
-export const AuthSchema2 = yup.object({
+export const loginSchema = yup.object({
   email: yup.string().email('Email is not  valid').defined('Email is required'),
   password: yup
     .string()
