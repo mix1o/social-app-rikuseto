@@ -1,5 +1,5 @@
 import { FC, ReactChild } from 'react';
-import { AuthRoute, AccountRoute } from './auth';
+import { AuthRoute, AccountRoute, NewPasswordRoute } from './auth';
 import {
   PostsRoute,
   SharedPostRoute,
@@ -13,6 +13,7 @@ import { ConversationsRoutes, ConversationRoute } from './conversations';
 import { NotificationRoutes } from './notifications';
 import { NotFoundRoute, NotFoundAllRoute } from './other';
 import { SearchedDataRoute } from './search';
+import { ContactRoute } from './contact';
 
 interface RouteProps<T> {
   Component: FC<T>;
@@ -36,5 +37,7 @@ export const Routes: RouteProps<ReactChild>[] = [
   NotFoundRoute,
   SearchedDataRoute,
   UserDetails,
+  ContactRoute,
+  NewPasswordRoute,
   NotFoundAllRoute,
 ];
