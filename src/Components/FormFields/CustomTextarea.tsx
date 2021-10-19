@@ -17,6 +17,7 @@ interface Textarea {
   textValue: string;
   setTextValue: Dispatch<SetStateAction<string>>;
   handleAction: (e: MouseEvent<HTMLButtonElement>) => void;
+  name: string;
   img?: string;
   placeholder?: string;
 }
@@ -24,6 +25,7 @@ const CustomTextarea: FC<Textarea> = ({
   textValue,
   setTextValue,
   handleAction,
+  name,
   img,
   placeholder = 'Aa',
 }) => {
@@ -88,6 +90,7 @@ const CustomTextarea: FC<Textarea> = ({
             className="textarea__input"
             value={textValue}
             placeholder={placeholder}
+            name={name}
             style={{
               height: 21 * (rows <= 5 ? rows : 5) + fontSize * 2.2,
             }}
