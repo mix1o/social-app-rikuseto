@@ -2,11 +2,14 @@ import { FC } from 'react';
 import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
 import { Form, Formik } from 'formik';
-import { AuthSchema3 as AuthSchema } from '../../validations/AuthSchemas';
+import { AuthSchema3 as AuthSchema } from '../../validations/authSchemas';
 import TextField from '../FormFields/TextField';
+import { useAuth } from '../../hooks/useAuth';
 
 const ResetPassword: FC = () => {
   const [, send] = useActor(authService);
+
+  const { resetPassword } = useAuth();
 
   return (
     <>
@@ -16,7 +19,7 @@ const ResetPassword: FC = () => {
         </div>
         <Formik
           initialValues={{ email: '' }}
-          onSubmit={values => console.log(values)}
+          onSubmit={values => resetPassword(values.email)}
           validationSchema={AuthSchema}
         >
           <Form className="auth-form">
