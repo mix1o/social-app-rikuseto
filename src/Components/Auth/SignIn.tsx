@@ -1,11 +1,9 @@
 import { Form, Formik } from 'formik';
 import { FC } from 'react';
 import TextField from '../FormFields/TextField';
-
 import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
-import { AuthSchema2 as AuthSchema } from '../../validations/AuthSchemas';
-
+import { loginSchema } from '../../validations/authSchemas';
 import { BaseUserData } from '../../interfaces/auth/authInterface';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -25,7 +23,7 @@ const SignIn: FC = () => {
         <Formik
           initialValues={{ email: '', password: '' }}
           onSubmit={values => handleLogIn(values)}
-          validationSchema={AuthSchema}
+          validationSchema={loginSchema}
         >
           <Form className="auth-form">
             <TextField
