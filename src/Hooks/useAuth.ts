@@ -1,3 +1,4 @@
+import { assertExpressionStatement } from '@babel/types';
 import { useActor } from '@xstate/react';
 import axios, { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
@@ -136,11 +137,35 @@ export const useAuth = () => {
     }
   };
 
+  const resetPassword = (email: string) => {
+    axios
+      .put(`${process.env.REACT_APP_API}/user/reset?email=${email}`)
+      .then(res => console.log(res.data));
+  };
+
+  const newPassword = (password: string, token: string) => {
+    axios
+      .put(`${process.env.REACT_APP_API}/user/new-password`, {
+        userId: token,
+        password,
+      })
+      .then(res => {
+        setMessage({ message: res.data.message, status: res.status });
+        if (res.status === 200) {
+          setTimeout(() => {
+            history.push('/auth');
+          }, 2000);
+        }
+      });
+  };
+
   return {
     signIn,
     loading,
     message,
     signUp,
     removeAccount,
+    resetPassword,
+    newPassword,
   };
 };
