@@ -179,6 +179,7 @@ const Comments: FC<CommentProps> = ({
       </div>
       {user && (
         <CustomTextarea
+          name="comment"
           textValue={commentText}
           setTextValue={setCommentText}
           handleAction={handleNewComment}

@@ -138,6 +138,7 @@ const SingleConversation = () => {
       </div>
       <div className="conversation__messages">{renderChat()}</div>
       <CustomTextarea
+        name="converastion"
         textValue={message}
         setTextValue={setMessage}
         handleAction={onMessageSend}
