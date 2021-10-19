@@ -58,4 +58,21 @@
   &__message--refused {
     color: clr.$warning-500;
   }
+  &__container-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+  }
+  &__heading {
+    margin-bottom: 5rem;
+  }
+  &__container-btns {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__change-btn {
+    background: clr.$main-bg-500;
+  }
 }

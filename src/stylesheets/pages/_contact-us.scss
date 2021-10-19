@@ -1,0 +1,29 @@
+@use '../abstracts/colors' as clr;
+@use '../abstracts/fontSizes' as ft;
+@use '../abstracts/variables' as var;
+@use '../components/button' as btn;
+
+.contact {
+  display: grid;
+  place-content: center;
+  //   max-width: 150ch;
+  min-height: 100vh;
+  margin: 0 1rem;
+
+  &__header {
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+  &__header::first-letter {
+    color: var(--main-bg-500);
+  }
+  &__textarea {
+    border: 2px solid var(--main-bg-500);
+    border-radius: 0;
+    margin-bottom: 2rem;
+  }
+  &__textarea:focus {
+    border-radius: 0;
+    border: 2px solid var(--main-bg-500);
+  }
+}

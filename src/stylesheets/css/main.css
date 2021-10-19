@@ -1869,6 +1869,23 @@ h6 {
 .auth__message--refused {
   color: #e53e3e;
 }
+.auth__container-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+.auth__heading {
+  margin-bottom: 5rem;
+}
+.auth__container-btns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.auth__change-btn {
+  background: #753ee0;
+}
 
 .account {
   padding: 1rem;
@@ -2579,6 +2596,29 @@ h6 {
 .details__btn--delete:disabled {
   background: #ffa1a1;
   outline-color: #e53e3e;
+}
+
+.contact {
+  display: grid;
+  place-content: center;
+  min-height: 100vh;
+  margin: 0 1rem;
+}
+.contact__header {
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+.contact__header::first-letter {
+  color: var(--main-bg-500);
+}
+.contact__textarea {
+  border: 2px solid var(--main-bg-500);
+  border-radius: 0;
+  margin-bottom: 2rem;
+}
+.contact__textarea:focus {
+  border-radius: 0;
+  border: 2px solid var(--main-bg-500);
 }
 
 [data-value=dark] {
