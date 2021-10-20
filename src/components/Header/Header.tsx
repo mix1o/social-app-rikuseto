@@ -15,27 +15,7 @@ import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import SearchCategory from '../Search/SearchCategory';
 import SearchUser from '../Search/SearchUser';
 import { handleFetch } from '../../helpers/handleSearch';
-
-const variants = {
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: 'tween',
-      ease: 'easeIn',
-      duration: 0.2,
-    },
-  },
-  closed: {
-    opacity: 0,
-    y: '-100%',
-    transition: {
-      type: 'tween',
-      ease: 'easeOut',
-      duration: 0.2,
-    },
-  },
-};
+import { menuVariants } from '../../helpers/variants';
 
 interface responseInterface {
   categories: Omit<CategoryArray, 'user_id'>[];
@@ -143,7 +123,7 @@ const Header: FC = () => {
             initial="closed"
             animate="open"
             exit="closed"
-            variants={variants}
+            variants={menuVariants}
             className="header__menu"
           >
             <div className="header__container">
@@ -218,9 +198,15 @@ const Header: FC = () => {
               <>
                 <section className="header__section">
                   <h5 className="header__heading-section">Useful links</h5>
-                  <p>About us</p>
-                  <p>Contact</p>
-                  <p>Support</p>
+                  <Link to="/" className="header__site-link">
+                    About us
+                  </Link>
+                  <Link to="/contact-us" className="header__site-link">
+                    Contact
+                  </Link>
+                  <Link to="/" className="header__site-link">
+                    Support
+                  </Link>
                 </section>
                 <section className="header__section">
                   <p className="header__heading-section">Theme</p>

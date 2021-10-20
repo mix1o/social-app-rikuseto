@@ -421,6 +421,15 @@ h6 {
   color: var(--font-dark-600);
   cursor: not-allowed;
 }
+.header__site-link {
+  color: var(--font-dark-600);
+  text-decoration: none;
+  display: block;
+  margin-block: 1rem;
+}
+.header__site-link:hover {
+  color: var(--main-bg-500);
+}
 
 .container-theme {
   width: 50px;
@@ -2613,12 +2622,53 @@ h6 {
 }
 .contact__textarea {
   border: 2px solid var(--main-bg-500);
-  border-radius: 0;
+  background: var(--light-bg-550);
+  font-family: inherit;
+  font-size: 1.6rem;
+  border-radius: 2px;
   margin-bottom: 2rem;
 }
 .contact__textarea:focus {
   border-radius: 0;
   border: 2px solid var(--main-bg-500);
+}
+.contact__submit {
+  background: #753ee0;
+  color: var(--font-light-300);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 1.2rem;
+  font-size: 1.6rem;
+}
+.contact__submit:hover {
+  background: #471a9e;
+  outline: 1px solid #946ae7;
+  cursor: pointer;
+}
+.contact__submit:active {
+  background: #946ae7;
+  outline: 1px solid #471a9e;
+  cursor: pointer;
+}
+.contact__submit:disabled {
+  background: #d3c2f5;
+  outline: 1px solid;
+  cursor: not-allowed;
+}
+.contact__error {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #e53e3e;
+}
+.contact__textarea-error {
+  border-color: #e53e3e;
+  background: rgba(229, 62, 62, 0.3);
+}
+.contact__message {
+  font-size: 1.6rem;
+  text-align: center;
+  color: #53c245;
 }
 
 [data-value=dark] {

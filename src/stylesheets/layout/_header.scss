@@ -155,6 +155,15 @@
   &__link--empty {
     @include btn.btnEmpty(var(--font-dark-600));
   }
+  &__site-link {
+    color: var(--font-dark-600);
+    text-decoration: none;
+    display: block;
+    margin-block: 1rem;
+  }
+  &__site-link:hover {
+    color: var(--main-bg-500);
+  }
 }
 
 .container-theme {
