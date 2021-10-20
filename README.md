@@ -18,9 +18,9 @@ Live Demo: [rikuseto](https://social-rikuseto.netlify.app/)
 ## Tech Stack
 
 **Client:** React, typescipt, react-cookie, axios, socket.io-client, @xstate/react, dropzone,
-react-sweet-state
+react-sweet-state.
 
-**Server:** Node, Express, mongoose, bcryptjs, uuid, socket.io, web-push,
+**Server:** Node, Express, mongoose, bcryptjs, uuid, socket.io, web-push.
 
 ## Authors
 
