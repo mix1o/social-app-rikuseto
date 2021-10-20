@@ -8,6 +8,7 @@ interface FieldProps {
   name: string;
   type: string;
   id?: string;
+  className?: string;
 }
 
 const TextField: FC<FieldProps> = ({ ...rest }) => {
@@ -17,7 +18,7 @@ const TextField: FC<FieldProps> = ({ ...rest }) => {
   const [focus, setFocus] = useState(false);
   return (
     <label
-      className="auth-form__wrapper"
+      className={`auth-form__wrapper  ${rest.className}`}
       onFocus={() => setFocus(!focus)}
       onBlur={() => setFocus(!focus)}
     >
@@ -26,7 +27,7 @@ const TextField: FC<FieldProps> = ({ ...rest }) => {
         focus={focus || meta.touched || meta.value}
       >
         {error ? null : rest.label}
-        <span className="auth-form__error" data-testid="message">
+        <span className={`auth-form__error `} data-testid="message">
           {error}
         </span>
       </Placeholder>

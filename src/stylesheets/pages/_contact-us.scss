@@ -6,7 +6,6 @@
 .contact {
   display: grid;
   place-content: center;
-  //   max-width: 150ch;
   min-height: 100vh;
   margin: 0 1rem;
 
@@ -19,11 +18,31 @@
   }
   &__textarea {
     border: 2px solid var(--main-bg-500);
-    border-radius: 0;
+    background: var(--light-bg-550);
+    font-family: inherit;
+    font-size: ft.$fs-300;
+    border-radius: 2px;
     margin-bottom: 2rem;
   }
   &__textarea:focus {
     border-radius: 0;
     border: 2px solid var(--main-bg-500);
+  }
+  &__submit {
+    @include btn.btn();
+  }
+  &__error {
+    font-size: ft.$fs-250;
+    font-weight: ft.$fw-500;
+    color: clr.$warning-500;
+  }
+  &__textarea-error {
+    border-color: clr.$warning-500;
+    background: clr.$warning-300;
+  }
+  &__message {
+    font-size: ft.$fs-300;
+    text-align: center;
+    color: clr.$pass-500;
   }
 }
