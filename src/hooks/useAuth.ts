@@ -1,4 +1,3 @@
-import { assertExpressionStatement } from '@babel/types';
 import { useActor } from '@xstate/react';
 import axios, { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
@@ -45,7 +44,10 @@ export const useAuth = () => {
     setLoading(false);
 
     if (status === 200) {
-      if (user) setCookie('user', user, { path: '/' });
+      if (user) {
+        setCookie('user', user, { path: '/' });
+        localStorage.setItem('userId', JSON.stringify({ id: user._id }));
+      }
 
       if (window.location.href.includes('/auth')) history.push('/');
 
@@ -130,6 +132,7 @@ export const useAuth = () => {
       setLoading(false);
       if (status === 200) {
         setTimeout(() => removeCookie('user'), 200);
+        localStorage.removeItem('userId');
         history.push('/');
       }
     } catch (err: any) {

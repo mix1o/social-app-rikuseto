@@ -11,7 +11,7 @@ import { CategoriesRoutes } from './categories';
 import { ProfileRoutes } from './profile';
 import { ConversationsRoutes, ConversationRoute } from './conversations';
 import { NotificationRoutes } from './notifications';
-import { NotFoundRoute, NotFoundAllRoute } from './other';
+import { NotFoundRoute, NotFoundAllRoute, AboutRoute } from './other';
 import { SearchedDataRoute } from './search';
 import { ContactRoute } from './contact';
 
@@ -39,5 +39,6 @@ export const Routes: RouteProps<ReactChild>[] = [
   UserDetails,
   ContactRoute,
   NewPasswordRoute,
+  AboutRoute,
   NotFoundAllRoute,
 ];

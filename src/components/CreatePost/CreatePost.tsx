@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState, useEffect, memo } from 'react';
+import { ChangeEvent, FC, useState, useEffect, memo, useRef } from 'react';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import Category from './Category';
@@ -31,8 +31,13 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
   const [message, setMessage] = useState<string>('');
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState<boolean>(false);
-  const { checkNotificationSupport, checkUserPermission } = useNotification();
-
+  const {
+    checkNotificationSupport,
+    checkUserPermission,
+    subscribeToPushNotification,
+  } = useNotification();
+  const ref = useRef<HTMLElement>(null);
+  console.log(user);
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
   ) => {
@@ -53,9 +58,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
       handleFetchPosts();
     }, 500);
   };
-  useEffect(() => {
-    console.log(post);
-  }, [post]);
+
   const checkCorrectPost = () => {
     if (userPickedImage) {
       if (
@@ -89,7 +92,15 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
     return () => setCorrectFormatPost(false);
   }, [post, correctImage, userPickedImage]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (ref.current) {
+      const currentHeight = ref.current.scrollHeight;
+
+      if (Math.floor((100 * currentHeight) / window.innerHeight) >= 70) {
+        ref.current.style.overflowY = 'scroll';
+      }
+    }
+  }, [ref.current?.scrollHeight]);
 
   const handleNotification = () => {
     const permission = checkUserPermission();
@@ -100,7 +111,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
   };
 
   return (
-    <section className="create-post">
+    <section ref={ref} className="create-post">
       <h2 data-testid="create-post__header">Create new post</h2>
       <label className="create-post__label">
         <input
@@ -149,8 +160,9 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
           </p>
         </label>
       )}
-      {/* {checkNotificationSupport && info.length >= 2 && (
-          )} */}
+      {checkNotificationSupport && (
+        <button onClick={subscribeToPushNotification}>subscript</button>
+      )}
 
       <button
         className="create-post__btn-add"

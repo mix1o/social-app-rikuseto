@@ -4,6 +4,7 @@ import {
   FC,
   SetStateAction,
   useCallback,
+  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -187,7 +188,6 @@ const CropImage: FC<CropProps> = ({
       },
     });
   };
-
   return (
     <section className="crop-image">
       {imagePreview!?.toString().length >= 1 ? (

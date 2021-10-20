@@ -12,16 +12,33 @@ import BlurredContent from '../Animations/Popup';
 import { AnimatePresence as Presence } from 'framer-motion';
 
 import RemoveAccount from './RemoveAccount';
+import useNotification from '../../hooks/notifications/useNotification';
 
 const Details = () => {
   const [cookies, setCookie] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
+  const {
+    askUserPermission,
+    userPermission,
+    checkNotificationSupport,
+    userSubscription,
+    error,
+    subscribeToPushNotification,
+  } = useNotification();
 
   const [toggle, setToggle] = useState(user?.pushNotification);
   const [open, setOpen] = useState(false);
 
   dayjs.extend(relativeTime);
   const handleToggle = () => {
+    if (!toggle) {
+      if (!checkNotificationSupport) return null;
+
+      if (userPermission !== 'granted') return askUserPermission();
+    }
+
+    subscribeToPushNotification();
+
     axios
       .put(
         `${process.env.REACT_APP_API}/user/update-notification?userId=${user._id}`
@@ -35,6 +52,7 @@ const Details = () => {
   return (
     <div>
       <Header />
+
       <main className="details">
         <h2 className="details__header">Account Details</h2>
         <section className="details__date">
@@ -79,6 +97,7 @@ const Details = () => {
               }}
             />
           </div>
+          {error}
           <button
             className="details__btn--remove"
             onClick={() => setOpen(true)}

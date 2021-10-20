@@ -832,7 +832,6 @@ h6 {
   background: var(--light-bg-600);
   max-width: 35rem;
   height: 70vh;
-  overflow-y: scroll;
 }
 .create-post__title {
   font-size: 1.6rem;

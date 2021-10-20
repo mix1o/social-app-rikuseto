@@ -198,7 +198,7 @@ const Header: FC = () => {
               <>
                 <section className="header__section">
                   <h5 className="header__heading-section">Useful links</h5>
-                  <Link to="/" className="header__site-link">
+                  <Link to="/about" className="header__site-link">
                     About us
                   </Link>
                   <Link to="/contact-us" className="header__site-link">
@@ -273,6 +273,7 @@ const Header: FC = () => {
                     onClick={e => {
                       e.stopPropagation();
                       removeCookie('user');
+                      localStorage.removeItem('userId');
                       setOpenMenu(false);
                       history.push('/');
                     }}

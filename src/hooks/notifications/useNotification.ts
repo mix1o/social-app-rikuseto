@@ -8,6 +8,7 @@ import {
   getUserSubscription,
 } from './push-notification';
 import { useCookies } from 'react-cookie';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 const checkNotificationSupport = notificationSupport();
 
@@ -19,7 +20,7 @@ const useNotification = () => {
   const [info, setInfo] = useState('');
 
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   // Register SW if notification are supported
   useEffect(() => {
     if (checkNotificationSupport) {
@@ -28,6 +29,8 @@ const useNotification = () => {
       registerServiceWorker().then(() => {
         setLoading(false);
       });
+    } else {
+      setError('Push Notifications are not supported on your device');
     }
   }, []);
 
@@ -37,10 +40,8 @@ const useNotification = () => {
     setError(false);
     const getExistingSubscription = async () => {
       const existingSubscription = await getUserSubscription();
-      if (existingSubscription === null) {
-        // TODO Display to user if he wants to subscripe, Check if user have already addded this SW to his account
-        setInfo('Do you want to get notification ?');
-      }
+      if (existingSubscription === null) return null;
+
       setUserSubscription(existingSubscription);
       setLoading(false);
       setInfo('');
@@ -57,7 +58,7 @@ const useNotification = () => {
   //On click to ask user for permission
   const askUserPermission = () => {
     setLoading(true);
-    setError(false);
+    setError('');
     askPermission().then(consent => {
       setUserPermission(consent);
       if (consent !== 'granted') {
@@ -74,33 +75,39 @@ const useNotification = () => {
   const subscribeToPushNotification = () => {
     setLoading(true);
     setError(false);
-    createNotificationSubscription()
-      .then(sub => {
-        setUserSubscription(sub);
-        if (sub?.endpoint) {
-          const subJSON = JSON.parse(JSON.stringify(sub));
+    const indexSw = user.serviceWorkers?.findIndex(
+      sw => sw.endpoint === userSubscription.endpoint
+    );
 
-          axios.put(`${process.env.REACT_APP_API}/sw/add-sw`, {
-            subscription: {
-              endpoint: sub?.endpoint,
-              keys: {
-                auth: subJSON.keys.auth,
-                p256dh: subJSON.keys.p256dh,
+    if (indexSw === -1) {
+      createNotificationSubscription()
+        .then(sub => {
+          setUserSubscription(sub);
+          if (sub?.endpoint) {
+            const subJSON = JSON.parse(JSON.stringify(sub));
+
+            axios.put(`${process.env.REACT_APP_API}/sw/add-sw`, {
+              subscription: {
+                endpoint: sub?.endpoint,
+                keys: {
+                  auth: subJSON.keys.auth,
+                  p256dh: subJSON.keys.p256dh,
+                },
               },
-            },
-            userId: user._id,
-          });
-        }
+              userId: user._id,
+            });
+          }
 
-        setLoading(false);
-      })
-      .catch(err => {
-        if (Notification.permission === 'denied') {
-          setError('Permission for notifications was denied');
-        }
-        setError(err);
-        setLoading(false);
-      });
+          setLoading(false);
+        })
+        .catch(err => {
+          if (Notification.permission === 'denied') {
+            setError('Permission for notifications was denied');
+          }
+          setError(err);
+          setLoading(false);
+        });
+    }
   };
 
   const checkUserPermission = () => {

@@ -70,7 +70,7 @@ const onChangeSubscription = e => {
     fetch(`${process.env.REACT_APP_API}/sw/update-sw`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+      body: {
         old_endpoint: e.oldSubscription ? e.oldSubscription.endpoint : null,
         new_endpoint: e.newSubscription ? e.newSubscription.endpoint : null,
         new_p256dh: e.newSubscription
@@ -79,7 +79,8 @@ const onChangeSubscription = e => {
         new_auth: e.newSubscription
           ? e.newSubscription.toJSON().keys.auth
           : null,
-      }),
+        userId: JSON.parse(localStorage.getItem('userId')),
+      },
     })
   );
 }; //TODO get user from cookies
