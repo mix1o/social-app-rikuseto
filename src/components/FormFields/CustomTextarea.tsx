@@ -20,6 +20,7 @@ interface Textarea {
   name: string;
   img?: string;
   placeholder?: string;
+  loading: boolean;
 }
 const CustomTextarea: FC<Textarea> = ({
   textValue,
@@ -27,6 +28,7 @@ const CustomTextarea: FC<Textarea> = ({
   handleAction,
   name,
   img,
+  loading,
   placeholder = 'Aa',
 }) => {
   const [openEmojiList, setOpenEmojiList] = useState(false);
@@ -122,6 +124,7 @@ const CustomTextarea: FC<Textarea> = ({
           data-testid="publish"
           className="textarea__publish"
           onClick={validateInput}
+          disabled={loading}
         >
           <i className="fas fa-location-arrow"></i>
         </button>
