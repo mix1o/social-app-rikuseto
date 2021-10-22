@@ -16,23 +16,8 @@ import CustomTextarea from '../FormFields/CustomTextarea';
 import { commentsOptions } from '../../helpers/filterOptions';
 import Select from 'react-select';
 import { mainSelect } from '../../helpers/selectStyles.styled';
-
-const commentVariant = {
-  hidden: {
-    y: 1000,
-    opacity: 0,
-    transition: {
-      type: 'tween',
-    },
-  },
-  show: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: 'tween',
-    },
-  },
-};
+import { commentVariant } from '../../helpers/variants';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
 interface SortedElement {
   date: string;
@@ -54,11 +39,12 @@ const Comments: FC<CommentProps> = ({
   const [comments, setComments] = useState<CommentsData[]>();
   const [filter, setFilter] = useState<string | undefined>('default');
   const [popup, setPopup] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   const commentRef = useRef<any>();
   const [, actions] = useCounter();
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
 
   const commentId = window.location.href.split('#')[1];
 
@@ -67,11 +53,8 @@ const Comments: FC<CommentProps> = ({
   const MODE_DEFAULT = 'default';
 
   const handleNewComment = (): void => {
-    if (!user) {
-      setPopup(true);
-      return;
-    }
-
+    if (!user) return setPopup(true);
+    setLoading(true);
     axios
       .post(`${process.env.REACT_APP_API}/comments/create`, {
         commentText,
@@ -88,6 +71,7 @@ const Comments: FC<CommentProps> = ({
             top: commentRef.current.scrollHeight,
             behavior: 'smooth',
           });
+          setLoading(false);
         }, 300);
       });
   };
@@ -185,6 +169,7 @@ const Comments: FC<CommentProps> = ({
           handleAction={handleNewComment}
           img={user.avatar}
           placeholder={`Add comment as ${user.firstName} ${user.lastName}`}
+          loading={loading}
         />
       )}
       <Presence initial={false} exitBeforeEnter>
