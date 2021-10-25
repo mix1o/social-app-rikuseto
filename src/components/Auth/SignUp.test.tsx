@@ -1,8 +1,14 @@
 import SignUp from './SignUp';
-import '@testing-library/jest-dom/extend-expect';
-import { fireEvent, render, waitFor, screen } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  waitFor,
+  screen,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
+import { server, rest } from '../../testServer';
 
 test('SignUp renders with correct elements', () => {
   render(<SignUp />);
@@ -74,4 +80,50 @@ test('Inputs show message after click button with empty value of input', async (
   };
 
   await waitFor(() => checkMessages());
+});
+
+test('Successfully registered user response from server', async () => {
+  server.use(
+    rest.post(
+      `${process.env.REACT_APP_API}/auth/create-account`,
+      (req, res, ctx) => {
+        return res(
+          ctx.status(203),
+          ctx.json({
+            message: 'Email already exists please login or reset your password',
+          })
+        );
+      }
+    )
+  );
+
+  render(<SignUp />);
+
+  act(() => {
+    fireEvent.change(screen.getByPlaceholderText('Email address'), {
+      target: { value: 'John@gmail.com' },
+    });
+
+    fireEvent.change(screen.getByPlaceholderText('Password'), {
+      target: { value: 'qweQWE123!@#' },
+    });
+
+    fireEvent.change(screen.getByPlaceholderText('Confirm Password'), {
+      target: { value: 'qweQWE123!@#' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('First Name'), {
+      target: { value: 'Johny' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Last Name'), {
+      target: { value: 'John' },
+    });
+  });
+
+  userEvent.click(screen.getByTestId('btn-sign-up'));
+
+  expect(
+    await screen.findByText(
+      /Email already exists please login or reset your password/i
+    )
+  ).toHaveClass('auth__message--refused');
 });
