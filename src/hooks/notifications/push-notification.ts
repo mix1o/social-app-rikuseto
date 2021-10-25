@@ -7,7 +7,7 @@ export const registerServiceWorker = () =>
 export const askPermission = async () => await Notification.requestPermission();
 
 export const createNotificationSubscription = async () => {
-  if (!notificationSupport()) return null;
+  if (!notificationSupport()) throw new Error('Notification are not supported');
 
   const SW = await navigator.serviceWorker.ready;
 
@@ -18,6 +18,8 @@ export const createNotificationSubscription = async () => {
 };
 
 export const getUserSubscription = async () => {
+  if (!notificationSupport()) throw new Error('Notification are not supported');
+
   const SW = await navigator.serviceWorker.ready;
   const getSubscription = await SW.pushManager.getSubscription();
 
