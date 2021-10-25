@@ -166,20 +166,22 @@ const CropImage: FC<CropProps> = ({
       success(result) {
         const formData = new FormData();
 
-        const fileData = upload(result).then(res => {
-          if (res!.status === 200) {
-            setTimeout(() => {
-              setPost({ ...post, file: res.data.link });
-              setCorrectImage(true);
-              setMessage('JAR JAR');
-            }, 200);
-            return false;
-          }
+        const fileData = upload(result)
+          .then(res => {
+            if (res!.status === 200) {
+              setTimeout(() => {
+                setPost({ ...post, file: res.data.link });
+                setCorrectImage(true);
+                setMessage('JAR JAR');
+              }, 200);
+              return false;
+            }
 
-          setCorrectImage(false);
-          setDisablelBtn(false);
-          setMessage('Something went wrong. Please try again');
-        });
+            setCorrectImage(false);
+            setDisablelBtn(false);
+            setMessage('Something went wrong. Please try again');
+          })
+          .catch(err => console.log(err));
 
         formData.append('file', result);
       },

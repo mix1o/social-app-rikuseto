@@ -142,6 +142,7 @@ const Posts: FC = () => {
   return (
     <>
       <Header />
+
       <main>
         {user && !state.isOpenCommentComponent && (
           <div className="post__wrapper">

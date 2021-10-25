@@ -37,7 +37,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
     subscribeToPushNotification,
   } = useNotification();
   const ref = useRef<HTMLElement>(null);
-  console.log(user);
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
   ) => {
@@ -102,13 +102,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
     }
   }, [ref.current?.scrollHeight]);
 
-  const handleNotification = () => {
-    const permission = checkUserPermission();
-
-    if (permission) {
-      console.log('granted');
-    }
-  };
+  const handleNotification = () => checkUserPermission();
 
   return (
     <section ref={ref} className="create-post">
@@ -151,6 +145,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
               setPost({ ...post, notification: !post.notification })
             }
             className="create-post__notifications"
+            name="Receive notification"
           />
           <p className="create-post__notifications-text">
             Receive notification{' '}
@@ -177,9 +172,5 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
 };
 
 export default memo(CreatePost);
-
-// TODO COMPONENT HELP
-
-// TODO RESET HASLA
 
 // TODO Pagination posts,comments, messages
