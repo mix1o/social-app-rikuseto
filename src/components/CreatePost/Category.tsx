@@ -1,21 +1,20 @@
 import axios from 'axios';
-import { FC, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { CookieUser } from '../../interfaces/auth/authInterface';
-import {
-  CategoryArray,
-  CategoryProps,
-  singleOptions,
-} from '../../interfaces/posts/category';
+import { CategoryArray, singleOptions } from '../../interfaces/posts/category';
 
-import AsyncSelect from 'react-select/async';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import { mainSelect } from '../../helpers/selectStyles.styled';
+import { useCreatePostCtx } from '../../hooks/useCreatePost';
+import { ActionEnum } from '../../interfaces/posts/postInterfaces';
 
-const Category: FC<CategoryProps> = ({ post, setPost }) => {
+const Category = () => {
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const [userCategories, setUserCategories] = useState<singleOptions[]>();
+  const postCtx = useCreatePostCtx();
+
   const getCategory = async () => {
     try {
       const response = await axios.get(
@@ -65,7 +64,10 @@ const Category: FC<CategoryProps> = ({ post, setPost }) => {
         loadOptions={inputValue => handleSearchFetch(inputValue)}
         onChange={inputValue => {
           if (inputValue?.value !== undefined) {
-            setPost({ ...post, category: inputValue?.value });
+            postCtx?.dispatch({
+              type: ActionEnum.SET_CATEGORY,
+              payload: inputValue.value,
+            });
           }
         }}
         loadingMessage={value => 'Searching ...'}

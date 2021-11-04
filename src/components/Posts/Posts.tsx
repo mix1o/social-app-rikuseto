@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useCallback, useRef, LegacyRef } from 'react';
+import { FC, useEffect, useState, useCallback, useRef } from 'react';
 import CreatePost from '../CreatePost/CreatePost';
 import Post from '../Post/Post';
 import axios from 'axios';
@@ -6,7 +6,7 @@ import { useCookies } from 'react-cookie';
 import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import { useCounter } from '../../store/sub';
 import Header from '../Header/Header';
-import { motion as m, AnimatePresence as Presence } from 'framer-motion';
+import { AnimatePresence as Presence } from 'framer-motion';
 import BlurredContent from '../Animations/Popup';
 import Select from 'react-select';
 import { mainSelect } from '../../helpers/selectStyles.styled';
@@ -15,6 +15,7 @@ import {
   singleOptions,
   singleOptionsWithGroup,
 } from '../../interfaces/posts/category';
+import CreatePostCtx from '../../providers/CreatePostCtx';
 
 const MODE_HOME = 'home';
 const MODE_ALL = 'all';
@@ -165,7 +166,9 @@ const Posts: FC = () => {
         <Presence>
           {state.open && (
             <BlurredContent closeHandler={closeHandler}>
-              <CreatePost handleFetchPosts={fetchPosts} />
+              <CreatePostCtx>
+                <CreatePost handleFetchPosts={fetchPosts} />
+              </CreatePostCtx>
             </BlurredContent>
           )}
         </Presence>

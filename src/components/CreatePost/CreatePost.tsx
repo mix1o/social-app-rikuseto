@@ -1,12 +1,13 @@
-import { ChangeEvent, FC, useState, useEffect, memo, useRef } from 'react';
+import { FC, useState, useEffect, memo, useRef } from 'react';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import Category from './Category';
 import CropImage from './CropImage';
-import { CreatePostI } from '../../interfaces/posts/postInterfaces';
+import { ActionEnum } from '../../interfaces/posts/postInterfaces';
 import useNotification from '../../hooks/notifications/useNotification';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 import { useCounter } from '../../store/sub';
+import { useCreatePostCtx } from '../../hooks/useCreatePost';
 
 interface CreateProps {
   handleFetchPosts: () => void;
@@ -15,17 +16,9 @@ interface CreateProps {
 const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
-
+  const postCtx = useCreatePostCtx();
   const [, actions] = useCounter();
-
-  const [post, setPost] = useState<CreatePostI>({
-    headline: '',
-    file: '',
-    category: '',
-    userId: user ? user._id : '',
-    notification: false,
-  });
-
+  console.log(postCtx.state);
   const [correctImage, setCorrectImage] = useState<boolean>(false);
   const [userPickedImage, setUserPickedImage] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
@@ -38,21 +31,12 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
   } = useNotification();
   const ref = useRef<HTMLElement>(null);
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
-  ) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    setPost({ ...post, [name]: value });
-  };
-
   const createNewPost = async () => {
     if (user) {
-      axios.post(`${process.env.REACT_APP_API}/posts/create`, post);
+      axios.post(`${process.env.REACT_APP_API}/posts/create`, postCtx?.state);
     }
 
-    setPost({ headline: '', file: '', category: '', notification: false });
+    postCtx?.dispatch({ type: ActionEnum.CLEAR });
     actions.openCreatePost(false);
     setTimeout(() => {
       handleFetchPosts();
@@ -62,9 +46,9 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
   const checkCorrectPost = () => {
     if (userPickedImage) {
       if (
-        post!.headline!.trim().length >= 3 &&
-        post!.category!.trim().length >= 1 &&
-        post!.file!.length > 3 &&
+        postCtx?.state!.headline!.trim().length >= 3 &&
+        postCtx?.state!.category!.trim().length >= 1 &&
+        postCtx?.state!.file!.length > 3 &&
         correctImage
       ) {
         setDisable(false);
@@ -76,7 +60,10 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
       }
     }
 
-    if (post!.headline!.length >= 3 && post!.category!.length > 1) {
+    if (
+      postCtx?.state!.headline!.length >= 3 &&
+      postCtx?.state!.category!.length > 1
+    ) {
       return true;
     } else {
       setMessage(
@@ -90,7 +77,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
     setCorrectFormatPost(checkCorrectPost());
 
     return () => setCorrectFormatPost(false);
-  }, [post, correctImage, userPickedImage]);
+  }, [postCtx?.state, correctImage, userPickedImage]);
 
   useEffect(() => {
     if (ref.current) {
@@ -110,26 +97,29 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
       <label className="create-post__label">
         <input
           data-testid="headline"
-          value={post.headline}
-          onChange={e => handleChange(e)}
+          value={postCtx?.state.headline}
+          onChange={e =>
+            postCtx?.dispatch({
+              type: ActionEnum.SET_HEADLINE,
+              payload: e.target.value,
+            })
+          }
           type="text"
-          name="headline"
+          name={ActionEnum.SET_HEADLINE}
           placeholder="Write something interesting"
           className="create-post__title"
         />
       </label>
 
-      <Category chooseCategory={post.category} setPost={setPost} post={post} />
+      <Category />
       <CropImage
         setMessage={setMessage}
-        post={post}
-        setPost={setPost}
         setUserPickedImage={setUserPickedImage}
         setCorrectImage={setCorrectImage}
         correctImage={correctImage}
       />
       {disable && <p>Loading image...</p>}
-      {!correctFormatPost && post!.headline!.length > 0 && (
+      {!correctFormatPost && postCtx?.state!.headline!.length > 0 && (
         <p data-testid="message" className="create-post__message">
           {message}
         </p>
@@ -142,10 +132,10 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
           <input
             type="checkbox"
             onChange={e =>
-              setPost({ ...post, notification: !post.notification })
+              postCtx?.dispatch({ type: ActionEnum.SET_NOTIFICATION })
             }
             className="create-post__notifications"
-            name="Receive notification"
+            name={ActionEnum.SET_NOTIFICATION}
           />
           <p className="create-post__notifications-text">
             Receive notification{' '}

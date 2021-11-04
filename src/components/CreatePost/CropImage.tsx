@@ -16,15 +16,14 @@ import {
 } from '../../helpers/imageFunctions';
 import { useDropzone as useDropZone } from 'react-dropzone';
 import Compressor from 'compressorjs';
-import { CreatePostI } from '../../interfaces/posts/postInterfaces';
+import { ActionEnum, CreatePostI } from '../../interfaces/posts/postInterfaces';
 import { upload } from '../../api/uploadImg';
 import { useCounter } from '../../store/sub';
 import { useFiles } from '../../hooks/useFiles';
+import { useCreatePostCtx } from '../../hooks/useCreatePost';
 
 interface CropProps {
   setMessage: Dispatch<SetStateAction<string>>;
-  post: CreatePostI;
-  setPost: Dispatch<SetStateAction<CreatePostI>>;
   setUserPickedImage: Dispatch<SetStateAction<boolean>>;
   setCorrectImage: Dispatch<SetStateAction<boolean>>;
   correctImage: boolean;
@@ -32,8 +31,6 @@ interface CropProps {
 
 const CropImage: FC<CropProps> = ({
   setMessage,
-  post,
-  setPost,
   setUserPickedImage,
   setCorrectImage,
 }) => {
@@ -44,6 +41,7 @@ const CropImage: FC<CropProps> = ({
   const cropRefWrapper = useRef<HTMLDivElement>(null);
   const [{ disabledModal }, { setDisabledModal }] = useCounter();
   const [disableBtn, setDisablelBtn] = useState(false);
+  const postCtx = useCreatePostCtx();
 
   const [openCrop, setOpenCrop] = useState(false);
 
@@ -170,7 +168,10 @@ const CropImage: FC<CropProps> = ({
           .then(res => {
             if (res!.status === 200) {
               setTimeout(() => {
-                setPost({ ...post, file: res.data.link });
+                postCtx?.dispatch({
+                  type: ActionEnum.SET_FILE,
+                  payload: res.data.link,
+                });
                 setCorrectImage(true);
                 setMessage('JAR JAR');
               }, 200);
