@@ -7,15 +7,9 @@ interface PostActionsI {
   id: string;
   userId: string;
   setIsEdit: Dispatch<SetStateAction<boolean>>;
-  refreshPosts: () => void;
 }
 
-const PostActions: FC<PostActionsI> = ({
-  id,
-  userId,
-  setIsEdit,
-  refreshPosts,
-}) => {
+const PostActions: FC<PostActionsI> = ({ id, userId, setIsEdit }) => {
   const [cookies, setCookie] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const [savedPost, setSavedPost] = useState<boolean>(false);
@@ -70,7 +64,7 @@ const PostActions: FC<PostActionsI> = ({
               savePost();
 
               setTimeout(() => {
-                refreshPosts();
+                //TODO query refresh
               }, 200);
             }}
             className="post__action"

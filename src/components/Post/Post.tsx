@@ -21,6 +21,7 @@ import { useCounter } from '../../store/sub';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 import ShareButton from './ShareButton';
 import PostActions from './PostActions';
+import { useLikePost } from '../../hooks/usePost';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
@@ -29,7 +30,6 @@ const Post: FC<PostInterfaceExtended> = ({
   category,
   file,
   likes,
-  refreshPosts,
   date,
 }) => {
   const [liked, setLiked] = useState<boolean | undefined>(false);
@@ -48,6 +48,7 @@ const Post: FC<PostInterfaceExtended> = ({
 
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
+  const { data, refetch } = useLikePost(_id, user._id);
 
   const location = useLocation();
   const [state] = useCounter();
@@ -56,18 +57,9 @@ const Post: FC<PostInterfaceExtended> = ({
 
   const handleLikePost = () => {
     if (user) {
-      axios
-        .post(`${process.env.REACT_APP_API}/posts/like`, {
-          postId: _id,
-          userId: user._id,
-        })
-        .then(() => {
-          refreshPosts();
-        })
-        .catch(err => console.log(err));
-
-      return;
+      return refetch();
     }
+
     setPopup(true);
   };
 
@@ -118,7 +110,7 @@ const Post: FC<PostInterfaceExtended> = ({
       })
       .then(() => {
         setIsEdit(false);
-        refreshPosts();
+        //TODO query refresh
       });
   };
 
@@ -160,12 +152,7 @@ const Post: FC<PostInterfaceExtended> = ({
                   },
                 }}
                 content={
-                  <PostActions
-                    setIsEdit={setIsEdit}
-                    id={_id}
-                    userId={userId}
-                    refreshPosts={refreshPosts}
-                  />
+                  <PostActions setIsEdit={setIsEdit} id={_id} userId={userId} />
                 }
               >
                 <button className="post__container-dots-btn">
@@ -261,7 +248,7 @@ const Post: FC<PostInterfaceExtended> = ({
               <m.button
                 className="post__btn"
                 whileTap={{ scale: 1.2 }}
-                onClick={() => handleLikePost()}
+                onClick={handleLikePost}
                 aria-label="like or dislike post"
                 type="button"
               >
