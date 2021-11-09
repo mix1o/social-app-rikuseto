@@ -206,7 +206,6 @@ const Profile: FC = () => {
                     file={file}
                     userId={userId}
                     likes={likes}
-                    refreshPosts={getUserData}
                     date={date}
                   />
                 );

@@ -9,7 +9,6 @@ export interface PostInterface {
 }
 
 export interface PostInterfaceExtended extends PostInterface {
-  refreshPosts: () => void;
   saved?: boolean;
 }
 
