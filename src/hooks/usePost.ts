@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient, QueryCache } from 'react-query';
+
 import {
   ActionEnum,
   CreatePostI,
@@ -35,8 +36,8 @@ export const useCreatePost = () => {
   );
 };
 
-export const useGetAllPosts = (type: fetchType, url: string) => {
-  return useQuery<PostInterface[]>(
+export const useGetAllPosts = (type: fetchType, url: string) =>
+  useQuery<PostInterface[]>(
     `${type}`,
     async () => {
       const res = await axios.get(`${process.env.REACT_APP_API}${url}`);
@@ -44,6 +45,27 @@ export const useGetAllPosts = (type: fetchType, url: string) => {
     },
     {
       staleTime: 1000000,
+    }
+  );
+
+export const useLikePost = (postId: string, userId: string) => {
+  const queryClient = useQueryClient();
+  return useQuery(
+    'like-post',
+    () => {
+      axios
+        .post(`${process.env.REACT_APP_API}/posts/like`, {
+          postId,
+          userId,
+        })
+        .then(res => res.data);
+    },
+    {
+      enabled: false,
+      onSuccess: () => {
+        queryClient.invalidateQueries('all-posts');
+        queryClient.invalidateQueries('user-posts');
+      },
     }
   );
 };

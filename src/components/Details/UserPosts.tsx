@@ -46,7 +46,6 @@ const UserPosts: FC = () => {
                   file={file}
                   userId={userId}
                   likes={likes}
-                  refreshPosts={getUserPosts}
                   date={date}
                 />
               );
