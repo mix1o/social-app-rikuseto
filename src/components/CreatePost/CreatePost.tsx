@@ -1,29 +1,24 @@
-import { FC, useState, useEffect, memo, useRef } from 'react';
-import axios from 'axios';
+import { useState, useEffect, memo, useRef, SyntheticEvent } from 'react';
 import { useCookies } from 'react-cookie';
 import Category from './Category';
 import CropImage from './CropImage';
 import { ActionEnum } from '../../interfaces/posts/postInterfaces';
 import useNotification from '../../hooks/notifications/useNotification';
 import { CookieUser } from '../../interfaces/auth/authInterface';
-import { useCounter } from '../../store/sub';
 import { useCreatePostCtx } from '../../hooks/useCreatePost';
+import { useCreatePost } from '../../hooks/usePost';
 
-interface CreateProps {
-  handleFetchPosts: () => void;
-}
-
-const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
+const CreatePost = () => {
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
-  const postCtx = useCreatePostCtx();
-  const [, actions] = useCounter();
-  console.log(postCtx.state);
+  const { dispatch, state } = useCreatePostCtx();
+
   const [correctImage, setCorrectImage] = useState<boolean>(false);
   const [userPickedImage, setUserPickedImage] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState<boolean>(false);
+  const createPostMutation = useCreatePost();
   const {
     checkNotificationSupport,
     checkUserPermission,
@@ -31,24 +26,19 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
   } = useNotification();
   const ref = useRef<HTMLElement>(null);
 
-  const createNewPost = async () => {
+  const createNewPost = async (e: SyntheticEvent) => {
+    e.preventDefault();
     if (user) {
-      axios.post(`${process.env.REACT_APP_API}/posts/create`, postCtx?.state);
+      createPostMutation.mutateAsync(state);
     }
-
-    postCtx?.dispatch({ type: ActionEnum.CLEAR });
-    actions.openCreatePost(false);
-    setTimeout(() => {
-      handleFetchPosts();
-    }, 500);
   };
 
   const checkCorrectPost = () => {
     if (userPickedImage) {
       if (
-        postCtx?.state!.headline!.trim().length >= 3 &&
-        postCtx?.state!.category!.trim().length >= 1 &&
-        postCtx?.state!.file!.length > 3 &&
+        state.headline.trim().length >= 3 &&
+        state.category &&
+        state.file.length > 3 &&
         correctImage
       ) {
         setDisable(false);
@@ -60,10 +50,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
       }
     }
 
-    if (
-      postCtx?.state!.headline!.length >= 3 &&
-      postCtx?.state!.category!.length > 1
-    ) {
+    if (state.headline.length >= 3 && state.category.length > 0) {
       return true;
     } else {
       setMessage(
@@ -77,7 +64,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
     setCorrectFormatPost(checkCorrectPost());
 
     return () => setCorrectFormatPost(false);
-  }, [postCtx?.state, correctImage, userPickedImage]);
+  }, [state, correctImage, userPickedImage]);
 
   useEffect(() => {
     if (ref.current) {
@@ -97,9 +84,9 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
       <label className="create-post__label">
         <input
           data-testid="headline"
-          value={postCtx?.state.headline}
+          value={state.headline}
           onChange={e =>
-            postCtx?.dispatch({
+            dispatch({
               type: ActionEnum.SET_HEADLINE,
               payload: e.target.value,
             })
@@ -119,7 +106,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
         correctImage={correctImage}
       />
       {disable && <p>Loading image...</p>}
-      {!correctFormatPost && postCtx?.state!.headline!.length > 0 && (
+      {!correctFormatPost && state!.headline!.length > 0 && (
         <p data-testid="message" className="create-post__message">
           {message}
         </p>
@@ -131,9 +118,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
         >
           <input
             type="checkbox"
-            onChange={e =>
-              postCtx?.dispatch({ type: ActionEnum.SET_NOTIFICATION })
-            }
+            onChange={() => dispatch({ type: ActionEnum.SET_NOTIFICATION })}
             className="create-post__notifications"
             name={ActionEnum.SET_NOTIFICATION}
           />
@@ -152,8 +137,8 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
       <button
         className="create-post__btn-add"
         data-testid="button"
-        disabled={!correctFormatPost}
-        onClick={() => createNewPost()}
+        disabled={!correctFormatPost || createPostMutation.status === 'loading'}
+        onClick={createNewPost}
       >
         Create post
       </button>

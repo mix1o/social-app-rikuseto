@@ -8,38 +8,31 @@ import AsyncCreatableSelect from 'react-select/async-creatable';
 import { mainSelect } from '../../helpers/selectStyles.styled';
 import { useCreatePostCtx } from '../../hooks/useCreatePost';
 import { ActionEnum } from '../../interfaces/posts/postInterfaces';
+import { useCategory, useCategoryAll } from '../../hooks/useCategory';
+import useDebounce from '../../hooks/useDebounce';
 
 const Category = () => {
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const [userCategories, setUserCategories] = useState<singleOptions[]>();
+  const [searchTerm, setSearchTerm] = useState('');
   const postCtx = useCreatePostCtx();
+  const { data } = useCategory(user._id);
 
-  const getCategory = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API}/category/get-categories?userId=${user._id}`
-      );
-      return setUserCategories(formatCategories(response.data, 'Favorites'));
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const debouncedValue = useDebounce(searchTerm, 300);
+  const { data: allCategory } = useCategoryAll(debouncedValue);
 
   useEffect(() => {
-    getCategory();
-  }, []);
+    setUserCategories(formatCategories(data));
+  }, [debouncedValue]);
 
   const handleSearchFetch = async (inputValue: string) => {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API}/category/filter`,
-      { params: { value: inputValue } }
-    );
+    setSearchTerm(inputValue);
 
-    return formatCategories(response.data, 'Other searched');
+    return formatCategories(allCategory?.data);
   };
 
-  const formatCategories = (arr: CategoryArray[], type: string) => {
+  const formatCategories = (arr: CategoryArray[]) => {
     const options: { label: string; value: string }[] = [];
     arr?.forEach(({ name, totalPosts }) => {
       const obj = {
@@ -63,12 +56,10 @@ const Category = () => {
         placeholder="Choose category"
         loadOptions={inputValue => handleSearchFetch(inputValue)}
         onChange={inputValue => {
-          if (inputValue?.value !== undefined) {
-            postCtx?.dispatch({
-              type: ActionEnum.SET_CATEGORY,
-              payload: inputValue.value,
-            });
-          }
+          postCtx?.dispatch({
+            type: ActionEnum.SET_CATEGORY,
+            payload: inputValue?.value ? inputValue?.value : '',
+          });
         }}
         loadingMessage={value => 'Searching ...'}
         isClearable={true}
