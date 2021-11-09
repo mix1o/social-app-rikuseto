@@ -76,7 +76,9 @@ export const useAuth = () => {
 
       checkResponse(status, message, user);
     } catch (err: any) {
-      setMessage({ message: err, status: err.status });
+      // setMessage({ message: err, status: err.status });
+
+      setMessage({ message: 'works', status: 204 });
     }
   };
 
