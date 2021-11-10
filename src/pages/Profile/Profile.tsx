@@ -82,7 +82,6 @@ const Profile: FC = () => {
 
   const handleAddToFriend = () => {
     setDisabled(true);
-    console.log(123);
 
     const usersIds = {
       userId: user._id,
@@ -228,7 +227,6 @@ const Profile: FC = () => {
                   likes={likes}
                   date={date}
                   refreshComments={getUserData}
-                  fetchTopComment={() => {}}
                 />
               );
             })}

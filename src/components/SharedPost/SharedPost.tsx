@@ -62,7 +62,6 @@ const SharedPost: FC = () => {
 
           <Comments
             postId={id}
-            fetchTopComment={() => {}}
             setOpenComments={() => {}}
             view={true}
             authorId={post![0].userId}

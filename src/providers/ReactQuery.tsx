@@ -7,7 +7,8 @@ const queryClient = new QueryClient();
 const ReactQueryProvider: FC = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      {children} <ReactQueryDevtools />
+      {children}
+      {process.env.REACT_APP_PRODUCTION && <ReactQueryDevtools />}
     </QueryClientProvider>
   );
 };
