@@ -25,7 +25,7 @@ const Comment: FC<SingleCommentProps> = ({
   likes,
   date,
   refreshComments,
-  fetchTopComment,
+
   scroll,
 }) => {
   const [cookies] = useCookies();
@@ -60,7 +60,19 @@ const Comment: FC<SingleCommentProps> = ({
       })
       .then(() => {
         refreshComments();
-        fetchTopComment();
+        // TODO Fetch top comment
+        //   const fetchTopComment = () => {
+        // axios
+        //   .get(`${process.env.REACT_APP_API}/comments/top?postId=${_id}`)
+        //   .then(res => {
+        //     setComment(res.data);
+
+        //     if (res.data.topComment) {
+        //       authorOfComment(res.data.topComment.userId).then(res => {
+        //         setCommentAuthor(res);
+        //       });
+        //     }
+        //   });
       });
   };
 
@@ -91,7 +103,6 @@ const Comment: FC<SingleCommentProps> = ({
     setTimeout(() => {
       setDisplayMessage(false);
       refreshComments();
-      fetchTopComment();
     }, 500);
   };
 

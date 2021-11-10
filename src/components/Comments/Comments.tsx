@@ -32,7 +32,7 @@ const Comments: FC<CommentProps> = ({
   postId,
   setOpenComments,
   authorId: postAuthorId,
-  fetchTopComment,
+
   view = false,
 }) => {
   const [commentText, setCommentText] = useState<string>('');
@@ -65,7 +65,7 @@ const Comments: FC<CommentProps> = ({
       .then(() => {
         setCommentText('');
         getAllComments();
-        fetchTopComment();
+
         setTimeout(() => {
           commentRef.current.scrollTo({
             top: commentRef.current.scrollHeight,
@@ -151,7 +151,6 @@ const Comments: FC<CommentProps> = ({
                   likes={likes}
                   date={date}
                   refreshComments={getAllComments}
-                  fetchTopComment={fetchTopComment}
                   scroll={commentId === _id ? true : false}
                 />
               );
