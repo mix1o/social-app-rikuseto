@@ -11,12 +11,11 @@ import BlurredContent from '../Animations/Popup';
 import Select from 'react-select';
 import { mainSelect } from '../../helpers/selectStyles.styled';
 import {
-  popularInterface,
   singleOptions,
   singleOptionsWithGroup,
 } from '../../interfaces/posts/category';
 import CreatePostCtx from '../../providers/CreatePostCtx';
-import { useGetAllPosts } from '../../hooks/usePost';
+import { useGetAllPosts, usePopularCategories } from '../../hooks/usePost';
 
 const MODE_HOME = 'home';
 const MODE_ALL = 'all';
@@ -34,8 +33,6 @@ const Posts: FC = () => {
     []
   );
   const selectRef = useRef<any>();
-  const [popularCategories, setPopularCategories] =
-    useState<popularInterface[]>();
 
   const [postTypes, setPostTypes] = useState<viewMode>(
     user ? MODE_HOME : MODE_ALL
@@ -44,13 +41,16 @@ const Posts: FC = () => {
 
   const { data } = useGetAllPosts(
     postTypes === 'all' ? 'all-posts' : 'user-posts',
-    postTypes === 'all' && user
+    postTypes === 'all'
       ? '/posts/get'
-      : `/posts/get-categories?id=${user._id}`
+      : user
+      ? `/posts/get-categories?id=${user._id}`
+      : '/posts/get'
   );
+  const { data: popularCategories, refetch } = usePopularCategories();
 
   useEffect(() => {
-    getPopularCategories();
+    if (!popularCategories) refetch();
   }, [postTypes]);
 
   useEffect(() => {
@@ -70,12 +70,6 @@ const Posts: FC = () => {
       default:
         return 0;
     }
-  };
-
-  const getPopularCategories = () => {
-    axios
-      .get(`${process.env.REACT_APP_API}/category/popular-categories`)
-      .then(res => setPopularCategories(res.data));
   };
 
   const filterByCategory = (element: PostInterface) => {

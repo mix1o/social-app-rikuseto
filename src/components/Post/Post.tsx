@@ -22,6 +22,7 @@ import { CookieUser } from '../../interfaces/auth/authInterface';
 import ShareButton from './ShareButton';
 import PostActions from './PostActions';
 import { useLikePost } from '../../hooks/usePost';
+import { useCommentAuthor, useTopComment } from '../../hooks/useComment';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
@@ -37,18 +38,23 @@ const Post: FC<PostInterfaceExtended> = ({
   const [popup, setPopup] = useState<boolean>(false);
   const [openToolTip, setOpenToolTip] = useState<boolean>(false);
   const [disableComments, setDisableComments] = useState<boolean>(false);
-  const [author, setAuthor] = useState<AuthorInterface>();
+  // const [author, setAuthor] = useState<AuthorInterface>();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [newHeadline, setNewHeadline] = useState<string>(headline);
   const [message, setMessage] = useState<string>('');
   const [showFloater, setShowFloater] = useState(false);
 
-  const [commentAuthor, setCommentAuthor] = useState<AuthorInterface>();
-  const [comment, setComment] = useState<TopComment>();
+  // const [commentAuthor, setCommentAuthor] = useState<AuthorInterface>();
 
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
-  const { data, refetch } = useLikePost(_id, user._id);
+
+  const likePost = useLikePost();
+  const { data: comment, status } = useTopComment(_id);
+  const { data: commentAuthor, refetch } = useCommentAuthor(
+    comment?.topComment?.userId
+  );
+  const { data: author, refetch: refetchAuthor } = useCommentAuthor(userId);
 
   const location = useLocation();
   const [state] = useCounter();
@@ -57,34 +63,23 @@ const Post: FC<PostInterfaceExtended> = ({
 
   const handleLikePost = () => {
     if (user) {
-      return refetch();
+      return likePost.mutate(_id);
     }
 
     setPopup(true);
   };
 
-  const fetchTopComment = () => {
-    axios
-      .get(`${process.env.REACT_APP_API}/comments/top?postId=${_id}`)
-      .then(res => {
-        setComment(res.data);
-
-        if (res.data.topComment) {
-          authorOfComment(res.data.topComment.userId).then(res => {
-            setCommentAuthor(res);
-          });
-        }
-      });
-  };
+  useEffect(() => {
+    if (status === 'success' && comment?.topComment && !commentAuthor) {
+      refetch();
+    }
+  }, [status]);
 
   useEffect(() => {
-    fetchTopComment();
-  }, []);
-
-  useEffect(() => {
-    authorOfComment(userId).then(res => {
-      setAuthor(res);
-    });
+    if (!author) {
+      refetchAuthor();
+      console.log('asd');
+    }
 
     const like = LikedElements(user, likes);
     setLiked(like);
@@ -353,7 +348,6 @@ const Post: FC<PostInterfaceExtended> = ({
                 postId={_id}
                 authorId={userId}
                 setOpenComments={setOpenComments}
-                fetchTopComment={fetchTopComment}
               />
             )}
           </Presence>

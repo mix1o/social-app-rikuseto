@@ -1,6 +1,8 @@
 import axios from 'axios';
-import { useMutation, useQuery, useQueryClient, QueryCache } from 'react-query';
-
+import { useCookies } from 'react-cookie';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { CookieUser } from '../interfaces/auth/authInterface';
+import { popularInterface } from '../interfaces/posts/category';
 import {
   ActionEnum,
   CreatePostI,
@@ -41,6 +43,7 @@ export const useGetAllPosts = (type: fetchType, url: string) =>
     `${type}`,
     async () => {
       const res = await axios.get(`${process.env.REACT_APP_API}${url}`);
+
       return res.data;
     },
     {
@@ -48,20 +51,24 @@ export const useGetAllPosts = (type: fetchType, url: string) =>
     }
   );
 
-export const useLikePost = (postId: string, userId: string) => {
+export const useLikePost = () => {
   const queryClient = useQueryClient();
-  return useQuery(
+  const [cookies] = useCookies();
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
+
+  return useMutation(
     'like-post',
-    () => {
-      axios
-        .post(`${process.env.REACT_APP_API}/posts/like`, {
-          postId,
-          userId,
-        })
-        .then(res => res.data);
+    async (postId: string) => {
+      const res = await axios.post(`${process.env.REACT_APP_API}/posts/like`, {
+        postId,
+        userId: user._id,
+      });
+      return res.data;
     },
+
     {
-      enabled: false,
+      retry: 3,
+      retryDelay: 10000,
       onSuccess: () => {
         queryClient.invalidateQueries('all-posts');
         queryClient.invalidateQueries('user-posts');
@@ -69,3 +76,10 @@ export const useLikePost = (postId: string, userId: string) => {
     }
   );
 };
+
+export const usePopularCategories = () =>
+  useQuery<popularInterface[]>('popular-categories', () =>
+    axios
+      .get(`${process.env.REACT_APP_API}/category/popular-categories`)
+      .then(res => res.data)
+  );
