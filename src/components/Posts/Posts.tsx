@@ -1,9 +1,11 @@
 import { FC, useEffect, useState, useCallback, useRef } from 'react';
 import CreatePost from '../CreatePost/CreatePost';
 import Post from '../Post/Post';
-import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import { PostInterface } from '../../interfaces/posts/postInterfaces';
+import {
+  fetchType,
+  PostInterface,
+} from '../../interfaces/posts/postInterfaces';
 import { useCounter } from '../../store/sub';
 import Header from '../Header/Header';
 import { AnimatePresence as Presence } from 'framer-motion';
@@ -16,15 +18,16 @@ import {
 } from '../../interfaces/posts/category';
 import CreatePostCtx from '../../providers/CreatePostCtx';
 import { useGetAllPosts, usePopularCategories } from '../../hooks/usePost';
+import { CookieUser } from '../../interfaces/auth/authInterface';
 
-const MODE_HOME = 'home';
-const MODE_ALL = 'all';
-type viewMode = 'home' | 'all';
+const MODE_HOME = 'user-posts';
+const MODE_ALL = 'all-posts';
+
 type filterT = 'popular' | 'latest' | 'top' | 'default';
 
 const Posts: FC = () => {
   const [cookies] = useCookies();
-  const { user } = cookies;
+  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const [state, actions] = useCounter();
 
   const [topCategory, setTopCategory] = useState<string | undefined>('');
@@ -32,30 +35,33 @@ const Posts: FC = () => {
   const [selectOptions, setSelectOptions] = useState<singleOptionsWithGroup[]>(
     []
   );
+
   const selectRef = useRef<any>();
 
-  const [postTypes, setPostTypes] = useState<viewMode>(
+  const [postTypes, setPostTypes] = useState<fetchType>(
     user ? MODE_HOME : MODE_ALL
   );
   const [filters, setFilters] = useState(user ? 0 : 1);
 
-  const { data } = useGetAllPosts(
-    postTypes === 'all' ? 'all-posts' : 'user-posts',
-    postTypes === 'all'
-      ? '/posts/get'
-      : user
-      ? `/posts/get-categories?id=${user._id}`
-      : '/posts/get'
-  );
+  const { data: userPosts, status: userStatus } = useGetAllPosts({
+    type: 'user-posts',
+    url: `/posts/get-categories?id=${user?._id}`,
+  });
+
+  const { data, status } = useGetAllPosts({
+    type: 'all-posts',
+    url: '/posts/get',
+  });
+
   const { data: popularCategories, refetch } = usePopularCategories();
 
   useEffect(() => {
     if (!popularCategories) refetch();
-  }, [postTypes]);
+  }, []);
 
   useEffect(() => {
     setSelectOptions(formatPopularCategories());
-  }, [popularCategories, filters]);
+  }, [filters]);
 
   const sortPosts = (a: PostInterface, b: PostInterface) => {
     switch (filter) {
@@ -82,24 +88,24 @@ const Posts: FC = () => {
     actions.openCreatePost(false);
   }, [actions]);
 
-  const formatPopularCategories = () => {
+  const formatPopularCategories = useCallback(() => {
     const mainOptions: singleOptionsWithGroup = {
       label: 'Popular categories',
       options: [{ label: 'Default', value: '' }],
     };
 
-    const options: singleOptionsWithGroup[] = [
-      {
-        label: 'Filter by',
-        options: [
-          { label: 'Default', value: 'default' },
-          { label: 'Popular', value: 'popular' },
-          { label: 'Top', value: 'top' },
-          { label: 'Latest', value: 'latest' },
-        ],
-      },
-    ];
+    const defaultOptions = {
+      label: 'Filter by',
+      options: [
+        { label: 'Default', value: 'default' },
+        { label: 'Popular', value: 'popular' },
+        { label: 'Top', value: 'top' },
+        { label: 'Latest', value: 'latest' },
+      ],
+    };
 
+    const options: singleOptionsWithGroup[] = [defaultOptions];
+    console.log(filters);
     if (filters === 1) {
       popularCategories?.forEach(singlePost => {
         const e: singleOptions = {
@@ -111,10 +117,12 @@ const Posts: FC = () => {
       });
 
       options.push(mainOptions);
+    } else {
+      options.splice(0, options.length, defaultOptions);
     }
 
     return options;
-  };
+  }, [popularCategories, filters]);
 
   const handleSelectChange = (value: string | undefined) => {
     if (
@@ -129,6 +137,9 @@ const Posts: FC = () => {
     }
   };
 
+  const formatMap = () => (postTypes === 'all-posts' ? data : userPosts);
+
+  if (status === 'loading') return <h3>Loading...</h3>; // TODO Make loader component
   return (
     <>
       <Header />
@@ -169,8 +180,8 @@ const Posts: FC = () => {
                 filters === 0 ? 'post__filter-active' : ''
               }`}
               onClick={() => {
-                setPostTypes(MODE_HOME);
                 setFilters(0);
+                setPostTypes(MODE_HOME);
               }}
             >
               Home <i className="fas fa-home" />
@@ -180,8 +191,8 @@ const Posts: FC = () => {
                 filters === 1 ? 'post__filter-active' : ''
               }`}
               onClick={() => {
-                setPostTypes(MODE_ALL);
                 setFilters(1);
+                setPostTypes(MODE_ALL);
               }}
             >
               All posts <i className="fas fa-book" />
@@ -202,12 +213,12 @@ const Posts: FC = () => {
           />
         </div>
         <div>
-          {data
+          {formatMap()
             ?.sort(sortPosts)
             ?.filter(filterByCategory)
-            ?.map(post => {
-              return <Post key={post._id} {...post} />;
-            })}
+            ?.map(post => (
+              <Post key={post._id} {...post} />
+            ))}
         </div>
       </main>
     </>

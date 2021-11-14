@@ -6,12 +6,11 @@ import { popularInterface } from '../interfaces/posts/category';
 import {
   ActionEnum,
   CreatePostI,
+  fetchType,
   PostInterface,
 } from '../interfaces/posts/postInterfaces';
 import { useCounter } from '../store/sub';
 import { useCreatePostCtx } from './useCreatePost';
-
-type fetchType = 'all-posts' | 'user-posts';
 
 export const useCreatePost = () => {
   const queryClient = useQueryClient();
@@ -38,8 +37,15 @@ export const useCreatePost = () => {
   );
 };
 
-export const useGetAllPosts = (type: fetchType, url: string) =>
-  useQuery<PostInterface[]>(
+export const useGetAllPosts = ({
+  type,
+  url,
+}: {
+  type: fetchType;
+  url: string;
+}) => {
+  const queryClient = useQueryClient();
+  return useQuery<PostInterface[]>(
     `${type}`,
     async () => {
       const res = await axios.get(`${process.env.REACT_APP_API}${url}`);
@@ -47,9 +53,14 @@ export const useGetAllPosts = (type: fetchType, url: string) =>
       return res.data;
     },
     {
-      staleTime: 1000000,
+      initialData: [],
+      // staleTime: 1000000,
+      //  cacheTime:
     }
   );
+  // {
+  // }
+};
 
 export const useLikePost = () => {
   const queryClient = useQueryClient();

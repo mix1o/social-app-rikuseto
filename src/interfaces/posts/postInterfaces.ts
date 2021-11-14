@@ -7,7 +7,7 @@ export interface PostInterface {
   likes: string[];
   date: string;
 }
-
+export type fetchType = 'all-posts' | 'user-posts';
 export interface PostInterfaceExtended extends PostInterface {
   saved?: boolean;
 }
