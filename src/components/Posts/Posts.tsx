@@ -53,6 +53,21 @@ const Posts: FC = () => {
     url: '/posts/get',
   });
 
+  const reducedCategories = userPosts?.reduce((acc, val) => {
+    const elem = acc.findIndex(filt => filt.category === val.category);
+
+    return [
+      ...acc.filter(
+        (reduced, idx, old) =>
+          idx === old.findIndex(item => item.category === reduced.category)
+      ),
+      {
+        category: elem === -1 ? val.category : acc[elem].category,
+        count: elem === -1 ? 1 : acc[elem].count++,
+      },
+    ];
+  }, [] as { category: string; count: number }[]);
+
   const { data: popularCategories, refetch } = usePopularCategories();
 
   useEffect(() => {
@@ -105,7 +120,7 @@ const Posts: FC = () => {
     };
 
     const options: singleOptionsWithGroup[] = [defaultOptions];
-    console.log(filters);
+
     if (filters === 1) {
       popularCategories?.forEach(singlePost => {
         const e: singleOptions = {
@@ -139,7 +154,8 @@ const Posts: FC = () => {
 
   const formatMap = () => (postTypes === 'all-posts' ? data : userPosts);
 
-  if (status === 'loading') return <h3>Loading...</h3>; // TODO Make loader component
+  if (status === 'loading') return <h1>Loading...</h1>; // TODO Make loader component
+
   return (
     <>
       <Header />
