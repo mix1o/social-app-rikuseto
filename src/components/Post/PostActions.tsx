@@ -1,5 +1,12 @@
 import axios from 'axios';
-import { Dispatch, FC, SetStateAction, useState, useEffect } from 'react';
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useState,
+  useEffect,
+  SyntheticEvent,
+} from 'react';
 import { useCookies } from 'react-cookie';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 
@@ -60,19 +67,19 @@ const PostActions: FC<PostActionsI> = ({ id, userId, setIsEdit }) => {
       {user && user._id !== userId && (
         <>
           <button
-            onClick={() => {
+            onClick={e => {
               savePost();
-
               setTimeout(() => {
                 //TODO query refresh
               }, 200);
             }}
             className="post__action"
+            type="button"
           >
             {savedPost ? 'Unsave' : 'Save post'}
             <i className="fas fa-flag"></i>
           </button>
-          <button className="post__action">
+          <button className="post__action" type="button">
             Report
             <i className="fas fa-ban"></i>
           </button>
@@ -80,13 +87,20 @@ const PostActions: FC<PostActionsI> = ({ id, userId, setIsEdit }) => {
       )}
       {user && user._id === userId ? (
         <>
-          <button onClick={() => setIsEdit(true)} className="post__action">
+          <button
+            onClick={e => {
+              setIsEdit(true);
+            }}
+            className="post__action"
+            type="button"
+          >
             Edit
             <i className="fas fa-edit"></i>
           </button>
           <button
             onClick={deletePost}
             className="post__action post__action--delete"
+            type="button"
           >
             Delete
             <i className="fas fa-trash-alt"></i>

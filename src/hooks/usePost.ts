@@ -83,6 +83,7 @@ export const useLikePost = () => {
       onSuccess: () => {
         queryClient.invalidateQueries('all-posts');
         queryClient.invalidateQueries('user-posts');
+        queryClient.invalidateQueries('created-posts');
       },
     }
   );
@@ -94,3 +95,12 @@ export const usePopularCategories = () =>
       .get(`${process.env.REACT_APP_API}/category/popular-categories`)
       .then(res => res.data)
   );
+
+export const useUserPosts = ({ userId }: { userId: string }) => {
+  return useQuery<PostInterface[]>('created-posts', async () => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API}/posts/user-posts?userId=${userId}`
+    );
+    return res.data;
+  });
+};

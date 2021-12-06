@@ -60,7 +60,7 @@ const SavedPosts: FC = () => {
               textAlign: 'center',
               fontSize: '13px',
               marginTop: '3rem',
-              marginBottom: '6rem;',
+              marginBottom: '6rem',
             }}
           >
             No more content to load

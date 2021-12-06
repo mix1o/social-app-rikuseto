@@ -1,30 +1,17 @@
 import axios from 'axios';
-import {
-  ChangeEvent,
-  FC,
-  memo,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import { ChangeEvent, FC, memo, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import Comments from '../Comments/Comments';
 import { LikedElements } from '../../helpers/likedElements';
 import { PostInterfaceExtended } from '../../interfaces/posts/postInterfaces';
-import { AuthorInterface } from '../../interfaces/common/common';
 import { motion as m, AnimatePresence as Presence } from 'framer-motion';
-import { TopComment } from '../../interfaces/comments/commentsInterfaces';
-import { authorOfComment } from '../../helpers/authorOfComment';
 import { BlurredMenu } from '../Animations/Popup';
 import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Floater from 'react-floater';
 import { useLocation, Link } from 'react-router-dom';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useCounter } from '../../store/sub';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 import ShareButton from './ShareButton';
@@ -32,7 +19,6 @@ import PostActions from './PostActions';
 import { useLikePost } from '../../hooks/usePost';
 import { useCommentAuthor, useTopComment } from '../../hooks/useComment';
 import CustomFloater from './Floater';
-import { usePopper } from 'react-popper';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
@@ -46,16 +32,16 @@ const Post: FC<PostInterfaceExtended> = ({
   const [liked, setLiked] = useState<boolean | undefined>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
-  const [openToolTip, setOpenToolTip] = useState<boolean>(false);
+  const [openPostAction, setOpenPostAction] = useState<boolean>(false);
   const [disableComments, setDisableComments] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [newHeadline, setNewHeadline] = useState<string>(headline);
   const [message, setMessage] = useState<string>('');
   const [showFloater, setShowFloater] = useState(false);
-
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
-
+  const [actionElement, setActionElement] = useState<HTMLElement | null>(null);
+  const [shareElement, setShareElement] = useState<HTMLElement | null>(null);
   const likePost = useLikePost();
   const { data: comment, status } = useTopComment(_id);
   const { data: commentAuthor, refetch } = useCommentAuthor(
@@ -114,33 +100,7 @@ const Post: FC<PostInterfaceExtended> = ({
         //TODO query refresh
       });
   };
-  // let refReference: HTMLButtonElement;
-  // let popperElem: HTMLDivElement;
 
-  // const [referenceElement, setReferenceElement] =
-  //   useState<HTMLButtonElement | null>(null);
-  // const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
-  //   null
-  // );
-  // const { styles, attributes, update } = usePopper(
-  //   referenceElement,
-  //   popperElement,
-  //   {
-  //     placement: 'auto',
-  //     strategy: 'fixed',
-  //     onFirstUpdate: state =>
-  //       console.log('Popper positioned on', state.placement),
-  //     modifiers: [
-  //       {
-  //         name: 'flip',
-  //         options: {
-  //           fallbackPlacements: ['top', 'right'],
-  //         },
-  //       },
-  //     ],
-  //   }
-  // );
-  // TODO Change ract floater, couse of remap lags
   return (
     <>
       <section
@@ -149,53 +109,26 @@ const Post: FC<PostInterfaceExtended> = ({
       >
         {user && (
           <div
-            onClick={() => setOpenToolTip(prevState => !prevState)}
-            onBlur={() => setOpenToolTip(prevState => !prevState)}
             className="post__container-dots"
+            onBlur={() =>
+              setTimeout(() => setOpenPostAction(prev => !prev), 100)
+            }
           >
-            {/* <Floater
-              open={openToolTip}
-              offset={0}
-              placement="auto"
-              styles={{
-                floater: {
-                  filter: 'none',
-                },
-                container: {
-                  background: 'transparent',
-                  color: 'var(--font-dark-600)',
-                  filter: 'none',
-                  minHeight: 'none',
-                  minWidth: 100,
-                  textAlign: 'right',
-                  padding: 0,
-                  margin: 0,
-                },
-                arrow: {
-                  color: 'var(--light-bg-700)',
-                  length: 8,
-                  spread: 10,
-                },
-              }}
-              content={
-              }
-            > */}
-            {/* <PostActions setIsEdit={setIsEdit} id={_id} userId={userId} /> */}
-            {/* <>
-              <button
-                ref={node => setReferenceElement(node)}
-                className="post__container-dots-btn"
-              >
-                <i className="fas fa-ellipsis-v"></i>
-              </button>
-            </> */}
+            <button
+              ref={node => setActionElement(node)}
+              className="post__container-dots-btn"
+              onClick={() => setOpenPostAction(prevState => !prevState)}
+            >
+              <i className="fas fa-ellipsis-v"></i>
+            </button>
+            {openPostAction && (
+              <CustomFloater referenceElement={actionElement}>
+                <PostActions setIsEdit={setIsEdit} id={_id} userId={userId} />
+              </CustomFloater>
+            )}
           </div>
         )}
-        {/* {openToolTip && (
-          <div ref={node => setPopperElement(node)} {...attributes.popper}>
-            <PostActions setIsEdit={setIsEdit} id={_id} userId={userId} />
-          </div>
-        )} */}
+
         <div className="post__author">
           <img
             className="post__image-author"
@@ -308,35 +241,25 @@ const Post: FC<PostInterfaceExtended> = ({
             )}
             <button
               onClick={() => setShowFloater(prevVal => !prevVal)}
-              onBlur={() => setShowFloater(false)}
+              onBlur={() => setTimeout(() => setShowFloater(false), 150)}
               className="post__btn post__single-action"
+              ref={node => setShareElement(node)}
             >
-              {/* <Floater
-                styles={{
-                  floater: {
-                    filter: 'none',
-                  },
-                  container: {
-                    backgroundColor: 'var(--light-bg-700)',
-                    color: 'var(--font-dark-600)',
-                    filter: 'none',
-                    minHeight: 'none',
-                    padding: 10,
-                  },
-                  arrow: {
-                    color: 'var(--light-bg-700)',
-                    length: 8,
-                    spread: 10,
-                  },
-                }}
-                content={ShareButton({ link: linkShare })}
-                open={showFloater}
-              >
-                <div style={{ display: 'flex' }}>
-                  share <i className="fas fa-share"></i>
-                </div>
-              </Floater> */}
+              <div style={{ display: 'flex' }}>
+                Share <i className="fas fa-share"></i>
+              </div>
             </button>
+            {showFloater && (
+              <CustomFloater
+                referenceElement={shareElement}
+                styles={{
+                  background: 'var(--light-bg-600)',
+                  border: '1px solid var(--light-bg-700) ',
+                }}
+              >
+                <ShareButton link={linkShare} />
+              </CustomFloater>
+            )}
           </div>
         </div>
         {!disableComments && comment?.topComment && (
