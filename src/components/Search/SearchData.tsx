@@ -83,7 +83,6 @@ const SearchedData: FC = () => {
                   file={file}
                   userId={userId}
                   likes={likes}
-                  refreshPosts={fetchData}
                   date={date}
                 />
               );

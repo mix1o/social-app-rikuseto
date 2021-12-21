@@ -11,14 +11,11 @@ import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import { mainSelect } from '../../helpers/selectStyles.styled';
 import { useCounter } from '../../store/sub';
 import {
-  popularInterface,
   singleOptions,
   singleOptionsWithGroup,
 } from '../../interfaces/posts/category';
 import { usePosts } from '../../hooks/usePosts';
 
-const MODE_HOME = 'home';
-const MODE_ALL = 'all';
 type filterT = 'popular' | 'latest' | 'top' | 'default';
 
 const Posts: FC = () => {
@@ -34,11 +31,10 @@ const Posts: FC = () => {
   const [selectOptions, setSelectOptions] = useState<singleOptionsWithGroup[]>(
     []
   );
-  const selectRef = useRef<any>();
-  const [popularCategories, setPopularCategories] =
-    useState<popularInterface[]>();
 
-  const [postTypes, setPostTypes] = useState<string>(
+  const selectRef = useRef<any>();
+
+  const [postTypes, setPostTypes] = useState<fetchType>(
     user ? MODE_HOME : MODE_ALL
   );
 
@@ -81,12 +77,6 @@ const Posts: FC = () => {
     }
   };
 
-  const getPopularCategories = () => {
-    axios
-      .get(`${process.env.REACT_APP_API}/category/popular-categories`)
-      .then(res => setPopularCategories(res.data));
-  };
-
   const filterByCategory = (element: PostInterface) => {
     if (topCategory !== '' && filters !== 0)
       return element.category === topCategory;
@@ -95,25 +85,25 @@ const Posts: FC = () => {
 
   const closeHandler = useCallback(() => {
     actions.openCreatePost(false);
-  }, [posts]);
+  }, [actions]);
 
-  const formatPopularCategories = () => {
+  const formatPopularCategories = useCallback(() => {
     const mainOptions: singleOptionsWithGroup = {
       label: 'Popular categories',
       options: [{ label: 'Default', value: '' }],
     };
 
-    const options: singleOptionsWithGroup[] = [
-      {
-        label: 'Filter by',
-        options: [
-          { label: 'Default', value: 'default' },
-          { label: 'Popular', value: 'popular' },
-          { label: 'Top', value: 'top' },
-          { label: 'Latest', value: 'latest' },
-        ],
-      },
-    ];
+    const defaultOptions = {
+      label: 'Filter by',
+      options: [
+        { label: 'Default', value: 'default' },
+        { label: 'Popular', value: 'popular' },
+        { label: 'Top', value: 'top' },
+        { label: 'Latest', value: 'latest' },
+      ],
+    };
+
+    const options: singleOptionsWithGroup[] = [defaultOptions];
 
     if (filters === 1) {
       popularCategories?.forEach(singlePost => {
@@ -126,10 +116,12 @@ const Posts: FC = () => {
       });
 
       options.push(mainOptions);
+    } else {
+      options.splice(0, options.length, defaultOptions);
     }
 
     return options;
-  };
+  }, [popularCategories, filters]);
 
   const handleSelectChange = (value: string | undefined) => {
     if (
@@ -144,9 +136,14 @@ const Posts: FC = () => {
     }
   };
 
+  const formatMap = () => (postTypes === 'all-posts' ? data : userPosts);
+
+  if (status === 'loading') return <h1>Loading...</h1>; // TODO Make loader component
+
   return (
     <>
       <Header />
+
       <main>
         {user && !state.isOpenCommentComponent && (
           <div className="post__wrapper">
@@ -169,7 +166,9 @@ const Posts: FC = () => {
         <Presence>
           {state.open && (
             <BlurredContent closeHandler={closeHandler}>
-              <CreatePost handleFetchPosts={() => {}} />
+              <CreatePostCtx>
+                <CreatePost />
+              </CreatePostCtx>
             </BlurredContent>
           )}
         </Presence>
@@ -181,9 +180,8 @@ const Posts: FC = () => {
                 filters === 0 ? 'post__filter-active' : ''
               }`}
               onClick={() => {
-                setPostTypes(MODE_HOME);
                 setFilters(0);
-                // selectInputRef.current.select.clearValue(); fix
+                setPostTypes(MODE_HOME);
               }}
             >
               Home <i className="fas fa-home" />
@@ -193,9 +191,8 @@ const Posts: FC = () => {
                 filters === 1 ? 'post__filter-active' : ''
               }`}
               onClick={() => {
-                setPostTypes(MODE_ALL);
                 setFilters(1);
-                // selectInputRef.current.select.clearValue(); fix
+                setPostTypes(MODE_ALL);
               }}
             >
               All posts <i className="fas fa-book" />
@@ -216,7 +213,7 @@ const Posts: FC = () => {
           />
         </div>
         <div>
-          {posts
+          {formatMap()
             ?.sort(sortPosts)
             ?.filter(filterByCategory)
             ?.map(({ _id, headline, category, file, userId, likes, date }) => {

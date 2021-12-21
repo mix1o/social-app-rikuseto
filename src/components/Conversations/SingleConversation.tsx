@@ -142,6 +142,7 @@ const SingleConversation = () => {
         textValue={message}
         setTextValue={setMessage}
         handleAction={onMessageSend}
+        loading={false}
       />
     </div>
   );

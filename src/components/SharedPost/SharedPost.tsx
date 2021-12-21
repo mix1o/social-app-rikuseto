@@ -52,7 +52,6 @@ const SharedPost: FC = () => {
                 file={file}
                 likes={likes}
                 date={date}
-                refreshPosts={fetchPost}
               />
             )
           )}
@@ -63,7 +62,6 @@ const SharedPost: FC = () => {
 
           <Comments
             postId={id}
-            fetchTopComment={() => {}}
             setOpenComments={() => {}}
             view={true}
             authorId={post![0].userId}

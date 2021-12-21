@@ -10,6 +10,7 @@ import {
   CreateUser,
   IMessage,
 } from '../interfaces/auth/authInterface';
+import useNotification from './notifications/useNotification';
 
 interface ISignInResponse {
   message: string;
@@ -25,6 +26,7 @@ export const useAuth = () => {
     message: '',
     status: 0,
   });
+  const { subscribeToPushNotification } = useNotification();
 
   useEffect(() => {
     return () => {
@@ -47,6 +49,7 @@ export const useAuth = () => {
       if (user) {
         setCookie('user', user, { path: '/' });
         localStorage.setItem('userId', JSON.stringify({ id: user._id }));
+        if (user.pushNotification) subscribeToPushNotification();
       }
 
       if (window.location.href.includes('/auth')) history.push('/');
@@ -73,7 +76,9 @@ export const useAuth = () => {
 
       checkResponse(status, message, user);
     } catch (err: any) {
-      setMessage({ message: err, status: err.status });
+      // setMessage({ message: err, status: err.status });
+
+      setMessage({ message: 'works', status: 204 });
     }
   };
 
@@ -92,7 +97,7 @@ export const useAuth = () => {
         message,
         status,
       });
-
+      setLoading(false);
       if (status === 200) {
         setTimeout(() => {
           send('SIGN_IN');
@@ -100,6 +105,7 @@ export const useAuth = () => {
       }
     } catch (err: any) {
       setMessage({ message: err, status: err.status });
+      setLoading(false);
     }
   };
 

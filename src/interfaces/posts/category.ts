@@ -9,12 +9,6 @@ export interface CategoryArray {
   view?: boolean;
 }
 
-export interface CategoryProps {
-  chooseCategory?: string;
-  setPost: React.Dispatch<React.SetStateAction<CreatePostI>>;
-  post: CreatePostI;
-}
-
 export interface CategoryItemI {
   name: string;
   totalPosts?: number;

@@ -1,70 +1,44 @@
-import { ChangeEvent, FC, useState, useEffect, memo, useRef } from 'react';
-import axios from 'axios';
+import { useState, useEffect, memo, useRef, SyntheticEvent } from 'react';
 import { useCookies } from 'react-cookie';
 import Category from './Category';
 import CropImage from './CropImage';
-import { CreatePostI } from '../../interfaces/posts/postInterfaces';
+import { ActionEnum } from '../../interfaces/posts/postInterfaces';
 import useNotification from '../../hooks/notifications/useNotification';
 import { CookieUser } from '../../interfaces/auth/authInterface';
-import { useCounter } from '../../store/sub';
+import { useCreatePostCtx } from '../../hooks/useCreatePost';
+import { useCreatePost } from '../../hooks/usePost';
 
-interface CreateProps {
-  handleFetchPosts: () => void;
-}
-
-const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
+const CreatePost = () => {
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
-
-  const [, actions] = useCounter();
-
-  const [post, setPost] = useState<CreatePostI>({
-    headline: '',
-    file: '',
-    category: '',
-    userId: user ? user._id : '',
-    notification: false,
-  });
+  const { dispatch, state } = useCreatePostCtx();
 
   const [correctImage, setCorrectImage] = useState<boolean>(false);
   const [userPickedImage, setUserPickedImage] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState<boolean>(false);
+  const createPostMutation = useCreatePost();
   const {
     checkNotificationSupport,
     checkUserPermission,
     subscribeToPushNotification,
   } = useNotification();
   const ref = useRef<HTMLElement>(null);
-  console.log(user);
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
-  ) => {
-    const name = e.target.name;
-    const value = e.target.value;
 
-    setPost({ ...post, [name]: value });
-  };
-
-  const createNewPost = async () => {
+  const createNewPost = async (e: SyntheticEvent) => {
+    e.preventDefault();
     if (user) {
-      axios.post(`${process.env.REACT_APP_API}/posts/create`, post);
+      createPostMutation.mutateAsync(state);
     }
-
-    setPost({ headline: '', file: '', category: '', notification: false });
-    actions.openCreatePost(false);
-    setTimeout(() => {
-      handleFetchPosts();
-    }, 500);
   };
 
   const checkCorrectPost = () => {
     if (userPickedImage) {
       if (
-        post!.headline!.trim().length >= 3 &&
-        post!.category!.trim().length >= 1 &&
-        post!.file!.length > 3 &&
+        state.headline.trim().length >= 3 &&
+        state.category &&
+        state.file.length > 3 &&
         correctImage
       ) {
         setDisable(false);
@@ -76,7 +50,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
       }
     }
 
-    if (post!.headline!.length >= 3 && post!.category!.length > 1) {
+    if (state.headline.length >= 3 && state.category.length > 0) {
       return true;
     } else {
       setMessage(
@@ -90,7 +64,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
     setCorrectFormatPost(checkCorrectPost());
 
     return () => setCorrectFormatPost(false);
-  }, [post, correctImage, userPickedImage]);
+  }, [state, correctImage, userPickedImage]);
 
   useEffect(() => {
     if (ref.current) {
@@ -102,13 +76,7 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
     }
   }, [ref.current?.scrollHeight]);
 
-  const handleNotification = () => {
-    const permission = checkUserPermission();
-
-    if (permission) {
-      console.log('granted');
-    }
-  };
+  const handleNotification = () => checkUserPermission();
 
   return (
     <section ref={ref} className="create-post">
@@ -116,26 +84,29 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
       <label className="create-post__label">
         <input
           data-testid="headline"
-          value={post.headline}
-          onChange={e => handleChange(e)}
+          value={state.headline}
+          onChange={e =>
+            dispatch({
+              type: ActionEnum.SET_HEADLINE,
+              payload: e.target.value,
+            })
+          }
           type="text"
-          name="headline"
+          name={ActionEnum.SET_HEADLINE}
           placeholder="Write something interesting"
           className="create-post__title"
         />
       </label>
 
-      <Category chooseCategory={post.category} setPost={setPost} post={post} />
+      <Category />
       <CropImage
         setMessage={setMessage}
-        post={post}
-        setPost={setPost}
         setUserPickedImage={setUserPickedImage}
         setCorrectImage={setCorrectImage}
         correctImage={correctImage}
       />
       {disable && <p>Loading image...</p>}
-      {!correctFormatPost && post!.headline!.length > 0 && (
+      {!correctFormatPost && state!.headline!.length > 0 && (
         <p data-testid="message" className="create-post__message">
           {message}
         </p>
@@ -147,10 +118,9 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
         >
           <input
             type="checkbox"
-            onChange={e =>
-              setPost({ ...post, notification: !post.notification })
-            }
+            onChange={() => dispatch({ type: ActionEnum.SET_NOTIFICATION })}
             className="create-post__notifications"
+            name={ActionEnum.SET_NOTIFICATION}
           />
           <p className="create-post__notifications-text">
             Receive notification{' '}
@@ -167,8 +137,8 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
       <button
         className="create-post__btn-add"
         data-testid="button"
-        disabled={!correctFormatPost}
-        onClick={() => createNewPost()}
+        disabled={!correctFormatPost || createPostMutation.status === 'loading'}
+        onClick={createNewPost}
       >
         Create post
       </button>
@@ -177,9 +147,5 @@ const CreatePost: FC<CreateProps> = ({ handleFetchPosts }) => {
 };
 
 export default memo(CreatePost);
-
-// TODO COMPONENT HELP
-
-// TODO RESET HASLA
 
 // TODO Pagination posts,comments, messages

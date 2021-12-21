@@ -18,3 +18,20 @@ export const menuVariants = {
     },
   },
 };
+
+export const commentVariant = {
+  hidden: {
+    y: 1000,
+    opacity: 0,
+    transition: {
+      type: 'tween',
+    },
+  },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: 'tween',
+    },
+  },
+};

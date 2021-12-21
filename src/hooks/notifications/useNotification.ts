@@ -13,8 +13,10 @@ import { CookieUser } from '../../interfaces/auth/authInterface';
 const checkNotificationSupport = notificationSupport();
 
 const useNotification = () => {
-  const [userPermission, setUserPermission] = useState(Notification.permission);
-  const [userSubscription, setUserSubscription] = useState<any>();
+  const [userPermission, setUserPermission] = useState(
+    checkNotificationSupport ? Notification.permission : 'default'
+  );
+  const [userSubscription, setUserSubscription] = useState<PushSubscription>();
   const [error, setError] = useState<any>(false);
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState('');
@@ -26,9 +28,11 @@ const useNotification = () => {
     if (checkNotificationSupport) {
       setLoading(true);
       setError(false);
-      registerServiceWorker().then(() => {
-        setLoading(false);
-      });
+      registerServiceWorker()
+        .then(() => {
+          setLoading(false);
+        })
+        .catch(err => console.log(err));
     } else {
       setError('Push Notifications are not supported on your device');
     }
@@ -38,14 +42,20 @@ const useNotification = () => {
   useEffect(() => {
     setLoading(true);
     setError(false);
-    const getExistingSubscription = async () => {
-      const existingSubscription = await getUserSubscription();
-      if (existingSubscription === null) return null;
 
-      setUserSubscription(existingSubscription);
-      setLoading(false);
-      setInfo('');
+    const getExistingSubscription = async () => {
+      try {
+        const existingSubscription = await getUserSubscription();
+
+        if (existingSubscription === null) return null;
+        setUserSubscription(existingSubscription);
+        setLoading(false);
+        setInfo('');
+      } catch (err: any) {
+        // setError('Push Notifications are not supported on your device');
+      }
     };
+
     getExistingSubscription();
   }, []);
 
@@ -59,24 +69,28 @@ const useNotification = () => {
   const askUserPermission = () => {
     setLoading(true);
     setError('');
-    askPermission().then(consent => {
-      setUserPermission(consent);
-      if (consent !== 'granted') {
-        setError({
-          name: 'Consent denied',
-          message: 'You denied the consent to receive notifications',
-          code: 0,
-        });
-      }
-      setLoading(false);
-    });
+    askPermission()
+      .then(consent => {
+        setUserPermission(consent);
+        if (consent !== 'granted') {
+          setError({
+            name: 'Consent denied',
+            message: 'You denied the consent to receive notifications',
+            code: 0,
+          });
+        }
+        setLoading(false);
+      })
+      .catch(err => setError(err.toString()));
   };
 
   const subscribeToPushNotification = () => {
     setLoading(true);
     setError(false);
+    if (typeof userSubscription !== 'string') {
+    }
     const indexSw = user.serviceWorkers?.findIndex(
-      sw => sw.endpoint === userSubscription.endpoint
+      sw => sw.endpoint === userSubscription?.endpoint
     );
 
     if (indexSw === -1) {

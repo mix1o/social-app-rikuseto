@@ -21,7 +21,6 @@ const Details = () => {
     askUserPermission,
     userPermission,
     checkNotificationSupport,
-    userSubscription,
     error,
     subscribeToPushNotification,
   } = useNotification();

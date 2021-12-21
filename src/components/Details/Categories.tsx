@@ -147,7 +147,6 @@ const Categories: FC = () => {
                   file={file}
                   userId={userId}
                   likes={likes}
-                  refreshPosts={fetchPostByCategory}
                   date={date}
                 />
               );
