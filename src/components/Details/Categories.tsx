@@ -13,7 +13,6 @@ interface CategoryI {
 }
 
 const Categories: FC = () => {
-  const x = 2;
   const [categories, setCategories] = useState<CategoryI[]>();
   const [userCategories, setUserCategories] = useState<CategoryI[]>();
   const [posts, setPosts] = useState<PostInterface[]>();

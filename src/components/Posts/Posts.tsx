@@ -1,31 +1,34 @@
 import { FC, useEffect, useState, useCallback, useRef, LegacyRef } from 'react';
-import CreatePost from '../CreatePost/CreatePost';
-import Post from '../Post/Post';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import { PostInterface } from '../../interfaces/posts/postInterfaces';
-import { useCounter } from '../../store/sub';
-import Header from '../Header/Header';
-import { motion as m, AnimatePresence as Presence } from 'framer-motion';
+import CreatePost from '../CreatePost/CreatePost';
 import BlurredContent from '../Animations/Popup';
+import Header from '../Header/Header';
 import Select from 'react-select';
+import Post from '../Post/Post';
+import { motion as m, AnimatePresence as Presence } from 'framer-motion';
+import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import { mainSelect } from '../../helpers/selectStyles.styled';
+import { useCounter } from '../../store/sub';
 import {
   popularInterface,
   singleOptions,
   singleOptionsWithGroup,
 } from '../../interfaces/posts/category';
+import { usePosts } from '../../hooks/usePosts';
 
 const MODE_HOME = 'home';
 const MODE_ALL = 'all';
 type filterT = 'popular' | 'latest' | 'top' | 'default';
 
 const Posts: FC = () => {
+  const [state, actions] = useCounter();
   const [cookies] = useCookies();
   const { user } = cookies;
-  const [state, actions] = useCounter();
 
-  const [posts, setPosts] = useState<PostInterface[]>();
+  const { posts } = usePosts();
+
+  // const [posts, setPosts] = useState<PostInterface[]>();
   const [topCategory, setTopCategory] = useState<string | undefined>('');
   const [filter, setFilter] = useState<filterT | undefined>('default');
   const [selectOptions, setSelectOptions] = useState<singleOptionsWithGroup[]>(
@@ -38,28 +41,30 @@ const Posts: FC = () => {
   const [postTypes, setPostTypes] = useState<string>(
     user ? MODE_HOME : MODE_ALL
   );
-  const [filters, setFilters] = useState(user ? 0 : 1);
 
+  const [filters, setFilters] = useState(user ? 0 : 1);
   useEffect(() => {
+    const fetchPosts = (): void => {
+      let url = '';
+
+      console.log('dupa');
+      if (postTypes === MODE_ALL) url = '/posts/get';
+      if (postTypes === MODE_HOME && user)
+        url = `/posts/get-categories?id=${user._id}`;
+
+      axios.get(`${process.env.REACT_APP_API}${url}`).then(res => {
+        // setPosts(res.data);
+      });
+    };
+
     fetchPosts();
     getPopularCategories();
   }, [postTypes]);
 
+  const { posts } = usePosts();
   useEffect(() => {
     setSelectOptions(formatPopularCategories());
   }, [popularCategories, filters]);
-
-  const fetchPosts = (): void => {
-    let url = '';
-
-    if (postTypes === MODE_ALL) url = '/posts/get';
-    if (postTypes === MODE_HOME && user)
-      url = `/posts/get-categories?id=${user._id}`;
-
-    axios.get(`${process.env.REACT_APP_API}${url}`).then(res => {
-      setPosts(res.data);
-    });
-  };
 
   const sortPosts = (a: PostInterface, b: PostInterface) => {
     switch (filter) {
@@ -164,7 +169,7 @@ const Posts: FC = () => {
         <Presence>
           {state.open && (
             <BlurredContent closeHandler={closeHandler}>
-              <CreatePost handleFetchPosts={fetchPosts} />
+              <CreatePost handleFetchPosts={() => {}} />
             </BlurredContent>
           )}
         </Presence>
@@ -224,7 +229,7 @@ const Posts: FC = () => {
                   file={file}
                   userId={userId}
                   likes={likes}
-                  refreshPosts={fetchPosts}
+                  refreshPosts={() => {}}
                   date={date}
                 />
               );
@@ -236,3 +241,9 @@ const Posts: FC = () => {
 };
 
 export default Posts;
+
+//TODO
+//1. CUSTOM HOOKI - react query, functions
+//2. LIKE - STATE | Filtrowanie czy dany user jest w tablicy likeow
+//3. STYLED-COMPONENTS
+//4.
