@@ -243,4 +243,4 @@ export default Posts;
 //1. CUSTOM HOOKI - react query, functions
 //2. LIKE - STATE | Filtrowanie czy dany user jest w tablicy likeow
 //3. STYLED-COMPONENTS
-//4.
+//4. PUSH FROM DEVELOP
