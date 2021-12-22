@@ -23,8 +23,6 @@ const Posts: FC = () => {
   const [cookies] = useCookies();
   const { user } = cookies;
 
-  const { posts } = usePosts();
-
   // const [posts, setPosts] = useState<PostInterface[]>();
   const [topCategory, setTopCategory] = useState<string | undefined>('');
   const [filter, setFilter] = useState<filterT | undefined>('default');
@@ -34,116 +32,100 @@ const Posts: FC = () => {
 
   const selectRef = useRef<any>();
 
-  const [postTypes, setPostTypes] = useState<fetchType>(
-    user ? MODE_HOME : MODE_ALL
-  );
+  const MODE_HOME = '';
+  const MODE_ALL = '';
+  const [postTypes, setPostTypes] = useState(user ? MODE_HOME : MODE_ALL);
 
   const [filters, setFilters] = useState(user ? 0 : 1);
-  useEffect(() => {
-    const fetchPosts = (): void => {
-      let url = '';
 
-      console.log('dupa');
-      if (postTypes === MODE_ALL) url = '/posts/get';
-      if (postTypes === MODE_HOME && user)
-        url = `/posts/get-categories?id=${user._id}`;
+  // const { posts } = usePosts();
+  // useEffect(() => {
+  // setSelectOptions(formatPopularCategories());
+  // }, [popularCategories, filters]);
 
-      axios.get(`${process.env.REACT_APP_API}${url}`).then(res => {
-        // setPosts(res.data);
-      });
-    };
+  // const sortPosts = (a: PostInterface, b: PostInterface) => {
+  //   switch (filter) {
+  //     case 'popular':
+  //       return b.likes.length - a.likes.length;
+  //     case 'latest':
+  //       return new Date(a.date) > new Date(b.date) ? -1 : 1;
+  //     case 'top':
+  //       return 0;
+  //     case 'default':
+  //       return 0;
+  //     default:
+  //       return 0;
+  //   }
+  // };
 
-    fetchPosts();
-    getPopularCategories();
-  }, [postTypes]);
+  // const filterByCategory = (element: PostInterface) => {
+  //   if (topCategory !== '' && filters !== 0)
+  //     return element.category === topCategory;
+  //   return true;
+  // };
 
-  const { posts } = usePosts();
-  useEffect(() => {
-    setSelectOptions(formatPopularCategories());
-  }, [popularCategories, filters]);
+  // const closeHandler = useCallback(() => {
+  //   actions.openCreatePost(false);
+  // }, [actions]);
 
-  const sortPosts = (a: PostInterface, b: PostInterface) => {
-    switch (filter) {
-      case 'popular':
-        return b.likes.length - a.likes.length;
-      case 'latest':
-        return new Date(a.date) > new Date(b.date) ? -1 : 1;
-      case 'top':
-        return 0;
-      case 'default':
-        return 0;
-      default:
-        return 0;
-    }
-  };
+  // const formatPopularCategories = useCallback(() => {
+  //   const mainOptions: singleOptionsWithGroup = {
+  //     label: 'Popular categories',
+  //     options: [{ label: 'Default', value: '' }],
+  //   };
 
-  const filterByCategory = (element: PostInterface) => {
-    if (topCategory !== '' && filters !== 0)
-      return element.category === topCategory;
-    return true;
-  };
+  //   const defaultOptions = {
+  //     label: 'Filter by',
+  //     options: [
+  //       { label: 'Default', value: 'default' },
+  //       { label: 'Popular', value: 'popular' },
+  //       { label: 'Top', value: 'top' },
+  //       { label: 'Latest', value: 'latest' },
+  //     ],
+  //   };
 
-  const closeHandler = useCallback(() => {
-    actions.openCreatePost(false);
-  }, [actions]);
+  //   const options: singleOptionsWithGroup[] = [defaultOptions];
 
-  const formatPopularCategories = useCallback(() => {
-    const mainOptions: singleOptionsWithGroup = {
-      label: 'Popular categories',
-      options: [{ label: 'Default', value: '' }],
-    };
+  //   if (filters === 1) {
+  //     popularCategories?.forEach(singlePost => {
+  //       const e: singleOptions = {
+  //         label: singlePost.name,
+  //         value: singlePost.name,
+  //       };
 
-    const defaultOptions = {
-      label: 'Filter by',
-      options: [
-        { label: 'Default', value: 'default' },
-        { label: 'Popular', value: 'popular' },
-        { label: 'Top', value: 'top' },
-        { label: 'Latest', value: 'latest' },
-      ],
-    };
+  //       mainOptions.options.push(e);
+  //     });
 
-    const options: singleOptionsWithGroup[] = [defaultOptions];
+  //     options.push(mainOptions);
+  //   } else {
+  //     options.splice(0, options.length, defaultOptions);
+  //   }
 
-    if (filters === 1) {
-      popularCategories?.forEach(singlePost => {
-        const e: singleOptions = {
-          label: singlePost.name,
-          value: singlePost.name,
-        };
+  //   return options;
+  // }, [popularCategories, filters]);
 
-        mainOptions.options.push(e);
-      });
+  const { data, isLoading, isError, error } = usePosts();
 
-      options.push(mainOptions);
-    } else {
-      options.splice(0, options.length, defaultOptions);
-    }
+  // const handleSelectChange = (value: string | undefined) => {
+  //   if (
+  //     value === 'popular' ||
+  //     value === 'latest' ||
+  //     value === 'default' ||
+  //     value === 'top'
+  //   ) {
+  //     setFilter(value);
+  //   } else {
+  //     setTopCategory(value);
+  //   }
+  // };
 
-    return options;
-  }, [popularCategories, filters]);
+  // const formatMap = () => (postTypes === 'all-posts' ? data : userPosts); //delete it
 
-  const handleSelectChange = (value: string | undefined) => {
-    if (
-      value === 'popular' ||
-      value === 'latest' ||
-      value === 'default' ||
-      value === 'top'
-    ) {
-      setFilter(value);
-    } else {
-      setTopCategory(value);
-    }
-  };
-
-  const formatMap = () => (postTypes === 'all-posts' ? data : userPosts);
-
-  if (status === 'loading') return <h1>Loading...</h1>; // TODO Make loader component
+  // if (status === 'loading') return <h1>Loading...</h1>; // TODO Make loader component
 
   return (
     <>
       <Header />
-
       <main>
         {user && !state.isOpenCommentComponent && (
           <div className="post__wrapper">
@@ -164,13 +146,16 @@ const Posts: FC = () => {
           </div>
         )}
         <Presence>
-          {state.open && (
-            <BlurredContent closeHandler={closeHandler}>
-              <CreatePostCtx>
+          {
+            state.open &&
+              // <BlurredContent closeHandler={closeHandler}>
+              {
+                /* <CreatePostCtx>
                 <CreatePost />
-              </CreatePostCtx>
-            </BlurredContent>
-          )}
+              </CreatePostCtx> */
+              }
+            // </BlurredContent>
+          }
         </Presence>
 
         {user && (
@@ -206,31 +191,41 @@ const Posts: FC = () => {
             ref={selectRef}
             options={selectOptions}
             styles={mainSelect}
-            onChange={value => handleSelectChange(value?.value)}
+            // onChange={value => handleSelectChange(value?.value)}
             placeholder="Choose filter"
             defaultValue={selectOptions}
             maxMenuHeight={300}
           />
         </div>
         <div>
-          {formatMap()
-            ?.sort(sortPosts)
-            ?.filter(filterByCategory)
-            ?.map(({ _id, headline, category, file, userId, likes, date }) => {
-              return (
-                <Post
-                  key={_id}
-                  _id={_id}
-                  headline={headline}
-                  category={category}
-                  file={file}
-                  userId={userId}
-                  likes={likes}
-                  refreshPosts={() => {}}
-                  date={date}
-                />
-              );
-            })}
+          {!isError &&
+            !isLoading &&
+            data
+              ?.slice(10, 14)
+              .map(
+                ({
+                  _id,
+                  headline,
+                  category,
+                  file,
+                  userId,
+                  likes,
+                  date,
+                }: PostInterface) => {
+                  return (
+                    <Post
+                      key={_id}
+                      _id={_id}
+                      headline={headline}
+                      category={category}
+                      file={file}
+                      userId={userId}
+                      likes={likes}
+                      date={date}
+                    />
+                  );
+                }
+              )}
         </div>
       </main>
     </>
