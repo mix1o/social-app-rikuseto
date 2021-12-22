@@ -6,9 +6,7 @@ import { LikedElements } from '../../helpers/likedElements';
 import { PostInterfaceExtended } from '../../interfaces/posts/postInterfaces';
 import { motion as m, AnimatePresence as Presence } from 'framer-motion';
 import { BlurredMenu } from '../Animations/Popup';
-import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
-import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useLocation, Link } from 'react-router-dom';
@@ -19,6 +17,7 @@ import PostActions from './PostActions';
 import { useLikePost } from '../../hooks/usePost';
 import { useCommentAuthor, useTopComment } from '../../hooks/useComment';
 import CustomFloater from './Floater';
+import LikeButton from '../LikeButton/LikeButton';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
@@ -202,31 +201,8 @@ const Post: FC<PostInterfaceExtended> = ({
           style={disableComments ? { paddingBottom: '1rem' } : {}}
           className="post__actions"
         >
-          <m.div
-            className="post__container-likes"
-            animate={{
-              color: liked
-                ? '#753ee0'
-                : state.theme === 'dark'
-                ? '#f8f8f8'
-                : '#36344b',
-            }}
-          >
-            <m.button
-              className="post__btn"
-              whileTap={{ scale: 1.2 }}
-              onClick={handleLikePost}
-              aria-label="like or dislike post"
-              type="button"
-            >
-              {liked ? (
-                <FontAwesomeIcon icon={faStarChonky} />
-              ) : (
-                <FontAwesomeIcon icon={farBellThin} />
-              )}
-            </m.button>
-            <span className="post__likes">{likes.length}</span>
-          </m.div>
+          <LikeButton likes={likes} postId={_id} />
+
           <div>
             {!disableComments && (
               <button
