@@ -24,6 +24,7 @@
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "js-base64": "^3.6.1",
+    "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "moment": "^2.29.1",
     "netlify-cli": "^4.0.3",
