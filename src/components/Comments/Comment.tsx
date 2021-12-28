@@ -17,6 +17,8 @@ import Floater from 'react-floater';
 import { useCounter } from '../../store/sub';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 import { AnimatePresence as Presence } from 'framer-motion';
+import LikeButton from '../LikeButton/LikeButton';
+import { LikedElement } from '../../enums/LikedElement';
 
 const Comment: FC<SingleCommentProps> = ({
   _id,
@@ -255,31 +257,7 @@ const Comment: FC<SingleCommentProps> = ({
           </div>
         )}
         <div className="comment__container-likes">
-          <m.div
-            animate={{
-              color: liked ? '#753ee0' : state.theme ? '#f8f8f8' : '#36344b',
-            }}
-            className="comment__action"
-            data-testid="comment-action"
-          >
-            <m.button
-              whileTap={{ scale: 1.2 }}
-              className="comment__btn"
-              onClick={() => {
-                handleLikeComment();
-              }}
-              data-testid="btn-like"
-            >
-              {liked ? (
-                <FontAwesomeIcon icon={faStarChonky} />
-              ) : (
-                <FontAwesomeIcon icon={farBellThin} />
-              )}
-            </m.button>
-            <p className="comment__likes" data-testid="comment-likes-count">
-              {likes.length}
-            </p>
-          </m.div>
+          <LikeButton likes={likes} id={_id} type={LikedElement.Comment} />
         </div>
         {displayMessage && <p className="comment__information">Deleting...</p>}
       </div>
