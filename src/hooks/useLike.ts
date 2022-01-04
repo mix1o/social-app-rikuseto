@@ -17,12 +17,8 @@ export const useLikeButton = (
 
   useEffect(() => {
     if (user && likes.length > 0) {
-      const isPostLikedByUser = () => {
-        const index = likes.findIndex((userId: string) => userId === user._id);
-        index === -1 ? setIsLiked(false) : setIsLiked(true);
-      };
-
-      isPostLikedByUser();
+      const index = likes.findIndex((userId: string) => userId === user._id);
+      index === -1 ? setIsLiked(false) : setIsLiked(true);
     }
   }, [likes, user]);
 
@@ -50,8 +46,8 @@ export const useLikeButton = (
       return;
     }
 
-    if (!isLiked) setLikesCounter(oldLike => oldLike + 1);
-    if (isLiked) setLikesCounter(oldLike => oldLike - 1);
+    if (!isLiked) setLikesCounter(oldLikeCounter => oldLikeCounter + 1);
+    if (isLiked) setLikesCounter(oldLikeCounter => oldLikeCounter - 1);
 
     setIsLiked(prevState => !prevState);
 
