@@ -12,12 +12,20 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { useLocation, Link } from 'react-router-dom';
 import { useCounter } from '../../store/sub';
 import { CookieUser } from '../../interfaces/auth/authInterface';
-import ShareButton from './ShareButton';
+import PostShareSocials from './PostShareSocials';
 import PostActions from './PostActions';
-import { useLikePost } from '../../hooks/usePost';
-import { useCommentAuthor, useTopComment } from '../../hooks/useComment';
+// import { useLikePost } from '../../hooks/usePost';
 import CustomFloater from './Floater';
 import LikeButton from '../LikeButton/LikeButton';
+import { LikedElement } from '../../enums/LikedElement';
+import { useUser } from '../../hooks/useUser';
+import { useAuthor } from '../../hooks/useAuthor';
+import { useQuery } from 'react-query';
+import { getAuthor } from '../../api/author';
+import Author from '../Author/Author';
+import PostTopComment from './PostTopComment';
+import { useTopComment } from '../../hooks/useTopComment';
+import { Category } from './styled';
 
 const Post: FC<PostInterfaceExtended> = ({
   _id,
@@ -28,63 +36,48 @@ const Post: FC<PostInterfaceExtended> = ({
   likes,
   date,
 }) => {
-  const [liked, setLiked] = useState<boolean | undefined>(false);
   const [openComments, setOpenComments] = useState<boolean>(false);
-  const [popup, setPopup] = useState<boolean>(false);
+  const [popup, setPopup] = useState<boolean>(false); //WARNING we should have a global state to manage popup
   const [openPostAction, setOpenPostAction] = useState<boolean>(false);
   const [disableComments, setDisableComments] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [newHeadline, setNewHeadline] = useState<string>(headline);
   const [message, setMessage] = useState<string>('');
   const [showFloater, setShowFloater] = useState(false);
-  const [cookies] = useCookies();
-  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
+
   const [actionElement, setActionElement] = useState<HTMLElement | null>(null);
   const [shareElement, setShareElement] = useState<HTMLElement | null>(null);
-  const likePost = useLikePost();
-  const { data: comment, status } = useTopComment(_id);
-  const { data: commentAuthor, refetch } = useCommentAuthor(
-    comment?.topComment?.userId
-  );
-  const { data: author, refetch: refetchAuthor } = useCommentAuthor(userId);
+
+  const { user } = useUser();
+  const { data: comment } = useTopComment(_id);
 
   const location = useLocation();
   const [state] = useCounter();
-  const linkShare = `https://social-rikuseto.netlify.app/post/${_id}`;
+
   dayjs.extend(relativeTime);
 
-  const handleLikePost = () => {
-    if (user) {
-      return likePost.mutate(_id);
-    }
+  // useEffect(() => {
+  //   if (status === 'success' && comment?.topComment && !commentAuthor) {
+  //     refetch();
+  //   }
+  // }, [status]); TODO: Move to hook
 
-    setPopup(true);
-  };
+  // useEffect(() => {
+  //   if (!author) {
+  //     refetchAuthor(); //REWRITE
+  //   }
 
-  useEffect(() => {
-    if (status === 'success' && comment?.topComment && !commentAuthor) {
-      refetch();
-    }
-  }, [status]);
-
-  useEffect(() => {
-    if (!author) {
-      refetchAuthor();
-    }
-
-    const like = LikedElements(user, likes);
-    setLiked(like);
-
-    return;
-  }, [likes, user?._id]);
+  //   return;
+  // }, [likes, user?._id]);
 
   useEffect(() => {
     if (location.pathname.includes('/post')) {
-      setDisableComments(true);
+      setDisableComments(true); //REWRITE
     }
   }, [location.pathname]);
 
   const editPost = () => {
+    //TODO consider how to make that better
     if (newHeadline === headline) {
       setMessage('First you need to edit your post');
       return;
@@ -104,7 +97,7 @@ const Post: FC<PostInterfaceExtended> = ({
     <>
       <section
         data-testid="post"
-        className={`post ${disableComments ? 'post__mBottom' : ''}`}
+        className={`post ${disableComments ? 'post__mBottom' : ''}`} //WARNING should we manipulate margin or maybe just set comments to 100vh
       >
         {user && (
           <div
@@ -127,40 +120,22 @@ const Post: FC<PostInterfaceExtended> = ({
             )}
           </div>
         )}
-
-        <div className="post__author">
-          <img
-            className="post__image-author"
-            src={author?.avatar}
-            alt="user profile"
-          />
-
-          <div>
-            <p className="post__author-name">
-              <Link
-                className="post__author-link"
-                to={
-                  user && userId === user._id
-                    ? '/account'
-                    : `/profile/${userId}`
-                }
-              >
-                {author?.status === 200 ? (
-                  (author?.firstName, author?.lastName)
-                ) : (
-                  <em className="removed-author">(Deleted)</em>
-                )}
-              </Link>
-            </p>
-
-            <p className="post__info">
-              Posted on: <span className="post__category-name">{category}</span>
-              <span> {dayjs(date).fromNow()}</span>
-            </p>
-          </div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Author id={userId} />
+          <Category>
+            Posted on: <span>{category}</span>
+            <span> {dayjs(date).fromNow()}</span>
+          </Category>
         </div>
         <div className="post__content">
           {!isEdit && <h3 className="post__headline">{headline}</h3>}
+          //TODO make a component to edit post
           {isEdit && (
             <div className="post__edit-input-container">
               <input
@@ -201,7 +176,7 @@ const Post: FC<PostInterfaceExtended> = ({
           style={disableComments ? { paddingBottom: '1rem' } : {}}
           className="post__actions"
         >
-          <LikeButton likes={likes} postId={_id} />
+          <LikeButton likes={likes} id={_id} type={LikedElement.Post} />
 
           <div>
             {!disableComments && (
@@ -210,7 +185,7 @@ const Post: FC<PostInterfaceExtended> = ({
                 onClick={() => setOpenComments(true)}
               >
                 <span className="post__count-comments">
-                  {comment?.allComments}{' '}
+                  {comment?.allComments}
                 </span>
                 comments
               </button>
@@ -233,12 +208,14 @@ const Post: FC<PostInterfaceExtended> = ({
                   border: '1px solid var(--light-bg-700) ',
                 }}
               >
-                <ShareButton link={linkShare} />
+                <PostShareSocials id={_id} />
               </CustomFloater>
             )}
           </div>
         </div>
-        {!disableComments && comment?.topComment && (
+        //TODO
+        <PostTopComment comment={comment} />
+        {/* {!disableComments && comment?.topComment && (
           <>
             <p className="post__top-comment">
               <span className="post__top-author">
@@ -256,8 +233,8 @@ const Post: FC<PostInterfaceExtended> = ({
               <span className="post__top-text">{comment.topComment.text}</span>
             </p>
           </>
-        )}
-        {!disableComments && comment && (
+        )} */}
+        {/* {!disableComments && comment && (
           <div
             className="post__comments--count"
             onClick={() => setOpenComments(true)}
@@ -275,8 +252,7 @@ const Post: FC<PostInterfaceExtended> = ({
               </p>
             )}
           </div>
-        )}
-
+        )} */}
         <Presence exitBeforeEnter>
           {openComments && (
             <Comments
@@ -295,4 +271,12 @@ const Post: FC<PostInterfaceExtended> = ({
   );
 };
 
-export default memo(Post);
+export default Post;
+
+//1. What we need:
+//  - author of post
+//  - fetch top comment
+//2. We need to have hook to manage post
+//  - delete
+//  - edit
+//  - save or unsave

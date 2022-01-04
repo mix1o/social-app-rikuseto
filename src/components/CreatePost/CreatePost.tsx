@@ -6,7 +6,7 @@ import { ActionEnum } from '../../interfaces/posts/postInterfaces';
 import useNotification from '../../hooks/notifications/useNotification';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 import { useCreatePostCtx } from '../../hooks/useCreatePost';
-import { useCreatePost } from '../../hooks/usePost';
+// import { useCreatePost } from '../../hooks/usePost';
 
 const CreatePost = () => {
   const [cookies] = useCookies();
@@ -18,7 +18,7 @@ const CreatePost = () => {
   const [message, setMessage] = useState<string>('');
   const [correctFormatPost, setCorrectFormatPost] = useState<boolean>(false);
   const [disable, setDisable] = useState<boolean>(false);
-  const createPostMutation = useCreatePost();
+  // const createPostMutation = useCreatePost();
   const {
     checkNotificationSupport,
     checkUserPermission,
@@ -26,12 +26,12 @@ const CreatePost = () => {
   } = useNotification();
   const ref = useRef<HTMLElement>(null);
 
-  const createNewPost = async (e: SyntheticEvent) => {
-    e.preventDefault();
-    if (user) {
-      createPostMutation.mutateAsync(state);
-    }
-  };
+  // const createNewPost = async (e: SyntheticEvent) => {
+  //   e.preventDefault();
+  //   if (user) {
+  //     createPostMutation.mutateAsync(state);
+  //   }
+  // };
 
   const checkCorrectPost = () => {
     if (userPickedImage) {
@@ -137,8 +137,8 @@ const CreatePost = () => {
       <button
         className="create-post__btn-add"
         data-testid="button"
-        disabled={!correctFormatPost || createPostMutation.status === 'loading'}
-        onClick={createNewPost}
+        // disabled={!correctFormatPost || createPostMutation.status === 'loading'}
+        // onClick={createNewPost}
       >
         Create post
       </button>

@@ -8,6 +8,7 @@ import {
   SyntheticEvent,
 } from 'react';
 import { useCookies } from 'react-cookie';
+import { useUser } from '../../hooks/useUser';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 
 interface PostActionsI {
@@ -17,9 +18,8 @@ interface PostActionsI {
 }
 
 const PostActions: FC<PostActionsI> = ({ id, userId, setIsEdit }) => {
-  const [cookies, setCookie] = useCookies();
-  const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const [savedPost, setSavedPost] = useState<boolean>(false);
+  const { user, setCookie } = useUser();
 
   const checkIsSaved = (updatedUserPosts: string[]) => {
     setSavedPost(false);

@@ -5,6 +5,8 @@ const CustomFloater: FC<{
   referenceElement: HTMLElement | null;
   styles?: CSSProperties;
 }> = ({ referenceElement, children, styles: customStyles }) => {
+  //Should we have something like floater or maybe just use a simply div with position absolute
+
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: 'auto',

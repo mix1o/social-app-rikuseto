@@ -169,7 +169,7 @@ const Posts: FC = () => {
                 setPostTypes(MODE_HOME);
               }}
             >
-              Home <i className="fas fa-home" />
+              {/* Home <i className="fas fa-home" /> */}
             </button>
             <button
               className={`post__option-displaying ${
@@ -201,7 +201,7 @@ const Posts: FC = () => {
           {!isError &&
             !isLoading &&
             data
-              ?.slice(10, 14)
+              ?.slice(0, 10)
               .map(
                 ({
                   _id,
@@ -233,9 +233,3 @@ const Posts: FC = () => {
 };
 
 export default Posts;
-
-//TODO
-//1. CUSTOM HOOKI - react query, functions
-//2. LIKE - STATE | Filtrowanie czy dany user jest w tablicy likeow
-//3. STYLED-COMPONENTS
-//4. PUSH FROM DEVELOP

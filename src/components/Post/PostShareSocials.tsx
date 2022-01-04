@@ -13,8 +13,10 @@ import {
   TwitterIcon,
   WhatsappIcon,
 } from 'react-share';
-
-const ShareButton: FC<{ link: string }> = ({ link }) => {
+//That component is correct actually
+const PostShareSocials: FC<{ id: string }> = ({ id }) => {
+  const link = `${process.env.REACT_APP_POST_SHARE_LINK}${id}`;
+  //TODO: Set env netlify
   return (
     <>
       <div className="post__container-socials">
@@ -57,4 +59,4 @@ const ShareButton: FC<{ link: string }> = ({ link }) => {
   );
 };
 
-export default ShareButton;
+export default PostShareSocials;

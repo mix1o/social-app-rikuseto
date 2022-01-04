@@ -1,17 +1,22 @@
 import { motion as m, AnimatePresence as Presence } from 'framer-motion';
-import { useState } from 'react';
 import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLikeButton } from '../../hooks/useLike';
+import { LikedElement } from '../../enums/LikedElement';
 
 interface Props {
   likes: string[];
-  postId: string;
+  id: string;
+  type: LikedElement;
 }
 
-const LikeButton = ({ likes, postId }: Props) => {
-  const { likePost, isLiked, likesCounter } = useLikeButton(likes, postId);
+const LikeButton = ({ likes, id, type }: Props) => {
+  const { handleLikePost, isLiked, likesCounter } = useLikeButton(
+    likes,
+    id,
+    type
+  );
 
   return (
     <m.div
@@ -23,7 +28,7 @@ const LikeButton = ({ likes, postId }: Props) => {
       <m.button
         className="post__btn"
         whileTap={{ scale: 1.2 }}
-        onClick={likePost}
+        onClick={handleLikePost}
         aria-label="like or dislike post"
         type="button"
       >
