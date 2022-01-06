@@ -15,5 +15,7 @@ export const Image = styled.img`
   margin-right: 1rem;
 `;
 export const FullName = styled.p`
-  font-size: 1.4rem;
+  font-size: ${({ theme }) => theme.fs200};
+  font-weight: ${({ theme }) => theme.fw600};
+  /* color: ${({theme}) => } */
 `;
