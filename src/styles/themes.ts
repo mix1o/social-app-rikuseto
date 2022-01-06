@@ -33,3 +33,5 @@ const lightTheme = {
 };
 
 export { lightTheme, darkTheme };
+
+export type StyledType = typeof darkTheme;

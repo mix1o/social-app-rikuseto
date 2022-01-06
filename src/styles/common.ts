@@ -52,5 +52,3 @@ export const commonTheme = {
   ...actionColors,
   ...sizes,
 };
-
-export type StyledType = typeof commonTheme;

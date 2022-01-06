@@ -1,11 +1,14 @@
 import App from '../App';
 import ReactQueryProvider from './ReactQuery';
+import StylesProvider from './StylesProvider';
 
 const GlobalProviders = () => {
   return (
     <>
       <ReactQueryProvider>
-        <App />
+        <StylesProvider>
+          <App />
+        </StylesProvider>
       </ReactQueryProvider>
     </>
   );
