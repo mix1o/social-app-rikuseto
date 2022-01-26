@@ -5,15 +5,15 @@ import { PostInterface } from '../../interfaces/posts/postInterfaces';
 import Header from '../../components/Header/Header';
 import Post from '../Post/Post';
 import { CookieUser } from '../../interfaces/auth/authInterface';
-import { useUserPosts } from '../../hooks/usePost';
+// import { useUserPosts } from '../../hooks/usePost';
 
 const UserPosts: FC = () => {
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const [posts, setPosts] = useState<PostInterface[]>();
 
-  const { data } = useUserPosts({ userId: user._id });
-  console.log(data);
+  // const { data } = useUserPosts({ userId: user._id });
+
   return (
     <>
       {user && (
@@ -28,7 +28,7 @@ const UserPosts: FC = () => {
           >
             Your posts
           </p>
-          {data?.map(
+          {/* {data?.map(
             ({ _id, headline, category, file, userId, likes, date }) => {
               return (
                 <Post
@@ -43,7 +43,7 @@ const UserPosts: FC = () => {
                 />
               );
             }
-          )}
+          )} */}
         </div>
       )}
     </>

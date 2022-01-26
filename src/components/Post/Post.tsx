@@ -14,7 +14,7 @@ import { useCounter } from '../../store/sub';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 import ShareButton from './ShareButton';
 import PostActions from './PostActions';
-import { useLikePost } from '../../hooks/usePost';
+// import { useLikePost } from '../../hooks/usePost';
 import { useCommentAuthor, useTopComment } from '../../hooks/useComment';
 import CustomFloater from './Floater';
 import LikeButton from '../LikeButton/LikeButton';
@@ -41,7 +41,7 @@ const Post: FC<PostInterfaceExtended> = ({
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
   const [actionElement, setActionElement] = useState<HTMLElement | null>(null);
   const [shareElement, setShareElement] = useState<HTMLElement | null>(null);
-  const likePost = useLikePost();
+  // const likePost = useLikePost();
   const { data: comment, status } = useTopComment(_id);
   const { data: commentAuthor, refetch } = useCommentAuthor(
     comment?.topComment?.userId
@@ -55,7 +55,7 @@ const Post: FC<PostInterfaceExtended> = ({
 
   const handleLikePost = () => {
     if (user) {
-      return likePost.mutate(_id);
+      // return likePost.mutate(_id);
     }
 
     setPopup(true);
@@ -202,7 +202,7 @@ const Post: FC<PostInterfaceExtended> = ({
           className="post__actions"
         >
           <LikeButton likes={likes} postId={_id} />
-
+          <p style={{ color: 'red' }}>{likes.length}</p>
           <div>
             {!disableComments && (
               <button

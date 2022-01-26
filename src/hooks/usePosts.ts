@@ -1,23 +1,40 @@
-import axios, { AxiosResponse } from 'axios';
-import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useState } from 'react';
+import { useInfiniteQuery } from 'react-query';
 import { fetchPosts } from '../api/posts';
-import { PostInterface } from '../interfaces/posts/postInterfaces';
 
 export const usePosts = () => {
-  const { isLoading, isError, data, error } = useQuery('posts', fetchPosts, {
-    onSuccess: () => {
-      console.log('Posts fetched'); //For now can be console
-    },
-    onError: () => {
-      throw new Error('Fetching posts failed');
-    },
-  });
-
-  return {
-    isLoading,
-    isError,
+  const [sortType, setSortType] = useState<string | undefined>('');
+  const {
     data,
     error,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isError,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery(['projects', sortType], fetchPosts, {
+    getNextPageParam: lastPage =>
+      lastPage.data.hasNextPage ? lastPage.data.currentPage + 1 : undefined,
+    meta: { sortType }, //pass any data to api call
+    refetchOnWindowFocus: false,
+  });
+
+  const changePostSort = (e: any) => {
+    if (!e.value) return;
+
+    setSortType(e?.value);
+  };
+
+  return {
+    data,
+    error,
+    status,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    changePostSort,
   };
 };
