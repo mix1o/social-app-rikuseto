@@ -13,49 +13,51 @@ import {
   TwitterIcon,
   WhatsappIcon,
 } from 'react-share';
-//That component is correct actually
+import {
+  PostContainerSocials,
+  ButtonCopy,
+  PostSocialText,
+  PostSocialLink,
+} from './styled';
+
 const PostShareSocials: FC<{ id: string }> = ({ id }) => {
   const link = `${process.env.REACT_APP_POST_SHARE_LINK}${id}`;
-  //TODO: Set env netlify
   return (
-    <>
-      <div className="post__container-socials">
-        <FacebookShareButton url={link}>
-          <FacebookIcon size={40} round={true} />
-        </FacebookShareButton>
-        <RedditShareButton url={link}>
-          <RedditIcon size={40} round={true} />
-        </RedditShareButton>
-        <WhatsappShareButton url={link}>
-          <WhatsappIcon size={40} round={true} />
-        </WhatsappShareButton>
-        <TelegramShareButton url={link}>
-          <TelegramIcon size={40} round={true} />
-        </TelegramShareButton>
-        <TwitterShareButton url={link}>
-          <TwitterIcon size={40} round={true} />
-        </TwitterShareButton>
-        <EmailShareButton url={link}>
-          <EmailIcon size={40} round={true} />
-        </EmailShareButton>
-      </div>
-      <p className="post__share-info">Or just copy link</p>
-      <div className="post__container-link">
-        <a href={link} className="post__link">
+    <PostContainerSocials>
+      <FacebookShareButton url={link}>
+        <FacebookIcon size={40} round={true} />
+      </FacebookShareButton>
+      <RedditShareButton url={link}>
+        <RedditIcon size={40} round={true} />
+      </RedditShareButton>
+      <WhatsappShareButton url={link}>
+        <WhatsappIcon size={40} round={true} />
+      </WhatsappShareButton>
+      <TelegramShareButton url={link}>
+        <TelegramIcon size={40} round={true} />
+      </TelegramShareButton>
+      <TwitterShareButton url={link}>
+        <TwitterIcon size={40} round={true} />
+      </TwitterShareButton>
+      <EmailShareButton url={link}>
+        <EmailIcon size={40} round={true} />
+      </EmailShareButton>
+      <PostSocialText>Or just copy link</PostSocialText>
+      <div>
+        <PostSocialLink href={link} className="post__link">
           {link}
-        </a>
+        </PostSocialLink>
       </div>
 
-      <button
+      <ButtonCopy
         onClick={() => {
           navigator.clipboard.writeText(link);
         }}
-        className="post__btn-copy"
       >
         Copy link
         <i className="far fa-copy"></i>
-      </button>
-    </>
+      </ButtonCopy>
+    </PostContainerSocials>
   );
 };
 

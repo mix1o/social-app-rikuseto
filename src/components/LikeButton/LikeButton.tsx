@@ -2,7 +2,7 @@ import { motion as m, AnimatePresence as Presence } from 'framer-motion';
 import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faStar as farBellThin } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useLikeButton } from '../../hooks/useLike';
+import { useLike } from '../../hooks/useLike';
 import { LikedElement } from '../../enums/LikedElement';
 
 interface Props {
@@ -12,11 +12,7 @@ interface Props {
 }
 
 const LikeButton = ({ likes, id, type }: Props) => {
-  const { handleLikePost, isLiked, likesCounter } = useLikeButton(
-    likes,
-    id,
-    type
-  );
+  const { handleLikePost, isLiked, likesCounter } = useLike(likes, id, type);
 
   return (
     <m.div

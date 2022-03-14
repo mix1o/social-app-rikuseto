@@ -1,113 +1,91 @@
 import axios from 'axios';
-import {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useState,
-  useEffect,
-  SyntheticEvent,
-} from 'react';
-import { useCookies } from 'react-cookie';
+import { Dispatch, FC, SetStateAction, useState, useEffect } from 'react';
+import { usePostActions } from '../../hooks/usePostActions';
 import { useUser } from '../../hooks/useUser';
-import { CookieUser } from '../../interfaces/auth/authInterface';
+import {
+  ActionButton,
+  PostActionDescription,
+  PostActionInput,
+  PostActionLabel,
+  PostActionsWrapper,
+} from './styled';
 
 interface PostActionsI {
   id: string;
   userId: string;
-  setIsEdit: Dispatch<SetStateAction<boolean>>;
 }
 
-const PostActions: FC<PostActionsI> = ({ id, userId, setIsEdit }) => {
-  const [savedPost, setSavedPost] = useState<boolean>(false);
-  const { user, setCookie } = useUser();
-
-  const checkIsSaved = (updatedUserPosts: string[]) => {
-    setSavedPost(false);
-    if (updatedUserPosts) {
-      updatedUserPosts.forEach((element: string) => {
-        if (element.toString() === id.toString()) {
-          setSavedPost(true);
-        } else {
-          setSavedPost(false);
-        }
-      });
-    }
-  };
-
-  useEffect(() => {
-    checkIsSaved(user.savedPosts);
-  }, []);
-
-  const savePost = () => {
-    axios
-      .put(`${process.env.REACT_APP_API}/posts/save`, {
-        id,
-        userId: user._id,
-      })
-      .then(res => {
-        checkIsSaved(res.data.updatedUser.savedPosts);
-        setCookie('user', res.data.updatedUser, { path: '/' });
-      });
-  };
-
-  const deletePost = () => {
-    axios.delete(`${process.env.REACT_APP_API}/posts/delete`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        postId: id,
-      },
-    });
-    window.location.reload();
-  };
+const PostActions: FC<PostActionsI> = ({ id, userId }) => {
+  const { user } = useUser();
+  const { isSavedPost, savePost, deletePost } = usePostActions(id);
 
   return (
-    <div className="post__container-dots-actions">
+    <PostActionsWrapper>
       {user && user._id !== userId && (
         <>
-          <button
-            onClick={e => {
+          <PostActionDescription>
+            You can save favorites posts.
+          </PostActionDescription>
+          <ActionButton
+            onClick={() => {
               savePost();
-              setTimeout(() => {
-                //TODO query refresh
-              }, 200);
             }}
-            className="post__action"
-            type="button"
           >
-            {savedPost ? 'Unsave' : 'Save post'}
+            {isSavedPost ? 'Unsave' : 'Save post'}
             <i className="fas fa-flag"></i>
-          </button>
-          <button className="post__action" type="button">
-            Report
+          </ActionButton>
+
+          <PostActionDescription>Select options bellow</PostActionDescription>
+          <PostActionLabel>
+            <PostActionInput
+              value="option 1"
+              name="report-option"
+              type="radio"
+            />
+            Option 1
+          </PostActionLabel>
+          <PostActionLabel>
+            <PostActionInput
+              value="option 2"
+              name="report-option"
+              type="radio"
+            />
+            Option 2
+          </PostActionLabel>
+          <PostActionLabel>
+            <PostActionInput
+              value="option 3"
+              name="report-option"
+              type="radio"
+            />
+            Option 3
+          </PostActionLabel>
+          <ActionButton>
+            {/* TODO add function report */}
+            Submit report
             <i className="fas fa-ban"></i>
-          </button>
+          </ActionButton>
         </>
       )}
       {user && user._id === userId ? (
         <>
-          <button
-            onClick={e => {
-              setIsEdit(true);
-            }}
-            className="post__action"
-            type="button"
-          >
+          <PostActionDescription>
+            You can easily modify your post whenever want
+          </PostActionDescription>
+          <ActionButton>
             Edit
             <i className="fas fa-edit"></i>
-          </button>
-          <button
-            onClick={deletePost}
-            className="post__action post__action--delete"
-            type="button"
-          >
+          </ActionButton>
+          <PostActionDescription>
+            Delete post. This action is permanent
+          </PostActionDescription>
+          <ActionButton warningButton={true} onClick={deletePost}>
             Delete
             <i className="fas fa-trash-alt"></i>
-          </button>
+          </ActionButton>
         </>
       ) : null}
-    </div>
+    </PostActionsWrapper>
   );
 };
 

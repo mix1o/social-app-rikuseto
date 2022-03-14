@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-//TODO add color pallete
-
 export const Wrapper = styled.div`
   display: flex;
   align-items: center;
@@ -14,8 +12,15 @@ export const Image = styled.img`
   border-radius: 100%;
   margin-right: 1rem;
 `;
+
 export const FullName = styled.p`
-  font-size: ${({ theme }) => theme.fs200};
+  font-size: ${({ theme }) => theme.fs250};
   font-weight: ${({ theme }) => theme.fw600};
-  /* color: ${({theme}) => } */
+  color: ${({ theme }) => theme.fontColor500};
+
+  span {
+    color: ${({ theme }) => theme.fontColor300};
+    font-weight: ${({ theme }) => theme.fw400};
+    font-style: italic;
+  }
 `;

@@ -4,7 +4,13 @@ import { useUser } from '../../hooks/useUser';
 import { AuthorInterface } from '../../interfaces/common/common';
 import { Wrapper, Image, FullName } from './styled';
 
-const Author = ({ id }: { id: string }) => {
+const Author = ({
+  id,
+  children,
+}: {
+  id: string;
+  children?: React.ReactNode;
+}) => {
   const { data: author } = useAuthor(id);
   const { user } = useUser();
 
@@ -18,10 +24,13 @@ const Author = ({ id }: { id: string }) => {
             to={user && user._id === id ? '/account' : `/profile/${id}`}
           >
             <FullName>
-              {author.status === 200
-                ? `${author.firstName} ${author.lastName}`
-                : 'Deleted'}
+              {author.status === 200 ? (
+                `${author.firstName} ${author.lastName}`
+              ) : (
+                <span>(Deleted)</span>
+              )}
             </FullName>
+            {children}
           </Link>
         </Wrapper>
       )}

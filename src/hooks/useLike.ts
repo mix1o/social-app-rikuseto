@@ -1,19 +1,18 @@
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
 import { LikedElement } from '../enums/LikedElement';
 import debounce from 'lodash/debounce';
+import { useDispatch } from 'react-redux';
+import { ModalType, openModal } from '../features/modalSlice';
+import { useUser } from './useUser';
 
-export const useLikeButton = (
-  likes: string[],
-  id: string,
-  type: LikedElement
-) => {
-  const [cookies] = useCookies();
-  const { user } = cookies;
+export const useLike = (likes: string[], id: string, type: LikedElement) => {
+  const { user } = useUser();
 
   const [isLiked, setIsLiked] = useState(false);
   const [likesCounter, setLikesCounter] = useState(likes.length);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (user && likes.length > 0) {
@@ -42,7 +41,7 @@ export const useLikeButton = (
 
   const handleLikePost = async () => {
     if (!user) {
-      alert('You need to log in');
+      dispatch(openModal({ type: ModalType.LOG_IN }));
       return;
     }
 

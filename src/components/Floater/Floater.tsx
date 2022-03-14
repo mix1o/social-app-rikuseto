@@ -1,7 +1,7 @@
 import { FC, useState, CSSProperties } from 'react';
 import { usePopper } from 'react-popper';
 
-const CustomFloater: FC<{
+export const Floater: FC<{
   referenceElement: HTMLElement | null;
   styles?: CSSProperties;
 }> = ({ referenceElement, children, styles: customStyles }) => {
@@ -29,5 +29,3 @@ const CustomFloater: FC<{
     </div>
   );
 };
-
-export default CustomFloater;

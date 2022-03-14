@@ -1,19 +1,24 @@
-import { useAuthor } from '../../hooks/useAuthor';
-import { useTopComment } from '../../hooks/useTopComment';
+import dayjs from 'dayjs';
+import { TopComment } from '../../interfaces/comments/commentsInterfaces';
 import Author from '../Author/Author';
+import { TopCommentDate, TopCommentText, TopCommentWrapper } from './styled';
 
-const PostTopComment = ({ comment }: { comment: any }) => {
+const PostTopComment = ({ comment }: { comment: TopComment | undefined }) => {
   return (
-    <div>
+    <>
       {comment?.topComment && (
-        <div>
+        <TopCommentWrapper>
           <Author
             id={comment?.topComment?.userId ? comment.topComment.userId : ''}
-          />
-          //TODO display top comment
-        </div>
+          >
+            <TopCommentText>{comment.topComment.text}</TopCommentText>
+          </Author>
+          <TopCommentDate>
+            {dayjs(comment.topComment.date).fromNow()}
+          </TopCommentDate>
+        </TopCommentWrapper>
       )}
-    </div>
+    </>
   );
 };
 

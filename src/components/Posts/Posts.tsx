@@ -200,32 +200,30 @@ const Posts: FC = () => {
         <div>
           {!isError &&
             !isLoading &&
-            data
-              ?.slice(0, 10)
-              .map(
-                ({
-                  _id,
-                  headline,
-                  category,
-                  file,
-                  userId,
-                  likes,
-                  date,
-                }: PostInterface) => {
-                  return (
-                    <Post
-                      key={_id}
-                      _id={_id}
-                      headline={headline}
-                      category={category}
-                      file={file}
-                      userId={userId}
-                      likes={likes}
-                      date={date}
-                    />
-                  );
-                }
-              )}
+            data?.map(
+              ({
+                _id,
+                headline,
+                category,
+                file,
+                userId,
+                likes,
+                date,
+              }: PostInterface) => {
+                return (
+                  <Post
+                    key={_id}
+                    _id={_id}
+                    headline={headline}
+                    category={category}
+                    file={file}
+                    userId={userId}
+                    likes={likes}
+                    date={date}
+                  />
+                );
+              }
+            )}
         </div>
       </main>
     </>
