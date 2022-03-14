@@ -5,7 +5,7 @@ import { CookieUser } from '../../interfaces/auth/authInterface';
 import { CategoryArray, singleOptions } from '../../interfaces/posts/category';
 
 import AsyncCreatableSelect from 'react-select/async-creatable';
-import { mainSelect } from '../../helpers/selectStyles.styled';
+// import { mainSelect } from '../../helpers/selectStyles.styled';
 import { useCreatePostCtx } from '../../hooks/useCreatePost';
 import { ActionEnum } from '../../interfaces/posts/postInterfaces';
 import { useCategory, useCategoryAll } from '../../hooks/useCategory';
@@ -49,7 +49,7 @@ const Category = () => {
 
   return (
     <div className="category">
-      <AsyncCreatableSelect
+      {/* <AsyncCreatableSelect
         cacheOptions
         defaultOptions={userCategories}
         styles={mainSelect}
@@ -65,7 +65,7 @@ const Category = () => {
         isClearable={true}
         maxMenuHeight={300}
         noOptionsMessage={() => 'No one posted in this category yet.'}
-      />
+      /> */}
     </div>
   );
 };

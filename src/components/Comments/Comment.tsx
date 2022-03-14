@@ -250,7 +250,7 @@ const Comment: FC<SingleCommentProps> = ({
           </div>
         )}
         <div className="comment__container-likes">
-          <LikeButton likes={likes} id={_id} type={LikedElement.Comment} />
+          {/* <LikeButton likes={likes} id={_id} type={LikedElement.Comment} /> */}
         </div>
         {displayMessage && <p className="comment__information">Deleting...</p>}
       </div>

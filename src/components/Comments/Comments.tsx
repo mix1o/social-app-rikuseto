@@ -15,7 +15,7 @@ import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import CustomTextarea from '../FormFields/CustomTextarea';
 import { commentsOptions } from '../../helpers/filterOptions';
 import Select from 'react-select';
-import { mainSelect } from '../../helpers/selectStyles.styled';
+import { CustomSelect } from '../../helpers/selectStyles.styled';
 import { commentVariant } from '../../helpers/variants';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 
@@ -119,11 +119,11 @@ const Comments: FC<CommentProps> = ({
           <div style={{ width: '40%' }}>
             {comments?.length! > 0 && (
               <div className="comments__filter">
-                <Select
+                <CustomSelect
                   options={commentsOptions}
                   defaultValue={commentsOptions[0]}
-                  onChange={value => setFilter(value?.value)}
-                  styles={mainSelect}
+                  onChange={(value: any) => setFilter(value?.value)} //WARNING Typec check value or leave it as any. Styling with styled components return typof ReactSelect without any types
+                  classNamePrefix="react-select"
                 />
               </div>
             )}

@@ -6,6 +6,7 @@ export interface PostInterface {
   file: string;
   likes: string[];
   date: string;
+  totalLikes?: number;
 }
 export type fetchType = 'all-posts' | 'user-posts';
 export interface PostInterfaceExtended extends PostInterface {

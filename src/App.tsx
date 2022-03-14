@@ -1,10 +1,5 @@
 import { FC, ReactChild, useEffect } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Routes } from './routes';
 import Menu from './components/Navigation/Menu';
 import { useCookies } from 'react-cookie';

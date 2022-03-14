@@ -6,6 +6,7 @@ import { ActionEnum } from '../../interfaces/posts/postInterfaces';
 import useNotification from '../../hooks/notifications/useNotification';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 import { useCreatePostCtx } from '../../hooks/useCreatePost';
+import axios from 'axios';
 // import { useCreatePost } from '../../hooks/usePost';
 
 const CreatePost = () => {
@@ -26,12 +27,14 @@ const CreatePost = () => {
   } = useNotification();
   const ref = useRef<HTMLElement>(null);
 
-  // const createNewPost = async (e: SyntheticEvent) => {
-  //   e.preventDefault();
-  //   if (user) {
-  //     createPostMutation.mutateAsync(state);
-  //   }
-  // };
+  const createNewPost = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    if (user) {
+      // createPostMutation.mutateAsync(state);
+
+      axios.post(`${process.env.REACT_APP_API}/posts/create`, state);
+    }
+  };
 
   const checkCorrectPost = () => {
     if (userPickedImage) {
@@ -139,6 +142,7 @@ const CreatePost = () => {
         data-testid="button"
         // disabled={!correctFormatPost || createPostMutation.status === 'loading'}
         // onClick={createNewPost}
+        onClick={createNewPost}
       >
         Create post
       </button>

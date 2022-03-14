@@ -14,6 +14,7 @@ const UserPosts: FC = () => {
 
   // const { data } = useUserPosts({ userId: user._id });
   // console.log(data);
+
   return (
     <>
       {user && (
