@@ -8,21 +8,19 @@ export interface User extends BaseUserData {
   firstName: string;
 }
 
-export interface IMessage {
-  message: string;
-  status?: number;
-}
-
 export interface CreateUser extends User {
   confirmPassword: string;
 }
 
-type RequestStatus = 'pending' | 'accepted' | 'declined';
-interface Request {
+export interface RemoveUser extends BaseUserData {
   userId: string;
-  requestedUser: string;
-  date: string;
-  status: RequestStatus;
+}
+export interface ResetData {
+  step: number;
+  password?: string;
+  confirmPassword?: string;
+  email?: string;
+  token?: string;
 }
 export interface CookieUser extends User {
   avatar: string;

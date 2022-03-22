@@ -9,7 +9,7 @@ const RemoveAccount = () => {
   const [cookies] = useCookies();
   const user: CookieUser = cookies['user'] ? { ...cookies['user'] } : undefined;
 
-  const { removeAccount, message, loading } = useAuth();
+  // const { removeAccount, message, loading } = useAuth();
 
   return (
     <section className="details__remove">
@@ -25,7 +25,7 @@ const RemoveAccount = () => {
           verifyText: '',
           userId: user._id,
         }}
-        onSubmit={values => removeAccount(values)}
+        onSubmit={values => {}}
         validationSchema={() => deleteAccountSchema(user.email)}
       >
         <Form className="auth-form">
@@ -50,7 +50,7 @@ const RemoveAccount = () => {
             id="verifyText"
             key="verifyText-field"
           />
-          {message.message && (
+          {/* {message.message && (
             <p
               className={`auth__message ${
                 message.status === 200
@@ -60,10 +60,10 @@ const RemoveAccount = () => {
             >
               {message.message}
             </p>
-          )}
+          )} */}
           <button
             type="submit"
-            disabled={loading}
+            // disabled={loading}
             className="details__btn--delete"
           >
             Delete this account

@@ -3,7 +3,7 @@ import { useCookies } from 'react-cookie';
 import Category from './Category';
 import CropImage from './CropImage';
 import { ActionEnum } from '../../interfaces/posts/postInterfaces';
-import useNotification from '../../hooks/notifications/useNotification';
+import useNotification from '../../hooks/useNotification';
 import { CookieUser } from '../../interfaces/auth/authInterface';
 import { useCreatePostCtx } from '../../hooks/useCreatePost';
 import axios from 'axios';

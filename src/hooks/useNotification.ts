@@ -6,9 +6,9 @@ import {
   askPermission,
   createNotificationSubscription,
   getUserSubscription,
-} from './push-notification';
+} from '../helpers/push-notification';
 import { useCookies } from 'react-cookie';
-import { CookieUser } from '../../interfaces/auth/authInterface';
+import { CookieUser } from '../interfaces/auth/authInterface';
 
 const checkNotificationSupport = notificationSupport();
 

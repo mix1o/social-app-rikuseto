@@ -4,10 +4,8 @@ import Post from '../Post/Post';
 import { usePosts } from '../../hooks/usePosts';
 import PaginationEnd from '../Pagination/PaginationEnd';
 import { CustomSelect } from '../../helpers/selectStyles.styled';
-import CreatePost from '../CreatePost/CreatePost';
-import { CreatePostProvider } from '../../hooks/useCreatePost';
-import { useCookies } from 'react-cookie';
-import { CookieUser } from '../../interfaces/auth/authInterface';
+import ContentLoader from '../Animations/Skeleton';
+import styled from 'styled-components';
 
 const filterOptions = [
   {
@@ -26,15 +24,21 @@ const filterOptions = [
     label: 'Least Comments',
     value: '&order=desc&sort=comments',
   },
-  {
-    label: 'Popular',
-    value: '&order=asc&sort=popular', //TODO more fitlers
-  },
+  // {
+  //   label: 'Popular',
+  //   value: '&order=asc&sort=popular',
+  // },
   {
     label: 'Rising',
-    value: '&order=asc&sort=rising', //TODO more fitlers
+    value: '&order=asc&sort=rising',
   },
 ];
+
+const Main = styled.main`
+  display: grid;
+  place-content: start center;
+  margin: 0 auto;
+`;
 
 const Posts: FC = () => {
   const {
@@ -51,30 +55,34 @@ const Posts: FC = () => {
   return (
     <>
       <Header />
-      <CustomSelect
-        classNamePrefix="react-select"
-        options={filterOptions}
-        onChange={changePostSort}
-        defaultValue={filterOptions[0]}
-        isSearchable={false}
-      />
-      {status === 'success'
-        ? data?.pages.map(response =>
-            response.data.posts?.map(post => (
-              <Post
-                key={post._id}
-                _id={post._id}
-                headline={post.headline}
-                category={post.category}
-                file={post.file}
-                userId={post.userId}
-                likes={post.likes}
-                date={post.date}
-              />
-            ))
-          )
-        : null}
-
+      <Main>
+        <CustomSelect
+          classNamePrefix="react-select"
+          options={filterOptions}
+          onChange={changePostSort}
+          defaultValue={filterOptions[0]}
+          isSearchable={false}
+        />
+        {status === 'loading' && (
+          <ContentLoader totalItems={data?.pages ? 2 : 5} />
+        )}
+        {status === 'success'
+          ? data?.pages.map(response =>
+              response.data.posts?.map(post => (
+                <Post
+                  key={post._id}
+                  _id={post._id}
+                  headline={post.headline}
+                  category={post.category}
+                  file={post.file}
+                  userId={post.userId}
+                  likes={post.likes}
+                  date={post.date}
+                />
+              ))
+            )
+          : null}
+      </Main>
       <PaginationEnd
         fetchNextPage={fetchNextPage}
         hasNextPage={hasNextPage}

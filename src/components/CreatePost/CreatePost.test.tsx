@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 const mockFetch = jest.fn();
 
 test('Renders correctly', () => {
-  render(<CreatePost handleFetchPosts={mockFetch} />);
+  render(<CreatePost />);
 
   expect(screen.getByText('Create new post')).toBeInTheDocument();
 

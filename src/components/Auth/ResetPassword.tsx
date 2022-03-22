@@ -8,8 +8,7 @@ import { resetSchema } from '../../validations/authSchemas';
 
 const ResetPassword: FC = () => {
   const [, send] = useActor(authService);
-
-  const { resetPassword } = useAuth();
+  const { reset } = useAuth();
 
   return (
     <>
@@ -19,7 +18,7 @@ const ResetPassword: FC = () => {
         </div>
         <Formik
           initialValues={{ email: '' }}
-          onSubmit={values => resetPassword(values.email)}
+          onSubmit={values => reset({ email: values.email, step: 1 })}
           validationSchema={resetSchema}
         >
           <Form className="auth-form">

@@ -11,32 +11,32 @@ import { act } from 'react-dom/test-utils';
 const history = createMemoryHistory();
 
 jest.mock('axios');
-test('fetching posts', async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({
-      data: [
-        {
-          _id: '0832',
-          headline: 'Test post',
-          category: 'Test category',
-          file: '',
-          userId: '1',
-          likes: [],
-          date: new Date(),
-        },
-      ],
-    })
-  );
+// test('fetching posts', async () => {
+//   // axios.get.mockImplementation(() =>
+//   //   Promise.resolve({
+//   //     data: [
+//   //       {
+//   //         _id: '0832',
+//   //         headline: 'Test post',
+//   //         category: 'Test category',
+//   //         file: '',
+//   //         userId: '1',
+//   //         likes: [],
+//   //         date: new Date(),
+//   //       },
+//   //     ],
+//   //   })
+//   );
 
-  render(
-    <Router history={history}>
-      <Posts />
-    </Router>
-  );
+//   render(
+//     <Router history={history}>
+//       <Posts />
+//     </Router>
+//   );
 
-  await waitFor(() => {
-    expect(screen.getByText('Test post')).toBeInTheDocument();
-    expect(screen.getByText('Test category')).toBeInTheDocument();
-    expect(screen.getByTestId('likes').textContent).toBe('0');
-  });
-});
+//   await waitFor(() => {
+//     expect(screen.getByText('Test post')).toBeInTheDocument();
+//     expect(screen.getByText('Test category')).toBeInTheDocument();
+//     expect(screen.getByTestId('likes').textContent).toBe('0');
+//   });
+// });

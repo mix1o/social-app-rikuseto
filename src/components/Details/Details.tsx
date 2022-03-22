@@ -12,7 +12,7 @@ import BlurredContent from '../Animations/Popup';
 import { AnimatePresence as Presence } from 'framer-motion';
 
 import RemoveAccount from './RemoveAccount';
-import useNotification from '../../hooks/notifications/useNotification';
+import useNotification from '../../hooks/useNotification';
 
 const Details = () => {
   const [cookies, setCookie] = useCookies();

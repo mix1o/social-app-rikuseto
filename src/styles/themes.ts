@@ -1,6 +1,7 @@
 import { commonTheme } from './common';
 
 const darkTheme = {
+  background400: '#3b3b3d',
   background500: '#29292b', //header background
   background600: '#212122', // single post/comments/ background (when using we can adjust more use-cases)
   background700: '#1a1a1c', //body/hamburger background
@@ -17,7 +18,8 @@ const darkTheme = {
 };
 
 const lightTheme = {
-  background500: 'ececec', //header background
+  background400: '#d6d4d4', //TODO skeleton loader to adjust
+  background500: '#ececec', //header background
   background600: '#f3f3f3', // single post/comments/ background (when using we can adjust more use-cases)
   background700: '#fff', //body/hamburger background
   borderColor: '#ddd',

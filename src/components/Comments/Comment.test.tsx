@@ -35,7 +35,7 @@ beforeEach(() => {
         date={fakeComment.date}
         likes={fakeComment.likes}
         refreshComments={fakeComment.refreshComments}
-        fetchTopComment={fakeComment.fetchTopComment}
+        // fetchTopComment={fakeComment.fetchTopComment}
       />
     </Router>
   );

@@ -5,13 +5,11 @@ import { registrationSchema } from '../../validations/authSchemas';
 import { useActor } from '@xstate/react';
 import { authService } from './AuthStateMachine';
 import { useAuth } from '../../hooks/useAuth';
-import { CreateUser } from '../../interfaces/auth/authInterface';
+import ServerErrorMessage from '../Errors/ServerErrorMessage';
 
 const SignUp: FC = () => {
   const [, send] = useActor(authService);
   const { loading, message, signUp } = useAuth();
-
-  const createAccount = async (values: CreateUser) => await signUp(values);
 
   return (
     <>
@@ -28,7 +26,7 @@ const SignUp: FC = () => {
             password: '',
             confirmPassword: '',
           }}
-          onSubmit={values => createAccount(values)}
+          onSubmit={values => signUp(values)}
           validationSchema={registrationSchema}
         >
           <Form className="auth-form">
@@ -78,17 +76,11 @@ const SignUp: FC = () => {
             </button>
           </Form>
         </Formik>
-        {message.message && (
-          <p
-            className={`auth__message ${
-              message.status === 200
-                ? 'auth__message--accepted'
-                : 'auth__message--refused'
-            }`}
-          >
-            {message.message}
-          </p>
-        )}
+        <ServerErrorMessage
+          message={message.message}
+          className="auth__message"
+          status={message.status}
+        />
         <p className="auth__form-link">
           Already a member ?{' '}
           <span className="auth__form-next" onClick={() => send('SIGN_IN')}>

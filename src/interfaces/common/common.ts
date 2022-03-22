@@ -4,3 +4,8 @@ export interface AuthorInterface {
   lastName: string;
   status: number;
 }
+
+export interface ServerBaseMessage {
+  message: string;
+  status?: number;
+}

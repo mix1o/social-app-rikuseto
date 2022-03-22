@@ -1,6 +1,6 @@
 import { Formik, Form } from 'formik';
 import { FC } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import TextField from '../FormFields/TextField';
 import { Link } from 'react-router-dom';
@@ -8,7 +8,7 @@ import { newPasswordValidation } from '../../validations/newPassword';
 
 const NewPassword: FC = () => {
   const { token } = useParams<{ token: string }>();
-  const { message, newPassword } = useAuth();
+  const { reset } = useAuth();
 
   return (
     <main className="auth__main">
@@ -19,7 +19,14 @@ const NewPassword: FC = () => {
             confirmPassword: '',
           }}
           validationSchema={newPasswordValidation}
-          onSubmit={v => newPassword(v.password, token)}
+          onSubmit={values =>
+            reset({
+              step: 2,
+              confirmPassword: values.confirmPassword,
+              password: values.password,
+              token,
+            })
+          }
         >
           <Form className="auth-form">
             <h2 className="auth__heading">Set your new password</h2>
@@ -43,7 +50,7 @@ const NewPassword: FC = () => {
                 Change password
               </button>
             </div>
-            <p
+            {/* <p
               className={`${
                 message.status === 200
                   ? 'auth__message--accepted'
@@ -51,7 +58,7 @@ const NewPassword: FC = () => {
               } auth__message`}
             >
               {message.message}
-            </p>
+            </p> */}
           </Form>
         </Formik>
       </div>

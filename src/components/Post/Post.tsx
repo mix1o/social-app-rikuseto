@@ -202,7 +202,7 @@ const Post: FC<PostInterfaceExtended> = ({
           className="post__actions"
         >
           <LikeButton likes={likes} postId={_id} />
-          <p style={{ color: 'red' }}>{likes.length}</p>
+
           <div>
             {!disableComments && (
               <button

@@ -59,7 +59,7 @@ const SignIn: FC = () => {
             </div>
           </Form>
         </Formik>
-        {message.message && (
+        {/* {message.message && (
           <p
             className={`auth__message ${
               message.status === 200
@@ -69,7 +69,7 @@ const SignIn: FC = () => {
           >
             {message.message}
           </p>
-        )}
+        )} */}
         <div>
           <p className="auth__form-link">
             Don't have account yet ?

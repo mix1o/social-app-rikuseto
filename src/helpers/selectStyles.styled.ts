@@ -4,7 +4,7 @@ import ReactSelect from 'react-select';
 export const CustomSelect = styled(ReactSelect)`
   .react-select__control {
     margin-block: 2em;
-    max-width: ${({ theme }) => theme.formWidth}; //TODO change fixed max width
+    width: 100%;
     background: ${({ theme }) => theme.background600};
     display: flex;
     border: 1px solid ${({ theme }) => theme.background500};

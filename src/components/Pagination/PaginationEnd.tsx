@@ -1,20 +1,22 @@
 import { useRef } from 'react';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
+import { PaginationProps } from '../../interfaces/common/paggination';
 import { PaginationInfoWrapper, PaginationContent } from './Styles';
 
-interface PaginationProps {
-  isFetchingNextPage: boolean;
-  isLoading: boolean;
-  isError: boolean;
-  fetchNextPage?: () => void;
-  hasNextPage?: boolean;
-}
+const defaultMessages = {
+  error: 'Something went terrible wrong',
+  finalPage: "You've scrolled to the end 🎉",
+  loading: 'Loading',
+  loadingNextPage: 'Loading more..',
+};
+
 const PaginationEnd = ({
   fetchNextPage = () => {},
   isFetchingNextPage,
   isLoading,
   hasNextPage = false,
   isError,
+  customMessages = defaultMessages,
 }: PaginationProps) => {
   const targetIntersect = useRef(null);
   useIntersectionObserver({
@@ -23,27 +25,25 @@ const PaginationEnd = ({
     enabled: hasNextPage,
     threshold: 0.8,
   });
-  //TODO more generic styles
+
   return (
     <PaginationInfoWrapper>
-      {/* First new page */}
       <PaginationContent ref={targetIntersect}>
-        <p>{isFetchingNextPage ? 'Loading more...' : ''}</p>
+        <p>{isFetchingNextPage ? customMessages.loadingNextPage : ''}</p>
       </PaginationContent>
-      {/* First page load */}
       {isLoading && (
         <PaginationContent>
-          <p> Loading </p>
+          <p>{customMessages.loading}</p>
         </PaginationContent>
       )}
       {!hasNextPage && !isLoading && (
         <PaginationContent>
-          <p>You've scrolled to the end 🎉</p>
+          <p>{customMessages.finalPage}</p>
         </PaginationContent>
       )}
       {isError && (
         <PaginationContent>
-          <p>Something went terrible wrong</p>
+          <p>{customMessages.error}</p>
         </PaginationContent>
       )}
     </PaginationInfoWrapper>
