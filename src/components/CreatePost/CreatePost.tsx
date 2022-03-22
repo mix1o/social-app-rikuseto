@@ -141,6 +141,7 @@ const CreatePost = () => {
         className="create-post__btn-add"
         data-testid="button"
         // disabled={!correctFormatPost || createPostMutation.status === 'loading'}
+        // onClick={createNewPost}
         onClick={createNewPost}
       >
         Create post

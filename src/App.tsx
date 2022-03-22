@@ -5,6 +5,9 @@ import Menu from './components/Navigation/Menu';
 import { useCookies } from 'react-cookie';
 import { useCounter } from './store/sub';
 import { CookieUser } from './interfaces/auth/authInterface';
+import { Provider } from 'react-redux';
+import { store } from './redux-store/store';
+import { Modal } from './components/Modal/Modal';
 
 const App: FC = () => {
   const html = document.querySelector('html');
@@ -28,31 +31,37 @@ const App: FC = () => {
   }, [html, actions]);
 
   return (
-    <div>
-      <Router>
-        <Switch>
-          {Routes.map(
-            ({ Component, url, exact, permission }, idx): ReactChild =>
-              permission === true ? (
-                <Route
-                  exact={exact}
-                  key={idx}
-                  path={user ? url : '/auth'}
-                  component={Component}
-                />
-              ) : (
-                <Route
-                  component={Component}
-                  exact={exact}
-                  path={url}
-                  key={idx}
-                />
-              )
-          )}
-        </Switch>
-        {user && <Menu />}
-      </Router>
-    </div>
+    <>
+      <Provider store={store}>
+        <Modal />
+
+        <div>
+          <Router>
+            <Switch>
+              {Routes.map(
+                ({ Component, url, exact, permission }, idx): ReactChild =>
+                  permission === true ? (
+                    <Route
+                      exact={exact}
+                      key={idx}
+                      path={user ? url : '/auth'}
+                      component={Component}
+                    />
+                  ) : (
+                    <Route
+                      component={Component}
+                      exact={exact}
+                      path={url}
+                      key={idx}
+                    />
+                  )
+              )}
+            </Switch>
+            {user && <Menu />}
+          </Router>
+        </div>
+      </Provider>
+    </>
   );
 };
 

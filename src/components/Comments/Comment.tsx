@@ -3,7 +3,6 @@ import { FC, useState, ChangeEvent, useEffect, useRef, useMemo } from 'react';
 import { useCookies } from 'react-cookie';
 import { LikedElements } from '../../helpers/likedElements';
 import { AuthorInterface } from '../../interfaces/common/common';
-import { authorOfComment } from '../../helpers/authorOfComment';
 import { SingleCommentProps } from '../../interfaces/comments/commentsInterfaces';
 import { motion as m } from 'framer-motion';
 import { faStar as faStarChonky } from '@fortawesome/free-solid-svg-icons/faStar';
@@ -77,12 +76,6 @@ const Comment: FC<SingleCommentProps> = ({
         //   });
       });
   };
-
-  useEffect(() => {
-    authorOfComment(userId).then(res => setAuthor(res));
-    const like = LikedElements(user, likes);
-    setLiked(like);
-  }, [likes]);
 
   const lastChildManipulation = () => {
     if (location.pathname.includes('post')) {

@@ -13,6 +13,7 @@ const UserPosts: FC = () => {
   const [posts, setPosts] = useState<PostInterface[]>();
 
   // const { data } = useUserPosts({ userId: user._id });
+  // console.log(data);
 
   return (
     <>
